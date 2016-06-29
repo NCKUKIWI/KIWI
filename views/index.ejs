@@ -46,9 +46,11 @@
     </div>
     <div class="container">
         <div class="row">
-            <div class="col-md-4">1</div>
-            <div class="col-md-4">2</div>
-            <div class="col-md-4">3</div>
+          <% for(var i in data ){ %>
+            <% for(var j in data[i] ){ %>
+              <li><%= j + data[i][j] %></li>
+            <% } %>
+          <% } %>
         </div>
     </div>
   </body>

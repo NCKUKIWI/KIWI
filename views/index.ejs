@@ -48,7 +48,7 @@
         <div class="row">
           <% for(var i in data ){ %>
             <% for(var j in data[i] ){ %>
-              <li><%= j + data[i][j] %></li>
+              <li><%- j + data[i][j] %></li>
             <% } %>
           <% } %>
         </div>

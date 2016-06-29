@@ -6,7 +6,7 @@ var user = require('./routes/user');         //引入router檔案位於routes資
 var app = express();
 
 app.set('views',path.join(__dirname,'views'));  //view的路徑位在資料夾views中
-app.set('view engine','hjs');                   //使用hjs作為template
+app.set('view engine','ejs');                   //使用ejs作為template
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));

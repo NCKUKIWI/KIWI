@@ -5,7 +5,7 @@ var database =  require('./firebase');
 router.get('/', function(req, res) {
   database.ref('post').on('value', function(snapshot) {
     var data = snapshot.val();
-    res.render('index',{"data":data});
+    res.render('post/index',{"data":data});
   });
 });
 

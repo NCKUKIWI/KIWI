@@ -29,9 +29,12 @@
 ```
 
 - `app.js` -> setting of the server
+- `assets` -> custom css and js file
+  - `css`
+  - `js` 
 - `routes` -> setting of the routes (Controller)
 - `views` -> template files (View)
-    - `public` -> layouts
+  - `public` -> layouts
 
 ## REST
 

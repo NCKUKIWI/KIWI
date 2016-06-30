@@ -3,7 +3,10 @@ var router = express.Router();
 var database =  require('./firebase');
 
 router.get('/', function(req, res) {
-  res.render('index');
+  database.ref('post').on('value', function(snapshot) {
+    var data = snapshot.val();
+    res.render('index',{"data":data});
+  });
 });
 
 module.exports = router;

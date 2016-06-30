@@ -18,7 +18,7 @@
 
 ```
 ├── app.js
-├── asset
+├── assets
 │   ├── css
 │   └── js
 ├── routes   

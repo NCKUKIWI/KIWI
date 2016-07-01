@@ -4,7 +4,7 @@ var database =  require('./firebase');
 
 /* index */
 router.get('/', function(req, res) {
-  console.log("GET '/post'");
+  console.log("GET /post");
   database.ref('post').on('value', function(snapshot) {
     var data = snapshot.val();
     res.render('post/index',{"data":data});
@@ -13,7 +13,8 @@ router.get('/', function(req, res) {
 
 /* show */
 router.get('/:id', function(req, res) {
-  res.render('post/show');
+  console.log("GET /post/"+req.params.id);
+  res.render('post/index');
 });
 
 /* new */

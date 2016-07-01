@@ -31,7 +31,7 @@
 - `app.js` -> setting of the server
 - `assets` -> custom css and js file
   - `css`
-  - `js` 
+  - `js`
 - `routes` -> setting of the routes (Controller)
 - `views` -> template files (View)
   - `public` -> layouts
@@ -55,3 +55,17 @@
 導入片段的 html or ejs
 
 `<% include path/view %>`
+
+##Body parser
+
+`url?id=1`
+
+req.query.id
+
+`url/:id`
+
+req.params.id
+
+`pass by table`
+
+req.body.id

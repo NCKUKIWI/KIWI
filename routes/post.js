@@ -1,14 +1,17 @@
 var express = require('express');
+var pg = require('pg');
 var router = express.Router();
-var database =  require('./firebase');
+/*
+--conect db--
+pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+
+});
+*/
 
 /* index */
 router.get('/', function(req, res) {
   console.log("GET /post");
-  database.ref('post').on('value', function(snapshot) {
-    var data = snapshot.val();
-    res.render('post/index',{"data":data});
-  });
+  res.render('post/index');
 });
 
 /* show */

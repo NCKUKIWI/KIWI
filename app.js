@@ -18,5 +18,5 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use('/', index);                          // get '/'時交給routes index處理
 app.use('/post', post);                          // get '/user'時交給routes user處理
 
-app.listen(3000);                             //監聽3000port
+app.listen( process.env.PORT || 3000);                             //監聽3000port
 console.log('running on port 3000');

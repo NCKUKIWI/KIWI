@@ -14,7 +14,7 @@ router.get('/', function(req, res) {
   console.log("GET '/'");
   pg.connect(db.url, function(err, client, done) {
     if (err) throw err;
-    client.query('SELECT course_name,teacher,catalog,semester FROM post', function (err, result) {
+    client.query('SELECT id,course_name,teacher,catalog,semester FROM post', function (err, result) {
       if (err) throw err;
       var data = result.rows;
       var count = result.rowCount;

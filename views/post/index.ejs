@@ -31,7 +31,7 @@
             </tr>
             <% for(var i in data){ %>
             <tr>
-              <td class="coursename"><%- data[i].course_name %></td>
+              <td class="coursename"><a href="post/<%= data[i].id %>"><%- data[i].course_name %></a></td>
               <td class="catalog"><%- data[i].catalog %></td>
               <td class="teacher"><%- data[i].teacher %></td>
               <td class="semester"><%- data[i].semester %></td>

@@ -69,3 +69,47 @@ req.params.id
 `pass by table`
 
 req.body.id
+
+##Model
+
+請先加入
+
+`var db = require(./db);`
+
+datas就是資料庫回傳的資料
+
+### Get all data from table
+
+`db.getall(tablename,function(datas){
+  ......
+});`
+
+Example: 拉出 post 這個 table 中的所有資料
+
+`db.getall('post',function(datas){
+  res.render('views',{'data':datas});
+});`
+
+### Get specific columns from table
+
+`db.getcols(tablename,colsname,function(datas){
+  ......
+});`
+
+Example: 拉出 post 這個 table 中的 id 跟 title 欄位
+
+`db.getcols('post','id,title',function(datas){
+  res.render('views',{'data':datas});
+});`
+
+### Find data by ID
+
+`db.findbyID(table,id,function(datas){
+  ......
+});`
+
+Example: 拉出 post 這個 table 中 id 為 1 的資料
+
+`db.getcols('post',1,function(datas){
+  res.render('views',{'data':datas});
+});`

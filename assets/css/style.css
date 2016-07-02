@@ -41,3 +41,57 @@ table {
 border-collapse: collapse;
 border-spacing: 0;
 }
+
+/* custom css */
+
+.navbar{
+  border-radius:0px;
+}
+
+.container{
+  margin:0px;
+  width:100%;
+  padding:0px 20px;
+}
+
+#sidebar,#content{
+  background:rgb(245,245,245);
+  padding:40px 20px;
+}
+
+.sidebar-query{
+  margin-bottom:50px;
+}
+
+#query{
+  display:block;
+  width:80%;
+  height:40px;
+  margin:20px auto;
+}
+
+.sidebar-categories{
+  font-size:0px
+}
+
+.category{
+ padding:5px 10px;
+ margin:4px 2.5%;
+ font-size:14px;
+ text-align:center;
+ display:inline-block;
+ width:45%;
+ border:solid 1px black;
+ background:white;
+}
+
+#search{
+  text-align:center;
+  display:block;
+  width:60%;
+  padding:10px 5px;
+  margin:40px auto;
+  border:solid 1px black;
+  background:rgb(175,236,180);
+  font-size:24px;
+}

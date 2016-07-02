@@ -14,6 +14,7 @@ app.set('view engine','ejs');                   //使用ejs作為template
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
+app.use("/assets",express.static(__dirname + "/assets"));
 
 app.use('/', index);                          // get '/'時交給routes index處理
 app.use('/post', post);                          // get '/user'時交給routes user處理

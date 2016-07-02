@@ -7,10 +7,10 @@ pg.connect(process.env.DATABASE_URL, function(err, client, done) {
 
 });
 */
-
+/* root */
 router.get('/', function(req, res) {
   console.log("GET '/'");
-  res.render('index');
+  res.render('post/index');
 });
 
 module.exports = router;

@@ -10,11 +10,11 @@
           <div class="sidebar-categories">
             <h1 class="text-center h3">選擇類別</h1>
             <ul>
-              <li class="category">A9 通識中心</li>
-              <li class="category">A2 體育室</li>
-              <li class="category">A1 外國語言</li>
-              <li class="category">A6 服務學習</li>
-              <li class="category">A7 基礎國文</li>
+              <li class="catagory">A9 通識中心</li>
+              <li class="catagory">A2 體育室</li>
+              <li class="catagory">A1 外國語言</li>
+              <li class="catagory">A6 服務學習</li>
+              <li class="catagory">A7 基礎國文</li>
             </ul>
           </div>
           <li id="search">查詢課程</li>
@@ -24,53 +24,19 @@
         <div id="content">
           <table class="table">
             <tr>
-              <th>課程</th>
-              <th>類別</th>
-              <th>開課老師</th>
-              <th>學期</th>
+              <th class="coursename">課程</th>
+              <th class="catalog">類別</th>
+              <th class="teacher">開課老師</th>
+              <th class="semester">學期</th>
             </tr>
+            <% for(var i in data){ %>
             <tr>
-              <td>課程</td>
-              <td>類別</td>
-              <td>開課老師</td>
-              <td>學期</td>
+              <td class="coursename"><%- data[i].course_name %></td>
+              <td class="catalog"><%- data[i].catalog %></td>
+              <td class="teacher"><%- data[i].teacher %></td>
+              <td class="semester"><%- data[i].semester %></td>
             </tr>
-            <tr>
-              <td>課程</td>
-              <td>類別</td>
-              <td>開課老師</td>
-              <td>學期</td>
-            </tr>
-            <tr>
-              <td>課程</td>
-              <td>類別</td>
-              <td>開課老師</td>
-              <td>學期</td>
-            </tr>
-            <tr>
-              <td>課程</td>
-              <td>類別</td>
-              <td>開課老師</td>
-              <td>學期</td>
-            </tr>
-            <tr>
-              <td>課程</td>
-              <td>類別</td>
-              <td>開課老師</td>
-              <td>學期</td>
-            </tr>
-            <tr>
-              <td>課程</td>
-              <td>類別</td>
-              <td>開課老師</td>
-              <td>學期</td>
-            </tr>
-            <tr>
-              <td>課程</td>
-              <td>類別</td>
-              <td>開課老師</td>
-              <td>學期</td>
-            </tr>
+            <% } %>
           </table>
         </div>
       </div>

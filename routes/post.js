@@ -25,7 +25,9 @@ router.get('/new', function(req, res) {
 
 /* create */
 router.post('/create', function(req, res) {
-
+  console.log(req.body.coursename);
+  console.log(req.body.teacher);
+  res.redirect('/'); 
 });
 
 /* edit */

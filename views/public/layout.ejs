@@ -10,7 +10,7 @@
   <link rel='stylesheet' href='assets/css/style.css' />
 </head>
 
-<body  style="background:rgb(233,234,239);">
+<body style="background:rgb(233,234,239);">
   <nav class="navbar navbar-default">
     <div class="container-fluid">
       <div class="navbar-header">
@@ -24,7 +24,42 @@
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav navbar-right">
           <li><a href="#">關於</a></li>
-          <li><a href="#">提供心得</a></li>
+          <li>
+            <a href="#" data-toggle="modal" data-target="#create">提供心得</a>
+            <div class="modal fade" id="create" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                      <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+                    </button>
+                    <h1 class="modal-title">新增心得</h1>
+                  </div>
+                  <div class="modal-body">
+                    <form class="form-horizontal" id="createform" method="post" action="/post/create">
+                      <div class="form-group">
+                        <label class="control-label col-sm-4">課程名稱:</label>
+                        <div class="col-sm-8">
+                          <input type="text" class="form-control" name="coursename">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-sm-4">授課老師:</label>
+                        <div class="col-sm-8">
+                          <input type="text" class="form-control" name="teacher">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="col-sm-offset-4 col-sm-8">
+                          <button type="submit" class="btn btn-default">Submit</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
           <li><a href="#">回報問題</a></li>
         </ul>
       </div>

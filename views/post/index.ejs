@@ -14,13 +14,52 @@
               <th class="semester">學期</th>
             </tr>
             <% for(var i in data){ %>
-            <tr>
-              <td class="coursename"><a href="post/<%= data[i].id %>"><%- data[i].course_name %></a></td>
-              <td class="catalog"><%- data[i].catalog %></td>
-              <td class="teacher"><%- data[i].teacher %></td>
-              <td class="semester"><%- data[i].semester %></td>
-            </tr>
-            <% } %>
+              <tr>
+                <td class="coursename">
+                  <span data-toggle="modal" data-target="#modal-<%= data[i].id %>">
+                  <%- data[i].course_name %>
+                </span>
+                </td>
+                <td class="catalog">
+                  <%- data[i].catalog %>
+                </td>
+                <td class="teacher">
+                  <%- data[i].teacher %>
+                </td>
+                <td class="semester">
+                  <%- data[i].semester %>
+                </td>
+              </tr>
+              <div class="modal fade" id="modal-<%= data[i].id %>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-md">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+                      </button>
+                      <h1 class="modal-title"><%- data[i].course_name %></h1>
+                    </div>
+                    <div class="modal-body">
+                      <div class="partA">
+                        <p><span class="title">類別:</span> <%- data[i].course_name %></p>
+                        <p><span class="title">學期:</span> <%- data[i].semester %></p>
+                        <p><span class="title">授課老師:</span> <%- data[i].teacher %></p>
+                      </div>
+                      <div class="partB">
+                        <p><span class="title">修課心得:</span> <%- data[i].comment %></p>
+                      </div>
+                      <div class="partA">
+                        <p><span class="title">報告作業:</span> <%- data[i].report_hw %></p>
+                        <p><span class="title">考試方式:</span> <%- data[i].exam_style %></p>
+                        <p><span class="title">評分方式:</span> <%- data[i].scorce_style %></p>
+                        <p><span class="title">老師上課教材:</span> <%- data[i].course_need %></p>
+                        <p><span class="title">老師上課方式:</span> <%- data[i].course_style %></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <% } %>
           </table>
         </div>
       </div>

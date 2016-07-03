@@ -19,33 +19,28 @@ router.get('/', function(req, res) {
   });
 });
 
-/* show */
-router.get('/:id', function(req, res) {
-  console.log("GET /post/"+req.params.id);
-  db.findbyID('post',req.params.id,function(datas){
-    res.render('post/show',{'data':datas});
-  });
-});
-
-/* new */
-router.get('/new', function(req, res) {
-  res.render('post/new');
-});
-
 /* create */
 router.post('/create', function(req, res) {
   var coursename = req.body.coursename;
   var teacher = req.body.teacher;
   var semester =req.body.semester;
   var catalog = req.body.catalog;
-  var comment = req.body.comment;
+  var comment = req.body.comment.replace(/\n/g,"<br>"); // replace \n to <br>
+  var report_hw = req.body.report_hw;
+  var exam_style = req.body.exam_style;
+  var score_style = req.body.score_style;
+  var course_need = req.body.course_need;
+  var course_style = req.body.course_style;
 
+  console.log('POST post/create');
+  
   pg.connect(config.dburl, function(err, client, done) {
     if (err) throw err;
-    client.query("INSERT INTO post (course_name,teacher,semester,catalog,comment) VALUES ($1,$2,$3,$4,$5)",[coursename,teacher,semester,catalog,comment],function (err, result) {
+    client.query("INSERT INTO post (course_name,teacher,semester,catalog,comment,report_hw,exam_style,score_style,course_need,course_style) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)"
+    ,[coursename,teacher,semester,catalog,comment,report_hw,exam_style,score_style,course_need,course_style],function (err, result) {
       if (err) throw err;
       done();
-      console.log(result);
+      console.log("Create Success");
       res.redirect('/');
     });
   });
@@ -63,7 +58,19 @@ router.post('/update', function(req, res) {
 
 /* del */
 router.delete('/:id', function(req,res) {
-
+  var id = req.params.id;
+  var sql= "DELETE FROM post WHERE id = "+id;
+  console.log("DELETE post/"+id);
+  pg.connect(config.dburl, function(err, client, done) {
+    if (err) throw err;
+    client.query(sql,function (err, result) {
+      if (err) throw err;
+      done();
+      console.log(sql);
+      console.log("DELETE Success!");
+      res.send('Success');
+    });
+  });
 });
 
 module.exports = router;

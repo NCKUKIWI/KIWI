@@ -17,8 +17,8 @@
               <tr>
                 <td class="coursename">
                   <span data-toggle="modal" data-target="#modal-<%= data[i].id %>">
-                  <%- data[i].course_name %>
-                </span>
+                    <%- data[i].course_name %>
+                  </span>
                 </td>
                 <td class="catalog">
                   <%- data[i].catalog %>
@@ -51,9 +51,10 @@
                       <div class="partA">
                         <p><span class="title">報告作業:</span> <%- data[i].report_hw %></p>
                         <p><span class="title">考試方式:</span> <%- data[i].exam_style %></p>
-                        <p><span class="title">評分方式:</span> <%- data[i].scorce_style %></p>
+                        <p><span class="title">評分方式:</span> <%- data[i].score_style %></p>
                         <p><span class="title">老師上課教材:</span> <%- data[i].course_need %></p>
                         <p><span class="title">老師上課方式:</span> <%- data[i].course_style %></p>
+                        <div class="btn btn-default delbtn" data-id="<%=data[i].id %>">del</div>
                       </div>
                     </div>
                   </div>
@@ -65,3 +66,17 @@
       </div>
     </div>
   </div>
+  <script type="text/javascript">
+    $('.delbtn').on('click',function(){
+      console.log('Click');
+      var postid = this.getAttribute("data-id");
+      console.log(postid);
+      $.ajax({
+        url: '/post/'+postid,
+        type: 'DELETE',
+        success: function(response) {
+          window.location.href="/";
+        }
+      });
+    });
+  </script>

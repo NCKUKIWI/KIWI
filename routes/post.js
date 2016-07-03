@@ -33,7 +33,7 @@ router.post('/create', function(req, res) {
   var course_style = req.body.course_style;
 
   console.log('POST post/create');
-  
+
   pg.connect(config.dburl, function(err, client, done) {
     if (err) throw err;
     client.query("INSERT INTO post (course_name,teacher,semester,catalog,comment,report_hw,exam_style,score_style,course_need,course_style) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)"

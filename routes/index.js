@@ -5,32 +5,41 @@ var db = require('../model/db');
 /* root */
 router.get('/', function(req, res) {
   console.log("GET '/'");
-  // db.getall('post',function(datas){
-  //   res.render('post/index',{'data':datas});
-  // });
+  db.getall('post',function(datas){
+  	var teacher = search_item(datas, "teacher");
+	  var courseName = search_item(datas, "course_name");
 
-  if(!req.query.hasOwnProperty("teacher") && !req.query.hasOwnProperty("course")){
-	  db.getall('post',function(datas){
-	  	var teacher = search_item(datas, "teacher");
-	  	var courseName = search_item(datas, "course_name");
-	  	// console.log(teacher);
-
+	  if(!req.query.hasOwnProperty("teacher") && !req.query.hasOwnProperty("course")){
 	    res.render('post/index',{
 	    	'data':datas,
 	    	'teachers': teacher,
-	    	'course_name': courseName,
+	    	'course_name': courseName
 	    });
-	  });
-  }
-  else if(req.query.hasOwnProperty("teacher")){
-	  db.getcols('post',function(datas){
+	  }
+	  else if(req.query.hasOwnProperty("teacher")){
+		  db.findbyTeacher('post', req.query.teacher,function(datas){
+
+		    res.render('post/index',{
+		    	'data':datas,
+		    	'teachers': teacher,
+		    	'course_name': courseName
+		    });
+		  });
+	  }
+	  else if(req.query.hasOwnProperty("course")){
+		  db.findbyCourseName('post', req.query.course,function(datas){
+
+		    res.render('post/index',{
+		    	'data':datas,
+		    	'teachers': teacher,
+		    	'course_name': courseName
+		    });
+		  });
+	  }
+  });
 
 
-	    res.render('post/index',{
-	    	'data':datas,
-	    });
-	  });
-  }
+
 
 function search_item(datas, item){
   	var item_array = [];
@@ -41,8 +50,11 @@ function search_item(datas, item){
 			data = datas[i];
 			for(var j in item_array){
 				if(data[item] == null) continue;
-				data[item] = data[item].replace(/\.|\(|\)/g, " ");
-				if(item_array[j].match(data[item]) != null)
+				var regex = data[item].replace(/\(/g, "\\(");
+				regex = regex.replace(/\)/g, "\\)");
+				regex = regex.replace(/\./g, "\\.");
+
+				if(item_array[j].match(regex) != null)
 					break;
 				else if (j == item_array.length - 1){
 					item_array.push(data[item]);

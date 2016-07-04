@@ -3,13 +3,13 @@
     <% for(var i in teachers){ %>
       {
         title:'<%- teachers[i]%>',
-        url:''
+        url:'/?teacher=<%- teachers[i]%>'
       },
     <% } %>
     <% for(var i in course_name){ %>
       {
         title: '<%- course_name[i]%>',
-        url: ''
+        url: '/?course=<%- course_name[i]%>'
       },
     <% } %>
   ];

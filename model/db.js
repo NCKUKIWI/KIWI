@@ -50,4 +50,32 @@ exports.findbyID = function findbyID(table,id,callback){
   });
 }
 
+exports.findbyCourseName = function findbyCourseName(table,courseName,callback){
+  var sql = "SELECT * FROM " + table +" WHERE course_name = "+ "\'" + courseName + "\'";
+  console.log(sql);
+  pg.connect(config.dburl, function(err, client, done) {
+    if (err) throw err;
+    client.query(sql, function (err, result) {
+      if (err) throw err;
+      client.end();
+      console.log(result.rowCount+" datas");
+      callback(result.rows);
+    });
+  });
+}
+
+exports.findbyTeacher = function findbyTeacher(table,name,callback){
+  var sql = "SELECT * FROM " + table +" WHERE teacher = "+ "\'" + name + "\'";
+  console.log(sql);
+  pg.connect(config.dburl, function(err, client, done) {
+    if (err) throw err;
+    client.query(sql, function (err, result) {
+      if (err) throw err;
+      client.end();
+      console.log(result.rowCount+" datas");
+      callback(result.rows);
+    });
+  });
+}
+
 

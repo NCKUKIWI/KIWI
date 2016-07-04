@@ -5,19 +5,32 @@ var db = require('../model/db');
 /* root */
 router.get('/', function(req, res) {
   console.log("GET '/'");
-  // if(!req.query.hasOwnProperty("teacher") && !req.query.hasOwnProperty("course")){
+  // db.getall('post',function(datas){
+  //   res.render('post/index',{'data':datas});
+  // });
+
+  if(!req.query.hasOwnProperty("teacher") && !req.query.hasOwnProperty("course")){
 	  db.getall('post',function(datas){
-	  	// var teacher = search_item(datas, "teacher");
-	  	// var className = search_item(datas, "class_name");
+	  	var teacher = search_item(datas, "teacher");
+	  	var courseName = search_item(datas, "course_name");
+	  	// console.log(teacher);
+
+	    res.render('post/index',{
+	    	'data':datas,
+	    	'teachers': teacher,
+	    	'course_name': courseName,
+	    });
+	  });
+  }
+  else if(req.query.hasOwnProperty("teacher")){
+	  db.getcols('post',function(datas){
 
 
 	    res.render('post/index',{
 	    	'data':datas,
-	    	// 'teacher': teacher,
-	    	// 'class_name': className,
 	    });
 	  });
-  // }
+  }
 
 function search_item(datas, item){
   	var item_array = [];
@@ -36,6 +49,7 @@ function search_item(datas, item){
 				}
 			}
 		}
+		return item_array;
 }
 
 

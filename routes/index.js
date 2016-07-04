@@ -17,24 +17,53 @@ router.get('/', function(req, res) {
 	    });
 	  }
 	  else if(req.query.hasOwnProperty("teacher")){
-		  db.findbyTeacher('post', req.query.teacher,function(datas){
+	  	var query_data = [];
+	  	for(var i in datas){
+	  		if(datas[i].teacher.match(req.query.teacher)){
+	  			query_data.push(datas[i]);
+	  		}
+	  	}
+	    res.render('post/index',{
+	    	'data':query_data,
+	    	'teachers': teacher,
+	    	'course_name': courseName
+	    });
 
-		    res.render('post/index',{
-		    	'data':datas,
-		    	'teachers': teacher,
-		    	'course_name': courseName
-		    });
-		  });
+		  // db.findbyTeacher('post', req.query.teacher,function(datas){
+
+		  //   res.render('post/index',{
+		  //   	'data':datas,
+		  //   	'teachers': teacher,
+		  //   	'course_name': courseName
+		  //   });
+		  // });
 	  }
 	  else if(req.query.hasOwnProperty("course")){
-		  db.findbyCourseName('post', req.query.course,function(datas){
+			var regex = req.query.course.replace(/\(/g, "\\(");
+			regex = regex.replace(/\)/g, "\\)");
+			regex = regex.replace(/\./g, "\\.");
 
-		    res.render('post/index',{
-		    	'data':datas,
-		    	'teachers': teacher,
-		    	'course_name': courseName
-		    });
-		  });
+	  	var query_data = [];
+	  	for(var i in datas){
+	  		if(datas[i].course_name.match(regex)){
+	  			query_data.push(datas[i]);
+	  		}
+	  	}
+	    res.render('post/index',{
+	    	'data':query_data,
+	    	'teachers': teacher,
+	    	'course_name': courseName
+	    });
+
+
+		  // db.findbyCourseName('post', req.query.course,function(datas){
+
+		  //   res.render('post/index',{
+		  //   	'data':datas,
+		  //   	'teachers': teacher,
+		  //   	'course_name': courseName
+		  //   });
+		  // });
 	  }
   });
 

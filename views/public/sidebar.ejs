@@ -15,13 +15,23 @@
   ];
   $(document).ready(function() {
     $('.ui.search').search({
-         source: content,
+        source: content,
+        error : {
+          source      : 'Cannot search. No source used, and Semantic API module was not included',
+          noResults   : '目前沒有此\"老師\"或是\"課程\"的心得',
+          logging     : 'Error in debug logging, exiting.',
+          noTemplate  : 'A valid template name was not specified.',
+          serverError : 'There was an issue with querying the server.',
+          maxResults  : 'Results must be an array to use maxResults setting',
+          method      : 'The method you called is not defined.'
+        },
+        maxResults: 10
     });
   });
 </script>
 
 <div id="sidebar">
-  <div class="ui search" style = "display: flex;flex-direction: column;">
+  <div class="ui search" style = "display: flex;flex-direction: column; margin-left: 20px;margin-right: 20px;">
     <div class="ui icon input">
       <input class="prompt" type="text" placeholder="Course or Teacher">
       <i class="search icon"></i>

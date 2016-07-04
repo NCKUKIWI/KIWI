@@ -11,14 +11,6 @@ client.query("INSERT INTO emps (firstname, lastname) values($1, $2)", ['Ronald',
 
 */
 
-/* index */
-router.get('/', function(req, res) {
-  console.log("GET '/'");
-  db.getall('post',function(datas){
-    res.render('post/index',{'data':datas});
-  });
-});
-
 /* create */
 router.post('/create', function(req, res) {
   var coursename = req.body.coursename;

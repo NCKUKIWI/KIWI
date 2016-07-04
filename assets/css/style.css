@@ -93,17 +93,6 @@ border-spacing: 0;
  background:white;
 }
 
-#searchbtn{
-  text-align:center;
-  display:block;
-  width:60%;
-  padding:10px 5px;
-  margin:40px auto;
-  border:solid 1px black;
-  background:rgb(175,236,180);
-  font-size:24px;
-}
-
 /* course table */
 .coursename{
   width:40%;

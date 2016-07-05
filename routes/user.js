@@ -40,4 +40,9 @@ router.get('/auth/facebook/callback',
   })
 );
 
+router.get('/logout', function(req, res){
+  req.logout();
+  res.redirect('/');
+});
+
 module.exports = router;

@@ -114,6 +114,9 @@ border-spacing: 0;
   font-weight:bold;
 }
 
+.delbtn{
+  margin-top:40px;
+}
 /* create form */
 #createform{
   margin:20px;

@@ -1,8 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var pg = require('pg');
-var db = require('../model/db');
-var config = require('../config');
+var connection = require('../config');
+connection = connection.connection;
 /*
 
 insert
@@ -17,19 +16,25 @@ router.get('/', function(req, res) {
 
 /* create */
 router.post('/create', function(req, res) {
-  var coursename = req.body.coursename;
-  var teacher = req.body.teacher;
-  var semester =req.body.semester;
-  var catalog = req.body.catalog;
-  var comment = req.body.comment.replace(/\n/g,"<br>"); // replace \n to <br>
-  var report_hw = req.body.report_hw;
-  var exam_style = req.body.exam_style;
-  var score_style = req.body.score_style;
-  var course_need = req.body.course_need;
-  var course_style = req.body.course_style;
-  var userid = req.user.id;
   console.log('POST post/create');
-
+  var post = {
+    course_name:req.body.coursename,
+    teacher:req.body.teacher,
+    semester:req.body.semester,
+    catalog:req.body.catalog,
+    comment:req.body.comment.replace(/\n/g,"<br>"),
+    report_hw:req.body.report_hw,
+    exam_style: req.body.exam_style,
+    score_style:req.body.score_style,
+    course_need: req.body.course_need,
+    course_style:req.body.course_style,
+    user_id: req.user.id
+  }
+  connection.query("INSERT INTO post SET ?",post,function(errs){
+    if (errs) throw errs;
+    res.redirect('/');
+  });
+  /*
   pg.connect(config.dburl, function(err, client, done) {
     if (err) throw err;
     client.query("INSERT INTO post (course_name,teacher,semester,catalog,comment,report_hw,exam_style,score_style,course_need,course_style,user_id) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)"
@@ -41,6 +46,7 @@ router.post('/create', function(req, res) {
       res.redirect('/');
     });
   });
+  */
 });
 
 /* edit */
@@ -58,6 +64,13 @@ router.delete('/:id', function(req,res) {
   var id = req.params.id;
   var sql= "DELETE FROM post WHERE id = "+id;
   console.log("DELETE post/"+id);
+  connection.query(sql,function(err, results, fields){
+    if (err) throw err;
+    console.log(sql);
+    console.log("DELETE Success!");
+    res.send('Success');
+  });
+  /*
   pg.connect(config.dburl, function(err, client, done) {
     if (err) throw err;
     client.query(sql,function (err, result) {
@@ -68,6 +81,7 @@ router.delete('/:id', function(req,res) {
       res.send('Success');
     });
   });
+  */
 });
 
 module.exports = router;

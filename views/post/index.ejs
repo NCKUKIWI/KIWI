@@ -31,7 +31,7 @@
                 </td>
               </tr>
               <div class="modal fade" id="modal-<%= data[i].id %>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-md">
+                <div class="modal-dialog modal-lg">
                   <div class="modal-content">
                     <div class="modal-header">
                       <button type="button" class="close" data-dismiss="modal">
@@ -54,8 +54,8 @@
                         <p><span class="title">評分方式:</span><br><%- (data[i].score_style != 'null') ?  data[i].score_style : '無' %></p><br>
                         <p><span class="title">老師上課教材:</span> <%- (data[i].course_need != 'null') ?  data[i].course_need : '無' %></p><br>
                         <p><span class="title">老師上課方式:</span> <%- (data[i].course_style != 'null') ?  data[i].course_style : '無' %></p>
-                        <% if(user && user.id == data[i].user_id ){ %>
-                        <div class="btn btn-default delbtn" data-id="<%=data[i].id %>">del</div>
+                        <% if(user && (user.id == data[i].user_id) ){ %>
+                          <div class="btn btn-default delbtn" data-id="<%=data[i].id %>">刪除文章</div>
                         <% } %>
                       </div>
                     </div>

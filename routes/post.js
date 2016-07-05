@@ -10,6 +10,10 @@ insert
 client.query("INSERT INTO emps (firstname, lastname) values($1, $2)", ['Ronald', 'McDonald']);
 
 */
+/* index  */
+router.get('/', function(req, res) {
+  res.redirect('../');
+});
 
 /* create */
 router.post('/create', function(req, res) {
@@ -23,13 +27,14 @@ router.post('/create', function(req, res) {
   var score_style = req.body.score_style;
   var course_need = req.body.course_need;
   var course_style = req.body.course_style;
-
+  var userid = req.user.id;
   console.log('POST post/create');
 
   pg.connect(config.dburl, function(err, client, done) {
     if (err) throw err;
-    client.query("INSERT INTO post (course_name,teacher,semester,catalog,comment,report_hw,exam_style,score_style,course_need,course_style) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)"
-    ,[coursename,teacher,semester,catalog,comment,report_hw,exam_style,score_style,course_need,course_style],function (err, result) {
+    client.query("INSERT INTO post (course_name,teacher,semester,catalog,comment,report_hw,exam_style,score_style,course_need,course_style,user_id) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)"
+    ,[coursename,teacher,semester,catalog,comment,report_hw,exam_style,score_style,course_need,course_style,userid],
+    function (err, result) {
       if (err) throw err;
       done();
       console.log("Create Success");

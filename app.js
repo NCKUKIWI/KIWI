@@ -2,9 +2,17 @@ var express = require('express');
 var engine = require('ejs-locals');             //讓express支援layout
 var path = require('path');
 var bodyParser = require('body-parser');
-
-var index = require('./routes/index');         //引入router檔案位於routes資料夾中
-var post = require('./routes/post');         //引入router檔案位於routes資料夾中
+var expressValidator = require('express-validator');
+var session = require('express-session');
+var passport = require('passport');
+//db
+var pg = require('pg');
+var db = require('./model/db');
+var config = require('./config');
+// 引入router檔案位於routes資料夾中
+var index = require('./routes/index');
+var post = require('./routes/post');
+var user = require('./routes/user');
 
 var app = express();
 
@@ -14,10 +22,24 @@ app.set('view engine','ejs');                   //使用ejs作為template
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
+
+//Validator
+app.use(expressValidator());
 app.use("/assets",express.static(__dirname + "/assets"));
 
-app.use('/', index);                          // get '/'時交給routes index處理
-app.use('/post', post);                          // get '/user'時交給routes user處理
+//Handle sessions
+app.use(session({
+  secret:'secret',
+  saveUninitialized: true,
+  resave: true
+}));
+//passport
+app.use(passport.initialize());
+app.use(passport.session());
+//Route
+app.use('/', index);                              // get '/'時交給routes index處理
+app.use('/post', post);                          // get '/post'時交給routes post處理
+app.use('/user',user);                          // get '/user'時交給routes user處理
 
 app.listen( process.env.PORT || 3000);                             //監聽3000port
 console.log('running on port 3000');

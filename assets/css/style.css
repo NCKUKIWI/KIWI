@@ -67,17 +67,6 @@ border-spacing: 0;
   padding:40px 20px;
 }
 
-.sidebar-query{
-  margin-bottom:50px;
-}
-
-#query{
-  display:block;
-  width:80%;
-  height:40px;
-  margin:20px auto;
-}
-
 .sidebar-categories{
   font-size:0px
 }
@@ -91,6 +80,9 @@ border-spacing: 0;
  width:45%;
  border:solid 1px black;
  background:white;
+}
+.catagory a{
+  color:black;
 }
 
 /* course table */

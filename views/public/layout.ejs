@@ -7,9 +7,9 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
-  <script src="assets/semantic/dist/semantic.min.js"></script>
-  <link rel="stylesheet" type="text/css" href="assets/semantic/dist/semantic.min.css">
-  <link rel='stylesheet' href='assets/css/style.css' />
+  <script src="../assets/semantic/dist/semantic.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="../assets/semantic/dist/semantic.min.css">
+  <link rel='stylesheet' href='../assets/css/style.css' />
 </head>
 
 <body style="background:rgb(233,234,239);">
@@ -26,11 +26,16 @@
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav navbar-right">
           <li><a href="#">關於</a></li>
+          <% if(user){%>
           <li>
             <a href="#" data-toggle="modal" data-target="#create">提供心得</a>
-            <% include ./createform %>
+            <% include ../post/createform %>
           </li>
+          <% }%>
           <li><a href="#">回報問題</a></li>
+          <% if(user == null ){%>
+          <li><a href="/user/auth/facebook">FB登入</a></li>
+          <% }%>
         </ul>
       </div>
     </div>

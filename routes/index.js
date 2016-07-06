@@ -47,6 +47,15 @@ router.get('/', function(req, res) {
 	  		case "AG":
 	  			req.query.catalog = "公民歷史"
 	  			break;
+        case "M":
+          req.query.catalog = "必修"
+          break;
+        case "C":
+          req.query.catalog = "選修"
+          break;
+        default :
+          req.query.catalog = ""
+          break;
 	  	}
 	  	db.query_post(datas, req.query.catalog, "catalog",function(data,teachers,course_name){
         res.render('post/index',{

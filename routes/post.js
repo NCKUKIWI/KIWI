@@ -11,22 +11,31 @@ router.get('/', function(req, res) {
 router.post('/create', function(req, res) {
   console.log('POST /post/create');
   var userid = (req.user) ? req.user.id : '0';
-  var post = {
-    course_name:req.body.coursename,
-    teacher:req.body.teacher,
-    semester:req.body.semester,
-    catalog:req.body.catalog,
-    comment:req.body.comment.replace(/\n/g,"<br>"),
-    report_hw:req.body.report_hw,
-    exam_style: req.body.exam_style,
-    score_style:req.body.score_style,
-    course_need: req.body.course_need,
-    course_style:req.body.course_style,
-    user_id: userid
+  req.checkBody('coursename', '課程名稱不可為空').notEmpty();
+  req.checkBody('teacher', '老師名稱不可為空').notEmpty();
+  req.checkBody('comment', '修課心得不可為空').notEmpty();
+  var errors = req.validationErrors();
+  if (errors) {
+    res.send(errors);
+  }else{
+    var post = {
+      course_name:req.body.coursename,
+      teacher:req.body.teacher,
+      semester:req.body.semester,
+      catalog:req.body.catalog,
+      comment:req.body.comment.replace(/\n/g,"<br>"),
+      report_hw:req.body.report_hw,
+      exam_style: req.body.exam_style,
+      score_style:req.body.score_style,
+      course_need: req.body.course_need,
+      course_style:req.body.course_style,
+      user_id: userid
+    }
+    db.Insert('post',post,function(err,result){
+      if(err) throw err;
+      res.send("success");
+    });
   }
-  db.Insert('post',post,function(err,result){
-    res.redirect('/');
-  });
 });
 
 /* edit */

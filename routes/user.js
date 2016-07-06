@@ -44,7 +44,9 @@ router.get('/auth/facebook', passport.authenticate('facebook'));
 router.get('/auth/facebook/callback',
   passport.authenticate('facebook', {
     successRedirect: '../../../',
-    failureRedirect: '/login'
+    successFlash: '登入成功!',
+    failureRedirect: '../../../',
+    failureFlash: '請重新再試一次!',
   })
 );
 

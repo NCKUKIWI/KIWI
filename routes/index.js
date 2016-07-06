@@ -7,7 +7,17 @@ router.get('/', function(req, res) {
   console.log("GET '/'");
   console.log(req.user);
   db.getall('post',function(datas){
-	  if(req.query.hasOwnProperty("teacher")){
+    if(req.query.hasOwnProperty("queryw")){
+	  	db.query_post(datas, req.query.queryw,"query",function(data,teachers,course_name){
+        res.render('post/index',{
+          'data':data,
+          'teachers': teachers,
+          'course_name': course_name,
+          'user': req.user
+        });
+      });
+	  }
+	  else if(req.query.hasOwnProperty("teacher")){
 	  	db.query_post(datas, req.query.teacher, "teacher",function(data,teachers,course_name){
         res.render('post/index',{
           'data':data,

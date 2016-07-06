@@ -102,14 +102,26 @@ exports.query_post = function query_post(datas, req, item,callback){
 	var regex = req.replace(/\(/g, "\\(");
 	regex = regex.replace(/\)/g, "\\)");
 	regex = regex.replace(/\./g, "\\.");
-
-	var query_data = [];
-	for(var i in datas){
-		var data = datas[i]
-		if(data[item].match(regex)){
-			query_data.push(datas[i]);
-		}
-	}
+  var query_data = [];
+  if(item="query"){
+    for(var i in datas){
+  		var data = datas[i]
+  		if(data['teacher'].match(regex)){
+  			query_data.push(datas[i]);
+  		}
+      if(data['course_name'].match(regex)){
+        query_data.push(datas[i]);
+      }
+  	}
+  }
+  else{
+  	for(var i in datas){
+  		var data = datas[i]
+  		if(data[item].match(regex)){
+  			query_data.push(datas[i]);
+  		}
+  	}
+  }
 
   callback(query_data,teacher,courseName);
 }

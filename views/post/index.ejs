@@ -19,7 +19,7 @@
               </tr>
             <% }else{ %>
               <% for(var i in data){ %>
-                <tr id="post-<%= data[i].id %>">
+                <tr id="post-<%= data[i].id %>" class="post-row">
                   <td class="coursename" data-toggle="modal" data-target="#modal-<%= data[i].id %>">
                     <%- data[i].course_name %>
                   </td>
@@ -52,11 +52,11 @@
                           <p><span class="title">修課心得:</span><br><%- data[i].comment %></p>
                         </div>
                         <div class="partA">
-                          <p><span class="title">報告作業:</span> <%- (data[i].report_hw != 'null') ?  data[i].report_hw : '無' %></p><br>
-                          <p><span class="title">考試方式:</span> <%- (data[i].exam_style != 'null') ?  data[i].exam_style : '無' %></p><br>
+                          <p><span class="title">報告作業:</span><br><%- (data[i].report_hw != 'null') ?  data[i].report_hw : '無' %></p><br>
+                          <p><span class="title">考試方式:</span><br><%- (data[i].exam_style != 'null') ?  data[i].exam_style : '無' %></p><br>
                           <p><span class="title">評分方式:</span><br><%- (data[i].score_style != 'null') ?  data[i].score_style : '無' %></p><br>
-                          <p><span class="title">老師上課教材:</span> <%- (data[i].course_need != 'null') ?  data[i].course_need : '無' %></p><br>
-                          <p><span class="title">老師上課方式:</span> <%- (data[i].course_style != 'null') ?  data[i].course_style : '無' %></p>
+                          <p><span class="title">老師上課教材:</span><br><%- (data[i].course_need != 'null') ?  data[i].course_need : '無' %></p><br>
+                          <p><span class="title">老師上課方式:</span><br><%- (data[i].course_style != 'null') ?  data[i].course_style : '無' %></p>
                           <% if(user && (user.id == data[i].user_id) ){ %>
                             <div class="btn btn-default delbtn" data-id="<%=data[i].id %>">刪除文章</div>
                           <% } %>

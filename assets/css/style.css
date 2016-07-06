@@ -73,7 +73,7 @@ border-spacing: 0;
 }
 
 .ui.button{
-  padding:10px 5px;
+  padding:12px 5px;
   margin:10px 1%;
   font-weight:500;
 }
@@ -82,20 +82,18 @@ border-spacing: 0;
  font-size:14px;
  text-align:center;
  width:48%;
-}
-
-.catagory a{
-  color:black;
+ color:black;
+ font-weight:500;
 }
 
 /* course table */
+.post-row:hover{
+  background:rgba(233,234,239,0.7);
+}
 .coursename{
   font-weight:bold;
   cursor: pointer;
   width:40%;
-}
-.coursename:hover{
-  background:rgba(233,234,239,0.7);
 }
 .catalog{
   width:25%;

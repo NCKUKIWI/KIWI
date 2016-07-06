@@ -1,9 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var pg = require('pg');
 var db = require('../model/db');
 var config = require('../config');
-var bcrypt = require('bcryptjs');
 var passport = require('passport');
 var FacebookStrategy = require('passport-facebook').Strategy;
 

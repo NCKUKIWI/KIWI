@@ -71,22 +71,25 @@ border-spacing: 0;
   font-size:0px
 }
 
+.ui.button{
+  padding:20px 5px;
+  margin:10px 1%;
+}
+
 .catagory{
- padding:5px 10px;
- margin:4px 2.5%;
  font-size:14px;
  text-align:center;
- display:inline-block;
- width:45%;
- border:solid 1px black;
- background:white;
+ width:48%;
 }
+
 .catagory a{
   color:black;
 }
 
 /* course table */
 .coursename{
+  font-weight:bold;
+  cursor: pointer;
   width:40%;
 }
 .catalog{

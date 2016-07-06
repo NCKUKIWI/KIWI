@@ -2,13 +2,7 @@ var express = require('express');
 var router = express.Router();
 var connection = require('../config');
 connection = connection.connection;
-/*
 
-insert
-
-client.query("INSERT INTO emps (firstname, lastname) values($1, $2)", ['Ronald', 'McDonald']);
-
-*/
 /* index  */
 router.get('/', function(req, res) {
   res.redirect('../');
@@ -34,19 +28,6 @@ router.post('/create', function(req, res) {
     if (errs) throw errs;
     res.redirect('/');
   });
-  /*
-  pg.connect(config.dburl, function(err, client, done) {
-    if (err) throw err;
-    client.query("INSERT INTO post (course_name,teacher,semester,catalog,comment,report_hw,exam_style,score_style,course_need,course_style,user_id) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)"
-    ,[coursename,teacher,semester,catalog,comment,report_hw,exam_style,score_style,course_need,course_style,userid],
-    function (err, result) {
-      if (err) throw err;
-      done();
-      console.log("Create Success");
-      res.redirect('/');
-    });
-  });
-  */
 });
 
 /* edit */
@@ -70,18 +51,6 @@ router.delete('/:id', function(req,res) {
     console.log("DELETE Success!");
     res.send('Success');
   });
-  /*
-  pg.connect(config.dburl, function(err, client, done) {
-    if (err) throw err;
-    client.query(sql,function (err, result) {
-      if (err) throw err;
-      done();
-      console.log(sql);
-      console.log("DELETE Success!");
-      res.send('Success');
-    });
-  });
-  */
 });
 
 module.exports = router;

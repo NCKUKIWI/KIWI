@@ -1,13 +1,5 @@
-// var pg = require('pg');
-// var config = require('../config');
 var connection = require('../config');
 connection = connection.connection;
-/*
---conect db--
-pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-
-});
-*/
 
 function search_item(datas, item){
   	var item_array = [];
@@ -33,21 +25,12 @@ function search_item(datas, item){
 }
 
 exports.getall = function getall(table,callback){
-  var sql = "SELECT * FROM " + table ;
+  var sql = "SELECT * FROM " + table +" ORDER BY id DESC" ;
   console.log(sql);
   connection.query(sql,function(err, results, fields){
     if (err) throw err;
     callback(results);
   });
-  // pg.connect(config.dburl, function(err, client, done) {
-  //   if (err) throw err;
-  //   client.query(sql, function (err, result) {
-  //     if (err) throw err;
-  //     client.end();
-  //     console.log(result.rowCount+" datas");
-  //     callback(result.rows);
-  //   });
-  // });
 }
 
 exports.getcols = function getcols(table,cols,callback){
@@ -57,15 +40,6 @@ exports.getcols = function getcols(table,cols,callback){
     if (err) throw err;
     callback(results);
   });
-  // pg.connect(config.dburl, function(err, client, done) {
-  //   if (err) throw err;
-  //   client.query(sql, function (err, result) {
-  //     if (err) throw err;
-  //     client.end();
-  //     console.log(result.rowCount+" datas");
-  //     callback(result.rows);
-  //   });
-  // });
 }
 
 exports.findbyID = function findbyID(table,id,callback){
@@ -75,16 +49,6 @@ exports.findbyID = function findbyID(table,id,callback){
     if (err) throw err;
     callback(results);
   });
-
-  // pg.connect(config.dburl, function(err, client, done) {
-  //   if (err) throw err;
-  //   client.query(sql, function (err, result) {
-  //     if (err) throw err;
-  //     client.end();
-  //     console.log(result.rowCount+" datas");
-  //     callback(result.rows);
-  //   });
-  // });
 }
 
 exports.findbyCourseName = function findbyCourseName(table,courseName,callback){
@@ -94,16 +58,6 @@ exports.findbyCourseName = function findbyCourseName(table,courseName,callback){
     if (err) throw err;
     callback(results);
   });
-
-  // pg.connect(config.dburl, function(err, client, done) {
-  //   if (err) throw err;
-  //   client.query(sql, function (err, result) {
-  //     if (err) throw err;
-  //     client.end();
-  //     console.log(result.rowCount+" datas");
-  //     callback(result.rows);
-  //   });
-  // });
 }
 
 exports.findbyTeacher = function findbyTeacher(table,name,callback){
@@ -113,16 +67,6 @@ exports.findbyTeacher = function findbyTeacher(table,name,callback){
     if (err) throw err;
     callback(results);
   });
-
-  // pg.connect(config.dburl, function(err, client, done) {
-  //   if (err) throw err;
-  //   client.query(sql, function (err, result) {
-  //     if (err) throw err;
-  //     client.end();
-  //     console.log(result.rowCount+" datas");
-  //     callback(result.rows);
-  //   });
-  // });
 }
 
 exports.query_post = function query_post(datas, req, item,callback){

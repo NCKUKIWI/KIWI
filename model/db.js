@@ -103,7 +103,7 @@ exports.query_post = function query_post(datas, req, item,callback){
 	regex = regex.replace(/\)/g, "\\)");
 	regex = regex.replace(/\./g, "\\.");
   var query_data = [];
-  if(item="query"){
+  if(item=="query"){
     for(var i in datas){
   		var data = datas[i]
   		if(data['teacher'].match(regex)){

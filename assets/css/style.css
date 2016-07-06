@@ -25,6 +25,7 @@ display: block;
 }
 body {
 line-height: 1;
+font-family:"Helvetica Neue","Arial", "Segoe UI","STHeiti", "Microsoft JhengHei";
 }
 ol, ul {
 list-style: none;
@@ -72,8 +73,9 @@ border-spacing: 0;
 }
 
 .ui.button{
-  padding:20px 5px;
+  padding:10px 5px;
   margin:10px 1%;
+  font-weight:500;
 }
 
 .catagory{

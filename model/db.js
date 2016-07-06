@@ -24,6 +24,26 @@ function search_item(datas, item){
 		return item_array;
 }
 
+exports.Insert = function Insert(table,data,callback){
+  var sql = "INSERT INTO " + table + " SET ? ";
+  console.log(sql);
+  connection.query(sql,data,function(err){
+    if (err) throw err;
+    callback(err);
+  });
+}
+
+
+exports.DeleteById = function DeleteById(table,id,callback){
+  var sql = "DELETE FROM " + table + " WHERE id = " + id;
+  console.log(sql);
+  connection.query(sql,function(err){
+    if (err) throw err;
+    console.log("DELETE Success!");
+    callback(err);
+  });
+}
+
 exports.getall = function getall(table,callback){
   var sql = "SELECT * FROM " + table +" ORDER BY id DESC" ;
   console.log(sql);

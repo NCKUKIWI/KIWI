@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var connection = require('../config');
-connection = connection.connection;
+var db = require('../model/db');
 
 /* index  */
 router.get('/', function(req, res) {
@@ -11,6 +10,7 @@ router.get('/', function(req, res) {
 /* create */
 router.post('/create', function(req, res) {
   console.log('POST post/create');
+  var userid = (req.user) ? req.user.id : '0';
   var post = {
     course_name:req.body.coursename,
     teacher:req.body.teacher,
@@ -22,10 +22,9 @@ router.post('/create', function(req, res) {
     score_style:req.body.score_style,
     course_need: req.body.course_need,
     course_style:req.body.course_style,
-    user_id: req.user.id
+    user_id: userid
   }
-  connection.query("INSERT INTO post SET ?",post,function(errs){
-    if (errs) throw errs;
+  db.Insert('post',post,function(err){
     res.redirect('/');
   });
 });
@@ -45,10 +44,7 @@ router.delete('/:id', function(req,res) {
   var id = req.params.id;
   var sql= "DELETE FROM post WHERE id = "+id;
   console.log("DELETE post/"+id);
-  connection.query(sql,function(err, results, fields){
-    if (err) throw err;
-    console.log(sql);
-    console.log("DELETE Success!");
+  db.DeleteById('post',id,function(err){
     res.send('Success');
   });
 });

@@ -19,8 +19,8 @@
               </tr>
             <% }else{ %>
               <% for(var i in data){ %>
-                <tr id="post-<%= data[i].id %>" class="post-row">
-                  <td class="coursename" data-toggle="modal" data-target="#modal-<%= data[i].id %>">
+                <tr id="post-<%= data[i].id %>" class="post-row" data-toggle="modal" data-target="#modal-<%= data[i].id %>">
+                  <td class="coursename">
                     <%- data[i].course_name %>
                   </td>
                   <td class="catalog">

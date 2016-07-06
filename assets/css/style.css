@@ -88,10 +88,10 @@ border-spacing: 0;
 /* course table */
 .post-row:hover{
   background:rgba(233,234,239,0.7);
+  cursor: pointer;
 }
 .coursename{
   font-weight:bold;
-  cursor: pointer;
   width:40%;
 }
 .catalog{

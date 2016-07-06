@@ -33,7 +33,7 @@
             </div>
             <div class="form-group">
               <div class="col-sm-offset-4 col-sm-8">
-                <button type="submit" class="btn btn-default">送出</button>
+                <div id="reportform-submit" class="btn btn-default">送出</div>
               </div>
             </div>
           </form>
@@ -42,3 +42,27 @@
     </div>
   </div>
 </div>
+<script>
+$('#reportform-submit').on('click',function(){
+  var data =$("#reportform").serialize();
+  $.ajax({
+    url: '/report',
+    type: 'post',
+    data: data,
+    success: function(response) {
+      if(response=="success"){
+        $('#reportform').fadeOut();
+        $('#report .partA').fadeOut();
+        document.getElementById("reportform").reset();
+        $('#report .partB').append("<h1 class='text-center h1'>謝謝你的回饋!</h1>");
+        setTimeout(function() {
+          $('#report .close').click();
+          $('#report .partB .h1').remove();
+          $('#reportform').fadeIn();
+          $('#report .partA').fadeIn();
+        },2000);
+      }
+    }
+  });
+});
+</script>

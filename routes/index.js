@@ -106,7 +106,8 @@ router.post('/report', function(req, res) {
     comment:req.body.comment.replace(/\n/g,"<br>"),
   }
   db.Insert('report',report,function(err){
-    res.redirect('/');
+    if(err) throw err;
+    res.send('success');
   });
 });
 

@@ -32,10 +32,10 @@ exports.Insert = function Insert(table,data,callback){
     console.log(i+" : "+data[i]);
   }
   console.log("}");
-  connection.query(sql,data,function(err){
+  connection.query(sql,data,function(err,result){
     if (err) throw err;
     console.log("Create Success!");
-    callback(err);
+    callback(err,result);
   });
 }
 
@@ -77,17 +77,8 @@ exports.findbyID = function findbyID(table,id,callback){
   });
 }
 
-exports.findbyCourseName = function findbyCourseName(table,courseName,callback){
-  var sql = "SELECT * FROM " + table +" WHERE course_name = "+ "\'" + courseName + "\'";
-  console.log(sql);
-  connection.query(sql,function(err, results, fields){
-    if (err) throw err;
-    callback(results);
-  });
-}
-
-exports.findbyTeacher = function findbyTeacher(table,name,callback){
-  var sql = "SELECT * FROM " + table +" WHERE teacher = "+ "\'" + name + "\'";
+exports.findbyColumn = function findbyColumn(table,col,value,callback){
+  var sql = "SELECT * FROM " + table +" WHERE "+ col + " = \'" + value + "\'";
   console.log(sql);
   connection.query(sql,function(err, results, fields){
     if (err) throw err;

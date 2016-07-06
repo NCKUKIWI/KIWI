@@ -24,7 +24,7 @@ router.post('/create', function(req, res) {
     course_style:req.body.course_style,
     user_id: userid
   }
-  db.Insert('post',post,function(err){
+  db.Insert('post',post,function(err,result){
     res.redirect('/');
   });
 });

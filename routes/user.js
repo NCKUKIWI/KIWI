@@ -9,15 +9,25 @@ var FacebookStrategy = require('passport-facebook').Strategy;
 passport.use(new FacebookStrategy({
     clientID: config.fbappid,
     clientSecret: config.fbsecret,
-    callbackURL: "http://ec2-52-197-130-40.ap-northeast-1.compute.amazonaws.com:3000/user/auth/facebook/callback",
+    callbackURL:"http://ec2-52-197-130-40.ap-northeast-1.compute.amazonaws.com:3000/user/auth/facebook/callback",
     profileFields: ['id', 'displayName']
   },
   function(accessToken, refreshToken, profile, cb) {
       var user ={
-        id:profile.id,
+        fb_id:profile.id,
         name:profile.displayName,
       }
-      cb(null,user);
+      db.findbyColumn('user','fb_id',profile.id,function(data){
+        if(data.length > 0 ){
+          cb(null,data[0]);
+        }
+        else{
+          db.Insert('user',user,function(err,result){
+            if(err) throw err;
+            cb(null,result[0]);
+          });
+        }
+      });
   }
 ));
 

@@ -7,7 +7,9 @@ router.get('/', function(req, res) {
   console.log("GET '/'");
   console.log(req.user);
   //如果登入成功
-  if(req.user){
+  var check=0;
+  if(req.user&&check==0){
+    check=1;
     req.flash('content', '登入成功');
     req.flash('type', 'success');
   }

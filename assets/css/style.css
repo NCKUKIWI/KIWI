@@ -94,6 +94,9 @@ border-spacing: 0;
   cursor: pointer;
   width:40%;
 }
+.coursename:hover{
+  background:rgba(233,234,239,0.7);
+}
 .catalog{
   width:25%;
 }

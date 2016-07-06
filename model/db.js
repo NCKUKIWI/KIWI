@@ -24,6 +24,9 @@ function search_item(datas, item){
 		return item_array;
 }
 
+
+exports.search_item = search_item;
+
 exports.Insert = function Insert(table,data,callback){
   var sql = "INSERT INTO " + table + " SET ? ";
   console.log(sql);
@@ -115,28 +118,4 @@ exports.query_post = function query_post(datas, req, item,callback){
   }
 
   callback(query_data,teacher,courseName);
-}
-
-
-exports.search_item = function search_item(datas, item){
-  	var item_array = [];
-  	var data = datas[0]
-		item_array.push(data[item]);
-
-		for(var i in datas){
-			data = datas[i];
-			for(var j in item_array){
-				if(data[item] == null) continue;
-				var regex = data[item].replace(/\(/g, "\\(");
-				regex = regex.replace(/\)/g, "\\)");
-				regex = regex.replace(/\./g, "\\.");
-
-				if(item_array[j].match(regex) != null)
-					break;
-				else if (j == item_array.length - 1){
-					item_array.push(data[item]);
-				}
-			}
-		}
-		return item_array;
 }

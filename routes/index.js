@@ -88,4 +88,16 @@ router.get('/login', function(req, res) {
   res.redirect('/user/login');
 });
 
+router.post('/report', function(req, res) {
+  console.log('POST /report');
+  var report = {
+    name:req.body.name,
+    contact:req.body.contact,
+    comment:req.body.comment.replace(/\n/g,"<br>"),
+  }
+  db.Insert('report',report,function(err){
+    res.redirect('/');
+  });
+});
+
 module.exports = router;

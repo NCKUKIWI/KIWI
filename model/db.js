@@ -27,8 +27,14 @@ function search_item(datas, item){
 exports.Insert = function Insert(table,data,callback){
   var sql = "INSERT INTO " + table + " SET ? ";
   console.log(sql);
+  console.log("Data: {");
+  for(var i in data){
+    console.log(i+" : "+data[i]);
+  }
+  console.log("}");
   connection.query(sql,data,function(err){
     if (err) throw err;
+    console.log("Create Success!");
     callback(err);
   });
 }

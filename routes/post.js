@@ -9,7 +9,7 @@ router.get('/', function(req, res) {
 
 /* create */
 router.post('/create', function(req, res) {
-  console.log('POST post/create');
+  console.log('POST /post/create');
   var userid = (req.user) ? req.user.id : '0';
   var post = {
     course_name:req.body.coursename,

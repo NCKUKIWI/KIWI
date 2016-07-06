@@ -1,0 +1,44 @@
+<div class="modal fade" id="report" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+        </button>
+        <h1 class="modal-title">回報問題</h1>
+      </div>
+      <div class="modal-body">
+        <div class="partA">
+          非常非常感謝你/妳提供意見！ :D :D :D 願意的話，也請告訴我們怎麼聯絡你/妳吧 :)
+        </div>
+        <div class="partB">
+          <form class="form-horizontal" id="reportform" method="post" action="/report">
+            <div class="form-group">
+              <label class="control-label col-sm-4">如何稱呼: </label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" name="name" placeholder="姓名或綽號 你方便稱呼的方式">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-4">聯絡方式: </label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" name="contact" placeholder="臉書或Email都可以喔">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-4">想說的話: </label>
+              <div class="col-sm-8">
+                <textarea rows="4" cols="50" name="comment" form="reportform" class="form-control"></textarea>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-sm-offset-4 col-sm-8">
+                <button type="submit" class="btn btn-default">送出</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

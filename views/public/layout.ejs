@@ -32,8 +32,14 @@
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav navbar-right">
-          <li><a href="#">關於</a></li>
-          <li><a href="#">回報問題</a></li>
+          <li>
+            <a href="#" data-toggle="modal" data-target="#about">關於</a>
+            <% include ../post/about %>
+          </li>
+          <li>
+            <a href="#" data-toggle="modal" data-target="#report">回報問題</a>
+            <% include ./report %>
+          </li>
           <% if(user){%>
           <li>
             <a href="#" data-toggle="modal" data-target="#create">提供心得</a>

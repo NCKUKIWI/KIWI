@@ -5,10 +5,8 @@ var bodyParser = require('body-parser');
 var expressValidator = require('express-validator');
 var session = require('express-session');
 var passport = require('passport');
-//db
-var pg = require('pg');
-var db = require('./model/db');
-var config = require('./config');
+var flash = require('express-flash');
+var cookieParser = require('cookie-parser');
 // 引入router檔案位於routes資料夾中
 var index = require('./routes/index');
 var post = require('./routes/post');
@@ -27,15 +25,21 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(expressValidator());
 app.use("/assets",express.static(__dirname + "/assets"));
 
-//Handle sessions
+//Handle sessions and cookie
 app.use(session({
   secret:'secret',
   saveUninitialized: true,
   resave: true
 }));
+app.use(cookieParser('secretString'));
+
+//flah message
+app.use(flash());
+
 //passport
 app.use(passport.initialize());
 app.use(passport.session());
+
 //Route
 app.use('/', index);                              // get '/'時交給routes index處理
 app.use('/post', post);                          // get '/post'時交給routes post處理

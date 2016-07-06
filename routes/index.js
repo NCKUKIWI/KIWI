@@ -6,6 +6,11 @@ var db = require('../model/db');
 router.get('/', function(req, res) {
   console.log("GET '/'");
   console.log(req.user);
+  //如果登入成功
+  if(req.user){
+    req.flash('content', '登入成功');
+    req.flash('type', 'success');
+  }
   db.getall('post',function(datas){
     if(req.query.hasOwnProperty("queryw")){
 	  	db.query_post(datas, req.query.queryw,"query",function(data,teachers,course_name){

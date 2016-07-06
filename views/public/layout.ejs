@@ -62,6 +62,12 @@
       </div>
     </div>
   </nav>
+  <% if (messages.content){ %>
+    <div class="alert alert-<%= messages.type %>">
+      <%= messages.content %>
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+  <% } %>
   <%- body %>
 </body>
 

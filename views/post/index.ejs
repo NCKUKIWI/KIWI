@@ -6,7 +6,7 @@
       </div>
       <div class="col-md-9 col-sm-9">
         <div id="content">
-          <table class="table">
+          <table class="table" id="post-table">
             <tr>
               <th class="course_name orderbtn" data-name="course_name">課程名稱</th>
               <th class="catalog orderbtn" data-name="catalog">類別</th>
@@ -47,19 +47,19 @@
                       </div>
                       <div class="modal-body">
                         <div class="partA">
-                          <p><span class="title">類別:</span> <%- data[i].catalog %></p>
-                          <p><span class="title">學期:</span> <%- data[i].semester %></p>
-                          <p><span class="title">授課老師:</span> <%- data[i].teacher %></p>
+                          <p><span class="post_title">類別:</span> <%- data[i].catalog %></p>
+                          <p><span class="post_title">學期:</span> <%- data[i].semester %></p>
+                          <p><span class="post_title">授課老師:</span> <%- data[i].teacher %></p>
                         </div>
                         <div class="partB">
-                          <p><span class="title">修課心得:</span><br><%- data[i].comment %></p>
+                          <p><span class="post_title">修課心得:</span><br><%- data[i].comment %></p>
                         </div>
                         <div class="partA">
-                          <p><span class="title">報告作業:</span><br><%- (data[i].report_hw != 'null') ?  data[i].report_hw : '無' %></p><br>
-                          <p><span class="title">考試方式:</span><br><%- (data[i].exam_style != 'null') ?  data[i].exam_style : '無' %></p><br>
-                          <p><span class="title">評分方式:</span><br><%- (data[i].score_style != 'null') ?  data[i].score_style : '無' %></p><br>
-                          <p><span class="title">老師上課教材:</span><br><%- (data[i].course_need != 'null') ?  data[i].course_need : '無' %></p><br>
-                          <p><span class="title">老師上課方式:</span><br><%- (data[i].course_style != 'null') ?  data[i].course_style : '無' %></p>
+                          <p><span class="post_title">報告作業:</span><br><%- (data[i].report_hw != 'null') ?  data[i].report_hw : '無' %></p><br>
+                          <p><span class="post_title">考試方式:</span><br><%- (data[i].exam_style != 'null') ?  data[i].exam_style : '無' %></p><br>
+                          <p><span class="post_title">評分方式:</span><br><%- (data[i].score_style != 'null') ?  data[i].score_style : '無' %></p><br>
+                          <p><span class="post_title">老師上課教材:</span><br><%- (data[i].course_need != 'null') ?  data[i].course_need : '無' %></p><br>
+                          <p><span class="post_title">老師上課方式:</span><br><%- (data[i].course_style != 'null') ?  data[i].course_style : '無' %></p>
                           <% if(user && (user.id == data[i].user_id) ){ %>
                             <div class="btn btn-default delbtn" data-id="<%=data[i].id %>">刪除文章</div>
                           <% } %>
@@ -75,51 +75,3 @@
       </div>
     </div>
   </div>
-  <script type="text/javascript">
-    //Parse URL
-    var url = window.location.href;
-    var urlObj = urlObject({'url':url});
-    if(urlObj.parameters.order){
-      var icon = "<i class='chevron down icon'></i>";
-      $("th.orderbtn."+urlObj.parameters.order).append(icon);
-    }
-
-    /* DEL post ajax*/
-    $('.delbtn').on('click',function(){
-      console.log('Click');
-      var postid = this.getAttribute("data-id");
-      console.log(postid);
-      $.ajax({
-        url: '/post/'+postid,
-        type: 'DELETE',
-        success: function(response) {
-          $('body').removeClass('modal-open');
-          $('#post-'+postid).hide();
-          $('#modal-'+postid).hide();
-        }
-      });
-    });
-
-    //Order
-    $('.orderbtn').on('click',function(){
-      var order = this.getAttribute("data-name");
-      if(urlObj.parameters.course_name || urlObj.parameters.catalog || urlObj.parameters.qweryw || urlObj.parameters.teacher || urlObj.parameters.order){
-        if(urlObj.parameters.order){
-          var searchword="?";
-          for(var i in urlObj.parameters){
-            if(i!="order"){
-              searchword= searchword+i+"="+urlObj.parameters[i]+"&";
-            }
-          }
-          window.location.href = urlObj.protocol +"//"+ urlObj.hostname + searchword + "order="+order;
-          //For Dev
-          //window.location.href = urlObj.protocol +"//"+ urlObj.hostname + ":" + urlObj.port + searchword + "order="+order;
-        }
-        else{
-          window.location.href = window.location.href + "&order=" + order;
-        }
-      }else{
-        window.location.href = window.location.href + "?order=" + order;
-      }
-    });
-  </script>

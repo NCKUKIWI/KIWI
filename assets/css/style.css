@@ -17,7 +17,6 @@ border: 0;
 font-size: 100%;
 font: inherit;
 vertical-align: baseline;
-font-family:"Helvetica Neue","Arial", "Segoe UI","STHeiti", "Microsoft JhengHei";
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
@@ -41,6 +40,10 @@ content: none;
 table {
 border-collapse: collapse;
 border-spacing: 0;
+}
+
+html *{
+  font-family:"Helvetica Neue","Arial", "Segoe UI","STHeiti", "Microsoft JhengHei";
 }
 
 /* custom css */
@@ -99,6 +102,10 @@ border-spacing: 0;
   padding:40px 20px;
 }
 
+.ui.icon.input input{
+  font-family:"Helvetica Neue","Arial", "Segoe UI","STHeiti", "Microsoft JhengHei";
+}
+
 .sidebar-categories{
   font-size:0px
 }
@@ -112,6 +119,10 @@ border-spacing: 0;
   width:44%;
   font-weight:500;
   font-family:"Helvetica Neue","Arial", "Segoe UI","STHeiti", "Microsoft JhengHei";
+}
+
+.ui.button.catagory:hover{
+  background-color:#CACBCD;
 }
 
 #catagory-all{
@@ -159,12 +170,12 @@ border-spacing: 0;
 }
 
 .partA p,.partB p{
-  color:#6f7780;
+  color:#4d555e;
 }
 
 .post_title{
   font-weight:bold;
-  color: #1c2a39;
+  color: #111922;
   text-align: center
 }
 
@@ -174,6 +185,10 @@ border-spacing: 0;
 /* create form */
 #createform{
   margin:20px;
+}
+/* report form */
+#reportform{
+  margin-right:10px;
 }
 /* Media query */
 

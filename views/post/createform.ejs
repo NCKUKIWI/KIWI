@@ -106,7 +106,7 @@
         if(response=="success"){
           window.location.href = "/";
         }else{
-          var errosbox = "<div class='ui negative message'><i class='close icon'></i><div class='header'>錯誤</div><ul class='list'>";
+          var errosbox = "<div class='ui negative message'><div class='header'>錯誤</div><ul class='list'>";
           for(var i in response){
             var dom = "<li>" + response[i].msg +"</li>";
             errosbox += dom;

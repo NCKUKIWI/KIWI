@@ -1,7 +1,9 @@
 <% if ( messages.success ){ %>
-  <div class="alert alert-success" >
-    <%= messages.success %>
-    <button type="button" class="close" data-dismiss="alert">&times;</button>
+  <div class="ui positive message">
+    <i class="close icon"></i>
+    <div class="header">
+      <%= messages.success %>
+    </div>
   </div>
 <% }else if(messages.error){ %>
   <div class="alert alert-danger" >

@@ -179,9 +179,12 @@ html *{
   text-align: center
 }
 
-.delbtn{
-  margin-top:40px;
+#delbtn{
+  margin: 20px auto;
+  display: block;
+  width: 30%;
 }
+
 /* create form */
 #createform{
   margin:20px;

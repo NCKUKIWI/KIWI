@@ -61,7 +61,7 @@
                           <p><span class="post_title">老師上課教材:</span><br><%- data[i].course_need %></p><br>
                           <p><span class="post_title">老師上課方式:</span><br><%- data[i].course_style %></p>
                           <% if(user && (user.id == data[i].user_id) ){ %>
-                            <div class="small ui button delbtn" data-id="<%=data[i].id %>">刪除文章</div>
+                            <div class="small ui button delbtn" id="delbtn" data-id="<%=data[i].id %>">刪除文章</div>
                           <% } %>
                         </div>
                       </div>

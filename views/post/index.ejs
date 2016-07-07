@@ -8,7 +8,7 @@
         <div id="content">
           <table class="table">
             <tr>
-              <th class="coursename orderbtn" data-name="course_name">課程名稱</th>
+              <th class="course_name orderbtn" data-name="course_name">課程名稱</th>
               <th class="catalog orderbtn" data-name="catalog">類別</th>
               <th class="teacher orderbtn" data-name="teacher">開課老師</th>
               <th class="semester orderbtn" data-name="semester">學期</th>
@@ -20,7 +20,7 @@
             <% }else{ %>
               <% for(var i in data){ %>
                 <tr id="post-<%= data[i].id %>" class="post-row" data-toggle="modal" data-target="#modal-<%= data[i].id %>">
-                  <td class="coursename">
+                  <td class="course_name">
                   <% if(user && (user.id == data[i].user_id) ){ %>
                     <span class="label label-pill label-success">My post</span>
                   <%  } %>
@@ -76,6 +76,14 @@
     </div>
   </div>
   <script type="text/javascript">
+    //Parse URL
+    var url = window.location.href;
+    var urlObj = urlObject({'url':url});
+    if(urlObj.parameters.order){
+      var icon = "<i class='chevron down icon'></i>";
+      $("th.orderbtn."+urlObj.parameters.order).append(icon);
+    }
+
     /* DEL post ajax*/
     $('.delbtn').on('click',function(){
       console.log('Click');
@@ -95,8 +103,6 @@
     //Order
     $('.orderbtn').on('click',function(){
       var order = this.getAttribute("data-name");
-      var url = window.location.href;
-      var urlObj = urlObject({'url':url});
       if(urlObj.parameters.course_name || urlObj.parameters.catalog || urlObj.parameters.qweryw || urlObj.parameters.teacher || urlObj.parameters.order){
         if(urlObj.parameters.order){
           var searchword="?";

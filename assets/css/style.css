@@ -89,11 +89,15 @@ border-spacing: 0;
 .orderbtn{
   cursor: pointer;
 }
+.chevron.down{
+  margin-left:4px;
+  font-size:14px;
+}
 .post-row:hover{
   background:rgba(233,234,239,0.7);
   cursor: pointer;
 }
-.coursename{
+.course_name{
   font-weight:bold;
   width:40%;
 }
@@ -120,10 +124,10 @@ border-spacing: 0;
 }
 .title{
   font-weight:bold;
-  border: #b30000 solid; 
-  height: 0px; 
-  color: #b30000; 
-  border-width: 0px 0px 1px;  
+  border: #b30000 solid;
+  height: 0px;
+  color: #b30000;
+  border-width: 0px 0px 1px;
   width: 200px;
   text-align: center
 }

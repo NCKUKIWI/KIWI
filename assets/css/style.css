@@ -17,6 +17,7 @@ border: 0;
 font-size: 100%;
 font: inherit;
 vertical-align: baseline;
+font-family:"Helvetica Neue","Arial", "Segoe UI","STHeiti", "Microsoft JhengHei";
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
@@ -25,7 +26,6 @@ display: block;
 }
 body {
 line-height: 1;
-font-family:"Helvetica Neue","Arial", "Segoe UI","STHeiti", "Microsoft JhengHei";
 }
 ol, ul {
 list-style: none;
@@ -111,6 +111,7 @@ border-spacing: 0;
   text-align:center;
   width:44%;
   font-weight:500;
+  font-family:"Helvetica Neue","Arial", "Segoe UI","STHeiti", "Microsoft JhengHei";
 }
 
 #catagory-all{
@@ -128,7 +129,7 @@ border-spacing: 0;
   font-size:14px;
 }
 .post-row:hover{
-  background:rgba(233,234,239,0.7);
+  background:rgba(218,218,218,0.6);
   cursor: pointer;
 }
 .course_name{

@@ -44,6 +44,8 @@
                 <option value="公民歷史">公民歷史 </option>
                 <option value="通識中心">通識中心 </option>
                 <option value="體育">體育 </option>
+                <option value="其他必修">其他必修 </option>
+                <option value="其他選修">其他選修 </option>
               </select>
             </div>
           </div>
@@ -104,12 +106,12 @@
         if(response=="success"){
           window.location.href = "/";
         }else{
-          var errosbox = "<div class='alert alert-warning'><button type='button' class='close' data-dismiss='alert'>&times;</button>";
+          var errosbox = "<div class='ui negative message'><i class='close icon'></i><div class='header'>錯誤</div><ul class='list'>";
           for(var i in response){
             var dom = "<li>" + response[i].msg +"</li>";
             errosbox += dom;
           }
-          errosbox += "</div>";
+          errosbox += "</ul></div>";
           $('#create .modal-body').prepend(errosbox);
         }
       }

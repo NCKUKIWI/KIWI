@@ -3,9 +3,9 @@
     <%= messages.success %>
     <button type="button" class="close" data-dismiss="alert">&times;</button>
   </div>
-<% }else if(messages.failure){ %>
+<% }else if(messages.error){ %>
   <div class="alert alert-danger" >
-    <%= messages.failure %>
+    <%= messages.error %>
     <button type="button" class="close" data-dismiss="alert">&times;</button>
   </div>
 <% }else if(messages.warning){ %>

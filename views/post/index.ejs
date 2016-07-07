@@ -8,10 +8,10 @@
         <div id="content">
           <table class="table">
             <tr>
-              <th class="coursename">課程名稱</th>
-              <th class="catalog">類別</th>
-              <th class="teacher">開課老師</th>
-              <th class="semester">學期</th>
+              <th class="coursename orderbtn" data-name="coursename">課程名稱</th>
+              <th class="catalog orderbtn" data-name="catalog">類別</th>
+              <th class="teacher orderbtn" data-name="teacher">開課老師</th>
+              <th class="semester orderbtn" data-name="semester">學期</th>
             </tr>
             <% if(data.length == 0 ){ %>
               <tr>
@@ -90,5 +90,30 @@
           $('#modal-'+postid).hide();
         }
       });
+    });
+
+    //Order
+    $('.orderbtn').on('click',function(){
+      var order = this.getAttribute("data-name");
+      var url = window.location.href;
+      var urlObj = urlObject({'url':url});
+      if(urlObj.parameters.course_name || urlObj.parameters.catalog || urlObj.parameters.qweryw || urlObj.parameters.teacher){
+        if(urlObj.parameters.order){
+          var searchword="?";
+          for(var i in urlObj.parameters){
+            if(i!="order"){
+              searchword= searchword+i+"="+urlObj.parameters[i]+"&";
+            }
+          }
+          window.location.href = urlObj.protocol +"//"+ urlObj.hostname + searchword + "order="+order;
+          //For Dev
+          //window.location.href = urlObj.protocol +"//"+ urlObj.hostname + ":" + urlObj.port + searchword + "order="+order;
+        }
+        else{
+          window.location.href = window.location.href + "&order=" + order;
+        }
+      }else{
+        window.location.href = window.location.href + "?order=" + order;
+      }
     });
   </script>

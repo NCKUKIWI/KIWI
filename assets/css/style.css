@@ -86,6 +86,9 @@ border-spacing: 0;
 }
 
 /* course table */
+.orderbtn{
+  cursor: pointer;
+}
 .post-row:hover{
   background:rgba(233,234,239,0.7);
   cursor: pointer;

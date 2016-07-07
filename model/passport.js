@@ -15,7 +15,7 @@ passport.use(new FacebookStrategy({
         fb_id:profile.id,
         name:profile.displayName,
       }
-      db.findbyColumn('user','fb_id',profile.id,function(data){
+      db.FindbyColumn('user','fb_id',profile.id,function(data){
         if(data.length > 0 ){
           cb(null,data[0]);
         }

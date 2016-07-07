@@ -53,8 +53,8 @@ exports.DeleteById = function DeleteById(table,id,callback){
   });
 }
 
-exports.getall = function getall(table,callback){
-  var sql = "SELECT * FROM " + table +" ORDER BY id DESC" ;
+exports.GetAll = function GetAll(table,order,callback){
+  var sql = "SELECT * FROM " + table +" ORDER BY " + order +" DESC" ;
   console.log(sql);
   connection.query(sql,function(err, results, fields){
     if (err) throw err;
@@ -62,7 +62,7 @@ exports.getall = function getall(table,callback){
   });
 }
 
-exports.getcols = function getcols(table,cols,callback){
+exports.GetCols = function GetCols(table,cols,callback){
   var sql = "SELECT " + cols + " FROM " + table ;
   console.log(sql);
   connection.query(sql,function(err, results, fields){
@@ -71,7 +71,7 @@ exports.getcols = function getcols(table,cols,callback){
   });
 }
 
-exports.findbyID = function findbyID(table,id,callback){
+exports.FindbyID = function FindbyID(table,id,callback){
   var sql = "SELECT * FROM " + table +" WHERE id = "+ id;
   console.log(sql);
   connection.query(sql,function(err, results, fields){
@@ -80,7 +80,7 @@ exports.findbyID = function findbyID(table,id,callback){
   });
 }
 
-exports.findbyColumn = function findbyColumn(table,col,value,callback){
+exports.FindbyColumn = function FindbyColumn(table,col,value,callback){
   var sql = "SELECT * FROM " + table +" WHERE "+ col + " = \'" + value + "\'";
   console.log(sql);
   connection.query(sql,function(err, results, fields){

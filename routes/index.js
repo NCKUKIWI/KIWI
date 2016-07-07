@@ -6,7 +6,13 @@ var db = require('../model/db');
 router.get('/', function(req, res) {
   console.log("GET '/'");
   console.log(req.user);
-  db.getall('post',function(datas){
+  if(req.query.hasOwnProperty("order")){
+    var order = req.query.order;
+  }
+  else{
+    var order = 'id';
+  }
+  db.GetAll('post',order,function(datas){
     if(req.query.hasOwnProperty("queryw")){
 	  	db.query_post(datas, req.query.queryw,"query",function(data,teachers,course_name){
         res.render('post/index',{

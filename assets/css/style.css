@@ -48,6 +48,24 @@ border-spacing: 0;
 /* edit bootstrap css */
 .navbar{
   border-radius:0px;
+  background:#34495e;
+}
+
+.navbar-toggle{
+  border:1px solid white;
+}
+
+.navbar-toggle .icon-bar{
+  background:white;
+}
+
+.navbar-brand,.navbar-brand:hover,.navbar-nav>li>a{
+  color:white;
+}
+
+.nav>li>a:hover,.nav>li>a:focus{
+  background:#34495e;
+  cursor: pointer;
 }
 
 .container{
@@ -62,9 +80,22 @@ border-spacing: 0;
   letter-spacing: 2px;
 }
 
+.modal-header{
+  background:#34495e;
+}
+
+.modal-title{
+  color:white;
+}
+
+.close{
+  text-shadow: none;
+  color:white;
+  opacity:1;
+}
 /* sidebar */
 #sidebar,#content{
-  background:rgb(245,245,245);
+  background:#ebebeb;
   padding:40px 20px;
 }
 
@@ -72,17 +103,20 @@ border-spacing: 0;
   font-size:0px
 }
 
-.ui.button{
+.ui.button.catagory{
+  background:#dadada;
   padding:12px 5px;
-  margin:10px 1%;
+  margin:6px 3%;
+  font-size:14px;
+  text-align:center;
+  width:44%;
+  font-weight:500;
 }
 
-.catagory{
- font-size:14px;
- text-align:center;
- width:48%;
- color:black;
- font-weight:500;
+#catagory-all{
+  width:94%;
+  margin:10px 3%;
+  display:block;
 }
 
 /* course table */
@@ -117,18 +151,19 @@ border-spacing: 0;
   padding:20px 50px;
 }
 .partA{
-  background:rgb(233,234,239);
+  background:#dadada;
 }
 .partB{
-  background:rgb(211,222,214);
+  background:#ebebeb;
 }
+
+.partA p,.partB p{
+  color:#6f7780;
+}
+
 .post_title{
   font-weight:bold;
-  border: #b30000 solid;
-  height: 0px;
-  color: #b30000;
-  border-width: 0px 0px 1px;
-  width: 200px;
+  color: #1c2a39;
   text-align: center
 }
 

@@ -55,13 +55,13 @@
                           <p><span class="post_title">修課心得:</span><br><%- data[i].comment %></p>
                         </div>
                         <div class="partA">
-                          <p><span class="post_title">報告作業:</span><br><%- (data[i].report_hw != 'null') ?  data[i].report_hw : '無' %></p><br>
-                          <p><span class="post_title">考試方式:</span><br><%- (data[i].exam_style != 'null') ?  data[i].exam_style : '無' %></p><br>
-                          <p><span class="post_title">評分方式:</span><br><%- (data[i].score_style != 'null') ?  data[i].score_style : '無' %></p><br>
-                          <p><span class="post_title">老師上課教材:</span><br><%- (data[i].course_need != 'null') ?  data[i].course_need : '無' %></p><br>
-                          <p><span class="post_title">老師上課方式:</span><br><%- (data[i].course_style != 'null') ?  data[i].course_style : '無' %></p>
+                          <p><span class="post_title">報告作業:</span><br><%- data[i].report_hw %></p><br>
+                          <p><span class="post_title">考試方式:</span><br><%- data[i].exam_style %></p><br>
+                          <p><span class="post_title">評分方式:</span><br><%- data[i].score_style %></p><br>
+                          <p><span class="post_title">老師上課教材:</span><br><%- data[i].course_need %></p><br>
+                          <p><span class="post_title">老師上課方式:</span><br><%- data[i].course_style %></p>
                           <% if(user && (user.id == data[i].user_id) ){ %>
-                            <div class="btn btn-default delbtn" data-id="<%=data[i].id %>">刪除文章</div>
+                            <div class="small ui button delbtn" data-id="<%=data[i].id %>">刪除文章</div>
                           <% } %>
                         </div>
                       </div>

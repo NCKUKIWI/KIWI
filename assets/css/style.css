@@ -120,6 +120,12 @@ border-spacing: 0;
 }
 .title{
   font-weight:bold;
+  border: #b30000 solid; 
+  height: 0px; 
+  color: #b30000; 
+  border-width: 0px 0px 1px;  
+  width: 200px;
+  text-align: center
 }
 
 .delbtn{

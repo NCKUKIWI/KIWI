@@ -20,7 +20,7 @@ router.post('/create', function(req, res) {
     res.send(errors);
   }else{
     var post = {
-      course_name:req.body.coursename,
+      course_name:req.body.coursename.replace(/\'|\#|\/\*/g,""),
       teacher:req.body.teacher.replace(/\'|\#|\/\*/g,""),
       semester:req.body.semester.replace(/\'|\#|\/\*/g,""),
       catalog:req.body.catalog.replace(/\'|\#|\/\*/g,""),

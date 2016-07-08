@@ -10,7 +10,8 @@ router.get('/', function(req, res) {
 /* create */
 router.post('/create', function(req, res) {
   console.log('POST /post/create');
-  var userid = (req.user) ? req.user.id : '0';
+  var userid = req.user.id;
+  console.log('User_id: '+req.user.id);
   req.checkBody('coursename', '課程名稱不可為空').notEmpty();
   req.checkBody('teacher', '老師名稱不可為空').notEmpty();
   req.checkBody('comment', '修課心得不可為空').notEmpty();

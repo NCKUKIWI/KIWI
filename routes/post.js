@@ -21,15 +21,15 @@ router.post('/create', function(req, res) {
   }else{
     var post = {
       course_name:req.body.coursename,
-      teacher:req.body.teacher,
-      semester:req.body.semester,
-      catalog:req.body.catalog,
-      comment:req.body.comment.replace(/\n/g,"<br>"),
-      report_hw:req.body.report_hw,
-      exam_style: req.body.exam_style,
-      score_style:req.body.score_style,
-      course_need: req.body.course_need,
-      course_style:req.body.course_style,
+      teacher:req.body.teacher.replace(/\'|\#|\/\*/g,""),
+      semester:req.body.semester.replace(/\'|\#|\/\*/g,""),
+      catalog:req.body.catalog.replace(/\'|\#|\/\*/g,""),
+      comment:req.body.comment.replace(/\n/g,"<br>").replace(/\'|\#|\/\*/g,""),
+      report_hw:req.body.report_hw.replace(/\'|\#|\/\*/g,""),
+      exam_style: req.body.exam_style.replace(/\'|\#|\/\*/g,""),
+      score_style:req.body.score_style.replace(/\'|\#|\/\*/g,""),
+      course_need: req.body.course_need.replace(/\'|\#|\/\*/g,""),
+      course_style:req.body.course_style.replace(/\'|\#|\/\*/g,""),
       user_id: userid
     }
     db.Insert('post',post,function(err,result){

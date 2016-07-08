@@ -132,9 +132,9 @@ router.get('/', function(req, res) {
 router.post('/report', function(req, res) {
   console.log('POST /report');
   var report = {
-    name:req.body.name,
-    contact:req.body.contact,
-    comment:req.body.comment.replace(/\n/g,"<br>"),
+    name:req.body.name.replace(/\'|\#|\/\*/g,""),
+    contact:req.body.contact.replace(/\'|\#|\/\*/g,""),
+    comment:req.body.comment.replace(/\n/g,"<br>").replace(/\'|\#|\/\*/g,""),
   }
   db.Insert('report',report,function(err){
     if(err) throw err;

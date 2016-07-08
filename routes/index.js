@@ -14,12 +14,12 @@ router.get('/', function(req, res) {
   console.log("query: " + req.url);
   if(req.user !== undefined) console.log("使用者：" + req.user.name);
 
-  
+
   if(req.query.order){
     var order = req.query.order;
   }
   else{
-    var order = 'id';
+    var order = 'course_name';
   }
   db.GetAll('post',order,function(datas){
     if(req.query.hasOwnProperty("queryw")){

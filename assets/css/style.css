@@ -165,7 +165,7 @@ html *{
 /* single post */
 .partA,.partB{
   width:100%;
-  padding:20px 50px;
+  padding:20px 25px;
 }
 .partA{
   background:#dadada;

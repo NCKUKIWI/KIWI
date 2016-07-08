@@ -139,10 +139,15 @@ html *{
   margin-left:4px;
   font-size:14px;
 }
-.post-row:hover{
-  background:rgba(218,218,218,0.6);
+
+.post-row{
   cursor: pointer;
 }
+
+.post-row:hover{
+  background:rgba(218,218,218,0.6);
+}
+
 .course_name{
   font-weight:bold;
   width:40%;

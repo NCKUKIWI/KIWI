@@ -47,22 +47,19 @@
           <li>
             <a href="#" data-toggle="modal" data-target="#report">回報問題</a>
           </li>
-<!--           <% if(user){%>
- -->          <li>
+          <li>
             <a href="#" data-toggle="modal" data-target="#create">提供心得</a>
           </li>
-<!--           <li><a href="/user/logout">登出</a></li>
-          <% }%>
-          <% if(user == null ){%>
-          <li><a href="/user/auth/facebook">Facebook登入</a></li>
-          <% }%> -->
+          <% if(user){%>
+            <li><a href="/user/logout">登出</a></li>
+          <% }else{ %>
+            <li><a href="/user/auth/facebook">Facebook登入</a></li>
+          <% } %>
         </ul>
       </div>
     </div>
   </nav>
-  <% if(user){%>
-    <% include ../post/createform %>
-  <% }%>
+  <% include ../post/createform %>
   <% include ../post/about %>
   <% include ./report %>
   <% include ./flash %>

@@ -60,7 +60,9 @@
       </div>
     </div>
   </nav>
-  <% include ../post/createform %>
+  <% if(user){%>
+    <% include ../post/createform %>
+  <% }%>
   <% include ../post/about %>
   <% include ./report %>
   <% include ./flash %>

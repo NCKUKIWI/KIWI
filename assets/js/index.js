@@ -102,7 +102,7 @@ $(document).ready(function(){
   //Ajax Order
   $('.orderbtn').on('click',function(){
     var order = this.getAttribute("data-name");
-    if(urlObj.parameters.course_name || urlObj.parameters.catalog || urlObj.parameters.qweryw || urlObj.parameters.teacher || urlObj.parameters.order){
+    if(urlObj.parameters.course_name || urlObj.parameters.catalog || urlObj.parameters.queryw || urlObj.parameters.teacher || urlObj.parameters.order){
       if(urlObj.parameters.order){
         var searchword="?";
         for(var i in urlObj.parameters){

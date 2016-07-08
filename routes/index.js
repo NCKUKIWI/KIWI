@@ -4,8 +4,17 @@ var db = require('../model/db');
 
 /* root */
 router.get('/', function(req, res) {
-  console.log("GET '/'");
-  console.log(req.user);
+
+  // log
+  console.log("\n")
+  console.log("========================================");
+  var dt = new Date();
+  console.log(dt);
+  // console.log("GET '/'");
+  console.log("query: " + req.url);
+  if(req.user !== undefined) console.log("使用者：" + req.user.name);
+
+  
   if(req.query.order){
     var order = req.query.order;
   }

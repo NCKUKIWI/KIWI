@@ -41,7 +41,6 @@ table {
 border-collapse: collapse;
 border-spacing: 0;
 }
-
 html *{
   font-family:"Helvetica Neue","Arial", "Segoe UI","STHeiti", "Microsoft JhengHei";
 }
@@ -96,7 +95,9 @@ html *{
   color:white;
   opacity:1;
 }
+
 /* sidebar */
+
 #sidebar,#content{
   background:#ebebeb;
   padding:40px 20px;
@@ -132,6 +133,7 @@ html *{
 }
 
 /* course table */
+
 .orderbtn{
   cursor: pointer;
 }
@@ -163,13 +165,16 @@ html *{
 }
 
 /* single post */
+
 .partA,.partB{
   width:100%;
   padding:20px 25px;
 }
+
 .partA{
   background:#dadada;
 }
+
 .partB{
   background:#ebebeb;
 }
@@ -191,6 +196,7 @@ html *{
 }
 
 /* create form */
+
 #createform{
   margin:20px;
 }
@@ -202,8 +208,37 @@ html *{
 }
 
 /* report form */
+
 #reportform{
   margin-right:10px;
+}
+
+
+/* schedule */
+
+#schedule-table{
+  margin:50px auto;
+}
+
+.scheduletable-label{
+  width:10%;
+}
+
+.scheduletable-cell{
+  width:18%;
+}
+
+#schedule-table th{
+  padding:4px;
+}
+
+#schedule-table td{
+  padding:15px;
+}
+
+#schedule-table th,#schedule-table td{
+  text-align: center;
+  vertical-align:middle;
 }
 /* Media query */
 

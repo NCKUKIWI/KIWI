@@ -41,6 +41,7 @@ table {
 border-collapse: collapse;
 border-spacing: 0;
 }
+
 html *{
   font-family: Arial , "儷黑 Pro", "LiHei Pro", "微軟正黑體", "Microsoft JhengHei", "標楷體";
 }
@@ -94,17 +95,6 @@ html *{
   text-shadow: none;
   color:white;
   opacity:1;
-}
-
-/* footer */
-footer{
-  font-family: Arial , "儷黑 Pro", "LiHei Pro", "微軟正黑體", "Microsoft JhengHei", "標楷體";
-  font-size:1em;
-  background:#34495e;
-  margin-top:50px;
-  padding:15px 0px;
-  text-align:center;
-  color:white;
 }
 
 /* sidebar */

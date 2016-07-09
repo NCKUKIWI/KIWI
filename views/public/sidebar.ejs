@@ -27,12 +27,15 @@
         },
         maxResults: 10
     });
+
     // Got enter in query input
+    var last;
     $(".query").keyup(function (e) {
-      if (e.keyCode == 13) {
+      if (e.keyCode == 13 && last == 13) {
         var query = $('.query').val();
         window.location.href = "/?queryw="+query.replace(/\\/g, "");
       }
+      last = e.keyCode;
     });
   });
 </script>

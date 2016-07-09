@@ -35,7 +35,7 @@
   - `css`
   - `js`
 - `routes` -> setting of the routes (Controller)
-- `model` -> database function 
+- `model` -> database function
 - `views` -> template files (View)
   - `public` -> layouts
 
@@ -91,12 +91,14 @@ db.Insert(table,data,callback);
 
 ####Example:
 
-`var data = {
+```
+var data = {
   'col1': 'value1',
   'col2': 'value2',
 }
 
-db.Insert('table_name',data,function(err,result){...});`
+db.Insert('table_name',data,function(err,result){...});
+```
 
 ###Delete data by Id
 

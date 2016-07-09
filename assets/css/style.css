@@ -42,7 +42,7 @@ border-collapse: collapse;
 border-spacing: 0;
 }
 html *{
-  font-family:"Helvetica Neue","Arial", "Segoe UI","STHeiti", "Microsoft JhengHei";
+  font-family: Arial , "儷黑 Pro", "LiHei Pro", "微軟正黑體", "Microsoft JhengHei", "標楷體";
 }
 
 /* custom css */
@@ -96,6 +96,17 @@ html *{
   opacity:1;
 }
 
+/* footer */
+footer{
+  font-family: Arial , "儷黑 Pro", "LiHei Pro", "微軟正黑體", "Microsoft JhengHei", "標楷體";
+  font-size:1em;
+  background:#34495e;
+  margin-top:50px;
+  padding:15px 0px;
+  text-align:center;
+  color:white;
+}
+
 /* sidebar */
 
 #sidebar,#content{
@@ -104,7 +115,7 @@ html *{
 }
 
 .ui.icon.input input{
-  font-family:"Helvetica Neue","Arial", "Segoe UI","STHeiti", "Microsoft JhengHei";
+  font-family: Arial , "儷黑 Pro", "LiHei Pro", "微軟正黑體", "Microsoft JhengHei", "標楷體";
 }
 
 .sidebar-categories{
@@ -119,7 +130,7 @@ html *{
   text-align:center;
   width:44%;
   font-weight:500;
-  font-family:"Helvetica Neue","Arial", "Segoe UI","STHeiti", "Microsoft JhengHei";
+  font-family: Arial , "儷黑 Pro", "LiHei Pro", "微軟正黑體", "Microsoft JhengHei", "標楷體";
 }
 
 .ui.button.catagory:hover{
@@ -151,7 +162,6 @@ html *{
 }
 
 .course_name{
-  font-weight:bold;
   width:40%;
 }
 .catalog{
@@ -240,6 +250,7 @@ html *{
   text-align: center;
   vertical-align:middle;
 }
+
 /* Media query */
 
 /* sm */

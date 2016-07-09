@@ -79,21 +79,6 @@ $(document).ready(function(){
       return urlObj;
   }
 
-  /* Ajax DEL post */
-  $('.delbtn').on('click',function(){
-    console.log('Click');
-    var postid = this.getAttribute("data-id");
-    console.log(postid);
-    $.ajax({
-      url: '/post/'+postid,
-      type: 'DELETE',
-      success: function(response) {
-        $('body').removeClass('modal-open');
-        $('#post-'+postid).remove();
-      }
-    });
-  });
-
   //Parse URL
   var url = window.location.href;
   var urlObj = urlObject({'url':url});

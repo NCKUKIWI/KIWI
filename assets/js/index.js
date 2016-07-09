@@ -152,7 +152,7 @@ $(document).ready(function(){
       url:ajaxurl,
       type: 'GET',
       success: function(response) {
-        $('.modal-content').prepend(response);
+        $('#post-modal .modal-content').prepend(response);
       }
     });
   });

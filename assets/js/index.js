@@ -153,6 +153,7 @@ $(document).ready(function(){
       type: 'GET',
       success: function(response) {
         $('#post-modal .modal-content').prepend(response);
+        $('#post-modal').data('bs.modal').handleUpdate();
       }
     });
   });

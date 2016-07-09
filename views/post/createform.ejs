@@ -117,6 +117,7 @@
           }
           errosbox += "</ul></div>";
           $('#create .modal-body').prepend(errosbox);
+          $('#create').data('bs.modal').handleUpdate();
         }
       }
     });

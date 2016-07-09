@@ -7,7 +7,8 @@ var db = require('./db');
 passport.use(new FacebookStrategy({
     clientID: config.fbappid,
     clientSecret: config.fbsecret,
-    callbackURL:"http://nckuhub.com/user/auth/facebook/callback",
+    callbackURL:"http://localhost:3000/user/auth/facebook/callback",
+    //"http://nckuhub.com/user/auth/facebook/callback",
     profileFields: ['id', 'displayName']
   },
   function(accessToken, refreshToken, profile, cb) {

@@ -62,7 +62,7 @@
       url: '/post/'+postid,
       type: 'DELETE',
       success: function(response) {
-        $('body').removeClass('modal-open');
+        $('#post-modal .close').click();
         $('#post-'+postid).remove();
       }
     });

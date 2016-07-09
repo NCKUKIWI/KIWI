@@ -11,7 +11,7 @@
 
 - Start server
 ```
-  node app.js
+  npm start
 ```
 
 ## Program structure
@@ -22,7 +22,9 @@
 │   ├── css
 │   └── js
 ├── routes   
-│   └── xxxx.js  
+│   └── xxxx.js  
+│── model
+│   └── db.js  
 └── views
     ├── public
     └── xxxx.ejs
@@ -33,6 +35,7 @@
   - `css`
   - `js`
 - `routes` -> setting of the routes (Controller)
+- `model` -> database function 
 - `views` -> template files (View)
   - `public` -> layouts
 
@@ -82,38 +85,57 @@ req.body.id
 
 datas就是資料庫回傳的資料
 
-### Get all data from table
+###Insert data into table
 
-`db.getall( tablename , function(datas){
-  ......
-});`
+db.Insert(table,data,callback);
 
-Example: 拉出 post 這個 table 中的所有資料
+####Example:
 
-`db.getall( 'post' , function(datas){
-  res.render('views',{'data':datas});
-});`
+`var data = {
+  'col1': 'value1',
+  'col2': 'value2',
+}
 
-### Get specific columns from table
+db.Insert('table_name',data,function(err,result){...});`
 
-`db.getcols( tablename , colsname , function(datas){
-  ......
-});`
+###Delete data by Id
 
-Example: 拉出 post 這個 table 中的 id 跟 title 欄位
+db.DeleteById(table,id,callbak);
 
-`db.getcols( 'post' , 'id,title' , function(datas){
-  res.render('views',{'data':datas});
-});`
+####Example:
 
-### Find data by ID
+`db.DeleteById('table_name','2',function(err){...});`
 
-`db.findbyID( table , id , function(datas){
-  ......
-});`
+###Get all data from table order by column
 
-Example: 拉出 post 這個 table 中 id 為 1 的資料
+db.GetAll(table,order,callback);
 
-`db.getcols( 'post' , 1 , function(datas){
-  res.render('views',{'data':datas});
-});`
+####Example:
+
+`db.GetAll('table_name','columns_name',function(datas){...});`
+
+###Get specific data from table order by column
+
+db.GetCols(table,columns,order,callback);
+
+####Example:
+
+`var columns = ['columns_name1','columns_name2'];
+
+db.GetCols('table_name',columns,'columns_name',function(datas){...});`
+
+###Find one data by Id (just on data)
+
+db.FindbyID(table,id,callback);
+
+####Example:
+
+`db.FindbyID('table_name','2',function(data){...});`
+
+###Find one datas by Id (one or more datas)
+
+db.FindbyColumn(table,col,value,callback);
+
+####Example:
+
+`db.FindbyColumn('table_name','columns_name','2',function(){...});`

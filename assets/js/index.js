@@ -1,6 +1,6 @@
 $(document).ready(function(){
+  //Parse URL function
   function urlObject(options) {
-
       var url_search_arr,
           option_key,
           i,
@@ -16,7 +16,6 @@ $(document).ready(function(){
               'unescape': true,
               'convert_num': true
           };
-
       if (typeof options !== "object") {
           options = default_options;
       } else {
@@ -28,11 +27,9 @@ $(document).ready(function(){
               }
           }
       }
-
       a.href = options.url;
       url_query = a.search.substring(1);
       url_search_arr = url_query.split('&');
-
       if (url_search_arr[0].length > 1) {
           for (i = 0; i < url_search_arr.length; i += 1) {
               get_param = url_search_arr[i].split("=");
@@ -44,7 +41,6 @@ $(document).ready(function(){
                   key = get_param[0];
                   val = get_param[1];
               }
-
               if (options.convert_num) {
                   if (val.match(/^\d+$/)) {
                       val = parseInt(val, 10);
@@ -52,7 +48,6 @@ $(document).ready(function(){
                       val = parseFloat(val);
                   }
               }
-
               if (url_get_params[key] === undefined) {
                   url_get_params[key] = val;
               } else if (typeof url_get_params[key] === "string") {
@@ -60,11 +55,9 @@ $(document).ready(function(){
               } else {
                   url_get_params[key].push(val);
               }
-
               get_param = [];
           }
       }
-
       urlObj = {
           protocol: a.protocol,
           hostname: a.hostname,
@@ -75,7 +68,6 @@ $(document).ready(function(){
           search: a.search,
           parameters: url_get_params
       };
-
       return urlObj;
   }
 
@@ -121,7 +113,7 @@ $(document).ready(function(){
         $('.sort.descending.icon').remove();
         var icon = "<i class='sort descending icon'></i>";
         $("th.orderbtn."+order).append(icon);
-        /* 將新的dom 綁定ajaxshow */
+        /* 將新的dom 綁定ajaxshow function */
         $('.post-row').on('click',function(){
           var postid= $(this).data("id");
           ajaxshow(postid);
@@ -136,6 +128,7 @@ $(document).ready(function(){
   });
 
 
+  /* Ajax show */
   function ajaxshow(id){
     var ajaxurl = '/post/'+ id;
     $.ajax({
@@ -148,13 +141,14 @@ $(document).ready(function(){
     });
   }
 
+  /* 綁定ajaxshow function */
   $('.post-row').on('click',function(){
-    var postid= $(this).data("id");
+    var postid= this.getAttribute("data-id");
     ajaxshow(postid);
   });
 
 
-  /* 關閉時清空 modal */
+  /* modal 關閉時清空 modal 內容 */
   $('#post-modal').on('hidden.bs.modal', function () {
     $('#post-modal .modal-content').empty();
   });

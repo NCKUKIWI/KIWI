@@ -1,31 +1,62 @@
 var connection = require('../config');
 connection = connection.connection;
 
-function search_item(datas, item){
-  	var item_array = [];
-  	var data = datas[0]
-		item_array.push(data[item]);
+/*
+Insert data into table
 
-		for(var i in datas){
-			data = datas[i];
-			for(var j in item_array){
-				if(data[item] == null) continue;
-				var regex = data[item].replace(/\(/g, "\\(");
-				regex = regex.replace(/\)/g, "\\)");
-				regex = regex.replace(/\./g, "\\.");
+Insert(table,data,callback);
 
-				if(item_array[j].match(regex) != null)
-					break;
-				else if (j == item_array.length - 1){
-					item_array.push(data[item]);
-				}
-			}
-		}
-		return item_array;
+Example:
+
+var data = {
+  'col1': 'value1',
+  'col2': 'value2',
 }
 
+Insert('table_name',data,function(err,result){...});
 
-exports.search_item = search_item;
+Delete data by Id
+
+DeleteById(table,id,callbak);
+
+Example:
+
+DeleteById('table_name','2',function(err){...});
+
+Get all data from table order by column
+
+GetAll(table,order,callback);
+
+Example:
+
+GetAll('table_name','columns_name',function(datas){...});
+
+Get specific data from table order by column
+
+GetCols(table,columns,order,callback);
+
+Example:
+
+var columns = ['columns_name1','columns_name2'];
+
+GetCols('table_name',columns,'columns_name',function(datas){...});
+
+Find one data by Id (just on data)
+
+FindbyID(table,id,callback);
+
+Example:
+
+FindbyID('table_name','2',function(data){...});
+
+Find one datas by Id (one or more datas)
+
+FindbyColumn(table,col,value,callback);
+
+Example:
+
+FindbyColumn('table_name','columns_name','2',function(){...});
+*/
 
 exports.Insert = function Insert(table,data,callback){
   var sql = "INSERT INTO " + table + " SET ? ";
@@ -95,6 +126,31 @@ exports.FindbyColumn = function FindbyColumn(table,col,value,callback){
     callback(results);
   });
 }
+
+function search_item(datas, item){
+  	var item_array = [];
+  	var data = datas[0]
+		item_array.push(data[item]);
+
+		for(var i in datas){
+			data = datas[i];
+			for(var j in item_array){
+				if(data[item] == null) continue;
+				var regex = data[item].replace(/\(/g, "\\(");
+				regex = regex.replace(/\)/g, "\\)");
+				regex = regex.replace(/\./g, "\\.");
+
+				if(item_array[j].match(regex) != null)
+					break;
+				else if (j == item_array.length - 1){
+					item_array.push(data[item]);
+				}
+			}
+		}
+		return item_array;
+}
+
+exports.search_item = search_item;
 
 exports.query_post = function query_post(datas, req, item,callback){
 	var teacher = search_item(datas, "teacher");

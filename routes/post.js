@@ -39,6 +39,15 @@ router.post('/create', function(req, res) {
   }
 });
 
+/* show */
+router.get('/:id', function(req, res) {
+  var id = req.params.id;
+  console.log('GET /post/'+id);
+  db.FindbyID('post',id,function(data){
+    res.render('post/show',{'data':data,'user': req.user });
+  });
+});
+
 /* edit */
 router.get('/edit', function(req, res) {
 

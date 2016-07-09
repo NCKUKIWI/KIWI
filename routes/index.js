@@ -5,23 +5,24 @@ var db = require('../model/db');
 /* root */
 router.get('/', function(req, res) {
 
-  // log
+  // Log
   console.log("\n")
   console.log("========================================");
   var dt = new Date();
   console.log(dt);
-  // console.log("GET '/'");
   console.log("query: " + req.url);
   if(req.user !== undefined) console.log("使用者：" + req.user.name);
 
-
+  /* 設定 Order 欄位 */
   if(req.query.order){
     var order = req.query.order;
   }
   else{
     var order = 'course_name';
   }
-  db.GetAll('post',order,function(datas){
+  /*  設定要的欄位 */
+  var colmuns = ['id','course_name','catalog','teacher','semester'];
+  db.GetCols('post',colmuns,order,function(datas){
     if(req.query.hasOwnProperty("queryw")){
 	  	db.query_post(datas, req.query.queryw,"query",function(data,teachers,course_name){
         if(req.query.order){
@@ -129,6 +130,7 @@ router.get('/', function(req, res) {
   });
 });
 
+/* 回報問題 */
 router.post('/report', function(req, res) {
   console.log('POST /report');
   var report = {

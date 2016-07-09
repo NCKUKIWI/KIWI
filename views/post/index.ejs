@@ -19,11 +19,11 @@
               </tr>
             <% }else{ %>
               <% for(var i in data){ %>
-                <tr id="post-<%= data[i].id %>" class="post-row" data-toggle="modal" data-target="#modal-<%= data[i].id %>">
+                <tr id="post-<%= data[i].id %>" class="post-row" data-toggle="modal" data-target="#post-modal" data-id="<%= data[i].id %>" >
                   <td class="course_name">
-                  <% if(user && (user.id == data[i].user_id) ){ %>
-                    <span class="label label-pill label-success">My post</span>
-                  <%  } %>
+                    <% if(user && (user.id == data[i].user_id) ){ %>
+                      <span class="label label-pill label-success">My post</span>
+                    <%  } %>
                     <%- data[i].course_name %>
                   </td>
                   <td class="catalog">
@@ -36,42 +36,17 @@
                     <%- data[i].semester %>
                   </td>
                 </tr>
-                <div class="modal fade" id="modal-<%= data[i].id %>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                  <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">
-                          <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-                        </button>
-                        <h1 class="modal-title"><%- data[i].course_name %></h1>
-                      </div>
-                      <div class="modal-body">
-                        <div class="partA">
-                          <p><span class="post_title">類別:</span> <%- data[i].catalog %></p>
-                          <p><span class="post_title">學期:</span> <%- data[i].semester %></p>
-                          <p><span class="post_title">授課老師:</span> <%- data[i].teacher %></p>
-                        </div>
-                        <div class="partB">
-                          <p><span class="post_title">修課心得:</span><br><%- data[i].comment %></p>
-                        </div>
-                        <div class="partA">
-                          <p><span class="post_title">報告作業:</span><br><%- data[i].report_hw %></p><br>
-                          <p><span class="post_title">考試方式:</span><br><%- data[i].exam_style %></p><br>
-                          <p><span class="post_title">評分方式:</span><br><%- data[i].score_style %></p><br>
-                          <p><span class="post_title">老師上課教材:</span><br><%- data[i].course_need %></p><br>
-                          <p><span class="post_title">老師上課方式:</span><br><%- data[i].course_style %></p>
-                          <% if(user && (user.id == data[i].user_id) ){ %>
-                            <div class="small ui button delbtn" id="delbtn" data-id="<%=data[i].id %>">刪除文章</div>
-                          <% } %>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <% } %>
               <% } %>
+            <% } %>
           </table>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="post-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
       </div>
     </div>
   </div>

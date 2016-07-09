@@ -54,7 +54,7 @@ exports.DeleteById = function DeleteById(table,id,callback){
 }
 
 exports.GetAll = function GetAll(table,order,callback){
-  var sql = "SELECT * FROM " + table +" ORDER BY " + order +" DESC" ;
+  var sql = "SELECT * FROM " + table + " ORDER BY " + order +" DESC" ;
   console.log(sql);
   connection.query(sql,function(err, results, fields){
     if (err) throw err;
@@ -62,8 +62,15 @@ exports.GetAll = function GetAll(table,order,callback){
   });
 }
 
-exports.GetCols = function GetCols(table,cols,callback){
-  var sql = "SELECT " + cols + " FROM " + table ;
+exports.GetCols = function GetCols(table,cols,order,callback){
+  var columns = "";
+  for(var i in cols ){
+    columns+=cols[i];
+    if( i != cols.length-1 ){
+      columns+=",";
+    }
+  }
+  var sql = "SELECT " + columns + " FROM " + table + " ORDER BY " + order +" DESC" ;
   console.log(sql);
   connection.query(sql,function(err, results, fields){
     if (err) throw err;
@@ -76,7 +83,7 @@ exports.FindbyID = function FindbyID(table,id,callback){
   console.log(sql);
   connection.query(sql,function(err, results, fields){
     if (err) throw err;
-    callback(results);
+    callback(results[0]);
   });
 }
 

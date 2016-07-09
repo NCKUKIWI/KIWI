@@ -89,8 +89,7 @@ $(document).ready(function(){
       type: 'DELETE',
       success: function(response) {
         $('body').removeClass('modal-open');
-        $('#post-'+postid).hide();
-        $('#modal-'+postid).hide();
+        $('#post-'+postid).remove();
       }
     });
   });
@@ -141,13 +140,26 @@ $(document).ready(function(){
     });
   });
 
-  $('.message .close')
-    .on('click', function() {
-      $(this)
-        .closest('.message')
-        .transition('fade')
-      ;
-    })
-  ;
+  /* 上方通知欄關閉  */
+  $('.message .close').on('click', function() {
+      $(this).closest('.message').transition('fade');
+  });
+
+  /* Ajax Show */
+  $('.post-row').on('click',function(){
+    var ajaxurl = '/post/'+ this.getAttribute("data-id");
+    $.ajax({
+      url:ajaxurl,
+      type: 'GET',
+      success: function(response) {
+        $('.modal-content').prepend(response);
+      }
+    });
+  });
+
+  /* 關閉時清空 modal */
+  $('#post-modal').on('hidden.bs.modal', function () {
+    $('#post-modal .modal-content').empty();
+  });
 
 });

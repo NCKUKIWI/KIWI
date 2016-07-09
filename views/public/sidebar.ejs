@@ -31,7 +31,7 @@
     $(".query").keyup(function (e) {
       if (e.keyCode == 13) {
         var query = $('.query').val();
-        window.location.href = "/?queryw="+$('.query').val();
+        window.location.href = "/?queryw="+query.replace(/\\/g, "");
       }
     });
   });

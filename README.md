@@ -122,9 +122,11 @@ db.GetCols(table,columns,order,callback);
 
 ####Example:
 
-`var columns = ['columns_name1','columns_name2'];
+```
+var columns = ['columns_name1','columns_name2'];
 
-db.GetCols('table_name',columns,'columns_name',function(datas){...});`
+db.GetCols('table_name',columns,'columns_name',function(datas){...});
+```
 
 ###Find one data by Id (just on data)
 

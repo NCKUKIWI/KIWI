@@ -115,12 +115,17 @@ $(document).ready(function(){
       success: function(response) {
         $('.post-row').fadeOut().remove();
         for(var i in response){
-          var dom ="<tr id='post-"+response[i].id+"' class='post-row' data-toggle='modal' data-target='#modal-"+response[i].id+"'><td class='course_name'>"+response[i].course_name+"</td><td class='catalog'>"+response[i].catalog+"</td><td class='teacher'>"+response[i].teacher+"</td><td class='semester'>"+response[i].semester+"</td></tr>";
+          var dom ="<tr id='post-"+response[i].id+"' class='post-row' data-toggle='modal' data-target='#post-modal' data-id='"+response[i].id+"'><td class='course_name'>"+response[i].course_name+"</td><td class='catalog'>"+response[i].catalog+"</td><td class='teacher'>"+response[i].teacher+"</td><td class='semester'>"+response[i].semester+"</td></tr>";
           $('#post-table').append(dom);
         }
-        $('.chevron.down.icon').remove();
-        var icon = "<i class='chevron down icon'></i>";
+        $('.sort.descending.icon').remove();
+        var icon = "<i class='sort descending icon'></i>";
         $("th.orderbtn."+order).append(icon);
+        /* 將新的dom 綁定ajaxshow */
+        $('.post-row').on('click',function(){
+          var postid= $(this).data("id");
+          ajaxshow(postid);
+        });
       }
     });
   });
@@ -130,9 +135,9 @@ $(document).ready(function(){
       $(this).closest('.message').transition('fade');
   });
 
-  /* Ajax Show */
-  $('.post-row').on('click',function(){
-    var ajaxurl = '/post/'+ this.getAttribute("data-id");
+
+  function ajaxshow(id){
+    var ajaxurl = '/post/'+ id;
     $.ajax({
       url:ajaxurl,
       type: 'GET',
@@ -141,7 +146,13 @@ $(document).ready(function(){
         $('#post-modal').data('bs.modal').handleUpdate();
       }
     });
+  }
+
+  $('.post-row').on('click',function(){
+    var postid= $(this).data("id");
+    ajaxshow(postid);
   });
+
 
   /* 關閉時清空 modal */
   $('#post-modal').on('hidden.bs.modal', function () {

@@ -135,9 +135,9 @@ html *{
 .orderbtn{
   cursor: pointer;
 }
-.chevron.down{
-  margin-left:4px;
-  font-size:14px;
+
+.sort.descending{
+  vertical-align:super;
 }
 
 .post-row{

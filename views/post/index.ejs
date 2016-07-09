@@ -8,7 +8,7 @@
         <div id="content">
           <table class="table" id="post-table">
             <tr>
-              <th class="course_name orderbtn" data-name="course_name">課程名稱<i class='chevron down icon'></i></th>
+              <th class="course_name orderbtn" data-name="course_name">課程名稱<i class='sort descending icon'></i></th>
               <th class="catalog orderbtn" data-name="catalog">類別</th>
               <th class="teacher orderbtn" data-name="teacher">開課老師</th>
               <th class="semester orderbtn" data-name="semester">學期</th>
@@ -19,7 +19,7 @@
               </tr>
             <% }else{ %>
               <% for(var i in data){ %>
-                <tr id="post-<%= data[i].id %>" class="post-row" data-toggle="modal" data-target="#post-modal" data-id="<%= data[i].id %>" >
+                <tr id="post-<%= data[i].id %>" class="post-row" data-toggle="modal" data-target="#post-modal" data-id="<%= data[i].id %>">
                   <td class="course_name">
                     <% if(user && (user.id == data[i].user_id) ){ %>
                       <span class="label label-pill label-success">My post</span>

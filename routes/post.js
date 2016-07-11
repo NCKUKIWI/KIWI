@@ -42,10 +42,15 @@ router.post('/create', function(req, res) {
 /* show */
 router.get('/:id', function(req, res) {
   var id = req.params.id;
-  console.log('GET /post/'+id);
-  db.FindbyID('post',id,function(data){
-    res.render('post/show',{'data':data,'user': req.user });
-  });
+  if(id.match(/\D/g)){
+    res.redirect('../');
+  }
+  else{
+    console.log('GET /post/'+id);
+    db.FindbyID('post',id,function(data){
+      res.render('post/show',{'data':data,'user': req.user });
+    });
+  }
 });
 
 /* edit */

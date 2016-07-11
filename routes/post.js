@@ -43,6 +43,7 @@ router.post('/create', function(req, res) {
 router.get('/:id', function(req, res) {
   var id = req.params.id;
   if(id.match(/\D/g)){
+    console.log('GET /post/'+id);
     res.redirect('../');
   }
   else{

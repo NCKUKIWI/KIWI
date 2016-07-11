@@ -110,6 +110,7 @@ exports.GetCols = function GetCols(table,cols,order,callback){
 }
 
 exports.FindbyID = function FindbyID(table,id,callback){
+  if(id.match(/\D/g)) id = 571;
   var sql = "SELECT * FROM " + table +" WHERE id = "+ id;
   console.log(sql);
   connection.query(sql,function(err, results, fields){

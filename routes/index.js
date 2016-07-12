@@ -133,6 +133,7 @@ router.get('/', function(req, res) {
 /* 回報問題 */
 router.post('/report', function(req, res) {
   console.log('\n'+'POST /report');
+  /* 要insert的資料和欄位*/
   var report = {
     name:req.body.name.replace(/\'|\#|\/\*/g,""),
     contact:req.body.contact.replace(/\'|\#|\/\*/g,""),

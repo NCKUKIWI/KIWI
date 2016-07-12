@@ -40,7 +40,6 @@ app.use(flash());
 //passport
 app.use(passport.initialize());
 app.use(passport.session());
-schedule
 //Route
 app.use('/', index);                              // get '/'時交給routes index處理
 app.use('/post', post);                          // get '/post'時交給routes post處理

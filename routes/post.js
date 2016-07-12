@@ -66,24 +66,30 @@ router.post('/update', function(req, res) {
 
 /*report post */
 router.post('/report/:id', function(req,res) {
+  /* 要檢舉的文章id*/
   var postid = parseInt(req.params.id);
   console.log('\n'+'PUT post/report/'+postid);
+  /* 檢查用戶是否登入 */
   if(req.user !== undefined){
     var name = req.user.name;
+    var userid = parseInt(req.user.id);
     console.log('檢舉者：'+ name)
-    db.FindbyColumn('report_post',{'post_id':postid,'name':name},function(datas){
+    /* 檢查是否檢舉過 依照user的name及post_id去尋找 */
+    db.FindbyColumn('report_post',{'post_id':postid,'user_id':userid},function(datas){
       if(datas.length > 0 ){
         console.log('Already report');
         res.send('Already report');
       }
       else{
+        /* 新增檢舉紀錄 */
         var report_post ={
-          name:name,
+          user_id:userid,
           post_id:postid
         }
         db.Insert('report_post',report_post,function(err,results){
           if(err) throw err;
           console.log('Report post ' + postid + ' success');
+          /* 依照post_id將文章的檢舉次數+1 */
           db.UpdatePlusone('post','report_count',postid,function(results){
             res.send('Success');
           });

@@ -13,7 +13,7 @@ var data = {
   'col2': 'value2',
 }
 
-Insert('table_name',data,function(err,result){...});
+Insert('table_name',data,function(err,results){...});
 
 Delete data by Id
 

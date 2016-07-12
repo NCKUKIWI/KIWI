@@ -98,6 +98,7 @@ var data = {
 }
 
 db.Insert('table_name',data,function(err,result){...});
+//result.insertId = the id of the data you just insert
 ```
 
 ###Delete data by Id

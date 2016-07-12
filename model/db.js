@@ -33,13 +33,13 @@ GetAll('table_name','columns_name',function(datas){...});
 
 Get specific data from table order by column
 
-GetCols(table,columns,order,callback);
+GetColumn(table,columns,order,callback);
 
 Example:
 
 var columns = ['columns_name1','columns_name2'];
 
-GetCols('table_name',columns,'columns_name',function(datas){...});
+GetColumn('table_name',columns,'columns_name',function(datas){...});
 
 Find one data by Id (just on data)
 
@@ -114,7 +114,7 @@ exports.GetAll = function GetAll(table,order,callback){
   });
 }
 
-exports.GetCols = function GetCols(table,cols,order,callback){
+exports.GetColumn = function GetColumn(table,cols,order,callback){
   var columns = "";
   for(var i in cols ){
     columns+=cols[i];

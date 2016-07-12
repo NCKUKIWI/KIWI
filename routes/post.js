@@ -68,13 +68,13 @@ router.post('/update', function(req, res) {
 router.post('/report/:id', function(req,res) {
   /* 要檢舉的文章id*/
   var postid = parseInt(req.params.id);
-  console.log('\n'+'PUT post/report/'+postid);
+  console.log('\n'+'POST /post/report/'+postid);
   /* 檢查用戶是否登入 */
   if(req.user !== undefined){
     var name = req.user.name;
     var userid = parseInt(req.user.id);
     console.log('檢舉者：'+ name)
-    /* 檢查是否檢舉過 依照user的name及post_id去尋找 */
+    /* 檢查是否檢舉過 依照user_id及post_id去尋找 */
     db.FindbyColumn('report_post',{'post_id':postid,'user_id':userid},function(datas){
       if(datas.length > 0 ){
         console.log('Already report');

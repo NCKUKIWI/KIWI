@@ -23,7 +23,7 @@ passport.use(new FacebookStrategy({
         else{
           db.Insert('user',user,function(err,results){
             if(err) throw err;
-            db.FindbyID('user',result.insertId,function(data){
+            db.FindbyID('user',results.insertId,function(data){
               cb(null,data);
             });
           });

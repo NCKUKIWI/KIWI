@@ -136,10 +136,16 @@ db.FindbyID(table,id,callback);
 
 `db.FindbyID('table_name','2',function(data){...});`
 
-###Find one datas by Id (one or more datas)
+###Find datas by Condition (one or more datas)
 
-db.FindbyColumn(table,col,value,callback);
+db.FindbyColumn(table,conditions,callback);
 
 ####Example:
 
-`db.FindbyColumn('table_name','columns_name','2',function(){...});`
+```
+var conditions ={
+ id:2,
+ name:'xxx'
+}
+db.FindbyColumn('user',conditions,function(datas){...});
+```

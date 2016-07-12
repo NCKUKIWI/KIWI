@@ -132,7 +132,7 @@ router.get('/', function(req, res) {
 
 /* 回報問題 */
 router.post('/report', function(req, res) {
-  console.log('POST /report');
+  console.log('\n'+'POST /report');
   var report = {
     name:req.body.name.replace(/\'|\#|\/\*/g,""),
     contact:req.body.contact.replace(/\'|\#|\/\*/g,""),

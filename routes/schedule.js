@@ -4,7 +4,7 @@ var db = require('../model/db');
 
 /* index  */
 router.get('/', function(req, res) {
-  console.log('GET /schedule');
+  console.log('\n'+'GET /schedule');
   res.render('schedule/index',{'user': req.user});
 });
 

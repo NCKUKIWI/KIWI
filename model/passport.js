@@ -15,14 +15,14 @@ passport.use(new FacebookStrategy({
         fb_id:profile.id,
         name:profile.displayName,
       }
-      db.FindbyColumn('user','fb_id',profile.id,function(data){
-        if(data.length > 0 ){
-          cb(null,data[0]);
+      db.FindbyColumn('user',{'fb_id':profile.id},function(datas){
+        if(datas.length > 0 ){
+          cb(null,datas[0]);
         }
         else{
           db.Insert('user',user,function(err,result){
             if(err) throw err;
-            db.FindbyColumn('user','id',result.insertId,function(data){
+            db.FindbyColumn('user',{'id':result.insertId},function(data){
               cb(null,data[0]);
             });
           });

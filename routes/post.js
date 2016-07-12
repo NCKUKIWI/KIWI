@@ -9,7 +9,7 @@ router.get('/', function(req, res) {
 
 /* create */
 router.post('/create', function(req, res) {
-  console.log('POST /post/create');
+  console.log('\n'+'POST /post/create');
   var userid = req.user.id;
   console.log('User_id: '+req.user.id);
   req.checkBody('coursename', '課程名稱不可為空').notEmpty();
@@ -43,11 +43,11 @@ router.post('/create', function(req, res) {
 router.get('/:id', function(req, res) {
   var id = req.params.id;
   if(id.match(/\D/g)){
-    console.log('GET /post/'+id);
+    console.log('\n'+'GET /post/'+id);
     res.redirect('../');
   }
   else{
-    console.log('GET /post/'+id);
+    console.log('\n'+'GET /post/'+id);
     db.FindbyID('post',id,function(data){
       res.render('post/show',{'data':data,'user': req.user });
     });
@@ -64,11 +64,44 @@ router.post('/update', function(req, res) {
 
 });
 
+/*report post */
+router.post('/report/:id', function(req,res) {
+  var postid = parseInt(req.params.id);
+  var name = req.user.name;
+  console.log('\n'+'PUT post/report/'+postid);
+  if(req.user !== undefined){
+    console.log('檢舉者：'+ name)
+    db.FindbyColumn('report_post',{'post_id':postid,'name':name},function(datas){
+      if(datas.length > 0 ){
+        console.log('Already report');
+        res.send('Already report');
+      }
+      else{
+        var report_post ={
+          name:name,
+          post_id:postid
+        }
+        db.Insert('report_post',report_post,function(err,result){
+          if(err) throw err;
+          console.log('Report post ' + postid + ' success');
+          db.UpdatePlusone('post','report_count',postid,function(results){
+            res.send('Success');
+          });
+        });
+      }
+    });
+  }
+  else{
+    console.log('Not login');
+    res.send('Not Login');
+  }
+});
+
 /* del */
 router.delete('/:id', function(req,res) {
   var id = req.params.id;
   var sql= "DELETE FROM post WHERE id = "+id;
-  console.log("DELETE post/"+id);
+  console.log('\n'+'DELETE post/'+id);
   db.DeleteById('post',id,function(err){
     res.send('Success');
   });

@@ -51,11 +51,16 @@ FindbyID('table_name','2',function(data){...});
 
 Find one datas by Id (one or more datas)
 
-FindbyColumn(table,col,value,callback);
+FindbyColumn(table,conditions,callback);
 
 Example:
 
-FindbyColumn('table_name','columns_name','2',function(){...});
+var conditions ={
+ id:2,
+ name:'xxx'
+}
+
+FindbyColumn('user',conditions,function(datas){...});
 */
 
 exports.Insert = function Insert(table,data,callback){
@@ -118,14 +123,42 @@ exports.FindbyID = function FindbyID(table,id,callback){
   });
 }
 
-exports.FindbyColumn = function FindbyColumn(table,col,value,callback){
-  var sql = "SELECT * FROM " + table +" WHERE "+ col + " = \'" + value + "\'";
+exports.FindbyColumn = function FindbyColumn(table,conditions,callback){
+  var condition="";
+  var count = 0;
+  var size = Object.keys(conditions).length - 1;
+  for(var i in conditions){
+    if(typeof conditions[i] === "number"){
+      condition = condition + i + " = " + conditions[i];
+    }
+    else{
+      condition = condition + i + " = \'" + conditions[i] + "\'";
+    }
+    if(count == size){
+      break;
+    }
+    else{
+      count++;
+      condition = condition + " AND ";
+    }
+  }
+  var sql = "SELECT * FROM " + table + " WHERE "+ condition;
   console.log(sql);
   connection.query(sql,function(err, results, fields){
     if (err) throw err;
     callback(results);
   });
 }
+
+exports.UpdatePlusone = function UpdatePlusone(table,col,id,callback){
+  var sql = "UPDATE " + table + " SET " + col +" = " + col + "+1 WHERE id = "+ id;
+  console.log(sql);
+  connection.query(sql,function(err, results, fields){
+    if (err) throw err;
+    callback(results);
+  });
+}
+
 
 function search_item(datas, item){
   	var item_array = [];

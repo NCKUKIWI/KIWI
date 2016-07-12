@@ -67,9 +67,9 @@ router.post('/update', function(req, res) {
 /*report post */
 router.post('/report/:id', function(req,res) {
   var postid = parseInt(req.params.id);
-  var name = req.user.name;
   console.log('\n'+'PUT post/report/'+postid);
   if(req.user !== undefined){
+    var name = req.user.name;
     console.log('檢舉者：'+ name)
     db.FindbyColumn('report_post',{'post_id':postid,'name':name},function(datas){
       if(datas.length > 0 ){

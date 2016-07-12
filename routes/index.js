@@ -138,7 +138,7 @@ router.post('/report', function(req, res) {
     contact:req.body.contact.replace(/\'|\#|\/\*/g,""),
     comment:req.body.comment.replace(/\n/g,"<br>").replace(/\'|\#|\/\*/g,""),
   }
-  db.Insert('report',report,function(err){
+  db.Insert('report',report,function(err,results){
     if(err) throw err;
     res.send('success');
   });

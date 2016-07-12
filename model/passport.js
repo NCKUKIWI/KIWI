@@ -4,6 +4,7 @@ var config = require('../config');
 var db = require('./db');
 
 //Passport
+//step 1
 passport.use(new FacebookStrategy({
     clientID: config.fbappid,
     clientSecret: config.fbsecret,
@@ -20,10 +21,10 @@ passport.use(new FacebookStrategy({
           cb(null,datas[0]);
         }
         else{
-          db.Insert('user',user,function(err,result){
+          db.Insert('user',user,function(err,results){
             if(err) throw err;
-            db.FindbyColumn('user',{'id':result.insertId},function(data){
-              cb(null,data[0]);
+            db.FindbyID('user',result.insertId,function(data){
+              cb(null,data);
             });
           });
         }
@@ -31,12 +32,16 @@ passport.use(new FacebookStrategy({
   }
 ));
 
+//step 2
 passport.serializeUser(function(user, done) {
-  done(null, user);
+  done(null, user.id);
 });
 
-passport.deserializeUser(function(user, done) {
-  done(null, user);
+//step 3
+passport.deserializeUser(function(id, done) {
+  db.FindbyID('user',id,function(data){
+    done(null,data);
+  });
 });
 
 module.exports = passport;

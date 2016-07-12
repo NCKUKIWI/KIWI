@@ -9,7 +9,7 @@
       </div>
       <div class="modal-body">
         <% if(user){%>
-        <form class="form-horizontal" id="createform" method="post" action="/post/create">
+        <form class="form-horizontal" id="createform">
           <div class="form-group">
             <label class="control-label col-sm-4">課程名稱(必填):</label>
             <div class="col-sm-8">
@@ -101,7 +101,7 @@
 </div>
 <script>
   $('#createform-submit').on('click',function(){
-    var data =$("#createform").serialize()
+    var data =$("#createform").serialize();
     $.ajax({
       url: '/post/create',
       type: 'post',

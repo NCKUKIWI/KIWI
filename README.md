@@ -149,3 +149,21 @@ var conditions ={
 }
 db.FindbyColumn('user',conditions,function(datas){...});
 ```
+
+###Update data
+
+Update(table,datas,conditions,callback);
+
+####Example:
+
+```
+var datas ={
+  name:'newname',
+  nickname:'newnickname'
+}
+var conditions ={
+  id:3
+}
+
+db.Update('user',datas,conditions,function(results){...});
+```

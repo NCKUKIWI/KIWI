@@ -32,7 +32,7 @@ router.post('/create', function(req, res) {
       course_style:req.body.course_style.replace(/\'|\#|\/\*/g,""),
       user_id: userid
     }
-    db.Insert('post',post,function(err,result){
+    db.Insert('post',post,function(err,results){
       if(err) throw err;
       res.send("success");
     });
@@ -81,7 +81,7 @@ router.post('/report/:id', function(req,res) {
           name:name,
           post_id:postid
         }
-        db.Insert('report_post',report_post,function(err,result){
+        db.Insert('report_post',report_post,function(err,results){
           if(err) throw err;
           console.log('Report post ' + postid + ' success');
           db.UpdatePlusone('post','report_count',postid,function(results){

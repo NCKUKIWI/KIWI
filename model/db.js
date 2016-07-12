@@ -61,6 +61,22 @@ var conditions ={
 }
 
 FindbyColumn('user',conditions,function(datas){...});
+
+Update data
+
+Update(table,datas,conditions,callback);
+
+Example:
+
+var datas ={
+  name:'newname',
+  nickname:'newnickname'
+}
+var conditions ={
+  id:3
+}
+
+Update('user',datas,conditions,function(results){...});
 */
 
 exports.Insert = function Insert(table,data,callback){
@@ -71,10 +87,10 @@ exports.Insert = function Insert(table,data,callback){
     console.log(i+" : "+data[i]);
   }
   console.log("}");
-  connection.query(sql,data,function(err,result){
+  connection.query(sql,data,function(err,results){
     if (err) throw err;
     console.log("Create Success!");
-    callback(err,result);
+    callback(err,results);
   });
 }
 
@@ -82,7 +98,7 @@ exports.Insert = function Insert(table,data,callback){
 exports.DeleteById = function DeleteById(table,id,callback){
   var sql = "DELETE FROM " + table + " WHERE id = " + id;
   console.log(sql);
-  connection.query(sql,function(err){
+  connection.query(sql,function(err,results){
     if (err) throw err;
     console.log("DELETE Success!");
     callback(err);
@@ -150,10 +166,61 @@ exports.FindbyColumn = function FindbyColumn(table,conditions,callback){
   });
 }
 
+exports.Update = function Update(table,datas,conditions,callback){
+  var condition="";
+  var count = 0;
+  var size = Object.keys(conditions).length - 1;
+  for(var i in conditions){
+    if(typeof conditions[i] === "number"){
+      condition = condition + i + " = " + conditions[i];
+    }
+    else{
+      condition = condition + i + " = \'" + conditions[i] + "\'";
+    }
+    if(count == size){
+      break;
+    }
+    else{
+      count++;
+      condition = condition + " AND ";
+    }
+  }
+  var data="";
+  count = 0;
+  size = Object.keys(datas).length - 1;
+  for(var i in datas){
+    if(typeof datas[i] === "number"){
+      data = data + i + " = " + datas[i];
+    }
+    else{
+      data = data + i + " = \'" + datas[i] + "\'";
+    }
+    if(count == size){
+      break;
+    }
+    else{
+      count++;
+      data = data + ",";
+    }
+  }
+  var sql = "UPDATE " + table + " SET " + data + " WHERE " + condition;
+  console.log(sql);
+  console.log("Data: {");
+  for(var i in datas){
+    console.log(i+" : "+datas[i]);
+  }
+  console.log("}");
+  connection.query(sql,function(err,results){
+    if (err) throw err;
+    callback(results);
+  });
+}
+
+
 exports.UpdatePlusone = function UpdatePlusone(table,col,id,callback){
   var sql = "UPDATE " + table + " SET " + col +" = " + col + "+1 WHERE id = "+ id;
   console.log(sql);
-  connection.query(sql,function(err, results, fields){
+  connection.query(sql,function(err, results){
     if (err) throw err;
     callback(results);
   });

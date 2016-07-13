@@ -5,6 +5,7 @@ var db = require('./db');
 
 //Passport
 //step 1
+//Call back url for Dev "http://localhost:3000/user/auth/facebook/callback",
 passport.use(new FacebookStrategy({
     clientID: config.fbappid,
     clientSecret: config.fbsecret,
@@ -13,7 +14,7 @@ passport.use(new FacebookStrategy({
   },
   function(accessToken, refreshToken, profile, cb){
     db.FindbyColumn('user',{'fb_id':profile.id},function(users){
-      if(datas.length > 0 ){
+      if(users.length > 0 ){
         cb(null,users[0]);
       }
       else{

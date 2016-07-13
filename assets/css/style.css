@@ -133,7 +133,7 @@ html *{
   display:block;
 }
 
-/* course table */
+/* post table */
 
 .orderbtn{
   cursor: pointer;
@@ -151,16 +151,16 @@ html *{
   background:rgba(218,218,218,0.6);
 }
 
-.course_name{
+#post-table .course_name{
   width:40%;
 }
-.catalog{
+#post-table .catalog{
   width:25%;
 }
-.teacher{
+#post-table .teacher{
   width:20%;
 }
-.semester{
+#post-table .semester{
   width:15%;
 }
 
@@ -240,6 +240,27 @@ html *{
   vertical-align:middle;
 }
 
+/* course */
+
+.course-row{
+  cursor: pointer;
+}
+
+#course-table .course_name{
+  width:40%
+}
+
+#course-table .department_name{
+ width:20%
+}
+
+#course-table .teacher{
+width:25%
+}
+
+#course-table .class_time{
+ width:15%
+}
 /* Media query */
 
 /* sm */

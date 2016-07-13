@@ -1,0 +1,44 @@
+<% layout('../public/layout') %>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-3 col-sm-3">
+        side bar
+      </div>
+      <div class="col-md-9 col-sm-9">
+        <div id="content">
+          <table class="table" id="course-table">
+            <tr>
+              <th class="course_name">課程名稱</th>
+              <th class="department_name" >開課系所</th>
+              <th class="teacher" >開課老師</th>
+              <th class="class_time">時間</th>
+            </tr>
+            <% for(var i in courses){ %>
+                <tr id="course-<%= courses[i].id %>" class="course-row" data-id="<%= courses[i].id %>">
+                  <td>
+                    <%- courses[i].課程名稱 %>
+                  </td>
+                  <td>
+                    <%- courses[i].系所名稱 %>
+                  </td>
+                  <td>
+                    <%- courses[i].老師 %>
+                  </td>
+                  <td>
+                    <%- courses[i].時間 %>
+                  </td>
+                </tr>
+            <% } %>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    $(document).ready(function(){
+      $('.course-row').on('click',function(){
+        window.location.href =   window.location.href +"/"+this.getAttribute("data-id");
+      });
+    });
+  </script>

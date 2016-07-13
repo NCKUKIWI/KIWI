@@ -2,56 +2,56 @@
   <button type="button" class="close" data-dismiss="modal">
     <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
   </button>
-  <h1 class="modal-title"><%- data.course_name %></h1>
+  <h1 class="modal-title"><%- post.course_name %></h1>
 </div>
 <div class="modal-body">
   <div class="partA">
     <p><span class="post_title">類別:</span>
-      <%- data.catalog %>
+      <%- post.catalog %>
     </p>
     <p><span class="post_title">學期:</span>
-      <%- data.semester %>
+      <%- post.semester %>
     </p>
     <p><span class="post_title">授課老師:</span>
-      <%- data.teacher %>
+      <%- post.teacher %>
     </p>
   </div>
   <div class="partB">
     <p><span class="post_title">修課心得:</span>
       <br>
-      <%- data.comment %>
+      <%- post.comment %>
     </p>
   </div>
   <div class="partA">
     <p><span class="post_title">報告作業:</span>
       <br>
-      <%- data.report_hw %>
+      <%- post.report_hw %>
     </p>
     <br>
     <p><span class="post_title">考試方式:</span>
       <br>
-      <%- data.exam_style %>
+      <%- post.exam_style %>
     </p>
     <br>
     <p><span class="post_title">評分方式:</span>
       <br>
-      <%- data.score_style %>
+      <%- post.score_style %>
     </p>
     <br>
     <p><span class="post_title">老師上課教材:</span>
       <br>
-      <%- data.course_need %>
+      <%- post.course_need %>
     </p>
     <br>
     <p><span class="post_title">老師上課方式:</span>
       <br>
-      <%- data.course_style %>
+      <%- post.course_style %>
     </p>
     <div class="showbtnbar">
-      <% if(user && (user.id == data.user_id) ){ %>
-        <div class="small ui button delbtn"  data-id="<%=data.id %>">刪除文章</div>
+      <% if(user && (user.id == post.user_id) ){ %>
+        <div class="small ui button delbtn"  data-id="<%= post.id %>">刪除文章</div>
       <% } %>
-      <div class="small ui button reportbtn" data-id="<%=data.id %>">檢舉文章</div>
+      <div class="small ui button reportbtn" data-id="<%= post.id %>">檢舉文章</div>
     </div>
   </div>
 </div>

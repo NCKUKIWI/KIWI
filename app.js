@@ -12,6 +12,7 @@ var index = require('./routes/index');
 var post = require('./routes/post');
 var user = require('./routes/user');
 var schedule = require('./routes/schedule');
+var course = require('./routes/course');
 
 var app = express();
 
@@ -45,6 +46,7 @@ app.use('/', index);                              // get '/'時交給routes inde
 app.use('/post', post);                          // get '/post'時交給routes post處理
 app.use('/user',user);                          // get '/user'時交給routes user處理
 app.use('/schedule',schedule);                 // get '/schedule'時交給routes schedule
+app.use('/course',course);                 // get '/schedule'時交給routes schedule
 
 app.listen( process.env.PORT || 3000);                             //監聽3000port
 console.log('running on port 3000');

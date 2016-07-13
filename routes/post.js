@@ -44,12 +44,12 @@ router.get('/:id', function(req, res) {
   var id = req.params.id;
   if(id.match(/\D/g)){
     console.log('\n'+'GET /post/'+id);
-    res.redirect('../');
+    res.redirect('/');
   }
   else{
     console.log('\n'+'GET /post/'+id);
-    db.FindbyID('post',id,function(data){
-      res.render('post/show',{'data':data,'user': req.user });
+    db.FindbyID('post',id,function(post){
+      res.render('post/show',{'post':post,'user': req.user });
     });
   }
 });

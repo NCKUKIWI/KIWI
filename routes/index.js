@@ -22,15 +22,15 @@ router.get('/', function(req, res) {
   }
   /*  設定要的欄位 */
   var colmuns = ['id','course_name','catalog','teacher','semester','user_id'];
-  db.GetColumn('post',colmuns,order,function(datas){
+  db.GetColumn('post',colmuns,order,function(posts){
     if(req.query.hasOwnProperty("queryw")){
-	  	db.query_post(datas, req.query.queryw,"query",function(data,teachers,course_name){
+	  	db.query_post(posts, req.query.queryw,"query",function(posts,teachers,course_name){
         if(req.query.order){
-          res.send(data);
+          res.send(posts);
         }
         else{
           res.render('post/index',{
-            'data':data,
+            'posts':posts,
             'teachers': teachers,
             'course_name': course_name,
             'user': req.user
@@ -39,13 +39,13 @@ router.get('/', function(req, res) {
       });
 	  }
 	  else if(req.query.hasOwnProperty("teacher")){
-	  	db.query_post(datas, req.query.teacher, "teacher",function(data,teachers,course_name){
+	  	db.query_post(posts, req.query.teacher, "teacher",function(posts,teachers,course_name){
         if(req.query.order){
-          res.send(data);
+          res.send(posts);
         }
         else{
           res.render('post/index',{
-            'data':data,
+            'posts':posts,
             'teachers': teachers,
             'course_name': course_name,
             'user': req.user
@@ -54,13 +54,13 @@ router.get('/', function(req, res) {
       });
 	  }
 	  else if(req.query.hasOwnProperty("course_name")){
-	  	db.query_post(datas, req.query.course_name, "course_name",function(data,teachers,course_name){
+	  	db.query_post(posts, req.query.course_name, "course_name",function(posts,teachers,course_name){
         if(req.query.order){
-          res.send(data);
+          res.send(posts);
         }
         else{
           res.render('post/index',{
-            'data':data,
+            'posts':posts,
             'teachers': teachers,
             'course_name': course_name,
             'user': req.user
@@ -98,13 +98,13 @@ router.get('/', function(req, res) {
           req.query.catalog = "";
           break;
 	  	}
-	  	db.query_post(datas, req.query.catalog,"catalog",function(data,teachers,course_name){
+	  	db.query_post(posts, req.query.catalog,"catalog",function(posts,teachers,course_name){
         if(req.query.order){
-          res.send(data);
+          res.send(posts);
         }
         else{
           res.render('post/index',{
-            'data':data,
+            'posts':posts,
             'teachers': teachers,
             'course_name': course_name,
             'user': req.user
@@ -113,14 +113,14 @@ router.get('/', function(req, res) {
       });
 	  }
 	  else{
-			var teacher = db.search_item(datas, "teacher");
-		  var courseName = db.search_item(datas, "course_name");
+			var teacher = db.search_item(posts, "teacher");
+		  var courseName = db.search_item(posts, "course_name");
       if(req.query.order){
-        res.send(datas);
+        res.send(posts);
       }
       else{
   	    res.render('post/index',{
-  	    	'data':datas,
+  	    	'posts':posts,
   	    	'teachers': teacher,
   	    	'course_name': courseName,
           'user': req.user

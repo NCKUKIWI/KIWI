@@ -11,24 +11,24 @@ passport.use(new FacebookStrategy({
     callbackURL:"http://nckuhub.com/user/auth/facebook/callback",
     profileFields: ['id', 'displayName']
   },
-  function(accessToken, refreshToken, profile, cb) {
-      var user ={
-        fb_id:profile.id,
-        name:profile.displayName,
+  function(accessToken, refreshToken, profile, cb){
+    db.FindbyColumn('user',{'fb_id':profile.id},function(users){
+      if(datas.length > 0 ){
+        cb(null,users[0]);
       }
-      db.FindbyColumn('user',{'fb_id':profile.id},function(datas){
-        if(datas.length > 0 ){
-          cb(null,datas[0]);
+      else{
+        var user ={
+          fb_id:profile.id,
+          name:profile.displayName,
         }
-        else{
-          db.Insert('user',user,function(err,results){
-            if(err) throw err;
-            db.FindbyID('user',results.insertId,function(data){
-              cb(null,data);
-            });
+        db.Insert('user',user,function(err,results){
+          if(err) throw err;
+          db.FindbyID('user',results.insertId,function(user){
+            cb(null,user);
           });
-        }
-      });
+        });
+      }
+    });
   }
 ));
 

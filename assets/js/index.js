@@ -1,4 +1,10 @@
 $(document).ready(function(){
+
+  /* 上方通知欄關閉  */
+  $('.message .close').on('click', function() {
+      $(this).closest('.message').transition('fade');
+  });
+
   //Parse URL function
   function urlObject(options) {
       var url_search_arr,
@@ -71,6 +77,8 @@ $(document).ready(function(){
       return urlObj;
   }
 
+  //===== Post ======
+
   //Parse URL
   var url = window.location.href;
   var urlObj = urlObject({'url':url});
@@ -116,20 +124,14 @@ $(document).ready(function(){
         /* 將新的dom 綁定ajaxshow function */
         $('.post-row').on('click',function(){
           var postid= $(this).data("id");
-          ajaxshow(postid);
+          ajaxshowpost(postid);
         });
       }
     });
   });
 
-  /* 上方通知欄關閉  */
-  $('.message .close').on('click', function() {
-      $(this).closest('.message').transition('fade');
-  });
-
-
-  /* Ajax show */
-  function ajaxshow(id){
+  /* Ajax show post */
+  function ajaxshowpost(id){
     var ajaxurl = '/post/'+ id;
     $.ajax({
       url:ajaxurl,
@@ -141,10 +143,10 @@ $(document).ready(function(){
     });
   }
 
-  /* 綁定ajaxshow function */
+  /* 綁定ajaxshowpost function */
   $('.post-row').on('click',function(){
     var postid= this.getAttribute("data-id");
-    ajaxshow(postid);
+    ajaxshowpost(postid);
   });
 
 

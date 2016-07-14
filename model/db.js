@@ -49,7 +49,7 @@ Example:
 
 FindbyID('table_name','2',function(data){...});
 
-Find one datas by Id (one or more datas)
+Find datas by column (one or more datas)
 
 FindbyColumn(table,conditions,callback);
 
@@ -61,6 +61,18 @@ var conditions ={
 }
 
 FindbyColumn('user',conditions,function(datas){...});
+
+Find datas by conditions and order by column (one or more datas)
+
+FindbyColumnOrder(table,conditions,order,callback);
+
+Example:
+
+var conditions ={
+ user_id:2
+}
+
+FindbyColumnOrder('post',conditions,{'column':ordercolumn,'order':'ASC/DESC'},function(datas){...});
 
 Update data
 
@@ -106,7 +118,7 @@ exports.DeleteById = function DeleteById(table,id,callback){
 }
 
 exports.GetAll = function GetAll(table,order,callback){
-  var sql = "SELECT * FROM " + table + " ORDER BY " + order +" DESC" ;
+  var sql = "SELECT * FROM " + table + " ORDER BY " + order['column'] + " " + order['order'] ;
   console.log(sql);
   connection.query(sql,function(err, results, fields){
     if (err) throw err;
@@ -122,7 +134,7 @@ exports.GetColumn = function GetColumn(table,cols,order,callback){
       columns+=",";
     }
   }
-  var sql = "SELECT " + columns + " FROM " + table + " ORDER BY " + order +" DESC" ;
+  var sql = "SELECT " + columns + " FROM " + table + " ORDER BY " + order['column'] + " " + order['order'];
   console.log(sql);
   connection.query(sql,function(err, results, fields){
     if (err) throw err;
@@ -158,7 +170,34 @@ exports.FindbyColumn = function FindbyColumn(table,conditions,callback){
       condition = condition + " AND ";
     }
   }
-  var sql = "SELECT * FROM " + table + " WHERE "+ condition;
+  var sql = "SELECT * FROM " + table + " WHERE " + condition;
+  console.log(sql);
+  connection.query(sql,function(err, results, fields){
+    if (err) throw err;
+    callback(results);
+  });
+}
+
+exports.FindbyColumnOrder = function FindbyColumnOrder(table,conditions,order,callback){
+  var condition="";
+  var count = 0;
+  var size = Object.keys(conditions).length - 1;
+  for(var i in conditions){
+    if(typeof conditions[i] === "number"){
+      condition = condition + i + " = " + conditions[i];
+    }
+    else{
+      condition = condition + i + " = \'" + conditions[i] + "\'";
+    }
+    if(count == size){
+      break;
+    }
+    else{
+      count++;
+      condition = condition + " AND ";
+    }
+  }
+  var sql = "SELECT * FROM " + table + " WHERE " + condition + " ORDER BY " + order['column'] + " " + order['order'];
   console.log(sql);
   connection.query(sql,function(err, results, fields){
     if (err) throw err;

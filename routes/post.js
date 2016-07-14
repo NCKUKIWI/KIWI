@@ -49,7 +49,10 @@ router.get('/:id', function(req, res) {
   else{
     console.log('\n'+'GET /post/'+id);
     db.FindbyID('post',id,function(post){
-      res.render('post/show',{'post':post,'user': req.user });
+      res.render('post/show',{
+        'post':post,
+        'user': req.user
+      });
     });
   }
 });

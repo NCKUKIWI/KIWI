@@ -151,6 +151,20 @@ var conditions ={
 db.FindbyColumn('user',conditions,function(datas){...});
 ```
 
+###Find datas by conditions and order by column (one or more datas)
+
+db.FindbyColumnOrder(table,conditions,order,callback);
+
+####Example:
+
+```
+var conditions ={
+ user_id:2
+}
+
+db.FindbyColumnOrder('post',conditions,{'column':ordercolumn,'order':'ASC/DESC'},function(datas){...});
+```
+
 ###Update data
 
 Update(table,datas,conditions,callback);

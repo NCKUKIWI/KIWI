@@ -22,7 +22,9 @@ router.get('/logout', function(req, res){
 router.get('/edit', function(req, res){
   if(req.user == undefined) res.redirect('../');
   console.log('\n'+'GET /user/edit');
-  res.render('user/edit',{'user':req.user});
+  res.render('user/edit',{
+    'user':req.user
+  });
 });
 
 router.post('/update', function(req, res){

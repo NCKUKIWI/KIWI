@@ -14,7 +14,7 @@
               <th class="class_time">時間</th>
             </tr>
             <% for(var i in courses){ %>
-                <tr id="course-<%= courses[i].id %>" class="course-row" data-id="<%= courses[i].id %>">
+                <tr id="course-<%= courses[i].id %>" class="course-row" data-toggle="modal" data-target="#course-modal" data-id="<%= courses[i].id %>">
                   <td>
                     <%- courses[i].課程名稱 %>
                   </td>
@@ -35,10 +35,38 @@
     </div>
   </div>
 
-  <script>
-    $(document).ready(function(){
-      $('.course-row').on('click',function(){
-        window.location.href =   window.location.href +"/"+this.getAttribute("data-id");
-      });
+  <div class="modal fade" id="course-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+      </div>
+    </div>
+  </div>
+
+<script>
+
+  /* Ajax show post */
+  function ajaxshowcourse(id){
+    var ajaxurl = '/course/'+ id;
+    $.ajax({
+      url:ajaxurl,
+      type: 'GET',
+      success: function(response) {
+        $('#course-modal .modal-content').prepend(response);
+        $('#course-modal').data('bs.modal').handleUpdate();
+      }
     });
-  </script>
+  }
+
+  /* 綁定ajaxshowpost function */
+  $('.course-row').on('click',function(){
+    var courseid= this.getAttribute("data-id");
+    ajaxshowcourse(courseid);
+  });
+
+
+  /* modal 關閉時清空 modal 內容 */
+  $('#course-modal').on('hidden.bs.modal', function () {
+    $('#course-modal .modal-content').empty();
+  });
+
+</script>

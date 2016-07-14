@@ -1,45 +1,19 @@
-<% layout('../public/layout') %>
-  <%= course.課程名稱 %>
-    <div class="container">
-      <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-          <table class="table" id="post-table">
-            <tr>
-              <th class="course_name" data-name="course_name">課程名稱</th>
-              <th class="catalog" data-name="catalog">類別</th>
-              <th class="teacher" data-name="teacher">開課老師</th>
-              <th class="semester" data-name="semester">學期</th>
-            </tr>
-            <% if(posts.length == 0 ){ %>
-              <tr>
-                <th class="h3 text-center" colspan="4">目前無心得</th>
-              </tr>
-            <% }else{ %>
-              <% for(var i in posts){ %>
-                <tr id="post-<%= posts[i].id %>" class="post-row" data-toggle="modal" data-target="#post-modal" data-id="<%= posts[i].id %>">
-                  <td class="course_name">
-                    <%- posts[i].course_name %>
-                  </td>
-                  <td class="catalog">
-                    <%- posts[i].catalog %>
-                  </td>
-                  <td class="teacher">
-                    <%- posts[i].teacher %>
-                  </td>
-                  <td class="semester">
-                    <%- posts[i].semester %>
-                  </td>
-                </tr>
-              <% } %>
-            <% } %>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <div class="modal fade" id="post-modal" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-        </div>
-      </div>
-    </div>
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal">
+    <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+  </button>
+  <h1 class="modal-title"><%= course.課程名稱 %></h1>
+</div>
+<div class="modal-body">
+  <div class="partA">
+    <p><span class="post_title">類別:</span>
+      <%- course.時間 %>
+    </p>
+    <p><span class="post_title">學期:</span>
+      <%- course.系所名稱 %>
+    </p>
+    <p><span class="post_title">授課老師:</span>
+      <%- course.老師 %>
+    </p>
+  </div>
+</div>

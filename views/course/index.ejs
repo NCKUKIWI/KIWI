@@ -14,10 +14,10 @@
               <th class="teacher" >開課老師</th>
               <th class="class_time">時間</th>
             </tr>
-            <% for(var i in courses){ %>
+            <% for(var i = 0 ; i<50 ; i++){ %>
                 <tr id="course-<%= courses[i].id %>" class="course-row">
                   <td>
-                    <div><i class="plus icon addcoursebtn" data-id="<%= courses[i].id %>"></i></div>
+                    <div class="mini ui button addcoursebtn" data-id="<%= courses[i].id %>">選課</div>
                   </td>
                   <td class="course_name" data-toggle="modal" data-target="#course-modal" data-id="<%= courses[i].id %>">
                     <%- courses[i].課程名稱 %>
@@ -75,7 +75,6 @@
 
   /* choose course */
   $('.addcoursebtn').on('click',function(){
-    console.log($(this));
     var courseid = this.getAttribute("data-id");
     var ajaxurl = '/course/addcourse/'+ courseid;
     $.ajax({
@@ -83,10 +82,10 @@
       type: 'POST',
       success: function(response) {
         if(response=='No login'){
-          toastr.warning('請先登入');
+          toastr.warning('請先登入!');
         }
         else if(response=='Already choose'){
-          toastr.warning('已經選過囉');
+          toastr.warning('已經選過囉!');
         }
         else{
           toastr.success('選課成功!');
@@ -97,7 +96,15 @@
 
   /* delete course */
   $('.delcoursebtn').on('click',function(){
-    console.log('Click');
+    var courseid = this.getAttribute("data-id");
+    var ajaxurl = '/course/delcourse/'+ courseid;
+    $.ajax({
+      url:ajaxurl,
+      type: 'POST',
+      success: function(response){
+        toastr.success('移除成功!');
+      }
+    });
   });
 
 </script>

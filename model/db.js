@@ -102,6 +102,27 @@ var conditions = {'user.id':post.user_id};
 InnerJoin(tables,cols,conditions,function(results){...});
 */
 
+function conditionjoin(conditions){
+  var condition="";
+  var count = 0;
+  var size = Object.keys(conditions).length - 1;
+  for(var i in conditions){
+    if(typeof conditions[i] === "number"){
+      condition = condition + i + " = " + conditions[i];
+    }
+    else{
+      condition = condition + i + " = \'" + conditions[i] + "\'";
+    }
+    if(count == size){
+      return condition;
+    }
+    else{
+      count++;
+      condition = condition + " AND ";
+    }
+  }
+}
+
 exports.Insert = function Insert(table,data,callback){
   var sql = "INSERT INTO " + table + " SET ? ";
   console.log(sql);
@@ -120,6 +141,17 @@ exports.Insert = function Insert(table,data,callback){
 
 exports.DeleteById = function DeleteById(table,id,callback){
   var sql = "DELETE FROM " + table + " WHERE id = " + id;
+  console.log(sql);
+  connection.query(sql,function(err,results){
+    if (err) throw err;
+    console.log("DELETE Success!");
+    callback(err);
+  });
+}
+
+exports.DeleteByColumn = function DeleteByColumn(table,conditions,callback){
+  var condition = conditionjoin(conditions);
+  var sql = "DELETE FROM " + table + " WHERE " + condition;
   console.log(sql);
   connection.query(sql,function(err,results){
     if (err) throw err;
@@ -163,24 +195,7 @@ exports.FindbyID = function FindbyID(table,id,callback){
 }
 
 exports.FindbyColumn = function FindbyColumn(table,conditions,callback){
-  var condition="";
-  var count = 0;
-  var size = Object.keys(conditions).length - 1;
-  for(var i in conditions){
-    if(typeof conditions[i] === "number"){
-      condition = condition + i + " = " + conditions[i];
-    }
-    else{
-      condition = condition + i + " = \'" + conditions[i] + "\'";
-    }
-    if(count == size){
-      break;
-    }
-    else{
-      count++;
-      condition = condition + " AND ";
-    }
-  }
+  var condition = conditionjoin(conditions);
   var sql = "SELECT * FROM " + table + " WHERE " + condition;
   console.log(sql);
   connection.query(sql,function(err, results, fields){
@@ -190,24 +205,7 @@ exports.FindbyColumn = function FindbyColumn(table,conditions,callback){
 }
 
 exports.FindbyColumnOrder = function FindbyColumnOrder(table,conditions,order,callback){
-  var condition="";
-  var count = 0;
-  var size = Object.keys(conditions).length - 1;
-  for(var i in conditions){
-    if(typeof conditions[i] === "number"){
-      condition = condition + i + " = " + conditions[i];
-    }
-    else{
-      condition = condition + i + " = \'" + conditions[i] + "\'";
-    }
-    if(count == size){
-      break;
-    }
-    else{
-      count++;
-      condition = condition + " AND ";
-    }
-  }
+  var condition = conditionjoin(conditions);
   var sql = "SELECT * FROM " + table + " WHERE " + condition + " ORDER BY " + order['column'] + " " + order['order'];
   console.log(sql);
   connection.query(sql,function(err, results, fields){
@@ -217,24 +215,7 @@ exports.FindbyColumnOrder = function FindbyColumnOrder(table,conditions,order,ca
 }
 
 exports.Update = function Update(table,datas,conditions,callback){
-  var condition="";
-  var count = 0;
-  var size = Object.keys(conditions).length - 1;
-  for(var i in conditions){
-    if(typeof conditions[i] === "number"){
-      condition = condition + i + " = " + conditions[i];
-    }
-    else{
-      condition = condition + i + " = \'" + conditions[i] + "\'";
-    }
-    if(count == size){
-      break;
-    }
-    else{
-      count++;
-      condition = condition + " AND ";
-    }
-  }
+  var condition = conditionjoin(conditions);
   var data="";
   count = 0;
   size = Object.keys(datas).length - 1;
@@ -277,24 +258,7 @@ exports.UpdatePlusone = function UpdatePlusone(table,col,id,callback){
 }
 
 exports.InnerJoin = function InnerJoin(tables,cols,conditions,callback){
-  var condition="";
-  var count = 0;
-  var size = Object.keys(conditions).length - 1;
-  for(var i in conditions){
-    if(typeof conditions[i] === "number"){
-      condition = condition + i + " = " + conditions[i];
-    }
-    else{
-      condition = condition + i + " = \'" + conditions[i] + "\'";
-    }
-    if(count == size){
-      break;
-    }
-    else{
-      count++;
-      condition = condition + " AND ";
-    }
-  }
+  var condition = conditionjoin(conditions);
   var columns = "";
   for(var i in col ){
     columns+=col[i];

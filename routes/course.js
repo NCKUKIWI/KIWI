@@ -36,7 +36,6 @@ router.get('/:id', function(req, res) {
 });
 
 /* add course */
-/* show */
 router.post('/addcourse/:id', function(req, res) {
   var courseid =parseInt(req.params.id);
   console.log('\n'+'POST /addcourse/'+courseid);
@@ -46,6 +45,8 @@ router.post('/addcourse/:id', function(req, res) {
   }
   else{
     var userid = parseInt(req.user.id);
+    var name = req.user.name;
+    console.log("選課者: "+name);
     db.FindbyColumn('cart',{'user_id':userid,'course_id':courseid},function(carts){
       if(carts.length > 0 ){
         console.log('Already choose');
@@ -65,6 +66,16 @@ router.post('/addcourse/:id', function(req, res) {
       }
     });
   }
+});
+
+/* del course*/
+router.delete('/delcourse/:id', function(req,res) {
+  var courseid =parseInt(req.params.id);
+  var userid = parseInt(req.user.id);
+  console.log('\n'+'DELETE /delcourse/'+courseid);
+  db.DeleteByColumn('cart',{'course_id':courseid,'user_id':userid},function(err){
+    res.send('Success');
+  });
 });
 
 module.exports = router;

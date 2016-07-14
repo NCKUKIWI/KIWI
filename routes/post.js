@@ -109,7 +109,6 @@ router.post('/report/:id', function(req,res) {
 /* del */
 router.delete('/:id', function(req,res) {
   var id = req.params.id;
-  var sql= "DELETE FROM post WHERE id = "+id;
   console.log('\n'+'DELETE post/'+id);
   db.DeleteById('post',id,function(err){
     res.send('Success');

@@ -11,7 +11,7 @@ Example:
 var data = {
   'col1': 'value1',
   'col2': 'value2',
-}
+};
 
 Insert('table_name',data,function(err,results){...});
 
@@ -58,7 +58,7 @@ Example:
 var conditions ={
  id:2,
  name:'xxx'
-}
+};
 
 FindbyColumn('user',conditions,function(datas){...});
 
@@ -70,7 +70,7 @@ Example:
 
 var conditions ={
  user_id:2
-}
+};
 
 FindbyColumnOrder('post',conditions,{'column':ordercolumn,'order':'ASC/DESC'},function(datas){...});
 
@@ -83,12 +83,23 @@ Example:
 var datas ={
   name:'newname',
   nickname:'newnickname'
-}
+};
 var conditions ={
   id:3
-}
+};
 
 Update('user',datas,conditions,function(results){...});
+
+Inner Join table
+
+InnerJoin(tables,cols,conditions,callback);
+
+Example:
+
+var tables = {'table':'post','jointable':'user'};
+var cols = ['post.title','user.name'];
+var conditions = {'user.id':post.user_id};
+InnerJoin(tables,cols,conditions,function(results){...});
 */
 
 exports.Insert = function Insert(table,data,callback){
@@ -258,6 +269,40 @@ exports.Update = function Update(table,datas,conditions,callback){
 
 exports.UpdatePlusone = function UpdatePlusone(table,col,id,callback){
   var sql = "UPDATE " + table + " SET " + col +" = " + col + "+1 WHERE id = "+ id;
+  console.log(sql);
+  connection.query(sql,function(err, results){
+    if (err) throw err;
+    callback(results);
+  });
+}
+
+exports.InnerJoin = function InnerJoin(tables,cols,conditions,callback){
+  var condition="";
+  var count = 0;
+  var size = Object.keys(conditions).length - 1;
+  for(var i in conditions){
+    if(typeof conditions[i] === "number"){
+      condition = condition + i + " = " + conditions[i];
+    }
+    else{
+      condition = condition + i + " = \'" + conditions[i] + "\'";
+    }
+    if(count == size){
+      break;
+    }
+    else{
+      count++;
+      condition = condition + " AND ";
+    }
+  }
+  var columns = "";
+  for(var i in col ){
+    columns+=col[i];
+    if( i != col.length-1 ){
+      columns+=",";
+    }
+  }
+  var sql = "SELCTE " + columns + " FROM " + table['table'] + " INNER JOIN " + table['jointable'] + " ON " + condition;
   console.log(sql);
   connection.query(sql,function(err, results){
     if (err) throw err;

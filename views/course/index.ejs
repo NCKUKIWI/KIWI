@@ -8,14 +8,18 @@
         <div id="content">
           <table class="table" id="course-table">
             <tr>
+              <th >操作</th>
               <th class="course_name">課程名稱</th>
               <th class="department_name" >開課系所</th>
               <th class="teacher" >開課老師</th>
               <th class="class_time">時間</th>
             </tr>
             <% for(var i in courses){ %>
-                <tr id="course-<%= courses[i].id %>" class="course-row" data-toggle="modal" data-target="#course-modal" data-id="<%= courses[i].id %>">
+                <tr id="course-<%= courses[i].id %>" class="course-row">
                   <td>
+                    <div><i class="plus icon addcoursebtn" data-id="<%= courses[i].id %>"></i></div>
+                  </td>
+                  <td class="course_name" data-toggle="modal" data-target="#course-modal" data-id="<%= courses[i].id %>">
                     <%- courses[i].課程名稱 %>
                   </td>
                   <td>
@@ -58,7 +62,7 @@
   }
 
   /* 綁定ajaxshowpost function */
-  $('.course-row').on('click',function(){
+  $('.course-row .course_name').on('click',function(){
     var courseid= this.getAttribute("data-id");
     ajaxshowcourse(courseid);
   });
@@ -67,6 +71,33 @@
   /* modal 關閉時清空 modal 內容 */
   $('#course-modal').on('hidden.bs.modal', function () {
     $('#course-modal .modal-content').empty();
+  });
+
+  /* choose course */
+  $('.addcoursebtn').on('click',function(){
+    console.log($(this));
+    var courseid = this.getAttribute("data-id");
+    var ajaxurl = '/course/addcourse/'+ courseid;
+    $.ajax({
+      url:ajaxurl,
+      type: 'POST',
+      success: function(response) {
+        if(response=='No login'){
+          toastr.warning('請先登入');
+        }
+        else if(response=='Already choose'){
+          toastr.warning('已經選過囉');
+        }
+        else{
+          toastr.success('選課成功!');
+        }
+      }
+    });
+  });
+
+  /* delete course */
+  $('.delcoursebtn').on('click',function(){
+    console.log('Click');
   });
 
 </script>

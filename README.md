@@ -95,7 +95,7 @@ db.Insert(table,data,callback);
 var data = {
   'col1': 'value1',
   'col2': 'value2',
-}
+};
 
 db.Insert('table_name',data,function(err,result){...});
 //result.insertId = the id of the data you just insert
@@ -147,7 +147,7 @@ db.FindbyColumn(table,conditions,callback);
 var conditions ={
  id:2,
  name:'xxx'
-}
+};
 db.FindbyColumn('user',conditions,function(datas){...});
 ```
 
@@ -160,7 +160,7 @@ db.FindbyColumnOrder(table,conditions,order,callback);
 ```
 var conditions ={
  user_id:2
-}
+};
 
 db.FindbyColumnOrder('post',conditions,{'column':ordercolumn,'order':'ASC/DESC'},function(datas){...});
 ```
@@ -175,10 +175,25 @@ Update(table,datas,conditions,callback);
 var datas ={
   name:'newname',
   nickname:'newnickname'
-}
+};
 var conditions ={
   id:3
-}
+};
 
 db.Update('user',datas,conditions,function(results){...});
+```
+
+###Inner Join table
+
+InnerJoin(tables,cols,conditions,callback);
+
+####Example:
+```
+var tables = {'table':'post','jointable':'user'};
+
+var cols = ['post.title','user.name'];
+
+var conditions = {'user.id':post.user_id};
+
+db.InnerJoin(tables,cols,conditions,function(results){...});
 ```

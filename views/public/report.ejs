@@ -12,29 +12,21 @@
           非常非常感謝你/妳提供意見！ :D :D :D<br>願意的話，也請告訴我們怎麼聯絡你/妳吧 :)
         </div>
         <div class="partB">
-          <form class="form-horizontal" id="reportform" method="post" action="/report">
-            <div class="form-group">
-              <label class="control-label col-sm-3">如何稱呼: </label>
-              <div class="col-sm-9">
-                <input type="text" class="form-control" name="name" placeholder="姓名或綽號 你方便稱呼的方式">
-              </div>
+          <form class="ui form" id="reportform" method="post" action="/report">
+            <div class="field">
+              <label>如何稱呼: </label>
+              <input type="text" name="name" placeholder="姓名或綽號 你方便稱呼的方式">
             </div>
-            <div class="form-group">
-              <label class="control-label col-sm-3">聯絡方式: </label>
-              <div class="col-sm-9">
-                <input type="text" class="form-control" name="contact" placeholder="臉書或Email都可以喔">
-              </div>
+            <div class="field">
+              <label >聯絡方式: </label>
+              <input type="text" name="contact" placeholder="臉書或Email都可以喔">
             </div>
-            <div class="form-group">
-              <label class="control-label col-sm-3">想說的話: </label>
-              <div class="col-sm-9">
-                <textarea rows="4" cols="50" name="comment" form="reportform" class="form-control"></textarea>
-              </div>
+            <div class="field">
+              <label>想說的話: </label>
+              <textarea rows="4" cols="50" name="comment" form="reportform"></textarea>
             </div>
-            <div class="form-group">
-              <div class="col-sm-offset-3 col-sm-9">
+            <div class="field">
                 <div id="reportform-submit" class="medium ui button">送出</div>
-              </div>
             </div>
           </form>
         </div>

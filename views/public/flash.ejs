@@ -1,18 +1,11 @@
-<% if ( messages.success ){ %>
-  <div class="ui positive message">
-    <i class="close icon"></i>
-    <div class="header">
-      <%= messages.success %>
-    </div>
-  </div>
-<% }else if(messages.error){ %>
-  <div class="alert alert-danger" >
-    <%= messages.error %>
-    <button type="button" class="close" data-dismiss="alert">&times;</button>
-  </div>
-<% }else if(messages.warning){ %>
-  <div class="alert alert-warning" >
-    <%= messages.warning %>
-    <button type="button" class="close" data-dismiss="alert">&times;</button>
-  </div>
-<% } %>
+<script>
+  $(document).ready(function(){
+    <% if ( messages.success ){ %>
+        toastr.success('<%= messages.success %>');
+    <% }else if(messages.error){ %>
+
+    <% }else if(messages.warning){ %>
+
+    <% } %>
+  });
+</script>

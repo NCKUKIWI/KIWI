@@ -1,9 +1,14 @@
 $(document).ready(function(){
-
-  /* 上方通知欄關閉  */
-  $('.message .close').on('click', function() {
-      $(this).closest('.message').transition('fade');
-  });
+  
+  /* toastr option */
+  toastr.options = {
+    "closeButton": true,
+    "positionClass": "toast-top-right",
+    "showDuration": "0",
+    "hideDuration": "1000",
+    "timeOut": "3000",
+    "extendedTimeOut": "1000"
+  }
 
   //Parse URL function
   function urlObject(options) {

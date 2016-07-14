@@ -79,13 +79,13 @@
       type: 'POST',
       success: function(response) {
         if(response=="Success"){
-          alert("檢舉成功!");
+          toastr.success('檢舉成功!');
         }
         else if(response=="Already report"){
-          alert("已經檢舉過囉");
+          toastr.success('已經檢舉過囉!');
         }
         else{
-          alert("請先登入");
+          toastr.warning('請先登入');
         }
       }
     });

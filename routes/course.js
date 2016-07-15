@@ -18,7 +18,7 @@ router.get('/', function(req, res) {
     else{
       var userid = parseInt(req.user.id);
       var colmuns = ['course_id'];
-      //有登入 抓取用戶的選課清單
+      /* 有登入 抓取用戶的選課清單 */
       db.FindbyColumn('cart',['course_id'],{'user_id':userid},function(carts){
         res.render('course/index',{
           'courses':courses,
@@ -55,7 +55,7 @@ router.get('/:id', function(req, res) {
 /* add course */
 router.post('/addcourse/:id', function(req, res) {
   var courseid =parseInt(req.params.id);
-  console.log('\n'+'POST /addcourse/'+courseid);
+  console.log('\n'+'POST /course/addcourse/'+courseid);
   if(req.user == undefined){
     console.log('No login');
     res.send('No login');
@@ -90,10 +90,34 @@ router.post('/addcourse/:id', function(req, res) {
 router.post('/delcourse/:id', function(req,res) {
   var courseid = parseInt(req.params.id);
   var userid = parseInt(req.user.id);
-  console.log('\n'+'DELETE /delcourse/'+courseid);
+  console.log('\n'+'DELETE /course/delcourse/'+courseid);
   db.DeleteByColumn('cart',{'course_id':courseid,'user_id':userid},function(err){
     res.send('Success');
   });
+});
+
+/* inputadd course */
+router.post('/inputaddcourse/:courseid', function(req, res) {
+  var courseid = req.params.courseid.toUpperCase();
+  console.log('\n'+'POST /course/inputaddcourse/'+courseid);
+  if(req.user == undefined){
+    var column=["id","課程名稱","時間"];
+    /* 透過輸入的選課序號 查找課程 */
+    db.FindbyColumn('course',column,{'選課序號':courseid},function(course){
+      /* 若該選課序號無對應的課程 回傳not found */
+      if(course.length==0){
+        console.log("Course "+courseid+" not found");
+        res.send("Not found");
+      }
+      /* 有找到課程 則傳送課程資訊 */
+      else{
+        res.send(course);
+      }
+    });
+  }
+  else{
+
+  }
 });
 
 module.exports = router;

@@ -1,3 +1,4 @@
+<input id="addcourseinput" type="text" placeholder="請輸入選課序號">
 <table class="ui celled table unstackable" id="cart-table">
   <thead>
     <tr>
@@ -7,12 +8,39 @@
     </tr>
   </thead>
   <tbody>
-    <% for(var i in carts){ %>
-      <tr>
-        <td><%= carts[i].id %></td>
-        <td><%= carts[i].課程名稱 %></td>
-        <td><%= carts[i].時間 %></td>
-      </tr>
+    <% if(user != undefined){ %>
+      <% if(carts.length==0){ %>
+        <% for(var i in carts){ %>
+          <tr>
+            <td><%= carts[i].id %></td>
+            <td><%= carts[i].課程名稱 %></td>
+            <td><%= carts[i].時間 %></td>
+          </tr>
+        <% } %>
+      <% }else{ %>
+        <td colspan="3" style="text-align:center;">無課程</td>
+      <% } %>
+    <% }else{ %>
+      <td colspan="3" style="text-align:center;">無課程</td>
     <% } %>
   </tbody>
 </table>
+<script>
+$(document).ready(function() {
+  // Got enter in add course input
+  $("#addcourseinput").keyup(function (e) {
+    if (e.keyCode == 13 ) {
+      var course = $('#addcourseinput').val();
+      $('#addcourseinput').val("");
+      var ajaxurl = '/course/inputaddcourse/'+ course;
+      $.ajax({
+        url:ajaxurl,
+        type: 'POST',
+        success: function(response){
+          console.log(response);
+        }
+      });
+    }
+  });
+});
+</script>

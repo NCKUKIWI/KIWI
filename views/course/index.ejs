@@ -8,7 +8,7 @@
         <div id="content">
           <table class="table" id="course-table">
             <tr>
-              <th >操作</th>
+              <th>加入</th>
               <th class="course_name">課程名稱</th>
               <th class="department_name" >開課系所</th>
               <th class="teacher" >開課老師</th>
@@ -17,7 +17,7 @@
             <% for(var i = 0 ; i<50 ; i++){ %>
                 <tr id="course-<%= courses[i].id %>" class="course-row">
                   <td>
-                    <div class="mini ui button addcoursebtn" data-id="<%= courses[i].id %>">選課</div>
+                    <i class="plus icon addcoursebtn" id="<%= courses[i].id %>" data-id="<%= courses[i].id %>"></i>
                   </td>
                   <td class="course_name" data-toggle="modal" data-target="#course-modal" data-id="<%= courses[i].id %>">
                     <%- courses[i].課程名稱 %>
@@ -47,8 +47,17 @@
   </div>
 
 <script>
+$(document).ready(function(){
 
-  /* Ajax show post */
+  /* 辨別目前用戶的清單中有哪些課程 並將該課程按鈕由加變減 */
+  var carts = <%- JSON.stringify(carts) %>;
+  if(carts != null ){
+    for(var i in carts){
+      $('#'+carts[i].course_id).removeClass('plus addcoursebtn').addClass('minus delcoursebtn');
+    }
+  }
+
+  /* Ajax show course */
   function ajaxshowcourse(id){
     var ajaxurl = '/course/'+ id;
     $.ajax({
@@ -61,7 +70,7 @@
     });
   }
 
-  /* 綁定ajaxshowpost function */
+  /* 綁定ajaxshowcourse function */
   $('.course-row .course_name').on('click',function(){
     var courseid= this.getAttribute("data-id");
     ajaxshowcourse(courseid);
@@ -73,9 +82,22 @@
     $('#course-modal .modal-content').empty();
   });
 
-  /* choose course */
+  /* 在加號上綁定選課的事件 */
   $('.addcoursebtn').on('click',function(){
     var courseid = this.getAttribute("data-id");
+    var btn = $(this);
+    addcourse(courseid,btn);
+  });
+
+  /* 在加號上綁定移除課程的事件 */
+  $('.delcoursebtn').on('click',function(){
+    var courseid = this.getAttribute("data-id");
+    var btn = $(this);
+    delcourse(courseid,btn);
+  });
+
+  /* ajax choose course */
+  function addcourse(courseid,btn){
     var ajaxurl = '/course/addcourse/'+ courseid;
     $.ajax({
       url:ajaxurl,
@@ -88,23 +110,36 @@
           toastr.warning('已經選過囉!');
         }
         else{
+          btn.removeClass('plus addcoursebtn').addClass('minus delcoursebtn');
+          btn.off();
+          btn.on('click',function(){
+            var courseid = this.getAttribute("data-id");
+            var btn = $(this);
+            delcourse(courseid,btn);
+          });
           toastr.success('選課成功!');
         }
       }
     });
-  });
+  }
 
-  /* delete course */
-  $('.delcoursebtn').on('click',function(){
-    var courseid = this.getAttribute("data-id");
+  /* ajax del course */
+  function delcourse(courseid,btn){
     var ajaxurl = '/course/delcourse/'+ courseid;
     $.ajax({
       url:ajaxurl,
       type: 'POST',
       success: function(response){
+        btn.removeClass('minus delcoursebtn').addClass('plus addcoursebtn');
+        btn.off();
+        btn.on('click',function(){
+          var courseid = this.getAttribute("data-id");
+          var btn = $(this);
+          addcourse(courseid,btn);
+        });
         toastr.success('移除成功!');
       }
     });
-  });
-
+  }
+});
 </script>

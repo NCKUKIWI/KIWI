@@ -2,6 +2,13 @@
   <div class="container">
     <div class="row">
       <div class="col-md-8 col-md-offset-2">
+      <% if(user != undefined){ %>
+        <% include cart %>
+      <% }else{ %>
+        尚未登入
+      <% } %>
+      </div>
+      <div class="col-md-8 col-md-offset-2">
         <table class="ui celled table unstackable" id="schedule-table">
           <thead>
             <tr>

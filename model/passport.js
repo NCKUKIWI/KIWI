@@ -13,7 +13,7 @@ passport.use(new FacebookStrategy({
     profileFields: ['id', 'displayName']
   },
   function(accessToken, refreshToken, profile, cb){
-    db.FindbyColumn('user',{'fb_id':profile.id},function(users){
+    db.FindbyColumn('user',["id"],{'fb_id':profile.id},function(users){
       if(users.length > 0 ){
         cb(null,users[0]);
       }

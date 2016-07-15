@@ -15,6 +15,7 @@ var data = {
 
 Insert('table_name',data,function(err,results){...});
 
+=================
 Delete data by Id
 
 DeleteById(table,id,callbak);
@@ -23,6 +24,7 @@ Example:
 
 DeleteById('table_name','2',function(err){...});
 
+=================
 Get all data from table order by column
 
 GetAll(table,order,callback);
@@ -31,6 +33,7 @@ Example:
 
 GetAll('table_name','columns_name',function(datas){...});
 
+=================
 Get specific data from table order by column
 
 GetColumn(table,columns,order,callback);
@@ -41,6 +44,7 @@ var columns = ['columns_name1','columns_name2'];
 
 GetColumn('table_name',columns,'columns_name',function(datas){...});
 
+=================
 Find one data by Id (just on data)
 
 FindbyID(table,id,callback);
@@ -49,9 +53,10 @@ Example:
 
 FindbyID('table_name','2',function(data){...});
 
+=================
 Find datas by column (one or more datas)
 
-FindbyColumn(table,conditions,callback);
+FindbyColumn(table,cols,conditions,callback);
 
 Example:
 
@@ -59,9 +64,10 @@ var conditions ={
  id:2,
  name:'xxx'
 };
+var cols=["*"];
+FindbyColumn('user',cols,conditions,function(datas){...});
 
-FindbyColumn('user',conditions,function(datas){...});
-
+=================
 Find datas by conditions and order by column (one or more datas)
 
 FindbyColumnOrder(table,conditions,order,callback);
@@ -74,6 +80,7 @@ var conditions ={
 
 FindbyColumnOrder('post',conditions,{'column':ordercolumn,'order':'ASC/DESC'},function(datas){...});
 
+=================
 Update data
 
 Update(table,datas,conditions,callback);
@@ -90,6 +97,7 @@ var conditions ={
 
 Update('user',datas,conditions,function(results){...});
 
+=================
 Inner Join table
 
 InnerJoin(tables,cols,conditions,callback);
@@ -194,9 +202,16 @@ exports.FindbyID = function FindbyID(table,id,callback){
   });
 }
 
-exports.FindbyColumn = function FindbyColumn(table,conditions,callback){
+exports.FindbyColumn = function FindbyColumn(table,cols,conditions,callback){
+  var columns = "";
+  for(var i in cols ){
+    columns+=cols[i];
+    if( i != cols.length-1 ){
+      columns+=",";
+    }
+  }
   var condition = conditionjoin(conditions);
-  var sql = "SELECT * FROM " + table + " WHERE " + condition;
+  var sql = "SELECT " + columns + " FROM " + table + " WHERE " + condition;
   console.log(sql);
   connection.query(sql,function(err, results, fields){
     if (err) throw err;
@@ -258,15 +273,27 @@ exports.UpdatePlusone = function UpdatePlusone(table,col,id,callback){
 }
 
 exports.InnerJoin = function InnerJoin(tables,cols,conditions,callback){
-  var condition = conditionjoin(conditions);
+  var condition="";
+  var count = 0;
+  var size = Object.keys(conditions).length - 1;
+  for(var i in conditions){
+    condition = condition + i + " = " + conditions[i];
+    if(count == size){
+      break;
+    }
+    else{
+      count++;
+      condition = condition + " AND ";
+    }
+  }
   var columns = "";
-  for(var i in col ){
-    columns+=col[i];
-    if( i != col.length-1 ){
+  for(var i in cols ){
+    columns+=cols[i];
+    if( i != cols.length-1 ){
       columns+=",";
     }
   }
-  var sql = "SELCTE " + columns + " FROM " + table['table'] + " INNER JOIN " + table['jointable'] + " ON " + condition;
+  var sql = "SELECT " + columns + " FROM " + tables['table'] + " INNER JOIN " + tables['jointable'] + " ON " + condition;
   console.log(sql);
   connection.query(sql,function(err, results){
     if (err) throw err;

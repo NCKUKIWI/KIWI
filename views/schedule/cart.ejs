@@ -1,0 +1,18 @@
+<table class="ui celled table unstackable" id="cart-table">
+  <thead>
+    <tr>
+      <th class="scheduletable-label">ID</th>
+      <th class="scheduletable-cell">課程名稱</th>
+      <th class="scheduletable-cell">時間</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% for(var i in carts){ %>
+      <tr>
+        <td><%= carts[i].id %></td>
+        <td><%= carts[i].課程名稱 %></td>
+        <td><%= carts[i].時間 %></td>
+      </tr>
+    <% } %>
+  </tbody>
+</table>

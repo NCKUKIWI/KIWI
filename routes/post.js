@@ -78,7 +78,7 @@ router.post('/report/:id', function(req,res) {
     var userid = parseInt(req.user.id);
     console.log('檢舉者：'+ name)
     /* 檢查是否檢舉過 依照user_id及post_id去尋找 */
-    db.FindbyColumn('report_post',{'post_id':postid,'user_id':userid},function(reports){
+    db.FindbyColumn('report_post',["id"],{'post_id':postid,'user_id':userid},function(reports){
       if(reports.length > 0 ){
         console.log('Already report');
         res.send('Already report');

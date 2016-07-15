@@ -39,6 +39,7 @@
     </div>
   </div>
 
+
   <div class="modal fade" id="course-modal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
@@ -47,99 +48,119 @@
   </div>
 
 <script>
-$(document).ready(function(){
+  $(document).ready(function(){
 
-  /* 辨別目前用戶的清單中有哪些課程 並將該課程按鈕由加變減 */
-  var carts = <%- JSON.stringify(carts) %>;
-  if(carts != null ){
-    for(var i in carts){
-      $('#'+carts[i].course_id).removeClass('plus addcoursebtn').addClass('minus delcoursebtn');
-    }
-  }
-
-  /* Ajax show course */
-  function ajaxshowcourse(id){
-    var ajaxurl = '/course/'+ id;
-    $.ajax({
-      url:ajaxurl,
-      type: 'GET',
-      success: function(response) {
-        $('#course-modal .modal-content').prepend(response);
-        $('#course-modal').data('bs.modal').handleUpdate();
+    /* 辨別目前用戶的清單中有哪些課程 並將該課程按鈕由加變減 */
+    var carts = <%- JSON.stringify(carts) %>;
+    if(carts != null ){
+      for(var i in carts){
+        $('#'+carts[i].course_id).removeClass('plus addcoursebtn').addClass('minus delcoursebtn');
       }
+    }
+
+    /* Ajax show course */
+    function ajaxshowcourse(id){
+      var ajaxurl = '/course/'+ id;
+      $.ajax({
+        url:ajaxurl,
+        type: 'GET',
+        success: function(response) {
+          $('#course-modal .modal-content').prepend(response);
+          $('#course-modal').data('bs.modal').handleUpdate();
+        }
+      });
+    }
+
+    /* 綁定ajaxshowcourse function */
+    $('.course-row .course_name').on('click',function(){
+      var courseid= this.getAttribute("data-id");
+      ajaxshowcourse(courseid);
     });
-  }
-
-  /* 綁定ajaxshowcourse function */
-  $('.course-row .course_name').on('click',function(){
-    var courseid= this.getAttribute("data-id");
-    ajaxshowcourse(courseid);
-  });
 
 
-  /* modal 關閉時清空 modal 內容 */
-  $('#course-modal').on('hidden.bs.modal', function () {
-    $('#course-modal .modal-content').empty();
-  });
+    /* modal 關閉時清空 modal 內容 */
+    $('#course-modal').on('hidden.bs.modal', function () {
+      $('#course-modal .modal-content').empty();
+    });
 
-  /* 在加號上綁定選課的事件 */
-  $('.addcoursebtn').on('click',function(){
-    var courseid = this.getAttribute("data-id");
-    var btn = $(this);
-    addcourse(courseid,btn);
-  });
+    /* 在加號上綁定選課的事件 */
+    $('.addcoursebtn').on('click',function(){
+      var courseid = this.getAttribute("data-id");
+      var btn = $(this);
+      addcourse(courseid,btn);
+    });
 
-  /* 在加號上綁定移除課程的事件 */
-  $('.delcoursebtn').on('click',function(){
-    var courseid = this.getAttribute("data-id");
-    var btn = $(this);
-    delcourse(courseid,btn);
-  });
+    /* 在加號上綁定移除課程的事件 */
+    $('.delcoursebtn').on('click',function(){
+      var courseid = this.getAttribute("data-id");
+      var btn = $(this);
+      delcourse(courseid,btn);
+    });
 
-  /* ajax choose course */
-  function addcourse(courseid,btn){
-    var ajaxurl = '/course/addcourse/'+ courseid;
-    $.ajax({
-      url:ajaxurl,
-      type: 'POST',
-      success: function(response) {
-        if(response=='No login'){
-          toastr.warning('請先登入!');
+    /* ajax choose course */
+    function addcourse(courseid,btn){
+      var ajaxurl = '/course/addcourse/'+ courseid;
+      $.ajax({
+        url:ajaxurl,
+        type: 'POST',
+        success: function(response) {
+          if(response=='No login'){
+            toastr.warning('請先登入!');
+          }
+          else if(response=='Already choose'){
+            toastr.warning('已經選過囉!');
+          }
+          else{
+            btn.removeClass('plus addcoursebtn').addClass('minus delcoursebtn');
+            btn.off();
+            btn.on('click',function(){
+              var courseid = this.getAttribute("data-id");
+              var btn = $(this);
+              delcourse(courseid,btn);
+            });
+            toastr.success('選課成功!');
+          }
         }
-        else if(response=='Already choose'){
-          toastr.warning('已經選過囉!');
-        }
-        else{
-          btn.removeClass('plus addcoursebtn').addClass('minus delcoursebtn');
+      });
+    }
+
+    /* ajax del course */
+    function delcourse(courseid,btn){
+      var ajaxurl = '/course/delcourse/'+ courseid;
+      $.ajax({
+        url:ajaxurl,
+        type: 'POST',
+        success: function(response){
+          btn.removeClass('minus delcoursebtn').addClass('plus addcoursebtn');
           btn.off();
           btn.on('click',function(){
             var courseid = this.getAttribute("data-id");
             var btn = $(this);
-            delcourse(courseid,btn);
+            addcourse(courseid,btn);
           });
-          toastr.success('選課成功!');
+          toastr.success('移除成功!');
         }
-      }
-    });
-  }
+      });
+    }
+  });
 
-  /* ajax del course */
-  function delcourse(courseid,btn){
-    var ajaxurl = '/course/delcourse/'+ courseid;
-    $.ajax({
-      url:ajaxurl,
-      type: 'POST',
-      success: function(response){
-        btn.removeClass('minus delcoursebtn').addClass('plus addcoursebtn');
-        btn.off();
-        btn.on('click',function(){
-          var courseid = this.getAttribute("data-id");
-          var btn = $(this);
-          addcourse(courseid,btn);
-        });
-        toastr.success('移除成功!');
+  var courses = <%- JSON.stringify(courses) %>;
+
+  var now_index = 50; // 起始值50筆
+
+  $(window).scroll(function(){
+      var bottomHeight = $(document).height()-$(window).height(); // 計算置底的值
+
+      if(bottomHeight - $(window).scrollTop() == 0  ){
+        for(var i = now_index; i < now_index + 50; i++ ){
+          if(i >= courses.length) break; // 大於query課程數就不在新增
+
+          var dom = "<tr id='course-" + courses[i].id + "' class='course-row'><td><i class='plus icon addcoursebtn' id='" + courses[i].id + "' data-id='" + courses[i].id + "'></i></td><td class='course_name' data-toggle='modal' data-target='#course-modal' data-id=' " + courses[i].id + "'> " + courses[i].課程名稱 + "</td><td> " + courses[i].系所名稱 + "</td><td>" + courses[i].老師 + "</td><td> " + courses[i].時間 + "</td></tr>";
+
+          $('#course-table').append(dom); 
+        }
+        now_index += 50; // 每次新增50筆
       }
-    });
-  }
-});
+  });
+
 </script>

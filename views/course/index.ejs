@@ -14,7 +14,7 @@
               <th class="teacher" >開課老師</th>
               <th class="class_time">時間</th>
             </tr>
-            <% for(var i = 0 ; i<50 ; i++){ %>
+            <% for(var i = 0 ; i< 50 ; i++){ %>
                 <tr id="course-<%= courses[i].id %>" class="course-row">
                   <td>
                     <i class="plus icon addcoursebtn" id="<%= courses[i].id %>" data-id="<%= courses[i].id %>"></i>
@@ -89,7 +89,7 @@
       addcourse(courseid,btn);
     });
 
-    /* 在加號上綁定移除課程的事件 */
+    /* 在減號上綁定移除課程的事件 */
     $('.delcoursebtn').on('click',function(){
       var courseid = this.getAttribute("data-id");
       var btn = $(this);
@@ -142,8 +142,7 @@
       });
     }
 
-    var courses = <%- JSON.stringify(courses) %>;
-
+    var courses = <%- JSON.stringify(courses) %>; //所有課程的資料
     var now_index = 50; // 起始值50筆
 
     $(window).scroll(function(){
@@ -155,21 +154,23 @@
 
             var dom = "<tr id='course-" + courses[i].id + "' class='course-row'><td><i class='plus icon addcoursebtn' id='" + courses[i].id + "' data-id='" + courses[i].id + "'></i></td><td class='course_name' data-toggle='modal' data-target='#course-modal' data-id='" + courses[i].id + "'> " + courses[i].課程名稱 + "</td><td> " + courses[i].系所名稱 + "</td><td>" + courses[i].老師 + "</td><td> " + courses[i].時間 + "</td></tr>";
 
-            $('#course-table').append(dom); 
+            $('#course-table').append(dom);
 
           }
 
           now_index += 50; // 每次新增50筆
 
+          /* 將先加入的課程中用戶已選過的課符號變為減號 */
+          if(carts != null ){
+            for(var i in carts){
+              $('#'+carts[i].course_id).removeClass('plus addcoursebtn').addClass('minus delcoursebtn');
+            }
+          }
+
           /* 綁定ajaxshowcourse function */
           $('.course-row .course_name').unbind('click').on('click', function(){
             var courseid= this.getAttribute("data-id");
             ajaxshowcourse(courseid);
-          });
-
-          /* modal 關閉時清空 modal 內容 */
-          $('#course-modal').unbind('hidden.bs.modal').on('click', function(){
-            $('#course-modal .modal-content').empty();
           });
 
           /* 在加號上綁定選課的事件 */
@@ -179,7 +180,7 @@
             addcourse(courseid,btn);
           });
 
-          /* 在加號上綁定移除課程的事件 */
+          /* 在減號上綁定移除課程的事件 */
           $('.delcoursebtn').unbind('click').on('click',function(){
             var courseid = this.getAttribute("data-id");
             var btn = $(this);

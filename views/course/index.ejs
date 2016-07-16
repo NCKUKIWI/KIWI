@@ -77,7 +77,6 @@
       ajaxshowcourse(courseid);
     });
 
-
     /* modal 關閉時清空 modal 內容 */
     $('#course-modal').on('hidden.bs.modal', function () {
       $('#course-modal .modal-content').empty();
@@ -150,7 +149,7 @@
     $(window).scroll(function(){
         var bottomHeight = $(document).height()-$(window).height(); // 計算置底的值
 
-        if(bottomHeight - $(window).scrollTop() == 0  ){
+        if(bottomHeight - $(window).scrollTop() == 0  && now_index <= courses.length){
           for(var i = now_index; i < now_index + 50; i++ ){
             if(i >= courses.length) break; // 大於query課程數就不在新增
 
@@ -159,6 +158,7 @@
             $('#course-table').append(dom); 
 
           }
+
           now_index += 50; // 每次新增50筆
 
           /* 綁定ajaxshowcourse function */

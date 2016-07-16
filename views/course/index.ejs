@@ -142,25 +142,53 @@
         }
       });
     }
-  });
 
-  var courses = <%- JSON.stringify(courses) %>;
+    var courses = <%- JSON.stringify(courses) %>;
 
-  var now_index = 50; // 起始值50筆
+    var now_index = 50; // 起始值50筆
 
-  $(window).scroll(function(){
-      var bottomHeight = $(document).height()-$(window).height(); // 計算置底的值
+    $(window).scroll(function(){
+        var bottomHeight = $(document).height()-$(window).height(); // 計算置底的值
 
-      if(bottomHeight - $(window).scrollTop() == 0  ){
-        for(var i = now_index; i < now_index + 50; i++ ){
-          if(i >= courses.length) break; // 大於query課程數就不在新增
+        if(bottomHeight - $(window).scrollTop() == 0  ){
+          for(var i = now_index; i < now_index + 50; i++ ){
+            if(i >= courses.length) break; // 大於query課程數就不在新增
 
-          var dom = "<tr id='course-" + courses[i].id + "' class='course-row'><td><i class='plus icon addcoursebtn' id='" + courses[i].id + "' data-id='" + courses[i].id + "'></i></td><td class='course_name' data-toggle='modal' data-target='#course-modal' data-id=' " + courses[i].id + "'> " + courses[i].課程名稱 + "</td><td> " + courses[i].系所名稱 + "</td><td>" + courses[i].老師 + "</td><td> " + courses[i].時間 + "</td></tr>";
+            var dom = "<tr id='course-" + courses[i].id + "' class='course-row'><td><i class='plus icon addcoursebtn' id='" + courses[i].id + "' data-id='" + courses[i].id + "'></i></td><td class='course_name' data-toggle='modal' data-target='#course-modal' data-id='" + courses[i].id + "'> " + courses[i].課程名稱 + "</td><td> " + courses[i].系所名稱 + "</td><td>" + courses[i].老師 + "</td><td> " + courses[i].時間 + "</td></tr>";
 
-          $('#course-table').append(dom); 
+            $('#course-table').append(dom); 
+
+          }
+          now_index += 50; // 每次新增50筆
+
+          /* 綁定ajaxshowcourse function */
+          $('.course-row .course_name').unbind('click').on('click', function(){
+            var courseid= this.getAttribute("data-id");
+            ajaxshowcourse(courseid);
+          });
+
+          /* modal 關閉時清空 modal 內容 */
+          $('#course-modal').unbind('hidden.bs.modal').on('click', function(){
+            $('#course-modal .modal-content').empty();
+          });
+
+          /* 在加號上綁定選課的事件 */
+          $('.addcoursebtn').unbind('click').on('click',function(){
+            var courseid = this.getAttribute("data-id");
+            var btn = $(this);
+            addcourse(courseid,btn);
+          });
+
+          /* 在加號上綁定移除課程的事件 */
+          $('.delcoursebtn').unbind('click').on('click',function(){
+            var courseid = this.getAttribute("data-id");
+            var btn = $(this);
+            delcourse(courseid,btn);
+          });
         }
-        now_index += 50; // 每次新增50筆
-      }
+    });
   });
+
+
 
 </script>

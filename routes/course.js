@@ -100,24 +100,19 @@ router.post('/delcourse/:id', function(req,res) {
 router.post('/inputaddcourse/:courseid', function(req, res) {
   var courseid = req.params.courseid.toUpperCase();
   console.log('\n'+'POST /course/inputaddcourse/'+courseid);
-  if(req.user == undefined){
-    var column=["id","課程名稱","時間"];
-    /* 透過輸入的選課序號 查找課程 */
-    db.FindbyColumn('course',column,{'選課序號':courseid},function(course){
-      /* 若該選課序號無對應的課程 回傳not found */
-      if(course.length==0){
-        console.log("Course "+courseid+" not found");
-        res.send("Not found");
-      }
-      /* 有找到課程 則傳送課程資訊 */
-      else{
-        res.send(course);
-      }
-    });
-  }
-  else{
-
-  }
+  var column=["id","課程名稱","時間"];
+  /* 透過輸入的選課序號 查找課程 */
+  db.FindbyColumn('course',column,{'選課序號':courseid},function(course){
+    /* 若該選課序號無對應的課程 回傳not found */
+    if(course.length==0){
+      console.log("Course "+courseid+" not found");
+      res.send("Not found");
+    }
+    /* 有找到課程 則傳送課程資訊 */
+    else{
+      res.send(course);
+    }
+  });
 });
 
 module.exports = router;

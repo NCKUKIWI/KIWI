@@ -151,7 +151,7 @@ $(document).ready(function() {
 
   /* coursetime parser */
   function coursetimeparser(coursetime){
-    var re = /\[([1-5])\]([0-9A-Ca-c])~([0-9A-Ca-c])|\[([1-5])\]([0-9A-Ca-c])/g;
+    var re = /\[([1-5])\]([1-9A-CN])~([0-9A-CN])|\[([1-5])\]([1-9A-CN])/g;
     var timearr = [];
     var m;
     /* parse couse time */
@@ -163,8 +163,40 @@ $(document).ready(function() {
         timearr.push({day:m[4],hour:m[5]});
       }
       else{
-        timearr.push({day:m[1],hour:m[2]});
-        timearr.push({day:m[1],hour:m[3]});
+        if((parseInt(m[2])+1) == parseInt(m[3])){
+          timearr.push({day:m[1],hour:m[2]});
+          timearr.push({day:m[1],hour:m[3]});
+        }
+        else if((parseInt(m[2])+3) == parseInt(m[3])){
+          timearr.push({day:m[1],hour:m[2]});
+          timearr.push({day:m[1],hour:parseInt(m[2])+1});
+          timearr.push({day:m[1],hour:parseInt(m[2])+2});
+          timearr.push({day:m[1],hour:m[3]});
+        }
+        else{
+          if(m[2] == "N" || m[2] == "A" ){
+            var mid = m[2]+1;
+          }
+          else{
+            var mid = parseInt(m[2])+1;
+          }
+          switch (mid) {
+            case "N1":
+              mid="5";
+              break;
+            case "A1":
+              mid="B";
+              break;
+            case "B1":
+              mid="C";
+              break;
+            default:
+              break;
+          }
+          timearr.push({day:m[1],hour:m[2]});
+          timearr.push({day:m[1],hour:mid});
+          timearr.push({day:m[1],hour:m[3]});
+        }
       }
     }
     return timearr;

@@ -13,8 +13,8 @@
         <% for(var i in carts){ %>
           <tr class="course-row" id="course-<%= carts[i].id %>" data-id="<%= carts[i].id %>">
             <td>
-              <i class="minus icon delcoursebtn" id="<%= carts[i].id %>" data-id="<%= carts[i].id %>">
-              </i>
+              <i class="minus icon delcoursebtn"  data-id="<%= carts[i].id %>"></i>
+              <i class="plus icon addschedulebtn" data-time="<%= carts[i].時間 %>" data-name="<%= carts[i].課程名稱 %>"></i>
             </td>
             <td class="course_name" data-toggle="modal" data-target="#course-modal" data-id="<%= carts[i].id %>">
               <%= carts[i].課程名稱 %>
@@ -147,6 +147,47 @@ $(document).ready(function() {
         }
       });
     }
+  });
+
+  /* coursetime parser */
+  function coursetimeparser(coursetime){
+    var re = /\[([1-5])\]([0-9A-Ca-c])~([0-9A-Ca-c])|\[([1-5])\]([0-9A-Ca-c])/g;
+    var timearr = [];
+    var m;
+    /* parse couse time */
+    while ((m = re.exec(coursetime)) !== null) {
+      if (m.index === re.lastIndex) {
+          re.lastIndex++;
+      }
+      if(m[3]==undefined){
+        timearr.push({day:m[4],hour:m[5]});
+      }
+      else{
+        timearr.push({day:m[1],hour:m[2]});
+        timearr.push({day:m[1],hour:m[3]});
+      }
+    }
+    return timearr;
+    /*
+      timearr will be an array of object,each of the object have two keys day and hour
+      Example:
+      [2]3~4 => [{day:2,hour:3},{day:2,hour:4}]
+    */
+  }
+
+  /* 把課程加入課表 */
+  $('.addschedulebtn').on('click',function(){
+    var coursename = this.getAttribute("data-name");
+    var coursetime = this.getAttribute("data-time");
+
+    var timearr = coursetimeparser(coursetime);
+
+    for(var i in timearr){
+      var hour = timearr[i].hour;
+      var day = timearr[i].day;
+      $("#schedule-table td[data-day="+day+"][data-hour="+hour+"]").append(coursename);
+    }
+    toastr.success('加入課表成功!');
   });
 });
 </script>

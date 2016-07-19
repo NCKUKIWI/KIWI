@@ -218,6 +218,14 @@ html *{
   margin:50px auto;
 }
 
+.scheduletable-label{
+  width:10%;
+}
+
+.scheduletable-cell{
+  width:18%;
+}
+
 #schedule-table th{
   padding:4px;
 }

@@ -90,27 +90,56 @@ router.post('/addcourse/:id', function(req, res) {
 router.post('/delcourse/:id', function(req,res) {
   var courseid = parseInt(req.params.id);
   var userid = parseInt(req.user.id);
+  var name = req.user.name;
   console.log('\n'+'DELETE /course/delcourse/'+courseid);
+  console.log("退課者: "+name);
   db.DeleteByColumn('cart',{'course_id':courseid,'user_id':userid},function(err){
     res.send('Success');
   });
 });
 
-/* inputadd course */
+/* input add course */
 router.post('/inputaddcourse/:courseid', function(req, res) {
-  var courseid = req.params.courseid.toUpperCase();
-  console.log('\n'+'POST /course/inputaddcourse/'+courseid);
+  var courseserial = req.params.courseid.toUpperCase();
+  console.log('\n'+'POST /course/inputaddcourse/'+courseserial);
   var column=["id","課程名稱","時間"];
   /* 透過輸入的選課序號 查找課程 */
-  db.FindbyColumn('course',column,{'選課序號':courseid},function(course){
+  db.FindbyColumn('course',column,{'選課序號':courseserial},function(course){
     /* 若該選課序號無對應的課程 回傳not found */
     if(course.length==0){
-      console.log("Course "+courseid+" not found");
+      console.log("Course "+courseserial+" not found");
       res.send("Not found");
     }
     /* 有找到課程 則傳送課程資訊 */
     else{
-      res.send(course);
+      var courseid = course[0].id
+      /* 若用戶非登入 則直接傳送課程資訊 */
+      if(req.user == undefined){
+        res.send(course);
+      }
+      else{
+        var userid = parseInt(req.user.id);
+        var name = req.user.name;
+        console.log("選課者: "+name);
+        /* 確認是否選過課了 */
+        db.FindbyColumn('cart',["id"],{'user_id':userid,'course_id':courseid},function(carts){
+          /* 用戶清單中有該課程 */
+          if(carts.length > 0 ){
+            console.log('Already choose');
+            res.send('Already choose');
+          }
+          else{
+            /* 新增選課紀錄 */
+            var cart ={
+              user_id:userid,
+              course_id:courseid
+            }
+            db.Insert('cart',cart,function(err,results){
+              res.send(course);
+            });
+          }
+        });
+      }
     }
   });
 });

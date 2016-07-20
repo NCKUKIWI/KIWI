@@ -14,7 +14,7 @@
           <tr class="course-row" id="course-<%= carts[i].id %>" data-id="<%= carts[i].id %>">
             <td>
               <i class="minus icon delcoursebtn"  data-id="<%= carts[i].id %>"></i>
-              <i class="plus icon addschedulebtn" data-time="<%= carts[i].時間 %>" data-name="<%= carts[i].課程名稱 %>"></i>
+              <i class="plus icon addschedulebtn" data-id="<%= carts[i].id %>" data-time="<%= carts[i].時間 %>" data-name="<%= carts[i].課程名稱 %>"></i>
             </td>
             <td class="course_name" data-toggle="modal" data-target="#course-modal" data-id="<%= carts[i].id %>">
               <%= carts[i].課程名稱 %>
@@ -151,7 +151,7 @@ $(document).ready(function() {
 
   /* coursetime parser */
   function coursetimeparser(coursetime){
-    var re = /\[([1-5])\]([1-9A-CN])~([0-9A-CN])|\[([1-5])\]([1-9A-CN])/g;
+    var re = /\[([1-5])\]([1-9A-DN])~([0-9A-DN])|\[([1-5])\]([1-9A-DN])/g;
     var timearr = [];
     var m;
     /* parse couse time */
@@ -160,48 +160,68 @@ $(document).ready(function() {
           re.lastIndex++;
       }
       if(m[3]==undefined){
-        timearr.push({day:m[4],hour:m[5]});
+        switch (m[5]) {
+          case "N":
+            m[5]=5;
+            break;
+          case "A":
+            m[5]=11;
+            break;
+          case "B":
+            m[5]=12;
+            break;
+          case "C":
+            m[5]=13;
+            break;
+          default:
+            (parseInt(m[5])>4) ? m[5]=parseInt(m[5])+1 : m[5]=parseInt(m[5]);
+            break;
+        }
+        timearr.push({day:parseInt(m[4]),hour:m[5]});
       }
       else{
-        if((parseInt(m[2])+1) == parseInt(m[3])){
-          timearr.push({day:m[1],hour:m[2]});
-          timearr.push({day:m[1],hour:m[3]});
+        switch (m[2]) {
+          case "N":
+            m[2]=5;
+            break;
+          case "A":
+            m[2]=11;
+            break;
+          case "B":
+            m[2]=12;
+            break;
+          case "C":
+            m[2]=13;
+            break;
+          default:
+            (parseInt(m[2])>4) ? m[2]=parseInt(m[2])+1 : m[2]=parseInt(m[2]);
+            break;
         }
-        else if((parseInt(m[2])+3) == parseInt(m[3])){
-          timearr.push({day:m[1],hour:m[2]});
-          timearr.push({day:m[1],hour:parseInt(m[2])+1});
-          timearr.push({day:m[1],hour:parseInt(m[2])+2});
-          timearr.push({day:m[1],hour:m[3]});
+        switch (m[3]) {
+          case "N":
+            m[3]=5;
+            break;
+          case "A":
+            m[3]=11;
+            break;
+          case "B":
+            m[3]=12;
+            break;
+          case "C":
+            m[3]=13;
+            break;
+          default:
+            (parseInt(m[3])>4) ? m[3]=parseInt(m[3])+1 : m[3]=parseInt(m[3]);
+            break;
         }
-        else{
-          if(m[2] == "N" || m[2] == "A" ){
-            var mid = m[2]+1;
-          }
-          else{
-            var mid = parseInt(m[2])+1;
-          }
-          switch (mid) {
-            case "N1":
-              mid="5";
-              break;
-            case "A1":
-              mid="B";
-              break;
-            case "B1":
-              mid="C";
-              break;
-            default:
-              break;
-          }
-          timearr.push({day:m[1],hour:m[2]});
-          timearr.push({day:m[1],hour:mid});
-          timearr.push({day:m[1],hour:m[3]});
+        for(var i = m[2]; i <= m[3] ; i++){
+          timearr.push({day:parseInt(m[1]),hour:i});
         }
       }
     }
     return timearr;
     /*
-      timearr will be an array of object,each of the object have two keys day and hour
+      timearr will be an array of object,each of the object have two keys, day and hour
       Example:
       [2]3~4 => [{day:2,hour:3},{day:2,hour:4}]
     */
@@ -211,15 +231,41 @@ $(document).ready(function() {
   $('.addschedulebtn').on('click',function(){
     var coursename = this.getAttribute("data-name");
     var coursetime = this.getAttribute("data-time");
-
-    var timearr = coursetimeparser(coursetime);
-
-    for(var i in timearr){
-      var hour = timearr[i].hour;
-      var day = timearr[i].day;
-      $("#schedule-table td[data-day="+day+"][data-hour="+hour+"]").append(coursename);
+    var courseid = this.getAttribute("data-id");
+    if(coursetime!="未定"){
+      var timearr = coursetimeparser(coursetime);
+      for(var i in timearr){
+        var hour = timearr[i].hour;
+        var day = timearr[i].day;
+        var dom ="<span class='td-"+courseid+"'>"+coursename+"</span><br>";
+        $("#schedule-table td[data-day="+day+"][data-hour="+hour+"]").append(dom);
+      }
+      toastr.success('加入課表成功!');
+      /* 檢查是否有衝堂 有則標示出來 並跳出通知*/
+      check();
     }
-    toastr.success('加入課表成功!');
+    else{
+      toastr.warning('課程時間未定無法加入課表!');
+    }
   });
+
+  /* 檢查是否有衝堂 有則標示出來 並跳出通知 */
+  function check() {
+    for(var i=1 ; i<6 ; i++){
+      for(var j=1 ; j<15 ; j++){
+        var length = $("#schedule-table td[data-day="+i+"][data-hour="+j+"] span").length;
+        if(length>1){
+          $("#schedule-table td[data-day="+i+"][data-hour="+j+"]").css("background-color", "red");
+          if(j>=6){
+            j--;
+          }
+          else if(j==5){
+            j="N";
+          }
+          toastr.warning("[ "+i+" ] "+j+" 衝堂!");
+        }
+      }
+    }
+  }
 });
 </script>

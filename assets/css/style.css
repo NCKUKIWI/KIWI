@@ -242,7 +242,7 @@ html *{
 /* course */
 
 .course-row,.delcoursebtn,.addcoursebtn{
-  cursor: pointer;
+  cursor:pointer;
 }
 
 #course-table .course_name{
@@ -250,15 +250,28 @@ html *{
 }
 
 #course-table .department_name{
- width:20%
+  width:20%
 }
 
 #course-table .teacher{
-width:25%
+  width:25%
 }
 
 #course-table .class_time{
- width:15%
+  width:15%
+}
+
+/* cart table */
+#cart-table .option{
+  width:10%;
+}
+
+#cart-table .course_name{
+  width:60%;
+}
+
+#cart-table .course_time{
+  width:30%;
 }
 
 /* Media query */

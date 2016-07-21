@@ -80,7 +80,7 @@ $(document).ready(function() {
         var day = timearr[i].day;
         var dom ="<span class='td-"+courseid+"'>"+coursename+"<br></span>";
         $("#schedule-table td[data-day="+day+"][data-hour="+hour+"]").append(dom);
-        /* 檢查是否有衝堂 有則標示出來 並跳出通知 */
+        /* 檢查課表是否衝堂 */
         var length = $("#schedule-table td[data-day="+day+"][data-hour="+hour+"] span").length;
         if(length>1){
           $("#schedule-table td[data-day="+day+"][data-hour="+hour+"]").css("background-color","red");
@@ -110,6 +110,15 @@ $(document).ready(function() {
 
   function delschedule(courseid,btn){
     $('.td-'+courseid).fadeOut().remove();
+    /* 檢查課表是否衝堂 */
+    for(var i=1 ; i<=5 ; i++){
+      for(var j=1 ; j<=14 ; j++){
+        var length = $("#schedule-table td[data-day="+i+"][data-hour="+j+"] span").length;
+        if(length<=1){
+          $("#schedule-table td[data-day="+i+"][data-hour="+j+"]").css("background-color","transparent");
+        }
+      }
+    }
     btn.removeClass('minus delschedulebtn').addClass('plus addschedulebtn');
     /* 綁定把課程從清單加入課表的事件 */
     $('.addschedulebtn').off().on('click',function(){
@@ -121,7 +130,6 @@ $(document).ready(function() {
     });
     toastr.success('移除課表成功!');
   }
-
 
   /* modal 關閉時清空 modal 內容 */
   $('#course-modal').on('hidden.bs.modal', function () {

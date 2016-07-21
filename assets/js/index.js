@@ -8,7 +8,7 @@ $(document).ready(function(){
     "timeOut": "3000",
     "extendedTimeOut": "1000"
   }
-  
+
 });
 
   //Parse URL function
@@ -81,4 +81,82 @@ $(document).ready(function(){
           parameters: url_get_params
       };
       return urlObj;
+  }
+
+  /* coursetime parser */
+  function coursetimeparser(coursetime){
+    var re = /\[([1-5])\]([1-9A-DN])~([0-9A-DN])|\[([1-5])\]([1-9A-DN])/g;
+    var timearr = [];
+    var m;
+    /* parse couse time */
+    while ((m = re.exec(coursetime)) !== null) {
+      if (m.index === re.lastIndex) {
+          re.lastIndex++;
+      }
+      if(m[3]==undefined){
+        switch (m[5]) {
+          case "N":
+            m[5]=5;
+            break;
+          case "A":
+            m[5]=11;
+            break;
+          case "B":
+            m[5]=12;
+            break;
+          case "C":
+            m[5]=13;
+            break;
+          default:
+            (parseInt(m[5])>4) ? m[5]=parseInt(m[5])+1 : m[5]=parseInt(m[5]);
+            break;
+        }
+        timearr.push({day:parseInt(m[4]),hour:m[5]});
+      }
+      else{
+        switch (m[2]) {
+          case "N":
+            m[2]=5;
+            break;
+          case "A":
+            m[2]=11;
+            break;
+          case "B":
+            m[2]=12;
+            break;
+          case "C":
+            m[2]=13;
+            break;
+          default:
+            (parseInt(m[2])>4) ? m[2]=parseInt(m[2])+1 : m[2]=parseInt(m[2]);
+            break;
+        }
+        switch (m[3]) {
+          case "N":
+            m[3]=5;
+            break;
+          case "A":
+            m[3]=11;
+            break;
+          case "B":
+            m[3]=12;
+            break;
+          case "C":
+            m[3]=13;
+            break;
+          default:
+            (parseInt(m[3])>4) ? m[3]=parseInt(m[3])+1 : m[3]=parseInt(m[3]);
+            break;
+        }
+        for(var i = m[2]; i <= m[3] ; i++){
+          timearr.push({day:parseInt(m[1]),hour:i});
+        }
+      }
+    }
+    return timearr;
+    /*
+      timearr will be an array of object,each of the object have two keys, day and hour
+      Example:
+      [2]3~4 => [{day:2,hour:3},{day:2,hour:4}]
+    */
   }

@@ -71,32 +71,7 @@
       });
     }
 
-    /* 綁定ajaxshowcourse function */
-    $('.course-row .course_name').on('click',function(){
-      var courseid= this.getAttribute("data-id");
-      ajaxshowcourse(courseid);
-    });
-
-    /* modal 關閉時清空 modal 內容 */
-    $('#course-modal').on('hidden.bs.modal', function () {
-      $('#course-modal .modal-content').empty();
-    });
-
-    /* 在加號上綁定選課的事件 */
-    $('.addcoursebtn').on('click',function(){
-      var courseid = this.getAttribute("data-id");
-      var btn = $(this);
-      addcourse(courseid,btn);
-    });
-
-    /* 在減號上綁定移除課程的事件 */
-    $('.delcoursebtn').on('click',function(){
-      var courseid = this.getAttribute("data-id");
-      var btn = $(this);
-      delcourse(courseid,btn);
-    });
-
-    /* ajax choose course */
+    /* Ajax choose course */
     function addcourse(courseid,btn){
       var ajaxurl = '/course/addcourse/'+ courseid;
       $.ajax({
@@ -123,7 +98,7 @@
       });
     }
 
-    /* ajax del course */
+    /* Ajax del course */
     function delcourse(courseid,btn){
       var ajaxurl = '/course/delcourse/'+ courseid;
       $.ajax({
@@ -141,6 +116,31 @@
         }
       });
     }
+
+    /* 綁定Ajaxshowcourse function */
+    $('.course-row .course_name').on('click',function(){
+      var courseid= this.getAttribute("data-id");
+      ajaxshowcourse(courseid);
+    });
+
+    /* modal 關閉時清空 modal 內容 */
+    $('#course-modal').on('hidden.bs.modal', function () {
+      $('#course-modal .modal-content').empty();
+    });
+
+    /* 在加號上綁定選課的事件 */
+    $('.addcoursebtn').on('click',function(){
+      var courseid = this.getAttribute("data-id");
+      var btn = $(this);
+      addcourse(courseid,btn);
+    });
+
+    /* 在減號上綁定移除課程的事件 */
+    $('.delcoursebtn').on('click',function(){
+      var courseid = this.getAttribute("data-id");
+      var btn = $(this);
+      delcourse(courseid,btn);
+    });
 
     var courses = <%- JSON.stringify(courses) %>; //所有課程的資料
     var now_index = 50; // 起始值50筆
@@ -189,7 +189,5 @@
         }
     });
   });
-
-
 
 </script>

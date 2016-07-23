@@ -126,6 +126,7 @@
     /* modal 關閉時清空 modal 內容 */
     $('#course-modal').on('hidden.bs.modal', function () {
       $('#course-modal .modal-content').empty();
+      // $.fn.fullpage.destroy('all');
     });
 
     /* 在加號上綁定選課的事件 */

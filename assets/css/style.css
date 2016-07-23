@@ -176,10 +176,29 @@ html *{
 
 .partB{
   background:#ebebeb;
+  overflow: hidden;
 }
 
 .partA p,.partB p{
   color:#4d555e;
+}
+
+.partA div{
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  flex-direction: column;
+}
+
+.partA button{
+  margin-bottom: 10px !important;
+  background-color: #ebebeb !important;
+  color: #464646 !important;
+}
+
+.partB_button{
+  display: flex;
+  justify-content: center;
 }
 
 .post_title{
@@ -191,6 +210,12 @@ html *{
 .showbtnbar{
   margin:50px auto 20px auto;
   display: block;
+}
+
+/* post catagory */
+
+#content1, #content2, #content3, #content4{
+  -webkit-animation-duration: 0.3s;
 }
 
 /* create form */
@@ -273,6 +298,7 @@ html *{
 #cart-table .course_time{
   width:30%;
 }
+
 
 /* Media query */
 

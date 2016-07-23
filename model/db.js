@@ -364,3 +364,31 @@ exports.query_post = function query_post(datas, req, item,callback){
 
   callback(query_data,teacher,courseName);
 }
+
+exports.query_post2 = function query_post2(id, callback){
+
+  // var sql = "select course_name, teacher, catalog, course_style, exam_style, report_hw, comment, semester ";
+  // sql += "from post where teacher in (select `老師` from course where id = " + id + ") ";
+  // sql += "and course_name in (select `課程名稱` from course where id = " + id + ") ";
+  // sql += "order by semester DESC";
+
+  var sql_1 = "select * from course where id = " + id;
+  connection.query(sql_1,function(err, courseInfo){
+    if (err) throw err;
+
+    var sql_2 = "select * ";
+    sql_2 += "from post where teacher = " + "\'" + courseInfo[0]["老師"] + "\' ";
+    sql_2 += "and course_name = " + "\'" + courseInfo[0]["課程名稱"] + "\'" + " order by semester DESC";
+    
+    connection.query(sql_2,function(err, comment){
+      if (err) throw err;
+      callback(courseInfo, comment);
+    });
+
+  });
+}
+
+
+
+
+

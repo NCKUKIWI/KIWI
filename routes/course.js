@@ -39,16 +39,23 @@ router.get('/:id', function(req, res) {
   }
   else{
     /* 尋找課程的資訊 */
-    db.FindbyID('course',id,function(course){
-      /* 尋找跟課程相關的心得文 */
-      db.FindbyColumnOrder('post',{'course_id':parseInt(id)},{'column':'semester','order':'DESC'},function(posts){
-        res.render('course/show',{
-          'course':course,
-          'posts':posts,
-          'user': req.user
-        });
-      });
+    db.query_post2(id, function(courseInfo, comment){
+      res.render('course/show', {
+        'courseInfo': courseInfo[0],
+        'comment': comment
+      })
     });
+
+    // db.FindbyID('course',id,function(course){
+    //   /* 尋找跟課程相關的心得文 */
+    //   db.FindbyColumnOrder('post',{'course_id':parseInt(id)},{'column':'semester','order':'DESC'},function(posts){
+    //     res.render('course/show',{
+    //       'course':course,
+    //       'posts':posts,
+    //       'user': req.user
+    //     });
+    //   });
+    // });
   }
 });
 

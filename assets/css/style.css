@@ -176,7 +176,7 @@ html *{
 
 .partB{
   background:#ebebeb;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 .partA p,.partB p{

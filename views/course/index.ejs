@@ -67,6 +67,29 @@
         success: function(response) {
           $('#course-modal .modal-content').prepend(response);
           $('#course-modal').data('bs.modal').handleUpdate();
+
+          // 將mobile的滑動效果裝上
+          $("#content1").on("swipeleft",function(){
+            moveAnimate("content2");
+          });
+
+          $("#content2").on("swiperight",function(){
+            moveAnimate("content1");
+          }); 
+          $("#content2").on("swipeleft",function(){
+            moveAnimate("content3");
+          });
+
+          $("#content3").on("swiperight",function(){
+            moveAnimate("content2");
+          }); 
+          $("#content3").on("swipeleft",function(){
+            moveAnimate("content4");
+          });
+
+          $("#content4").on("swiperight",function(){
+            moveAnimate("content3");
+          }); 
         }
       });
     }

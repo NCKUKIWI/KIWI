@@ -21,10 +21,10 @@
   </div>
   <div class="partB">
     <div class="partB_button">
-      <button class="ui button content1" onclick="moveAnimate(this)">修課心得</button>
-      <button class="ui button content2" onclick="moveAnimate(this)">上課內容</button>
-      <button class="ui button content3" onclick="moveAnimate(this)">作業考試</button>
-      <button class="ui button content4" onclick="moveAnimate(this)">得分比重</button>
+      <button class="ui button content1" onclick="moveAnimate('content1')">修課心得</button>
+      <button class="ui button content2" onclick="moveAnimate('content2')">上課內容</button>
+      <button class="ui button content3" onclick="moveAnimate('content3')">作業考試</button>
+      <button class="ui button content4" onclick="moveAnimate('content4')">得分比重</button>
     </div>
     <div id="content1" style="display:block;">
       <% for(var i in comment){ %>
@@ -60,10 +60,9 @@
 </div>
 
 <script type="text/javascript">
-  function moveAnimate(check)
+  function moveAnimate(next)
   {
-    // alert("success!" + check.className.split(" ")[2]);
-    var nextContent = check.className.split(" ")[2];
+    var nextContent = check;
     var currentContent;
     var content = $(".partB div");
     for(var i in content){
@@ -72,6 +71,7 @@
         break;
       }
     }
+    console.log("cur: " + currentContent);
     if(currentContent == nextContent){
       return 0;
     }else if (Number(currentContent.replace(/\D/g, "")) < Number(nextContent.replace(/\D/g, ""))){
@@ -93,35 +93,6 @@
         });
       });
     }
-
-
-    // if(check.checked == true)
-    // {
-      
-    //   $('#divide1').addClass('animated fadeOutLeft').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',function(){
-        
-    //     document.getElementById("divide2").style.display='block';
-    //     document.getElementById("divide1").style.display='none';
-    //     $('#divide2').addClass('animated fadeInRight').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',function(){
-    //         $('#divide1').removeClass();
-    //         $('#divide2').removeClass();
-    //     });
-    //   });
-    // }
-    // else
-    // {
-    
-    //   $('#divide2').addClass('animated fadeOutRight').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',function(){
-    //     document.getElementById("divide2").style.display='none';            
-    //     document.getElementById("divide1").style.display='block';
-    //     $('#divide1').addClass('animated fadeInLeft').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',function(){
-    //         $('#divide1').removeClass();
-    //         $('#divide2').removeClass();
-    //     });
-    //   });       
-    // }
-    // jQuery("html,body").animate({
-    //               scrollTop:$("#pic_2").offset().top
-    // },800);
   }
+
 </script>

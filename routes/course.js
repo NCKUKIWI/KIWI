@@ -6,7 +6,7 @@ var db = require('../model/db');
 router.get('/', function(req, res) {
   console.log('\n'+'GET /course');
   /*  設定要的欄位 */
-  var colmuns = ['id','課程名稱','系所名稱','老師','時間'];
+  var colmuns = ['id','課程名稱','系所名稱','老師','時間', 'get_post'];
   db.GetColumn('course',colmuns,{'column':'id','order':'DESC'},function(courses){
     if(req.user == undefined){
       res.render('course/index',{
@@ -40,9 +40,31 @@ router.get('/:id', function(req, res) {
   else{
     /* 尋找課程的資訊 */
     db.query_post2(id, function(courseInfo, comment){
+
+    // var comment_c = comment['comment'].filter(function (value) {
+    //   return  value != "無" && value != "";
+    // });
+    // console.log(comment_c);
+    courseInfo = courseInfo[0];
+    courseInfo.comment = 0;
+    courseInfo.course_style = 0;
+    courseInfo.report_hw = 0;
+    courseInfo.score_style = 0;
+
+    for(var i in comment){
+      for(var j in comment[i]){
+        var buf = comment[i];
+        if(buf[j] == "無" || buf[j] == ""){
+          delete buf[j];
+          continue;
+        }
+        courseInfo[j]++;
+      }
+    }
       res.render('course/show', {
-        'courseInfo': courseInfo[0],
-        'comment': comment
+        'courseInfo': courseInfo,
+        'comment': comment,
+        // 'c': comment_c
       })
     });
 

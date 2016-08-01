@@ -21,6 +21,11 @@
                   </td>
                   <td class="course_name" data-toggle="modal" data-target="#course-modal" data-id="<%= courses[i].id %>">
                     <%- courses[i].課程名稱 %>
+
+                    <% if(courses[i].get_post != 0){%>
+                      <span class="badge"><%- courses[i].get_post %></span>
+                    <% }%>
+                    <!-- <% if(courses[i].get_post != 0)%> <%- courses[i].get_post %> -->
                   </td>
                   <td>
                     <%- courses[i].系所名稱 %>
@@ -177,8 +182,8 @@
         if(bottomHeight - $(window).scrollTop() == 0  && now_index <= courses.length){
           for(var i = now_index; i < now_index + 50; i++ ){
             if(i >= courses.length) break; // 大於query課程數就不在新增
-
-            var dom = "<tr id='course-" + courses[i].id + "' class='course-row'><td><i class='plus icon addcoursebtn' id='" + courses[i].id + "' data-id='" + courses[i].id + "'></i></td><td class='course_name' data-toggle='modal' data-target='#course-modal' data-id='" + courses[i].id + "'> " + courses[i].課程名稱 + "</td><td> " + courses[i].系所名稱 + "</td><td>" + courses[i].老師 + "</td><td> " + courses[i].時間 + "</td></tr>";
+            if(courses[i].get_post == 0) courses[i].get_post = "";
+            var dom = "<tr id='course-" + courses[i].id + "' class='course-row'><td><i class='plus icon addcoursebtn' id='" + courses[i].id + "' data-id='" + courses[i].id + "'></i></td><td class='course_name' data-toggle='modal' data-target='#course-modal' data-id='" + courses[i].id + "'> " + courses[i].課程名稱 + " <span class='badge'>" + courses[i].get_post + "</span>" + "</td><td> " + courses[i].系所名稱 + "</td><td>" + courses[i].老師 + "</td><td> " + courses[i].時間 + "</td></tr>";
 
             $('#course-table').append(dom);
 

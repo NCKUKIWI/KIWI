@@ -201,6 +201,19 @@ html *{
   justify-content: center;
 }
 
+.partB_button button{
+  display: flex !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+}
+
+.partB_button a{
+  margin-left: 10px !important;
+  margin-top: 10px !important;
+  margin-right: 0px !important;
+
+}
+
 .post_title{
   font-weight:bold;
   color: #111922;

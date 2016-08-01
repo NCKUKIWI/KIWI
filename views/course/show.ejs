@@ -21,22 +21,41 @@
   </div>
   <div class="partB">
     <div class="partB_button">
-      <button class="ui button content1" onclick="moveAnimate('content1')">修課心得</button>
-      <button class="ui button content2" onclick="moveAnimate('content2')">上課內容</button>
-      <button class="ui button content3" onclick="moveAnimate('content3')">作業考試</button>
-      <button class="ui button content4" onclick="moveAnimate('content4')">得分比重</button>
+      <button class="ui button content1" onclick="moveAnimate('content1')">修課心得
+        <% if(courseInfo.comment != 0){%>
+          &nbsp;&nbsp;<span class="badge""><%= courseInfo.comment %></span>
+        <% }%>
+      </button>
+      <button class="ui button content2" onclick="moveAnimate('content2')">上課內容
+        <% if(courseInfo.course_style != 0){%>
+          &nbsp;&nbsp;<span class="badge""><%= courseInfo.course_style %></span>
+        <% }%>
+      </button>
+      <button class="ui button content3" onclick="moveAnimate('content3')">作業考試
+        <% if(courseInfo.report_hw != 0){%>
+          &nbsp;&nbsp;<span class="badge""><%= courseInfo.report_hw %></span>
+        <% }%>
+      </button>
+      <button class="ui button content4" onclick="moveAnimate('content4')">得分比重
+      </button>
     </div>
     <div id="content1" style="display:block;">
-      <% for(var i in comment){ %>
+      <% if(courseInfo.comment == 0){%>
+        <br>
+        <h1 style="text-align: center">尚無內容</h1>
+      <%}else { for(var i in comment){ %>
         <% if(comment[i].comment == "無") continue;%>
         <div class="ui vertical segment">
           <p>[<%- comment[i].semester %>]</p>
           <p><%- comment[i].comment %></p>
         </div>
-      <% } %>
+      <% } }%>
     </div>
     <div id="content2" style="display: none;">
-      <% for(var i in comment){ %>
+      <% if(courseInfo.course_style == 0){%>
+        <br>
+        <h1 style="text-align: center">尚無內容</h1>
+      <%}else for(var i in comment){ %>
         <% if(comment[i].course_style == "無") continue;%>
         <div class="ui vertical segment">
           <p>[<%- comment[i].semester %>]</p>
@@ -45,7 +64,10 @@
       <% } %>
     </div>
     <div id="content3" style="display: none;">
-      <% for(var i in comment){ %>
+      <% if(courseInfo.report_hw == 0){%>
+        <br>
+        <h1 style="text-align: center">尚無內容</h1>
+      <%}else for(var i in comment){ %>
         <% if(comment[i].report_hw == "無") continue;%>
         <div class="ui vertical segment">
           <p>[<%- comment[i].semester %>]</p>
@@ -54,7 +76,16 @@
       <% } %>
     </div>
     <div id="content4" style="display: none;">
-
+      <% if(courseInfo.score_style == 0){%>
+        <br>
+        <h1 style="text-align: center">尚無內容</h1>
+      <%} else for(var i in comment){ %>
+        <% if(comment[i].score_style == "無") continue;%>
+        <div class="ui vertical segment">
+          <p>[<%- comment[i].semester %>]</p>
+          <p><%- comment[i].score_style %></p>
+        </div>
+      <% } %>
     </div>
   </div>
 </div>

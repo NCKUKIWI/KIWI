@@ -82,21 +82,21 @@
 
           $("#content2").on("swiperight",function(){
             moveAnimate("content1");
-          }); 
+          });
           $("#content2").on("swipeleft",function(){
             moveAnimate("content3");
           });
 
           $("#content3").on("swiperight",function(){
             moveAnimate("content2");
-          }); 
+          });
           $("#content3").on("swipeleft",function(){
             moveAnimate("content4");
           });
 
           $("#content4").on("swiperight",function(){
             moveAnimate("content3");
-          }); 
+          });
         }
       });
     }
@@ -122,6 +122,8 @@
               var btn = $(this);
               delcourse(courseid,btn);
             });
+            /* 將新選的課加入用戶清單中 */
+            carts.push({"course_id":courseid});
             toastr.success('選課成功!');
           }
         }
@@ -142,6 +144,12 @@
             var btn = $(this);
             addcourse(courseid,btn);
           });
+          /* 將課程移出用戶清單 */
+          for(var i in carts){
+            if(carts[i].course_id==courseid){
+              carts[i].course_id=null;
+            }
+          }
           toastr.success('移除成功!');
         }
       });
@@ -218,6 +226,99 @@
             delcourse(courseid,btn);
           });
         }
+    });
+
+    /* modal 打開時執行 */
+    $('#course-modal').on('shown.bs.modal', function () {
+
+        /* 檢查查看的這門課是否有在用戶清單中 */
+        if(carts != null ){
+          for(var i in carts){
+            $('#course-modal #show'+carts[i].course_id).removeClass('showaddcoursebtn').addClass('showdelcoursebtn').html("移除課程");
+          }
+        }
+
+        /* Ajax choose course */
+        function showaddcourse(courseid,btn){
+          var ajaxurl = '/course/addcourse/'+ courseid;
+          $.ajax({
+            url:ajaxurl,
+            type: 'POST',
+            success: function(response) {
+              if(response=='No login'){
+                toastr.warning('請先登入!');
+              }
+              else if(response=='Already choose'){
+                toastr.warning('已經選過囉!');
+              }
+              else{
+                btn.removeClass('showaddcoursebtn').addClass('showdelcoursebtn').html("移除課程");
+                btn.off();
+                btn.on('click',function(){
+                  var courseid = this.getAttribute("data-id");
+                  var btn = $(this);
+                  showdelcourse(courseid,btn);
+                });
+                var btn2=$('#'+courseid);
+                btn2.removeClass('plus addcoursebtn').addClass('minus delcoursebtn');
+                btn2.off();
+                btn2.on('click',function(){
+                  var courseid = btn2.getAttribute("data-id");
+                  delcourse(courseid,btn2);
+                });
+                /* 將新選的課加入用戶清單中 */
+                carts.push({"course_id":courseid});
+                toastr.success('選課成功!');
+              }
+            }
+          });
+        }
+
+        /* Ajax del course */
+        function showdelcourse(courseid,btn){
+          var ajaxurl = '/course/delcourse/'+ courseid;
+          $.ajax({
+            url:ajaxurl,
+            type: 'POST',
+            success: function(response){
+              btn.removeClass('showdelcoursebtn').addClass('showaddcoursebtn').html("加入課程");
+              btn.off();
+              btn.on('click',function(){
+                var courseid = this.getAttribute("data-id");
+                var btn = $(this);
+                showaddcourse(courseid,btn);
+              });
+              var btn2 = $('#'+courseid);
+              btn2.removeClass('minus delcoursebtn').addClass('plus addcoursebtn');
+              btn2.off();
+              btn2.on('click',function(){
+                var courseid = btn2.getAttribute("data-id");
+                addcourse(courseid,btn2);
+              });
+              /* 將課程移出用戶清單 */
+              for(var i in carts){
+                if(carts[i].course_id==courseid){
+                  carts[i].course_id=null;
+                }
+              }
+              toastr.success('移除成功!');
+            }
+          });
+        }
+
+        /* modal中的加入課程按鈕綁定選課的事件 */
+        $('.showaddcoursebtn').on('click',function(){
+          var courseid = this.getAttribute("data-id");
+          var btn = $(this);
+          showaddcourse(courseid,btn);
+        });
+
+        /* modal中的移除課程按鈕綁定移除課程的事件 */
+        $('.showdelcoursebtn').on('click',function(){
+          var courseid = this.getAttribute("data-id");
+          var btn = $(this);
+          showdelcourse(courseid,btn);
+        });
     });
   });
 

@@ -14,6 +14,7 @@
       <% }else if (courseInfo.備註 != ""){%>
       <button class="ui grey button"><%= courseInfo.備註 %></button>
       <% } %>
+      <button class="ui grey button showaddcoursebtn" id="show<%= courseInfo.id %>" data-id="<%= courseInfo.id %>">加入課程</button>
     </div>
     <div>
 
@@ -23,17 +24,17 @@
     <div class="partB_button">
       <button class="ui button content1" onclick="moveAnimate('content1')">修課心得
         <% if(courseInfo.comment != 0){%>
-          &nbsp;&nbsp;<span class="badge""><%= courseInfo.comment %></span>
+          &nbsp;&nbsp;<span class="badge"><%= courseInfo.comment %></span>
         <% }%>
       </button>
       <button class="ui button content2" onclick="moveAnimate('content2')">上課內容
         <% if(courseInfo.course_style != 0){%>
-          &nbsp;&nbsp;<span class="badge""><%= courseInfo.course_style %></span>
+          &nbsp;&nbsp;<span class="badge"><%= courseInfo.course_style %></span>
         <% }%>
       </button>
       <button class="ui button content3" onclick="moveAnimate('content3')">作業考試
         <% if(courseInfo.report_hw != 0){%>
-          &nbsp;&nbsp;<span class="badge""><%= courseInfo.report_hw %></span>
+          &nbsp;&nbsp;<span class="badge"><%= courseInfo.report_hw %></span>
         <% }%>
       </button>
       <button class="ui button content4" onclick="moveAnimate('content4')">得分比重
@@ -91,8 +92,8 @@
 </div>
 
 <script type="text/javascript">
-  function moveAnimate(next)
-  {
+$(document).ready(function(){
+  function moveAnimate(next){
     var nextContent = next;
     var currentContent;
     var content = $(".partB div");
@@ -129,5 +130,6 @@
       });
     }
   }
+});
 
 </script>

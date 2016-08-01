@@ -45,27 +45,43 @@ router.get('/:id', function(req, res) {
     //   return  value != "無" && value != "";
     // });
     // console.log(comment_c);
-    courseInfo = courseInfo[0];
-    courseInfo.comment = 0;
-    courseInfo.course_style = 0;
-    courseInfo.report_hw = 0;
-    courseInfo.score_style = 0;
+      courseInfo = courseInfo[0];
+      courseInfo.comment = 0;
+      courseInfo.course_style = 0;
+      courseInfo.report_hw = 0;
+      courseInfo.score_style = 0;
 
-    for(var i in comment){
-      for(var j in comment[i]){
-        var buf = comment[i];
-        if(buf[j] == "無" || buf[j] == ""){
-          delete buf[j];
-          continue;
+      for(var i in comment){
+        for(var j in comment[i]){
+          var buf = comment[i];
+          if(buf[j] == "無" || buf[j] == ""){
+            delete buf[j];
+            continue;
+          }
+          courseInfo[j]++;
         }
-        courseInfo[j]++;
       }
-    }
-      res.render('course/show', {
-        'courseInfo': courseInfo,
-        'comment': comment,
-        // 'c': comment_c
-      })
+      if(req.user == undefined){
+        res.render('course/show', {
+          'courseInfo': courseInfo,
+          'comment': comment,
+          'user': req.user,
+          'carts':null
+        })
+      }
+      else{
+        var userid = parseInt(req.user.id);
+        var colmuns = ['course_id'];
+        /* 有登入 抓取用戶的選課清單 */
+        db.FindbyColumn('cart',['course_id'],{'user_id':userid},function(carts){
+          res.render('course/show',{
+            'courseInfo': courseInfo,
+            'comment': comment,
+            'user': req.user,
+            'carts':carts
+          });
+        });
+      }
     });
 
     // db.FindbyID('course',id,function(course){

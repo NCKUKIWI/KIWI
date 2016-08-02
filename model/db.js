@@ -372,14 +372,14 @@ exports.query_post2 = function query_post2(id, callback){
   // sql += "and course_name in (select `課程名稱` from course where id = " + id + ") ";
   // sql += "order by semester DESC";
 
-  var sql_1 = "select * from course where id = " + id;
+  var sql_1 = "SELECT * FROM course WHERE id = " + id;
   connection.query(sql_1,function(err, courseInfo){
     if (err) throw err;
 
-    var sql_2 = "select comment, course_style, course_need, exam_style, semester, score_style, report_hw ";
-    sql_2 += "from post where teacher = " + "\'" + courseInfo[0]["老師"] + "\' ";
-    sql_2 += "and course_name = " + "\'" + courseInfo[0]["課程名稱"] + "\'" + " order by semester DESC";
-    
+    var sql_2 = "SELECT id,comment, course_style, course_need, exam_style, semester, score_style, report_hw ";
+    sql_2 += "FROM post WHERE teacher = " + "\'" + courseInfo[0]["老師"] + "\' ";
+    sql_2 += "AND course_name = " + "\'" + courseInfo[0]["課程名稱"] + "\'" + " ORDER BY semester DESC";
+
     connection.query(sql_2,function(err, comment){
       if (err) throw err;
       callback(courseInfo, comment);
@@ -387,8 +387,3 @@ exports.query_post2 = function query_post2(id, callback){
 
   });
 }
-
-
-
-
-

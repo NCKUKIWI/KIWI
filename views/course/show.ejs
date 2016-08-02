@@ -49,6 +49,7 @@
         <div class="ui vertical segment">
           <p>[<%- comment[i].semester %>]</p>
           <p><%- comment[i].comment %></p>
+          <div class="small ui button reportbtn" data-id="<%= comment[i].id %>">檢舉文章</div>
         </div>
       <% } }%>
     </div>
@@ -130,6 +131,26 @@ $(document).ready(function(){
       });
     }
   }
+
+  /* Ajax Report post */
+  $('.reportbtn').on('click',function(){
+    var postid = this.getAttribute("data-id");
+    $.ajax({
+      url: '/post/report/'+postid,
+      type: 'POST',
+      success: function(response) {
+        if(response=="Success"){
+          toastr.success('檢舉成功!');
+        }
+        else if(response=="Already report"){
+          toastr.success('已經檢舉過囉!');
+        }
+        else{
+          toastr.warning('請先登入');
+        }
+      }
+    });
+  });
 });
 
 </script>

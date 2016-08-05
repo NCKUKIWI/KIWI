@@ -83,17 +83,6 @@ router.get('/:id', function(req, res) {
         });
       }
     });
-
-    // db.FindbyID('course',id,function(course){
-    //   /* 尋找跟課程相關的心得文 */
-    //   db.FindbyColumnOrder('post',{'course_id':parseInt(id)},{'column':'semester','order':'DESC'},function(posts){
-    //     res.render('course/show',{
-    //       'course':course,
-    //       'posts':posts,
-    //       'user': req.user
-    //     });
-    //   });
-    // });
   }
 });
 

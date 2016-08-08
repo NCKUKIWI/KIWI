@@ -1,3 +1,4 @@
+<script src="../assets/js/searchItem.js"></script>
 <script type="text/javascript">
    $(document).ready(function() {
       $('.ui.search').search({
@@ -17,38 +18,90 @@
       // Got enter in query input
       var last;
       $(".query").keyup(function (e) {
-      if (e.keyCode == 13 && last == 13) {
-         var query = $('.query').val();
-         window.location.href = "/?queryw="+query.replace(/\\/g, "");
-      }
-      last = e.keyCode;
+         if (e.keyCode == 13 && last == 13) {
+            var query = $('.query').val();
+            window.location.href = "/course?queryw="+query.replace(/\\/g, "");
+         }
+         last = e.keyCode;
+      });
+
+      $('.course').on('click', function(){
+         $('.chooseCourse').modal('show');
+      });
+      $('.tables').on('click', function(){
+         $('.timeTable').modal('show');
       });
    });
+
 
 </script>
 
 <div id="sidebar">
-  <div class="ui search" style = "display: flex;flex-direction: column;">
-    <div class="ui icon input">
-      <input class="prompt query" type="text" placeholder="課程名稱 或 老師名稱">
-      <i class="search icon"></i>
-    </div>
-    <div class="results"></div>
-  </div>
-  <br>
-  <div class="sidebar-categories">
-    <hr style="width:94%;margin:10px 3%;border:solid 1px rgb(221,221,221);">
-    <ul>
-      <a class="small ui button catagory" href="/?catalog=A9">A9 通識中心</a>
-      <a class="small ui button catagory" href="/?catalog=A2">A2 體育室</a>
-      <a class="small ui button catagory" href="/?catalog=A1">A1 外國語言</a>
-      <a class="small ui button catagory" href="/?catalog=A6">A7 基礎國文</a>
-      <a class="small ui button catagory" href="/?catalog=A7">A6 服務學習</a>
-      <a class="small ui button catagory" href="/?catalog=AG">本系</a>
-      <a class="small ui button catagory" id="catagory-all" href="/">依照系所、開課單位選擇</a>
-      <a class="small ui button catagory" id="catagory-all" href="/">依空堂時段選擇</a>
-      <a class="small ui button catagory" href="/?catalog=M" style="background-color: rgb(217, 176, 177);">清除所選</a>
-      <a class="small ui button catagory" href="/?catalog=C" style="background-color: rgb(167, 188, 214);">確認送出</a>
-    </ul>
-  </div>
+   <div class="ui search" style = "display: flex;flex-direction: column;">
+      <div class="ui icon input">
+         <input class="prompt query" type="text" placeholder="課程名稱 或 老師名稱">
+         <i class="search icon"></i>
+      </div>
+      <div class="results"></div>
+   </div>
+   <br>
+   <div class="sidebar-categories">
+      <hr style="width:94%;margin:10px 3%;border:solid 1px rgb(221,221,221);">
+      <ul>
+         <a class="small ui button catagory" href="/course?catalog=A9">A9 通識中心</a>
+         <a class="small ui button catagory" href="/course?catalog=A2">A2 體育室</a>
+         <a class="small ui button catagory" href="/course?catalog=A1">A1 外國語言</a>
+         <a class="small ui button catagory" href="/course?catalog=A7">A7 基礎國文</a>
+         <a class="small ui button catagory" href="/course?catalog=A6">A6 服務學習</a>
+         <a class="small ui button catagory" href="/course">本系</a>
+         <a class="small ui button catagory course" id="catagory-all">依照系所、開課單位選擇</a>
+         <a class="small ui button catagory tables" id="catagory-all">依空堂時段選擇</a>
+         <a class="small ui button catagory" href="/course?catalog=M" style="background-color: rgb(217, 176, 177);">清除所選</a>
+         <a class="small ui button catagory" href="/course?catalog=C" style="background-color: rgb(167, 188, 214);">確認送出</a>
+      </ul>
+   </div>
+
+
+   <div class="ui basic modal chooseCourse">
+      <div class="content">
+         <div class="center">
+            <div class="actions">
+             <div class="two fluid ui inverted buttons">
+               <div class="ui inverted button">
+                 課程
+               </div>
+             </div>
+            </div>
+         </div>
+      </div>
+
+   </div>
+
+   <div class="ui basic modal timeTable">
+     <i class="close icon"></i>
+     <div class="header">
+       Archive Old Messages
+     </div>
+     <div class="image content">
+       <div class="image">
+         <i class="archive icon"></i>
+       </div>
+       <div class="description">
+         <p>Your inbox is getting full, would you like us to enable automatic archiving of old messages?</p>
+       </div>
+     </div>
+     <div class="actions">
+       <div class="two fluid ui inverted buttons">
+         <div class="ui cancel red basic inverted button">
+           <i class="remove icon"></i>
+           No
+         </div>
+         <div class="ui ok green basic inverted button">
+           <i class="checkmark icon"></i>
+           Yes
+         </div>
+       </div>
+     </div>
+   </div>
+
 </div>

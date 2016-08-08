@@ -14,7 +14,7 @@
               <th class="teacher" >開課老師</th>
               <th class="class_time">時間</th>
             </tr>
-            <% for(var i = 0 ; i< 50 ; i++){ %>
+            <% for(var i = 0 ; i < courses.length && i < 50  ; i++){ %>
                 <tr id="course-<%= courses[i].id %>" class="course-row">
                   <td>
                     <i class="plus icon addcoursebtn" id="<%= courses[i].id %>" data-id="<%= courses[i].id %>"></i>
@@ -56,6 +56,8 @@
 
 <script>
   $(document).ready(function(){
+
+    $.mobile.ajaxEnabled = false; //防止頁面跳轉時，會被jquery-mobile所設定的效果影響（為了手機網頁切換畫面不會跳動而設計的）
 
     /* 辨別目前用戶的清單中有哪些課程 並將該課程按鈕由加變減 */
     var carts = <%- JSON.stringify(carts) %>;

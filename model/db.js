@@ -365,12 +365,9 @@ exports.query_post = function query_post(datas, req, item,callback){
   callback(query_data,teacher,courseName);
 }
 
-exports.query_post2 = function query_post2(id, callback){
+// for course
 
-  // var sql = "select course_name, teacher, catalog, course_style, exam_style, report_hw, comment, semester ";
-  // sql += "from post where teacher in (select `老師` from course where id = " + id + ") ";
-  // sql += "and course_name in (select `課程名稱` from course where id = " + id + ") ";
-  // sql += "order by semester DESC";
+exports.query_post2 = function query_post2(id, callback){
 
   var sql_1 = "SELECT * FROM course WHERE id = " + id;
   connection.query(sql_1,function(err, courseInfo){
@@ -386,4 +383,39 @@ exports.query_post2 = function query_post2(id, callback){
     });
 
   });
+}
+
+exports.query_course = function query_course(datas, req, item,callback){
+  try {
+      var regex = req.replace(/\(/g, "\\(");
+      regex = regex.replace(/\)/g, "\\)");
+      regex = regex.replace(/\./g, "\\.");
+
+      new RegExp(regex);
+  } catch(e) {
+      console.log(e);
+      regex = "";
+  }
+  var query_data = [];
+  if(item=="query"){
+    for(var i in datas){
+      var data = datas[i]
+      if(data['teacher'].match(regex)){
+        query_data.push(datas[i]);
+      }
+      if(data['course_name'].match(regex)){
+        query_data.push(datas[i]);
+      }
+    }
+  }
+  else{
+    for(var i in datas){
+      var data = datas[i]
+      if(data[item].match(regex)){
+        query_data.push(datas[i]);
+      }
+    }
+  }
+
+  callback(query_data,teacher,courseName);
 }

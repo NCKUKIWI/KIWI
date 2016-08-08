@@ -6,11 +6,36 @@ var db = require('../model/db');
 router.get('/', function(req, res) {
   console.log('\n'+'GET /course');
   /*  設定要的欄位 */
-  var colmuns = ['id','課程名稱','系所名稱','老師','時間', 'get_post'];
-  db.GetColumn('course',colmuns,{'column':'id','order':'DESC'},function(courses){
+  var columns = ['id','課程名稱','系所名稱','老師','時間', 'get_post'];
+  if(req.query.hasOwnProperty("queryw")){
+    db.query_course(courses, req.query.queryw,"query",function(courses,teachers,course_name){
+      check_Login(courses);
+    });
+  }
+  else if(req.query.hasOwnProperty("teacher")){
+    db.FindbyColumn('course', columns,{"老師": req.query.teacher} ,function(courses){
+      check_Login(courses);
+    });
+  }
+  else if(req.query.hasOwnProperty("course_name")){
+    db.FindbyColumn('course', columns,{"課程名稱": req.query.course_name} ,function(courses){
+      check_Login(courses);
+    });
+  }
+  else if(req.query.hasOwnProperty("catalog")){
+    db.FindbyColumn('course', columns,{"系號": req.query.catalog} ,function(courses){
+      check_Login(courses);
+    });
+  }
+  else{
+    db.GetColumn('course',columns,{'column':'id','order':'DESC'},function(courses){
+      check_Login(courses);
+    });
+  }
+  function check_Login(courses){
     if(req.user == undefined){
       res.render('course/index',{
-        'courses':courses,
+        'courses': courses,
         'user': req.user,
         'carts':null   //沒登入 選課清單為null
       });
@@ -27,7 +52,7 @@ router.get('/', function(req, res) {
         });
       });
     }
-  });
+  }  
 });
 
 /* show */
@@ -41,10 +66,6 @@ router.get('/:id', function(req, res) {
     /* 尋找課程的資訊 */
     db.query_post2(id, function(courseInfo, comment){
 
-    // var comment_c = comment['comment'].filter(function (value) {
-    //   return  value != "無" && value != "";
-    // });
-    // console.log(comment_c);
       courseInfo = courseInfo[0];
       courseInfo.comment = 0;
       courseInfo.course_style = 0;

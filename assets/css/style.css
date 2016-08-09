@@ -132,6 +132,24 @@ html *{
   display:block;
 }
 
+.sideber-course{
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  margin-right: 10px;
+}
+
+.sideber-course .button{
+  margin-bottom: 5px;
+}
+
+.ui.basic.modal{
+  margin-left: 5%;
+  width: 90%;
+  left: 0px;
+  bottom: auto;
+}
+
 /* post table */
 
 .orderbtn{

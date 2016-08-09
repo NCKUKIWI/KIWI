@@ -31,6 +31,8 @@
       $('.tables').on('click', function(){
          $('.timeTable').modal('show');
       });
+
+      $('.ui.checkbox').checkbox();
    });
 
 
@@ -46,6 +48,10 @@
    </div>
    <br>
    <div class="sidebar-categories">
+<div class="ui toggle checkbox">
+  <input type="checkbox" name="public">
+  <label>單選模式</label>
+</div>
       <hr style="width:94%;margin:10px 3%;border:solid 1px rgb(221,221,221);">
       <ul>
          <a class="small ui button catagory" href="/course?catalog=A9">A9 通識中心</a>
@@ -63,18 +69,132 @@
 
 
    <div class="ui basic modal chooseCourse">
-      <div class="content">
-         <div class="center">
-            <div class="actions">
-             <div class="two fluid ui inverted buttons">
-               <div class="ui inverted button">
-                 課程
-               </div>
-             </div>
-            </div>
-         </div>
+      <i class="close icon"></i>
+      <div class="header" style="text-align: center">依開課單位查詢</div>
+      <div style="display: flex; justify-content: space-around; flex-wrap: wrap;">
+        <div class="sideber-course">
+          <br>
+          <p>其他</p>
+          <br>
+          <div class="ui inverted button mini">體育室</div>
+          <div class="ui inverted button mini">軍訓室</div>
+          <div class="ui inverted button mini">師培中心</div>
+          <div class="ui inverted button mini">計網中心</div>
+          <div class="ui inverted button mini">服務學習</div>
+          <div class="ui inverted button mini">共同英授</div>
+          <div class="ui inverted button mini">華語中心</div>
+        </div>
+        <div class="sideber-course">
+          <br>
+          <p>不分學院</p>
+          <br>
+          <div class="ui inverted button mini">不分系學程</div>
+          <div class="ui inverted button mini">科學班</div>
+        </div>
+        <div class="sideber-course">
+          <br>
+          <p>通識課程</p>
+          <br>
+          <div class="ui inverted button mini">外國語言</div>
+          <div class="ui inverted button mini">基礎國文</div>
+          <div class="ui inverted button mini">通識中心</div>
+        </div>
+        <div class="sideber-course">
+          <br>
+          <p>文學院</p>
+          <br>
+          <div class="ui inverted button mini">中文</div>
+          <div class="ui inverted button mini">外文</div>
+          <div class="ui inverted button mini">歷史</div>
+          <div class="ui inverted button mini">台文</div>
+        </div>
+        <div class="sideber-course">
+          <br>
+          <p>理學院</p>
+          <br>
+          <div class="ui inverted button mini">數學</div>
+          <div class="ui inverted button mini">物理</div>
+          <div class="ui inverted button mini">化學</div>
+          <div class="ui inverted button mini">地科</div>
+          <div class="ui inverted button mini">光電</div>
+        </div>
+        <div class="sideber-course">
+          <br>
+          <p>工學院</p>
+          <br>
+          <div class="ui inverted button mini">工學院</div>
+          <div class="ui inverted button mini">機械</div>
+          <div class="ui inverted button mini">化工</div>
+          <div class="ui inverted button mini">資源</div>
+          <div class="ui inverted button mini">材料</div>
+          <div class="ui inverted button mini">土木</div>
+          <div class="ui inverted button mini">水利</div>
+        </div>
+        <div class="sideber-course" style="margin-left: 1px !important;">
+          <br>
+          <br>
+          <br>
+          <div class="ui inverted button mini">工科</div>
+          <div class="ui inverted button mini">能源</div>
+          <div class="ui inverted button mini">系統</div>
+          <div class="ui inverted button mini">航太</div>
+          <div class="ui inverted button mini">環工</div>
+          <div class="ui inverted button mini">測量</div>
+          <div class="ui inverted button mini">醫工</div>
+        </div>
+        <div class="sideber-course">
+          <br>
+          <p>管理學院</p>
+          <br>
+          <div class="ui inverted button mini">會計</div>
+          <div class="ui inverted button mini">統計</div>
+          <div class="ui inverted button mini">工資</div>
+          <div class="ui inverted button mini">企管</div>
+          <div class="ui inverted button mini">交管</div>
+        </div>
+        <div class="sideber-course">
+          <br>
+          <p>醫學院</p>
+          <br>
+          <div class="ui inverted button mini">護理</div>
+          <div class="ui inverted button mini">醫技</div>
+          <div class="ui inverted button mini">醫學</div>
+          <div class="ui inverted button mini">物治</div>
+          <div class="ui inverted button mini">職治</div>
+          <div class="ui inverted button mini">藥學</div>
+        </div>
+        <div class="sideber-course">
+          <br>
+          <p>社會學院</p>
+          <br>
+          <div class="ui inverted button mini">法律</div>
+          <div class="ui inverted button mini">政治</div>
+          <div class="ui inverted button mini">經濟</div>
+          <div class="ui inverted button mini">心理</div>
+        </div>
+        <div class="sideber-course">
+          <br>
+          <p>電資學院</p>
+          <br>
+          <div class="ui inverted button mini">電機</div>
+          <div class="ui inverted button mini">資訊</div>
+        </div>
+        <div class="sideber-course">
+          <br>
+          <p>規劃學院</p>
+          <br>
+          <div class="ui inverted button mini">建築</div>
+          <div class="ui inverted button mini">都計</div>
+          <div class="ui inverted button mini">工設</div>
+        </div>
+        <div class="sideber-course">
+          <br>
+          <p>生科學院</p>
+          <br>
+          <div class="ui inverted button mini">生命</div>
+          <div class="ui inverted button mini">生技</div>
+        </div>
       </div>
-
    </div>
 
    <div class="ui basic modal timeTable">

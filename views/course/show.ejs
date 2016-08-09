@@ -19,7 +19,11 @@
       <% }else if (courseInfo.備註 != ""){%>
       <button class="ui grey button"><%= courseInfo.備註 %></button><br>
       <% } %>
-      <button class="ui grey button showaddcoursebtn" id="show<%= courseInfo.id %>" data-id="<%= courseInfo.id %>">加入課程</button>
+      <% if(check !=null && check.length != 0){ %>
+        <button class="ui grey button showdelcoursebtn" id="show<%= courseInfo.id %>" data-id="<%= courseInfo.id %>">移除課程</button>
+      <% }else{ %>
+        <button class="ui grey button showaddcoursebtn" id="show<%= courseInfo.id %>" data-id="<%= courseInfo.id %>">加入課程</button>
+      <% } %>
     </div>
   </div>
   <div class="partB">

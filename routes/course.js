@@ -52,7 +52,7 @@ router.get('/', function(req, res) {
         });
       });
     }
-  }  
+  }
 });
 
 /* show */
@@ -87,19 +87,18 @@ router.get('/:id', function(req, res) {
           'courseInfo': courseInfo,
           'comment': comment,
           'user': req.user,
-          'carts':null
+          'check':null
         })
       }
       else{
         var userid = parseInt(req.user.id);
-        var colmuns = ['course_id'];
         /* 有登入 抓取用戶的選課清單 */
-        db.FindbyColumn('cart',['course_id'],{'user_id':userid},function(carts){
+        db.FindbyColumn('cart',['id'],{'course_id':parseInt(id)},function(check){
           res.render('course/show',{
             'courseInfo': courseInfo,
             'comment': comment,
             'user': req.user,
-            'carts':carts
+            'check':check
           });
         });
       }

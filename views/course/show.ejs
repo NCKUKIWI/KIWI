@@ -139,7 +139,7 @@ $(document).ready(function(){
     },
     from: {color: '#FFEA82'},
     to: {color: '#ED6A5A'},
-    step: (state, bar) => {
+    step:function(state, bar){
       var value = Math.round(bar.value() * 100)/10;
       bar.setText(value);
     }
@@ -167,7 +167,7 @@ $(document).ready(function(){
     },
     from: {color: '#FFEA82'},
     to: {color: '#ED6A5A'},
-    step: (state, bar) => {
+    step:function(state, bar){
       var value = Math.round(bar.value() * 100)/10;
       bar.setText(value);
     }
@@ -195,50 +195,51 @@ $(document).ready(function(){
     },
     from: {color: '#FFEA82'},
     to: {color: '#ED6A5A'},
-    step: (state, bar) => {
+    step:function(state, bar){
       var value = Math.round(bar.value() * 100)/10;
       bar.setText(value);
     }
   });
   barC.animate(0.52);
-});
 
-function moveAnimate(next){
-  var nextContent = next;
-  var currentContent;
-  var content = $(".partB div");
-  for(var i in content){
-    if(content[i].style.display == "block"){
-      currentContent = content[i].id;
-      break;
+  function moveAnimate(next){
+    var nextContent = next;
+    var currentContent;
+    var content = $(".partB div");
+    for(var i in content){
+      if(content[i].style.display == "block"){
+        currentContent = content[i].id;
+        break;
+      }
+    }
+    console.log(Number(currentContent.replace(/\D/g, "")));
+    console.log(Number(nextContent.replace(/\D/g, "")));
+    if(currentContent == nextContent){
+      return 0;
+    }else if (Number(currentContent.replace(/\D/g, "")) < Number(nextContent.replace(/\D/g, ""))){
+      console.log("out_left");
+
+      $('#' + currentContent).addClass('animated fadeOutLeft').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',function(){
+        document.getElementById(nextContent).style.display='block';
+        document.getElementById(currentContent).style.display='none';
+        $('#' + nextContent).addClass('animated fadeInRight').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',function(){
+            $('#' + currentContent).removeClass();
+            $('#' + nextContent).removeClass();
+        });
+      });
+    }else{
+      console.log("out_right");
+      $('#' + currentContent).addClass('animated fadeOutRight').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',function(){
+        document.getElementById(nextContent).style.display='block';
+        document.getElementById(currentContent).style.display='none';
+        $('#' + nextContent).addClass('animated fadeInLeft').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',function(){
+            $('#' + currentContent).removeClass();
+            $('#' + nextContent).removeClass();
+        });
+      });
     }
   }
-  console.log(Number(currentContent.replace(/\D/g, "")));
-  console.log(Number(nextContent.replace(/\D/g, "")));
-  if(currentContent == nextContent){
-    return 0;
-  }else if (Number(currentContent.replace(/\D/g, "")) < Number(nextContent.replace(/\D/g, ""))){
-    console.log("out_left");
 
-    $('#' + currentContent).addClass('animated fadeOutLeft').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',function(){
-      document.getElementById(nextContent).style.display='block';
-      document.getElementById(currentContent).style.display='none';
-      $('#' + nextContent).addClass('animated fadeInRight').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',function(){
-          $('#' + currentContent).removeClass();
-          $('#' + nextContent).removeClass();
-      });
-    });
-  }else{
-    console.log("out_right");
-    $('#' + currentContent).addClass('animated fadeOutRight').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',function(){
-      document.getElementById(nextContent).style.display='block';
-      document.getElementById(currentContent).style.display='none';
-      $('#' + nextContent).addClass('animated fadeInLeft').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',function(){
-          $('#' + currentContent).removeClass();
-          $('#' + nextContent).removeClass();
-      });
-    });
-  }
-}
+});
 
 </script>

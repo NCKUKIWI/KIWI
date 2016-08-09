@@ -5,19 +5,21 @@
   <h1 class="modal-title"><%= courseInfo.課程名稱 %> -- <%- courseInfo.老師 %></h1>
 </div>
 <div class="modal-body">
-  <div class="partA" >
-    <div>
-      <button class="ui grey button"><%= courseInfo.系所名稱 %></button>
-      <button class="ui grey button"><%= courseInfo.學分 %> 學分</button>
+  <div class="partA ui grid progressbarpart">
+    <div class="eight wide column">
+      推薦程度<div id="containerA" class="progressbar"></div><br>
+      課程硬度<div id="containerB" class="progressbar"></div><br>
+      分數甜度<div id="containerC" class="progressbar"></div><br>
+    </div>
+    <div class="eight wide column" style="text-align:right;">
+      <button class="ui grey button"><%= courseInfo.系所名稱 %></button><br>
+      <button class="ui grey button"><%= courseInfo.學分 %> 學分</button><br>
       <% if(courseInfo.系所名稱 == "通識中心GE"){%>
-        <button class="ui grey button"><%= courseInfo.類別 %></button>
+        <button class="ui grey button"><%= courseInfo.類別 %></button><br>
       <% }else if (courseInfo.備註 != ""){%>
-      <button class="ui grey button"><%= courseInfo.備註 %></button>
+      <button class="ui grey button"><%= courseInfo.備註 %></button><br>
       <% } %>
       <button class="ui grey button showaddcoursebtn" id="show<%= courseInfo.id %>" data-id="<%= courseInfo.id %>">加入課程</button>
-    </div>
-    <div>
-
     </div>
   </div>
   <div class="partB">
@@ -109,6 +111,92 @@ $(document).ready(function(){
       }
     });
   });
+
+  /* draw progress bar */
+  var barA = new ProgressBar.Line(containerA, {
+  strokeWidth: 4,
+  easing: 'easeInOut',
+  duration: 1400,
+  color: '#FFEA82',
+  trailColor: '#eee',
+  trailWidth: 1,
+  svgStyle: {width: '100%', height: '100%'},
+  text: {
+    style: {
+        color: '#999',
+        position:'relative',
+        top:'-10px',
+        right:'0px',
+        padding: 0,
+        margin: 0,
+        transform: null
+      },
+      autoStyleContainer: false
+    },
+    from: {color: '#FFEA82'},
+    to: {color: '#ED6A5A'},
+    step: (state, bar) => {
+      var value = Math.round(bar.value() * 100)/10;
+      bar.setText(value);
+    }
+  });
+  barA.animate(1.0);
+  var barB = new ProgressBar.Line(containerB, {
+  strokeWidth: 4,
+  easing: 'easeInOut',
+  duration: 1400,
+  color: '#FFEA82',
+  trailColor: '#eee',
+  trailWidth: 1,
+  svgStyle: {width: '100%', height: '100%'},
+  text: {
+    style: {
+        color: '#999',
+        position:'relative',
+        top:'-10px',
+        right:'0px',
+        padding: 0,
+        margin: 0,
+        transform: null
+      },
+      autoStyleContainer: false
+    },
+    from: {color: '#FFEA82'},
+    to: {color: '#ED6A5A'},
+    step: (state, bar) => {
+      var value = Math.round(bar.value() * 100)/10;
+      bar.setText(value);
+    }
+  });
+  barB.animate(0.2);
+  var barC = new ProgressBar.Line(containerC, {
+  strokeWidth: 4,
+  easing: 'easeInOut',
+  duration: 1400,
+  color: '#FFEA82',
+  trailColor: '#eee',
+  trailWidth: 1,
+  svgStyle: {width: '100%', height: '100%'},
+  text: {
+    style: {
+        color: '#999',
+        position:'relative',
+        top:'-10px',
+        right:'0px',
+        padding: 0,
+        margin: 0,
+        transform: null
+      },
+      autoStyleContainer: false
+    },
+    from: {color: '#FFEA82'},
+    to: {color: '#ED6A5A'},
+    step: (state, bar) => {
+      var value = Math.round(bar.value() * 100)/10;
+      bar.setText(value);
+    }
+  });
+  barC.animate(0.52);
 });
 
 function moveAnimate(next){

@@ -49,6 +49,7 @@ html *{
 
 /* edit bootstrap css */
 .navbar{
+  padding-left:10px;
   border-radius:0px;
   background:#34495e;
 }
@@ -94,6 +95,11 @@ html *{
   text-shadow: none;
   color:white;
   opacity:1;
+}
+
+/* edit sementic UI */
+.ui.grid{
+  margin:0;
 }
 
 /* sidebar */
@@ -181,13 +187,6 @@ html *{
 
 .partA p,.partB p{
   color:#4d555e;
-}
-
-.partA div{
-  display: flex;
-  align-items: flex-end;
-  justify-content: flex-end;
-  flex-direction: column;
 }
 
 .partA button{
@@ -297,6 +296,19 @@ html *{
 
 #course-table .class_time{
   width:15%
+}
+
+/* course show */
+.progressbarpart div{
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  flex-direction: column;
+}
+
+.progressbar{
+  width:80%;
+  height:15px;
 }
 
 /* cart table */

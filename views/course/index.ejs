@@ -1,56 +1,53 @@
 <% layout('../public/layout') %>
-  <div class="container">
-    <div class="row">
-      <div class="col-md-3 col-sm-3">
-        <% include ./sidebar %>
-      </div>
-      <div class="col-md-9 col-sm-9">
-        <div id="content">
-          <table class="table" id="course-table">
-            <tr>
-              <th>加入</th>
-              <th class="course_name">課程名稱</th>
-              <th class="department_name" >開課系所</th>
-              <th class="teacher" >開課老師</th>
-              <th class="class_time">時間</th>
-            </tr>
-            <% for(var i = 0 ; i < courses.length && i < 50  ; i++){ %>
-                <tr id="course-<%= courses[i].id %>" class="course-row">
-                  <td>
-                    <i class="plus icon addcoursebtn" id="<%= courses[i].id %>" data-id="<%= courses[i].id %>"></i>
-                  </td>
-                  <td class="course_name" data-toggle="modal" data-target="#course-modal" data-id="<%= courses[i].id %>">
-                    <%- courses[i].課程名稱 %>
-
-                    <% if(courses[i].get_post != 0){%>
-                      <span class="badge"><%- courses[i].get_post %></span>
-                    <% }%>
-                    <!-- <% if(courses[i].get_post != 0)%> <%- courses[i].get_post %> -->
-                  </td>
-                  <td>
-                    <%- courses[i].系所名稱 %>
-                  </td>
-                  <td>
-                    <%- courses[i].老師 %>
-                  </td>
-                  <td>
-                    <%- courses[i].時間 %>
-                  </td>
-                </tr>
-            <% } %>
-          </table>
-        </div>
+<div class="ui stackable grid">
+    <div class="four wide column">
+      <% include ./sidebar %>
+    </div>
+    <div class="twelve wide column">
+      <div id="content">
+        <table class="table" id="course-table">
+          <tr>
+            <th>加入</th>
+            <th class="course_name">課程名稱</th>
+            <th class="department_name" >開課系所</th>
+            <th class="teacher" >開課老師</th>
+            <th class="class_time">時間</th>
+          </tr>
+          <% for(var i = 0 ; i < courses.length && i < 50  ; i++){ %>
+              <tr id="course-<%= courses[i].id %>" class="course-row">
+                <td>
+                  <i class="plus icon addcoursebtn" id="<%= courses[i].id %>" data-id="<%=courses[i].id %>"></i>
+                </td>
+                <td class="course_name" data-toggle="modal" data-target="#course-modal" data-id="<%= courses[i].id %>">
+                  <%- courses[i].課程名稱 %>
+                  <% if(courses[i].get_post != 0){%>
+                    <span class="badge"><%- courses[i].get_post %></span>
+                  <% }%>
+                  <!-- <% if(courses[i].get_post != 0)%> <%- courses[i].get_post %> -->
+                </td>
+                <td>
+                  <%- courses[i].系所名稱 %>
+                </td>
+                <td>
+                  <%- courses[i].老師 %>
+                </td>
+                <td>
+                  <%- courses[i].時間 %>
+                </td>
+              </tr>
+          <% } %>
+        </table>
       </div>
     </div>
-  </div>
+</div>
 
 
-  <div class="modal fade" id="course-modal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-      </div>
+<div class="modal fade" id="course-modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
     </div>
   </div>
+</div>
 
 <script src="../assets/js/jquery.mobile-1.4.5.js"></script>
 

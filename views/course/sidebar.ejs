@@ -32,7 +32,10 @@
          $('.timeTable').modal('show');
       });
 
-      $('.ui.checkbox').checkbox();
+      $('.ui.inverted.button.mini').on('click', function(){
+        if($(this).hasClass('active')) $(this).removeClass('active');
+        else $(this).addClass('active');
+      });
    });
 
 

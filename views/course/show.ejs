@@ -10,6 +10,7 @@
       推薦程度<div id="containerA" class="progressbar"></div><br>
       課程硬度<div id="containerB" class="progressbar"></div><br>
       分數甜度<div id="containerC" class="progressbar"></div><br>
+      <p>評分比數:<%= rate_count %></p>
     </div>
     <div class="eight wide column" style="text-align:right;">
       <button class="ui grey button"><%= courseInfo.系所名稱 %></button><br>
@@ -147,7 +148,7 @@ $(document).ready(function(){
       bar.setText(value);
     }
   });
-  barA.animate(1.0);
+  barA.animate(<%= recommand/10 %>);
   var barB = new ProgressBar.Line(containerB, {
   strokeWidth: 4,
   easing: 'easeInOut',
@@ -175,7 +176,7 @@ $(document).ready(function(){
       bar.setText(value);
     }
   });
-  barB.animate(0.2);
+  barB.animate(<%= hard/10 %>);
   var barC = new ProgressBar.Line(containerC, {
   strokeWidth: 4,
   easing: 'easeInOut',
@@ -203,7 +204,7 @@ $(document).ready(function(){
       bar.setText(value);
     }
   });
-  barC.animate(0.52);
+  barC.animate(<%= sweet/10 %>);
 });
 
 

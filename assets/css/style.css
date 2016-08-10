@@ -255,14 +255,24 @@ html *{
 
 /* create form */
 
-#createform{
-  margin:20px;
-}
-
 #createform-fblogin-btn{
   width:60%;
   display:block;
   margin:40px auto;
+}
+
+.scorebar{
+  width:90%;
+  display:flex;
+}
+
+.scorebar .scorebtn{
+  flex:1;
+  text-align:center;
+  font-size:0.75em;
+  border:1px solid black;
+  border-left:0px;
+  background:white;
 }
 
 /* report form */

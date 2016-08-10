@@ -10,40 +10,67 @@ router.get('/', function(req, res) {
 /* create */
 router.post('/create', function(req, res) {
   console.log('\n'+'POST /post/create');
-  var userid = req.user.id;
-  console.log('User_id: '+req.user.id);
-  req.checkBody('comment', '修課心得不可為空').notEmpty();
-  var errors = req.validationErrors();
-  if (errors) {
-    res.send(errors);
-  }else{
-    var post = {
-      course_name:req.body.course_name.replace(/\'|\#|\/\*/g,""),
-      teacher:req.body.teacher.replace(/\'|\#|\/\*/g,""),
-      semester:req.body.semester.replace(/\'|\#|\/\*/g,""),
-      catalog:req.body.catalog.replace(/\'|\#|\/\*/g,""),
-      comment:req.body.comment.replace(/\n/g,"<br>").replace(/\'|\#|\/\*/g,""),
-      report_hw:req.body.report_hw.replace(/\'|\#|\/\*/g,""),
-      course_style:req.body.course_style.replace(/\'|\#|\/\*/g,""),
-      user_id: userid
+  if(req.user == undefined){
+    res.redirect('../');
+  }
+  else{
+    var userid = parseInt(req.user.id);
+    var courseid = parseInt(req.body.course_id.replace(/\'|\#|\/\*/g,""));
+    console.log('User_id: '+req.user.id);
+    req.checkBody('comment', '修課心得不可為空').notEmpty();
+    var errors = req.validationErrors();
+    if (errors) {
+      console.log("error");
+      res.send(errors);
     }
-    db.Insert('post',post,function(err,results){
-      if(err) throw err;
-      res.send("success");
-    });
+    else{
+      var post = {
+        course_name:req.body.course_name.replace(/\'|\#|\/\*/g,""),
+        teacher:req.body.teacher.replace(/\'|\#|\/\*/g,""),
+        semester:req.body.semester.replace(/\'|\#|\/\*/g,""),
+        catalog:req.body.catalog.replace(/\'|\#|\/\*/g,""),
+        comment:req.body.comment.replace(/\n/g,"<br>").replace(/\'|\#|\/\*/g,""),
+        report_hw:req.body.report_hw.replace(/\'|\#|\/\*/g,""),
+        course_style:req.body.course_style.replace(/\'|\#|\/\*/g,""),
+        course_id:courseid,
+        user_id: userid
+      }
+      db.Insert('post',post,function(err,results){
+        if(err) throw err;
+        var rate = {
+          sweet:parseInt(req.body.sweet.replace(/\'|\#|\/\*/g,"")),
+          hard:parseInt(req.body.hard.replace(/\'|\#|\/\*/g,"")),
+          recommand:parseInt(req.body.recommand.replace(/\'|\#|\/\*/g,"")),
+          course_id:courseid,
+          user_id: userid
+        }
+        db.Insert('course_rate',rate,function(err,results){
+          if(err) throw err;
+          res.send("success");
+        });
+      });
+    }
   }
 });
 
 /* new */
 router.get('/new', function(req, res) {
   console.log('\n'+'GET /post/new');
-  var colmuns = ['id','課程名稱','老師','時間','系所名稱'];
-  db.GetColumn('course',colmuns,{'column':'id','order':'DESC'},function(course){
+  if(req.user == undefined){
     res.render('post/new',{
-      'course': course,
+      'course': null,
       'user': req.user
     });
-  });
+  }
+  else{
+    var colmuns = ['id','課程名稱','老師','時間','系所名稱'];
+    db.GetColumn('course',colmuns,{'column':'id','order':'DESC'},function(course){
+      res.render('post/new',{
+        'course': course,
+        'user': req.user
+      });
+    });
+  }
 });
 
 /* show */

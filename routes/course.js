@@ -65,7 +65,6 @@ router.get('/:id', function(req, res) {
   else{
     /* 尋找課程的資訊 */
     db.query_post2(id, function(courseInfo, comment){
-
       courseInfo = courseInfo[0];
       courseInfo.comment = 0;
       courseInfo.course_style = 0;
@@ -82,26 +81,51 @@ router.get('/:id', function(req, res) {
           courseInfo[j]++;
         }
       }
-      if(req.user == undefined){
-        res.render('course/show', {
-          'courseInfo': courseInfo,
-          'comment': comment,
-          'user': req.user,
-          'check':null
-        })
-      }
-      else{
-        var userid = parseInt(req.user.id);
-        /* 有登入 抓取用戶的選課清單 */
-        db.FindbyColumn('cart',['id'],{'course_id':parseInt(id)},function(check){
-          res.render('course/show',{
+      db.FindbyColumn('course_rate',["*"],{course_id:parseInt(id)},function(datas){
+        var sweet=0;
+        var hard=0;
+        var recommand=0;
+        var rate_count=0;
+        if(datas.length>0){
+          for(var i in datas ){
+            sweet+=datas[i].sweet;
+            hard+=datas[i].hard;
+            recommand+=datas[i].recommand;
+          }
+          sweet/=datas.length;
+          hard/=datas.length;
+          recommand/=datas.length;
+          rate_count=datas.length;
+        }
+        if(req.user == undefined){
+          res.render('course/show', {
+            'recommand':recommand,
+            'hard':hard,
+            'sweet':sweet,
+            'rate_count':rate_count,
             'courseInfo': courseInfo,
             'comment': comment,
             'user': req.user,
-            'check':check
+            'check':null
+          })
+        }
+        else{
+          var userid = parseInt(req.user.id);
+          /* 有登入 抓取用戶的選課清單 */
+          db.FindbyColumn('cart',['id'],{'course_id':parseInt(id)},function(check){
+            res.render('course/show',{
+              'recommand':recommand,
+              'hard':hard,
+              'sweet':sweet,
+              'rate_count':rate_count,
+              'courseInfo': courseInfo,
+              'comment': comment,
+              'user': req.user,
+              'check':check
+            });
           });
-        });
-      }
+        }
+      });
     });
   }
 });

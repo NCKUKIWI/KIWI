@@ -16,6 +16,7 @@ $(document).ready(function(){
       type: 'GET',
       success: function(response) {
         $('#new .modal-content').append(response);
+        $('#new').data('bs.modal').handleUpdate();
       }
     });
   });

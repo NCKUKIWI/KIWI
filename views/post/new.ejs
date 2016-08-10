@@ -7,46 +7,100 @@
 <div class="modal-body">
   <% if(user){%>
     <form class="ui form" id="createform">
-      <div class="fields">
-        <div class="thirteen wide field">
-          <label>課程名稱:</label>
-          <div class="ui search">
-            <div class="ui input">
-              <input class="prompt" type="text" name="course">
+      <div class="partA">
+        <div class="fields">
+          <div class="thirteen wide field">
+            <label>課程名稱:</label>
+            <div class="ui search">
+              <div class="ui input">
+                <input class="prompt" type="text" name="course">
+              </div>
+              <div class="results"></div>
             </div>
-            <div class="results"></div>
+          </div>
+          <div class="three wide field">
+            <label>學期:</label>
+            <select name="semester" form="createform">
+              <option value="104-2">104-2</option>
+              <option value="104-1">104-1</option>
+              <option value="103-2">103-2</option>
+              <option value="103-1">103-1</option>
+              <option value="102-2">102-2</option>
+              <option value="102-1">102-1</option>
+            </select>
           </div>
         </div>
-        <div class="three wide field">
-          <label>學期:</label>
-          <select name="semester" form="createform">
-            <option value="104-2">104-2</option>
-            <option value="104-1">104-1</option>
-            <option value="103-2">103-2</option>
-            <option value="103-1">103-1</option>
-            <option value="102-2">102-2</option>
-            <option value="102-1">102-1</option>
-          </select>
-        </div>
       </div>
+      <input type="hidden" name="recommand" value="1">
+      <input type="hidden" name="hard" value="1">
+      <input type="hidden" name="sweet" value="1">
       <input type="hidden" name="catalog" value="0">
       <input type="hidden" name="course_name" value="0">
       <input type="hidden" name="course_id" value="0">
       <input type="hidden" name="teacher" value="0">
-      <div class="field">
-        <label>修課心得:</label>
-        <textarea rows="4" cols="50" name="comment" form="createform"></textarea>
+      <div class="partB">
+        <div class="field">
+          <label>推薦程度:</label>
+          <div class="scorebar" id="recommand">
+            <div class="scorebtn" style="border-left:1px solid black;" data-score="1">1</div>
+            <div class="scorebtn" data-score="2">2</div>
+            <div class="scorebtn" data-score="3">3</div>
+            <div class="scorebtn" data-score="4">4</div>
+            <div class="scorebtn" data-score="5">5</div>
+            <div class="scorebtn" data-score="6">6</div>
+            <div class="scorebtn" data-score="7">7</div>
+            <div class="scorebtn" data-score="8">8</div>
+            <div class="scorebtn" data-score="9">9</div>
+            <div class="scorebtn" data-score="10">10</div>
+          </div>
+        </div>
+        <div class="field">
+          <label>課程硬度:</label>
+          <div class="scorebar" id="hard">
+            <div class="scorebtn" style="border-left:1px solid black;" data-score="1">1</div>
+            <div class="scorebtn" data-score="2">2</div>
+            <div class="scorebtn" data-score="3">3</div>
+            <div class="scorebtn" data-score="4">4</div>
+            <div class="scorebtn" data-score="5">5</div>
+            <div class="scorebtn" data-score="6">6</div>
+            <div class="scorebtn" data-score="7">7</div>
+            <div class="scorebtn" data-score="8">8</div>
+            <div class="scorebtn" data-score="9">9</div>
+            <div class="scorebtn" data-score="10">10</div>
+          </div>
+        </div>
+        <div class="field">
+          <label>分數甜度:</label>
+          <div class="scorebar" id="sweet">
+            <div class="scorebtn" style="border-left:1px solid black;" data-score="1">1</div>
+            <div class="scorebtn" data-score="2">2</div>
+            <div class="scorebtn" data-score="3">3</div>
+            <div class="scorebtn" data-score="4">4</div>
+            <div class="scorebtn" data-score="5">5</div>
+            <div class="scorebtn" data-score="6">6</div>
+            <div class="scorebtn" data-score="7">7</div>
+            <div class="scorebtn" data-score="8">8</div>
+            <div class="scorebtn" data-score="9">9</div>
+            <div class="scorebtn" data-score="10">10</div>
+          </div>
+        </div>
       </div>
-      <div class="field">
-        <label>上課內容: </label>
-        <textarea rows="4" cols="50" name="course_style" form="createform"></textarea>
-      </div>
-      <div class="field">
-        <label>作業考試: </label>
-        <textarea rows="4" cols="50" name="report_hw" form="createform"></textarea>
-      </div>
-      <div class="field">
-        <div class="ui button" id="createform-submit">送出</div>
+      <div class="partA">
+        <div class="field">
+          <label>修課心得:</label>
+          <textarea rows="4" cols="50" name="comment" form="createform"></textarea>
+        </div>
+        <div class="field">
+          <label>上課內容: </label>
+          <textarea rows="4" cols="50" name="course_style" form="createform"></textarea>
+        </div>
+        <div class="field">
+          <label>作業考試: </label>
+          <textarea rows="4" cols="50" name="report_hw" form="createform"></textarea>
+        </div>
+        <div class="field">
+          <div class="ui button" id="createform-submit">送出</div>
+        </div>
       </div>
     </form>
     <% }else{ %>
@@ -101,5 +155,26 @@ $(document).ready(function(){
       }
     });
   });
+
+  $('#recommand .scorebtn').on('click',function(){
+    $('#recommand .scorebtn').css('background','white');
+    $(this).css('background','#D8D8D8');
+    var rate = this.getAttribute("data-score");
+    $('input[name=recommand]').val(rate);
+  })
+
+  $('#hard .scorebtn').on('click',function(){
+    $('#hard .scorebtn').css('background','white');
+    $(this).css('background','#D8D8D8');
+    var rate = this.getAttribute("data-score");
+    $('input[name=hard]').val(rate);
+  })
+
+  $('#sweet .scorebtn').on('click',function(){
+    $('#sweet .scorebtn').css('background','white');
+    $(this).css('background','#D8D8D8');
+    var rate = this.getAttribute("data-score");
+    $('input[name=sweet]').val(rate);
+  })
 });
 </script>

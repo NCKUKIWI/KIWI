@@ -66,6 +66,7 @@
         <div class="ui vertical segment">
           <p>[<%- comment[i].semester %>]</p>
           <p><%- comment[i].course_style %></p>
+          <div class="small ui button reportbtn" data-id="<%= comment[i].id %>">檢舉心得</div>
         </div>
       <% } }%>
     </div>
@@ -77,6 +78,7 @@
         <div class="ui vertical segment">
           <p>[<%- comment[i].semester %>]</p>
           <p><%- comment[i].report_hw %></p>
+          <div class="small ui button reportbtn" data-id="<%= comment[i].id %>">檢舉心得</div>
         </div>
       <% } }%>
     </div>
@@ -88,6 +90,7 @@
         <div class="ui vertical segment">
           <p>[<%- comment[i].semester %>]</p>
           <p><%- comment[i].score_style %></p>
+          <div class="small ui button reportbtn" data-id="<%= comment[i].id %>">檢舉心得</div>
         </div>
       <% } }%>
     </div>

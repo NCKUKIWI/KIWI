@@ -52,7 +52,7 @@
             <a href="#" data-toggle="modal" data-target="#report">回報問題</a>
           </li>
           <li>
-            <a href="#" data-toggle="modal" data-target="#create">提供心得</a>
+            <a href="#" data-toggle="modal" data-target="#new">提供心得</a>
           </li>
           <% if(user){%>
             <li><a href="/user/logout">登出</a></li>
@@ -63,10 +63,15 @@
       </div>
     </div>
   </nav>
-  <% include ../post/createform %>
   <% include ../post/about %>
   <% include ./report %>
   <% include ./flash %>
   <%- body %>
+  <div class="modal fade" id="new" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+      </div>
+    </div>
+  </div>
 </body>
 </html>

@@ -12,23 +12,18 @@ router.post('/create', function(req, res) {
   console.log('\n'+'POST /post/create');
   var userid = req.user.id;
   console.log('User_id: '+req.user.id);
-  req.checkBody('coursename', '課程名稱不可為空').notEmpty();
-  req.checkBody('teacher', '老師名稱不可為空').notEmpty();
   req.checkBody('comment', '修課心得不可為空').notEmpty();
   var errors = req.validationErrors();
   if (errors) {
     res.send(errors);
   }else{
     var post = {
-      course_name:req.body.coursename.replace(/\'|\#|\/\*/g,""),
+      course_name:req.body.course_name.replace(/\'|\#|\/\*/g,""),
       teacher:req.body.teacher.replace(/\'|\#|\/\*/g,""),
       semester:req.body.semester.replace(/\'|\#|\/\*/g,""),
       catalog:req.body.catalog.replace(/\'|\#|\/\*/g,""),
       comment:req.body.comment.replace(/\n/g,"<br>").replace(/\'|\#|\/\*/g,""),
       report_hw:req.body.report_hw.replace(/\'|\#|\/\*/g,""),
-      exam_style: req.body.exam_style.replace(/\'|\#|\/\*/g,""),
-      score_style:req.body.score_style.replace(/\'|\#|\/\*/g,""),
-      course_need: req.body.course_need.replace(/\'|\#|\/\*/g,""),
       course_style:req.body.course_style.replace(/\'|\#|\/\*/g,""),
       user_id: userid
     }
@@ -37,6 +32,18 @@ router.post('/create', function(req, res) {
       res.send("success");
     });
   }
+});
+
+/* new */
+router.get('/new', function(req, res) {
+  console.log('\n'+'GET /post/new');
+  var colmuns = ['id','課程名稱','老師','時間','系所名稱'];
+  db.GetColumn('course',colmuns,{'column':'id','order':'DESC'},function(course){
+    res.render('post/new',{
+      'course': course,
+      'user': req.user
+    });
+  });
 });
 
 /* show */

@@ -50,6 +50,7 @@ html *{
 /* edit bootstrap css */
 .navbar{
   padding-left:10px;
+  padding-right:10px;
   border-radius:0px;
   background:#34495e;
 }
@@ -100,6 +101,10 @@ html *{
 /* edit sementic UI */
 .ui.grid{
   margin:0;
+}
+
+.ui-input-text{
+  width:100%;
 }
 
 /* sidebar */

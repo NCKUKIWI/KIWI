@@ -21,7 +21,7 @@
                 <tr id="post-<%= posts[i].id %>" class="post-row" data-toggle="modal" data-target="#post-modal" data-id="<%= posts[i].id %>">
                   <td class="course_name">
                     <% if(user && (user.id == posts[i].user_id) ){ %>
-                      <span class="label label-pill label-success">My post</span>
+                      <span class="ui red horizontal label">My post</span>
                     <%  } %>
                     <%- posts[i].course_name %>
                   </td>
@@ -120,7 +120,6 @@ $(document).ready(function(){
     var postid= this.getAttribute("data-id");
     ajaxshowpost(postid);
   });
-
 
   /* modal 關閉時清空 modal 內容 */
   $('#post-modal').on('hidden.bs.modal', function () {

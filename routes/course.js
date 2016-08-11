@@ -105,12 +105,21 @@ router.get('/:id', function(req, res) {
             'rate_count':rate_count,
             'courseInfo': courseInfo,
             'comment': comment,
+            'courserate_id':0,
             'user': req.user,
             'check':null
           })
         }
         else{
           var userid = parseInt(req.user.id);
+          var courserateid=0;
+          if(datas.length>0){
+            for(var i in datas ){
+              if(datas[i].user_id == userid){
+                courserateid=datas[i].id;
+              }
+            }
+          }
           /* 有登入 抓取用戶的選課清單 */
           db.FindbyColumn('cart',['id'],{'course_id':parseInt(id)},function(check){
             res.render('course/show',{
@@ -120,6 +129,7 @@ router.get('/:id', function(req, res) {
               'rate_count':rate_count,
               'courseInfo': courseInfo,
               'comment': comment,
+              'courserate_id':courserateid,
               'user': req.user,
               'check':check
             });

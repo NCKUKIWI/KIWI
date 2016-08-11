@@ -18,17 +18,23 @@
       <% if(courseInfo.系所名稱 == "通識中心GE"){%>
         <button class="ui grey button"><%= courseInfo.類別 %></button><br>
       <% }else if (courseInfo.備註 != ""){%>
-      <button class="ui grey button"><%= courseInfo.備註 %></button><br>
+        <button class="ui grey button"><%= courseInfo.備註 %></button><br>
       <% } %>
       <% if(check !=null && check.length != 0){ %>
-        <button class="ui grey button showdelcoursebtn" id="show<%= courseInfo.id %>" data-id="<%= courseInfo.id %>">移除課程</button>
+        <button class="ui grey button showdelcoursebtn" data-id="<%= courseInfo.id %>">移除課程</button><br>
       <% }else{ %>
-        <button class="ui grey button showaddcoursebtn" id="show<%= courseInfo.id %>" data-id="<%= courseInfo.id %>">加入課程</button>
+        <button class="ui grey button showaddcoursebtn" data-id="<%= courseInfo.id %>">加入課程</button><br>
+      <% } %>
+      <% if(courserate_id == 0){ %>
+        <button class="ui grey button showcourseratebtn" data-id="<%= courseInfo.id %>">評分課程</button>
+      <% }else{ %>
+        <button class="ui grey button delcourseratebtn" data-id="<%= courserate_id %>" data-courseid="<%= courseInfo.id %>">刪除評分</button>
       <% } %>
     </div>
   </div>
+  <div class="partA courseratepart"></div>
   <div class="partB">
-    <div class="partB_button">
+    <div class="partB_button" style="margin-bottom:10px;">
       <button class="ui button content1" onclick="moveAnimate('content1')">修課心得
         <% if(courseInfo.comment != 0){%>
           &nbsp;&nbsp;<span class="badge"><%= courseInfo.comment %></span>
@@ -55,7 +61,7 @@
         <div class="ui vertical segment">
           <p>[<%- comment[i].semester %>]</p>
           <p><%- comment[i].comment %></p>
-          <div class="small ui button reportbtn" data-id="<%= comment[i].id %>">檢舉心得</div>
+          <div class="ui top right attached label red button reportbtn" data-id="<%= comment[i].id %>">檢舉心得</div>
         </div>
       <% } }%>
     </div>
@@ -67,7 +73,7 @@
         <div class="ui vertical segment">
           <p>[<%- comment[i].semester %>]</p>
           <p><%- comment[i].course_style %></p>
-          <div class="small ui button reportbtn" data-id="<%= comment[i].id %>">檢舉心得</div>
+          <div class="ui top right attached label red button reportbtn" data-id="<%= comment[i].id %>">檢舉心得</div>
         </div>
       <% } }%>
     </div>
@@ -79,7 +85,7 @@
         <div class="ui vertical segment">
           <p>[<%- comment[i].semester %>]</p>
           <p><%- comment[i].report_hw %></p>
-          <div class="small ui button reportbtn" data-id="<%= comment[i].id %>">檢舉心得</div>
+          <div class="ui top right attached label red button reportbtn" data-id="<%= comment[i].id %>">檢舉心得</div>
         </div>
       <% } }%>
     </div>
@@ -91,7 +97,7 @@
         <div class="ui vertical segment">
           <p>[<%- comment[i].semester %>]</p>
           <p><%- comment[i].score_style %></p>
-          <div class="small ui button reportbtn" data-id="<%= comment[i].id %>">檢舉心得</div>
+          <div class="ui top right attached label red button reportbtn" data-id="<%= comment[i].id %>">檢舉心得</div>
         </div>
       <% } }%>
     </div>
@@ -115,6 +121,39 @@ $(document).ready(function(){
         }
         else{
           toastr.warning('請先登入');
+        }
+      }
+    });
+  });
+
+  $('.showcourseratebtn').on('click',function(){
+    var courseid = this.getAttribute("data-id");
+    var btn = $(this);
+    $.ajax({
+      url: '/course_rate/new/'+courseid,
+      type: 'GET',
+      success: function(response) {
+        if(response=="No login"){
+          toastr.warning('請先登入');
+        }
+        else{
+          btn.hide();
+          $('.courseratepart').append(response);
+        }
+      }
+    });
+  });
+
+  $('.delcourseratebtn').on('click',function(){
+    var courserateid = this.getAttribute("data-id");
+    var courseid = this.getAttribute("data-courseid");
+    $.ajax({
+      url: '/course_rate/'+courserateid,
+      type: 'DELETE',
+      success: function(response) {
+        if(response=="Success"){
+          $('#course-modal .sr-only').click();
+          $('.course_name[data-id='+courseid+']').click();
         }
       }
     });

@@ -33,9 +33,39 @@
       });
 
       $('.ui.inverted.button.mini').on('click', function(){
-        if($(this).hasClass('active')) $(this).removeClass('active');
-        else $(this).addClass('active');
+        if($(this).hasClass('active')){
+          $(this).removeClass('active');
+        }
+        else{
+          $(this).addClass('active');
+        }
       });
+
+      $('.ui.checkbox').checkbox({debug: true});
+
+      $('#courseSelect').on('click', function(){
+        if($('.bachelor')[1].style.display == 'flex'){
+          if($('.bachelor .button.active').length == 0) $('.bachelor .button').addClass('active');
+          else $('.bachelor .button.active').removeClass('active');
+        }
+        else{
+          if($('.master .button .active').length == 0) $('.master .button').addClass('active');
+          else $('.master.button.active').removeClass('active');
+        }
+      });
+
+      $('#TableSelect').on('click', function(){
+        if($('.bachelor')[1].style.display == 'flex'){
+          if($('.bachelor .button.active').length == 0) $('.bachelor .button').addClass('active');
+          else $('.bachelor .button.active').removeClass('active');
+        }
+        else{
+          if($('.master .button .active').length == 0) $('.master .button').addClass('active');
+          else $('.master.button.active').removeClass('active');
+        }
+      });
+
+      // $('.chooseCourse #bachelor div .button.mini').css('background-color', 'red');
    });
 
 
@@ -51,10 +81,11 @@
    </div>
    <br>
    <div class="sidebar-categories">
-<div class="ui toggle checkbox">
-  <input type="checkbox" name="public">
-  <label>單選模式</label>
-</div>
+      <div class="ui toggle checkbox">
+        <input type="checkbox" name="public">
+        <label>單選模式</label>
+      </div>
+
       <hr style="width:94%;margin:10px 3%;border:solid 1px rgb(221,221,221);">
       <ul>
          <a class="small ui button catagory" href="/course?catalog=A9">A9 通識中心</a>
@@ -72,159 +103,382 @@
 
 
    <div class="ui basic modal chooseCourse">
-      <i class="close icon"></i>
-      <div class="header" style="text-align: center">依開課單位查詢</div>
-      <div style="display: flex; justify-content: space-around; flex-wrap: wrap;">
+      <!-- <i class="close icon"></i> -->
+      <div class="header" style="text-align: center; position: relative;">
+        依開課單位查詢
+      <div style="right: 1.5rem; top: 1.25rem;position:absolute;">
+        <div class="ui inverted right floated button Tiny master">研究所</div>
+        <div class="ui inverted right floated button Tiny bachelor active">大學部</div>
+      </div>
+      </div>
+
+      <div class="bachelor" style="display: flex;">
         <div class="sideber-course">
           <br>
           <p>其他</p>
           <br>
-          <div class="ui inverted button mini">體育室</div>
-          <div class="ui inverted button mini">軍訓室</div>
-          <div class="ui inverted button mini">師培中心</div>
-          <div class="ui inverted button mini">計網中心</div>
-          <div class="ui inverted button mini">服務學習</div>
-          <div class="ui inverted button mini">共同英授</div>
-          <div class="ui inverted button mini">華語中心</div>
+          <div class="ui inverted button mini" name="A2">體育室</div>
+          <div class="ui inverted button mini" courseid="A3">軍訓室</div>
+          <div class="ui inverted button mini" courseid="A4">師培中心</div>
+          <div class="ui inverted button mini" courseid="A5">計網中心</div>
+          <div class="ui inverted button mini" courseid="A6">服務學習</div>
+          <div class="ui inverted button mini" courseid="AA">共同英授</div>
+          <div class="ui inverted button mini" courseid="AH">華語中心</div>
         </div>
         <div class="sideber-course">
           <br>
           <p>不分學院</p>
           <br>
-          <div class="ui inverted button mini">不分系學程</div>
-          <div class="ui inverted button mini">科學班</div>
+          <div class="ui inverted button mini" courseid="AN">不分系學程</div>
+          <div class="ui inverted button mini" courseid="C0">科學班</div>
         </div>
         <div class="sideber-course">
           <br>
           <p>通識課程</p>
           <br>
-          <div class="ui inverted button mini">外國語言</div>
-          <div class="ui inverted button mini">基礎國文</div>
-          <div class="ui inverted button mini">通識中心</div>
+          <div class="ui inverted button mini" courseid="A1">外國語言</div>
+          <div class="ui inverted button mini" courseid="A7">基礎國文</div>
+          <div class="ui inverted button mini" courseid="A9">通識中心</div>
         </div>
         <div class="sideber-course">
           <br>
           <p>文學院</p>
           <br>
-          <div class="ui inverted button mini">中文</div>
-          <div class="ui inverted button mini">外文</div>
-          <div class="ui inverted button mini">歷史</div>
-          <div class="ui inverted button mini">台文</div>
+          <div class="ui inverted button mini" courseid="B1">中文</div>
+          <div class="ui inverted button mini" courseid="B2">外文</div>
+          <div class="ui inverted button mini" courseid="B3">歷史</div>
+          <div class="ui inverted button mini" courseid="B5">台文</div>
         </div>
         <div class="sideber-course">
           <br>
           <p>理學院</p>
           <br>
-          <div class="ui inverted button mini">數學</div>
-          <div class="ui inverted button mini">物理</div>
-          <div class="ui inverted button mini">化學</div>
-          <div class="ui inverted button mini">地科</div>
-          <div class="ui inverted button mini">光電</div>
+          <div class="ui inverted button mini" courseid="C1">數學</div>
+          <div class="ui inverted button mini" courseid="C2">物理</div>
+          <div class="ui inverted button mini" courseid="C3">化學</div>
+          <div class="ui inverted button mini" courseid="C4">地科</div>
+          <div class="ui inverted button mini" courseid="F8">光電</div>
         </div>
         <div class="sideber-course">
           <br>
           <p>工學院</p>
           <br>
-          <div class="ui inverted button mini">工學院</div>
-          <div class="ui inverted button mini">機械</div>
-          <div class="ui inverted button mini">化工</div>
-          <div class="ui inverted button mini">資源</div>
-          <div class="ui inverted button mini">材料</div>
-          <div class="ui inverted button mini">土木</div>
-          <div class="ui inverted button mini">水利</div>
+          <div class="ui inverted button mini" courseid="E0">工學院</div>
+          <div class="ui inverted button mini" courseid="E1">機械</div>
+          <div class="ui inverted button mini" courseid="E3">化工</div>
+          <div class="ui inverted button mini" courseid="E4">資源</div>
+          <div class="ui inverted button mini" courseid="E5">材料</div>
+          <div class="ui inverted button mini" courseid="E6">土木</div>
+          <div class="ui inverted button mini" courseid="E8">水利</div>
         </div>
         <div class="sideber-course" style="margin-left: 1px !important;">
           <br>
           <br>
           <br>
-          <div class="ui inverted button mini">工科</div>
-          <div class="ui inverted button mini">能源</div>
-          <div class="ui inverted button mini">系統</div>
-          <div class="ui inverted button mini">航太</div>
-          <div class="ui inverted button mini">環工</div>
-          <div class="ui inverted button mini">測量</div>
-          <div class="ui inverted button mini">醫工</div>
+          <div class="ui inverted button mini" courseid="E9">工科</div>
+          <div class="ui inverted button mini" courseid="F0">能源</div>
+          <div class="ui inverted button mini" courseid="F1">系統</div>
+          <div class="ui inverted button mini" courseid="F4">航太</div>
+          <div class="ui inverted button mini" courseid="F5">環工</div>
+          <div class="ui inverted button mini" courseid="F6">測量</div>
+          <div class="ui inverted button mini" courseid="F9">醫工</div>
         </div>
         <div class="sideber-course">
           <br>
           <p>管理學院</p>
           <br>
-          <div class="ui inverted button mini">會計</div>
-          <div class="ui inverted button mini">統計</div>
-          <div class="ui inverted button mini">工資</div>
-          <div class="ui inverted button mini">企管</div>
-          <div class="ui inverted button mini">交管</div>
+          <div class="ui inverted button mini" courseid="H1">會計</div>
+          <div class="ui inverted button mini" courseid="H2">統計</div>
+          <div class="ui inverted button mini" courseid="H3">工資</div>
+          <div class="ui inverted button mini" courseid="H4">企管</div>
+          <div class="ui inverted button mini" courseid="H5">交管</div>
         </div>
         <div class="sideber-course">
           <br>
           <p>醫學院</p>
           <br>
-          <div class="ui inverted button mini">護理</div>
-          <div class="ui inverted button mini">醫技</div>
-          <div class="ui inverted button mini">醫學</div>
-          <div class="ui inverted button mini">物治</div>
-          <div class="ui inverted button mini">職治</div>
-          <div class="ui inverted button mini">藥學</div>
+          <div class="ui inverted button mini" courseid="I2">護理</div>
+          <div class="ui inverted button mini" courseid="I3">醫技</div>
+          <div class="ui inverted button mini" courseid="I5">醫學</div>
+          <div class="ui inverted button mini" courseid="I6">物治</div>
+          <div class="ui inverted button mini" courseid="I7">職治</div>
+          <div class="ui inverted button mini" courseid="I8">藥學</div>
         </div>
         <div class="sideber-course">
           <br>
           <p>社會學院</p>
           <br>
-          <div class="ui inverted button mini">法律</div>
-          <div class="ui inverted button mini">政治</div>
-          <div class="ui inverted button mini">經濟</div>
-          <div class="ui inverted button mini">心理</div>
+          <div class="ui inverted button mini" courseid="D2">法律</div>
+          <div class="ui inverted button mini" courseid="D4">政治</div>
+          <div class="ui inverted button mini" courseid="D5">經濟</div>
+          <div class="ui inverted button mini" courseid="D8">心理</div>
         </div>
         <div class="sideber-course">
           <br>
           <p>電資學院</p>
           <br>
-          <div class="ui inverted button mini">電機</div>
-          <div class="ui inverted button mini">資訊</div>
+          <div class="ui inverted button mini" courseid="E2">電機</div>
+          <div class="ui inverted button mini" courseid="F7">資訊</div>
         </div>
         <div class="sideber-course">
           <br>
           <p>規劃學院</p>
           <br>
-          <div class="ui inverted button mini">建築</div>
-          <div class="ui inverted button mini">都計</div>
-          <div class="ui inverted button mini">工設</div>
+          <div class="ui inverted button mini" courseid="E7">建築</div>
+          <div class="ui inverted button mini" courseid="F2">都計</div>
+          <div class="ui inverted button mini" courseid="F3">工設</div>
         </div>
         <div class="sideber-course">
           <br>
           <p>生科學院</p>
           <br>
-          <div class="ui inverted button mini">生命</div>
-          <div class="ui inverted button mini">生技</div>
+          <div class="ui inverted button mini" courseid="C5">生命</div>
+          <div class="ui inverted button mini" courseid="C6">生技</div>
         </div>
       </div>
+      <div class="master" style="display: none;">
+        <div class="sideber-course">
+          <br>
+          <p>文學院</p>
+          <br>
+          <div class="ui inverted button mini" courseid="K1">中文</div>
+          <div class="ui inverted button mini" courseid="K2">外文</div>
+          <div class="ui inverted button mini" courseid="K3">歷史</div>
+          <div class="ui inverted button mini" courseid="K5">台文</div>
+          <div class="ui inverted button mini" courseid="K4">藝術</div>
+          <div class="ui inverted button mini" courseid="K7">考古</div>
+        </div>
+        <div class="sideber-course">
+          <br>
+          <p>理學院</p>
+          <br>
+          <div class="ui inverted button mini" courseid="C1">應數</div>
+          <div class="ui inverted button mini" courseid="C2">物理</div>
+          <div class="ui inverted button mini" courseid="C3">化學</div>
+          <div class="ui inverted button mini" courseid="C4">地科</div>
+          <div class="ui inverted button mini" courseid="F8">光電</div>
+        </div>
+        <div class="sideber-course">
+          <br>
+          <p>工學院</p>
+          <br>
+          <div class="ui inverted button mini" courseid="E0">工學院</div>
+          <div class="ui inverted button mini" courseid="E1">機械</div>
+          <div class="ui inverted button mini" courseid="E3">化工</div>
+          <div class="ui inverted button mini" courseid="E4">資源</div>
+          <div class="ui inverted button mini" courseid="E5">材料</div>
+          <div class="ui inverted button mini" courseid="E6">土木</div>
+          <div class="ui inverted button mini" courseid="E8">水利</div>
+        </div>
+        <div class="sideber-course" style="margin-left: 1px !important;">
+          <br>
+          <br>
+          <br>
+          <div class="ui inverted button mini" courseid="E9">工科</div>
+          <div class="ui inverted button mini" courseid="F0">能源</div>
+          <div class="ui inverted button mini" courseid="F1">系統</div>
+          <div class="ui inverted button mini" courseid="F4">航太</div>
+          <div class="ui inverted button mini" courseid="F5">環工</div>
+          <div class="ui inverted button mini" courseid="F6">測量</div>
+          <div class="ui inverted button mini" courseid="F9">醫工</div>
+        </div>
+        <div class="sideber-course">
+          <br>
+          <p>管理學院</p>
+          <br>
+          <div class="ui inverted button mini" courseid="H1">會計</div>
+          <div class="ui inverted button mini" courseid="H2">統計</div>
+          <div class="ui inverted button mini" courseid="H3">工資</div>
+          <div class="ui inverted button mini" courseid="H4">企管</div>
+          <div class="ui inverted button mini" courseid="H5">交管</div>
+        </div>
+        <div class="sideber-course">
+          <br>
+          <p>醫學院</p>
+          <br>
+          <div class="ui inverted button mini" courseid="I2">護理</div>
+          <div class="ui inverted button mini" courseid="I3">醫技</div>
+          <div class="ui inverted button mini" courseid="I5">醫學</div>
+          <div class="ui inverted button mini" courseid="I6">物治</div>
+          <div class="ui inverted button mini" courseid="I7">職治</div>
+          <div class="ui inverted button mini" courseid="I8">藥學</div>
+        </div>
+        <div class="sideber-course">
+          <br>
+          <p>社會學院</p>
+          <br>
+          <div class="ui inverted button mini" courseid="D2">法律</div>
+          <div class="ui inverted button mini" courseid="D4">政治</div>
+          <div class="ui inverted button mini" courseid="D5">經濟</div>
+          <div class="ui inverted button mini" courseid="D8">心理</div>
+        </div>
+        <div class="sideber-course">
+          <br>
+          <p>電資學院</p>
+          <br>
+          <div class="ui inverted button mini" courseid="E2">電機</div>
+          <div class="ui inverted button mini" courseid="F7">資訊</div>
+        </div>
+        <div class="sideber-course">
+          <br>
+          <p>規劃學院</p>
+          <br>
+          <div class="ui inverted button mini" courseid="E7">建築</div>
+          <div class="ui inverted button mini" courseid="F2">都計</div>
+          <div class="ui inverted button mini" courseid="F3">工設</div>
+        </div>
+        <div class="sideber-course">
+          <br>
+          <p>生科學院</p>
+          <br>
+          <div class="ui inverted button mini" courseid="C5">生命</div>
+          <div class="ui inverted button mini" courseid="C6">生技</div>
+        </div>
+      </div>
+      <br>
+      <div style="display: flex; justify-content: center;">
+        <div class="ui inverted button red" id="courseSelect" >全選/全部清除</div>  
+        <div class="ui inverted button blue" id="courseQuery">完成選擇</div>
+      </div>
+      
+      <br>
    </div>
 
    <div class="ui basic modal timeTable">
-     <i class="close icon"></i>
-     <div class="header">
-       Archive Old Messages
-     </div>
-     <div class="image content">
-       <div class="image">
-         <i class="archive icon"></i>
-       </div>
-       <div class="description">
-         <p>Your inbox is getting full, would you like us to enable automatic archiving of old messages?</p>
-       </div>
-     </div>
-     <div class="actions">
-       <div class="two fluid ui inverted buttons">
-         <div class="ui cancel red basic inverted button">
-           <i class="remove icon"></i>
-           No
-         </div>
-         <div class="ui ok green basic inverted button">
-           <i class="checkmark icon"></i>
-           Yes
-         </div>
-       </div>
-     </div>
+     <!-- <i class="close icon"></i> -->
+      <div class="header" style="text-align: center;margin-left: 13%;">課表</div>
+      <div style="display: flex; justify-content: space-between; flex-wrap: wrap;">
+        <div class="ui sideber-course disableborder">
+          <br>
+          <br>
+          <br>
+          <div class="ui inverted button mini" tableid="1">1</div>
+          <div class="ui inverted button mini" tableid="2">2</div>
+          <div class="ui inverted button mini" tableid="3">3</div>
+          <div class="ui inverted button mini" tableid="4">4</div>
+          <br>
+          <div class="ui inverted button mini" tableid="n"></div>
+          <br>
+          <div class="ui inverted button mini" tableid="5">5</div>
+          <div class="ui inverted button mini" tableid="6">6</div>
+          <div class="ui inverted button mini" tableid="7">7</div>
+          <div class="ui inverted button mini" tableid="8">8</div>
+<!--           <div class="ui inverted button mini" tableid="A">A</div>
+          <div class="ui inverted button mini" tableid="B">B</div>
+          <div class="ui inverted button mini" tableid="C">C</div>
+          <div class="ui inverted button mini" tableid="D">D</div> -->
+        </div>
+        <div class="sideber-course">
+          <br>
+          <p>星期一</p>
+          <br>
+          <div class="ui inverted button mini active" tableid="1-1">&nbsp;</div>
+          <div class="ui inverted button mini active" tableid="1-2">&nbsp;</div>
+          <div class="ui inverted button mini active" tableid="1-3">&nbsp;</div>
+          <div class="ui inverted button mini active" tableid="1-4">&nbsp;</div>
+          <!-- <div class="ui inverted button mini active" tableid="1-n">&nbsp;</div> -->
+          <br>
+          <hr style="width:94%;margin:10px 3%;border:solid 1px rgb(221,221,221);">
+          <br>
+          <div class="ui inverted button mini active" tableid="1-5">&nbsp;</div>
+          <div class="ui inverted button mini active" tableid="1-6">&nbsp;</div>
+          <div class="ui inverted button mini active" tableid="1-7">&nbsp;</div>
+          <div class="ui inverted button mini active" tableid="1-8">&nbsp;</div>
+<!--           <div class="ui inverted button mini active" tableid="1-A">&nbsp;</div>
+          <div class="ui inverted button mini active" tableid="1-B">&nbsp;</div>
+          <div class="ui inverted button mini active" tableid="1-C">&nbsp;</div>
+          <div class="ui inverted button mini active" tableid="1-D">&nbsp;</div> -->
+        </div>
+        <div class="sideber-course">
+          <br>
+          <p>星期二</p>
+          <br>
+          <div class="ui inverted button mini active" tableid="2-1">&nbsp;</div>
+          <div class="ui inverted button mini active" tableid="2-2">&nbsp;</div>
+          <div class="ui inverted button mini active" tableid="2-3">&nbsp;</div>
+          <div class="ui inverted button mini active" tableid="1-4">&nbsp;</div>
+          <!-- <div class="ui inverted button mini active" tableid="1-n">&nbsp;</div> -->
+          <br>
+          <hr style="width:94%;margin:10px 3%;border:solid 1px rgb(221,221,221);">
+          <br>
+          <div class="ui inverted button mini active" tableid="1-5">&nbsp;</div>
+          <div class="ui inverted button mini active" tableid="1-6">&nbsp;</div>
+          <div class="ui inverted button mini active" tableid="1-7">&nbsp;</div>
+          <div class="ui inverted button mini active" tableid="1-8">&nbsp;</div>
+<!--           <div class="ui inverted button mini active" tableid="1-A">&nbsp;</div>
+          <div class="ui inverted button mini active" tableid="1-B">&nbsp;</div>
+          <div class="ui inverted button mini active" tableid="1-C">&nbsp;</div>
+          <div class="ui inverted button mini active" tableid="1-D">&nbsp;</div> -->
+        </div>
+        <div class="sideber-course">
+          <br>
+          <p>星期三</p>
+          <br>
+          <div class="ui inverted button mini active" tableid="1-1">&nbsp;</div>
+          <div class="ui inverted button mini active" tableid="1-2">&nbsp;</div>
+          <div class="ui inverted button mini active" tableid="1-3">&nbsp;</div>
+          <div class="ui inverted button mini active" tableid="1-4">&nbsp;</div>
+          <!-- <div class="ui inverted button mini active" tableid="1-n">&nbsp;</div> -->
+          <br>
+          <hr style="width:94%;margin:10px 3%;border:solid 1px rgb(221,221,221);">
+          <br>
+          <div class="ui inverted button mini active" tableid="1-5">&nbsp;</div>
+          <div class="ui inverted button mini active" tableid="1-6">&nbsp;</div>
+          <div class="ui inverted button mini active" tableid="1-7">&nbsp;</div>
+          <div class="ui inverted button mini active" tableid="1-8">&nbsp;</div>
+<!--           <div class="ui inverted button mini active" tableid="1-A">&nbsp;</div>
+          <div class="ui inverted button mini active" tableid="1-B">&nbsp;</div>
+          <div class="ui inverted button mini active" tableid="1-C">&nbsp;</div>
+          <div class="ui inverted button mini active" tableid="1-D">&nbsp;</div> -->
+        </div>
+        <div class="sideber-course">
+          <br>
+          <p>星期四</p>
+          <br>
+          <div class="ui inverted button mini active" tableid="1-1">&nbsp;</div>
+          <div class="ui inverted button mini active" tableid="1-2">&nbsp;</div>
+          <div class="ui inverted button mini active" tableid="1-3">&nbsp;</div>
+          <div class="ui inverted button mini active" tableid="1-4">&nbsp;</div>
+          <!-- <div class="ui inverted button mini active" tableid="1-n">&nbsp;</div> -->
+          <br>
+          <hr style="width:94%;margin:10px 3%;border:solid 1px rgb(221,221,221);">
+          <br>
+          <div class="ui inverted button mini active" tableid="1-5">&nbsp;</div>
+          <div class="ui inverted button mini active" tableid="1-6">&nbsp;</div>
+          <div class="ui inverted button mini active" tableid="1-7">&nbsp;</div>
+          <div class="ui inverted button mini active" tableid="1-8">&nbsp;</div>
+<!--           <div class="ui inverted button mini active" tableid="1-A">&nbsp;</div>
+          <div class="ui inverted button mini active" tableid="1-B">&nbsp;</div>
+          <div class="ui inverted button mini active" tableid="1-C">&nbsp;</div>
+          <div class="ui inverted button mini active" tableid="1-D">&nbsp;</div> -->
+        </div>
+        <div class="sideber-course">
+          <br>
+          <p>星期五</p>
+          <br>
+          <div class="ui inverted button mini active" tableid="1-1">&nbsp;</div>
+          <div class="ui inverted button mini active" tableid="1-2">&nbsp;</div>
+          <div class="ui inverted button mini active" tableid="1-3">&nbsp;</div>
+          <div class="ui inverted button mini active" tableid="1-4">&nbsp;</div>
+          <!-- <div class="ui inverted button mini active" tableid="1-n">&nbsp;</div> -->
+          <br>
+          <hr style="width:94%;margin:10px 3%;border:solid 1px rgb(221,221,221);">
+          <br>
+          <div class="ui inverted button mini active" tableid="1-5">&nbsp;</div>
+          <div class="ui inverted button mini active" tableid="1-6">&nbsp;</div>
+          <div class="ui inverted button mini active" tableid="1-7">&nbsp;</div>
+          <div class="ui inverted button mini active" tableid="1-8">&nbsp;</div>
+          <!-- <div class="ui inverted button mini active" tableid="1-A">&nbsp;</div>
+          <div class="ui inverted button mini active" tableid="1-B">&nbsp;</div>
+          <div class="ui inverted button mini active" tableid="1-C">&nbsp;</div>
+          <div class="ui inverted button mini active" tableid="1-D">&nbsp;</div> -->
+        </div>
+      </div>
+      <br>
+      <div style="display: flex; justify-content: center; margin-left: 13%;">
+        <div class="ui inverted button red" >全選/全部清除</div>
+        <div class="ui inverted button blue" >完成選擇</div>
+      </div>
    </div>
 
 </div>

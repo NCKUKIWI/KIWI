@@ -6,7 +6,7 @@
     <div class="twelve wide column">
       <div id="content">
         <div class="ui toggle checkbox" style="margin-bottom: 10px">
-            <input type="checkbox" name="public" checked="checked">
+            <input type="checkbox" name="public" checked="true">
             <label>僅顯示有心得</label>
           </div>
         <table class="table" id="course-table">
@@ -52,7 +52,11 @@
     </div>
   </div>
 </div>
+
+
 <script>
+  var courses = <%- JSON.stringify(courses) %>; //所有課程的資料 (移出document.ready為了使其他script可以全域使用此資料)
+
   $(document).ready(function(){
     /* 辨別目前用戶的清單中有哪些課程 並將該課程按鈕由加變減 */
     var carts = <%- JSON.stringify(carts) %>;
@@ -155,7 +159,7 @@
       delcourse(courseid,btn);
     });
 
-    var courses = <%- JSON.stringify(courses) %>; //所有課程的資料
+    // var courses = <%- JSON.stringify(courses) %>; //所有課程的資料
     var now_index = 50; // 起始值50筆
 
     $(window).scroll(function(){

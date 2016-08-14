@@ -365,6 +365,8 @@ exports.query_post = function query_post(datas, req, item,callback){
   callback(query_data,teacher,courseName);
 }
 
+
+// =======================
 // for course
 
 exports.query_post2 = function query_post2(id, callback){
@@ -418,4 +420,26 @@ exports.query_course = function query_course(datas, req, item,callback){
   }
 
   callback(query_data,teacher,courseName);
+}
+
+exports.FindbyColumnFuzzy = function FindbyColumn(table,cols,conditions,callback){
+  var columns = "";
+  for(var i in cols ){
+    columns+=cols[i];
+    if( i != cols.length-1 ){
+      columns+=",";
+    }
+  }
+  // var condition = conditionjoin(conditions);
+  var whereCondition = "課程名稱 like ";
+  for(var i in conditions){
+    whereCondition += "\'" + "%" + conditions[i] + "%" + "\'"; 
+    if(i != conditions.length - 1) whereCondition += " or 課程名稱 like ";
+  }
+  var sql = "SELECT " + columns + " FROM " + table + " WHERE " + whereCondition;
+  console.log(sql);
+  connection.query(sql,function(err, results, fields){
+    if (err) throw err;
+    callback(results);
+  });
 }

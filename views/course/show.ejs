@@ -103,9 +103,37 @@
     </div>
   </div>
 </div>
-
+<script src="../assets/js/hammer.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
+  // 將mobile的滑動效果裝上
+  var content1 = document.getElementById('content1');
+  var content2 = document.getElementById('content2');
+  var content3 = document.getElementById('content3');
+  var content4 = document.getElementById('content4');
+  var content1m = new Hammer(content1);
+  var content2m = new Hammer(content2);
+  var content3m = new Hammer(content3);
+  var content4m = new Hammer(content4);
+  content1m.on("swipeleft panleft",function(){
+    moveAnimate("content2");
+  });
+  content2m.on("swiperight panright",function(){
+    moveAnimate("content1");
+  });
+  content2m.on("swipeleft panleft",function(){
+    moveAnimate("content3");
+  });
+  content3m.on("swiperight panright",function(){
+    moveAnimate("content2");
+  });
+  content3m.on("swipeleft panleft",function(){
+    moveAnimate("content4");
+  });
+  content4m.on("swiperight panright",function(){
+    moveAnimate("content3");
+  });
+  
   /* Ajax Report post */
   $('.reportbtn').on('click',function(){
     var postid = this.getAttribute("data-id");

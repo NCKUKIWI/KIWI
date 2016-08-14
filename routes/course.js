@@ -6,9 +6,12 @@ var db = require('../model/db');
 router.get('/', function(req, res) {
   console.log('\n'+'GET /course');
   /*  設定要的欄位 */
-  var columns = ['id','課程名稱','系所名稱','老師','時間', 'get_post'];
+  var columns = ['id','課程名稱','系號', '系所名稱','老師','時間', 'get_post'];
   if(req.query.hasOwnProperty("queryw")){
-    db.query_course(courses, req.query.queryw,"query",function(courses,teachers,course_name){
+    var cleanQuery = req.query.queryw.replace(/\'|\#|\/\*/g,""); // clean the query to avoid sql injection
+    var QueryArray = cleanQuery.split(" "); // if someone want to query alternately by "space"
+
+    db.FindbyColumnFuzzy('course', columns, QueryArray ,function(courses){
       check_Login(courses);
     });
   }

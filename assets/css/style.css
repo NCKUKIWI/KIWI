@@ -122,6 +122,10 @@ html *{
   font-size:0px
 }
 
+.ui.button.catagory :active{
+  background-color:red;
+}
+
 .ui.button.catagory{
   background:#dadada;
   padding:12px 5px;
@@ -154,13 +158,29 @@ html *{
   margin-bottom: 5px;
 }
 
-.ui.basic.modal{
+.ui.basic.modal.chooseCourse{
   margin-left: 5%;
   width: 90%;
   left: 0px;
   bottom: auto;
 }
 
+.chooseCourse .master, .chooseCourse .bachelor{
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.disableborder > div{
+  box-shadow: 0 0 0 0px !important;
+}
+
+.ui.basic.modal.timeTable{
+  width: 40%;
+  left: 0px;
+  bottom: auto;
+  margin-left: 27.5%;
+  margin-right: 32.5%;
+}
 /* post table */
 
 .orderbtn{
@@ -369,3 +389,4 @@ html *{
 @media (max-width:992px){
 
 }
+

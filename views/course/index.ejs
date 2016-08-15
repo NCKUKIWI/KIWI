@@ -6,7 +6,7 @@
     <div class="twelve wide column">
       <div id="content">
         <div class="ui toggle checkbox" style="margin-bottom: 10px">
-            <input type="checkbox" name="public" checked="true">
+            <input type="checkbox" >
             <label>僅顯示有心得</label>
           </div>
         <table class="table" id="course-table">
@@ -18,16 +18,15 @@
             <th class="class_time">時間</th>
           </tr>
           <% for(var i = 0 ; i < courses.length && i < 50  ; i++){ %>
-              <tr id="course-<%= courses[i].id %>" class="course-row">
+              <tr id="course-<%= courses[i].id %>" class="course-row <%= (courses[i].comment_amt >0) ? '' : 'empty' %>">
                 <td>
                   <i class="plus icon addcoursebtn" id="<%= courses[i].id %>" data-id="<%=courses[i].id %>"></i>
                 </td>
                 <td class="course_name" data-toggle="modal" data-target="#course-modal" data-id="<%= courses[i].id %>">
                   <%- courses[i].課程名稱 %>
-                  <% if(courses[i].get_post != 0){%>
-                    <span class="badge"><%- courses[i].get_post %></span>
-                  <% }%>
-                  <!-- <% if(courses[i].get_post != 0)%> <%- courses[i].get_post %> -->
+                  <% if(courses[i].comment_amt != 0){ %>
+                    <span class="badge"><%- courses[i].comment_amt %></span>
+                  <% } %>
                 </td>
                 <td>
                   <%- courses[i].系所名稱 %>
@@ -58,6 +57,20 @@
   var courses = <%- JSON.stringify(courses) %>; //所有課程的資料 (移出document.ready為了使其他script可以全域使用此資料)
 
   $(document).ready(function(){
+
+    /* 如果用戶勾選只顯示有心得的課程 則將無心得的課程隱藏起來*/
+    var showpostwithcomment = 0;
+    $('.ui.checkbox').last().checkbox({
+      onChecked: function() {
+        $('.course-row.empty').hide();
+        showpostwithcomment=1;
+      },
+      onUnchecked: function() {
+        $('.course-row.empty').show();
+        showpostwithcomment=0;
+      }
+    });
+
     /* 辨別目前用戶的清單中有哪些課程 並將該課程按鈕由加變減 */
     var carts = <%- JSON.stringify(carts) %>;
     if(carts != null ){
@@ -168,11 +181,16 @@
         if(bottomHeight - $(window).scrollTop() == 0  && now_index <= courses.length){
           for(var i = now_index; i < now_index + 50; i++ ){
             if(i >= courses.length) break; // 大於query課程數就不在新增
-            if(courses[i].get_post == 0) courses[i].get_post = "";
-            var dom = "<tr id='course-" + courses[i].id + "' class='course-row'><td><i class='plus icon addcoursebtn' id='" + courses[i].id + "' data-id='" + courses[i].id + "'></i></td><td class='course_name' data-toggle='modal' data-target='#course-modal' data-id='" + courses[i].id + "'> " + courses[i].課程名稱 + " <span class='badge'>" + courses[i].get_post + "</span>" + "</td><td> " + courses[i].系所名稱 + "</td><td>" + courses[i].老師 + "</td><td> " + courses[i].時間 + "</td></tr>";
-
+            if(courses[i].comment_amt == 0){
+              var dom = "<tr id='course-" + courses[i].id + "' class='course-row empty'><td><i class='plus icon addcoursebtn' id='" + courses[i].id + "' data-id='" + courses[i].id + "'></i></td><td class='course_name' data-toggle='modal' data-target='#course-modal' data-id='" + courses[i].id + "'> " + courses[i].課程名稱 + "</td><td> " + courses[i].系所名稱 + "</td><td>" + courses[i].老師 + "</td><td> " + courses[i].時間 + "</td></tr>";
+            }
+            else{
+              var dom = "<tr id='course-" + courses[i].id + "' class='course-row'><td><i class='plus icon addcoursebtn' id='" + courses[i].id + "' data-id='" + courses[i].id + "'></i></td><td class='course_name' data-toggle='modal' data-target='#course-modal' data-id='" + courses[i].id + "'> " + courses[i].課程名稱 + " <span class='badge'>" + courses[i].comment_amt + "</span>" + "</td><td> " + courses[i].系所名稱 + "</td><td>" + courses[i].老師 + "</td><td> " + courses[i].時間 + "</td></tr>";
+            }
             $('#course-table').append(dom);
-
+            if(showpostwithcomment==1){
+              $('.course-row.empty').hide();
+            }
           }
 
           now_index += 50; // 每次新增50筆

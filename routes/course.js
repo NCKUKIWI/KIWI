@@ -6,10 +6,12 @@ var db = require('../model/db');
 router.get('/', function(req, res) {
   console.log('\n'+'GET /course');
   /*  設定要的欄位 */
-  var columns = ['id','課程名稱','系號', '系所名稱','老師','時間', 'get_post'];
+  var columns = ['id','課程名稱','系號', '系所名稱','老師','時間','(SELECT COUNT(*) FROM post WHERE post.course_id = course.id ) AS comment_amt'];
   if(req.query.hasOwnProperty("queryw")){
-    var cleanQuery = req.query.queryw.replace(/\'|\#|\/\*/g,""); // clean the query to avoid sql injection
-    var QueryArray = cleanQuery.split(" "); // if someone want to query alternately by "space"
+    // clean the query to avoid sql injection
+    var cleanQuery = req.query.queryw.replace(/\'|\#|\/\*/g,"");
+    // if someone want to query alternately by "space"
+    var QueryArray = cleanQuery.split(" ");
 
     db.FindbyColumnFuzzy('course', columns, QueryArray ,function(courses){
       check_Login(courses);

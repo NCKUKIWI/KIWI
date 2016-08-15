@@ -51,6 +51,9 @@
         <% }%>
       </button>
       <button class="ui button content4" onclick="moveAnimate('content4')">得分比重
+        <% if(courseInfo.score_style != 0){%>
+          &nbsp;&nbsp;<span class="badge"><%= courseInfo.score_style %></span>
+        <% }%>
       </button>
     </div>
     <div id="content1" style="display:block;">
@@ -133,7 +136,7 @@ $(document).ready(function(){
   content4m.on("swiperight panright",function(){
     moveAnimate("content3");
   });
-  
+
   /* Ajax Report post */
   $('.reportbtn').on('click',function(){
     var postid = this.getAttribute("data-id");

@@ -95,7 +95,7 @@
         var nowCourse = $('.course-row');
         var filterCourse = [];
         for(var i = 0; i < nowCourse.length; i++){
-          var time = nowCourse[i].children[4].textContent;
+          var time = nowCourse[i].children[3].textContent;
           if(time == "未定"){
             filterCourse.push(nowCourse[i]);
             continue;
@@ -133,10 +133,13 @@
                 break;
               }
             }
-            if (isThechoose) filterCourse.push(nowCourse[i]);
+            if (isThechoose) filterCourse.push(nowCourse[i].innerHTML);
           }
         }
-        $("#filterCourse").html(filterCourse);
+        var originalText = '<tr><th class="course_name">課程名稱</th><th class="department_name" >開課系所</th><th class="teacher" >開課老師</th><th class="class_time">時間</th></tr>';
+        // $("#course-table").html(filterCourse);
+        filterCourse = filterCourse.join().replace(/\,/g, "");
+        $("#course-table").html(originalText + filterCourse);
         console.log(filterCourse);
       });
    });
@@ -159,7 +162,7 @@
    </div>
    <br>
    <div class="sidebar-categories">
-      <div class="ui toggle checkbox">
+      <div class="ui toggle checkbox" style="display: none;">
         <input type="checkbox" name="public">
         <label>單選模式</label>
       </div>
@@ -171,11 +174,11 @@
          <a class="small ui button catagory" href="/course?catalog=A1">A1 外國語言</a>
          <a class="small ui button catagory" href="/course?catalog=A7">A7 基礎國文</a>
          <a class="small ui button catagory" href="/course?catalog=A6">A6 服務學習</a>
-         <a class="small ui button catagory" href="/course">本系</a>
-         <a class="small ui button catagory course" id="catagory-all">依照系所、開課單位選擇</a>
+         <a class="small ui button catagory" href="/course" style="display: none;">本系</a>
+         <a class="small ui button catagory course" id="catagory-all" style="display: none;">依照系所、開課單位選擇</a>
          <a class="small ui button catagory tables" id="catagory-all">依空堂時段選擇</a>
-         <a class="small ui button catagory" href="/course?catalog=M" style="background-color: rgb(217, 176, 177);">清除所選</a>
-         <a class="small ui button catagory" href="/course?catalog=C" style="background-color: rgb(167, 188, 214);">確認送出</a>
+         <a class="small ui button catagory" href="/course?catalog=M" style="background-color: rgb(217, 176, 177); display: none;">清除所選</a>
+         <a class="small ui button catagory" href="/course?catalog=C" style="background-color: rgb(167, 188, 214); display: none;">確認送出</a>
       </ul>
    </div>
 

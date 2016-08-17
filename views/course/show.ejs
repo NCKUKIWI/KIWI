@@ -290,12 +290,9 @@ $(document).ready(function(){
         break;
       }
     }
-    console.log(Number(currentContent.replace(/\D/g, "")));
-    console.log(Number(nextContent.replace(/\D/g, "")));
     if(currentContent == nextContent){
       return 0;
     }else if (Number(currentContent.replace(/\D/g, "")) < Number(nextContent.replace(/\D/g, ""))){
-      console.log("out_left");
 
       $('#' + currentContent).addClass('animated fadeOutLeft').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',function(){
         document.getElementById(nextContent).style.display='block';
@@ -306,7 +303,6 @@ $(document).ready(function(){
         });
       });
     }else{
-      console.log("out_right");
       $('#' + currentContent).addClass('animated fadeOutRight').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',function(){
         document.getElementById(nextContent).style.display='block';
         document.getElementById(currentContent).style.display='none';

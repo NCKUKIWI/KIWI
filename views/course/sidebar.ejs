@@ -97,10 +97,20 @@
 
         if(nowCourse === undefined) nowCourse = $('.course-row');
         var filterCourse = [];
-        for(var i = 0; i < nowCourse.length; i++){
-          var time = nowCourse[i].children[3].textContent;
+
+        for(var i = 0; i < courses.length; i++){
+          // var time = nowCourse[i].children[3].textContent;
+          var dom;
+          time = courses[i].時間;
+
           if(time == "未定"){
-            filterCourse.push(nowCourse[i]);
+            if(courses[i].comment_amt == 0){
+              dom = "<tr id='course-" + courses[i].id + "' class='course-row empty' data-toggle='modal' data-target='#course-modal' data-id='" + courses[i].id + "'><td class='course_name' > " + courses[i].課程名稱 + "</td><td> " + courses[i].系所名稱 + "</td><td>" + courses[i].老師 + "</td><td> " + courses[i].時間 + "</td></tr>";
+            }
+            else{
+              dom = "<tr id='course-" + courses[i].id + "' class='course-row' ><td class='course_name'> " + courses[i].課程名稱 + " <span class='badge'>" + courses[i].comment_amt + "</span>" + "</td><td> " + courses[i].系所名稱 + "</td><td>" + courses[i].老師 + "</td><td> " + courses[i].時間 + "</td></tr>";
+            }
+            filterCourse.push(dom);
             continue;
           }
           time = time.split("[");
@@ -136,14 +146,35 @@
                 break;
               }
             }
-            console.log(nowCourse[i].toString());
-            if (isThechoose) filterCourse.push(nowCourse[i].outerHTML);
+
+
+            if(courses[i].comment_amt == 0){
+              var dom = "<tr id='course-" + courses[i].id + "' class='course-row empty' data-toggle='modal' data-target='#course-modal' data-id='" + courses[i].id + "'><td class='course_name' > " + courses[i].課程名稱 + "</td><td> " + courses[i].系所名稱 + "</td><td>" + courses[i].老師 + "</td><td> " + courses[i].時間 + "</td></tr>";
+            }
+            else{
+              var dom = "<tr id='course-" + courses[i].id + "' class='course-row' ><td class='course_name'> " + courses[i].課程名稱 + " <span class='badge'>" + courses[i].comment_amt + "</span>" + "</td><td> " + courses[i].系所名稱 + "</td><td>" + courses[i].老師 + "</td><td> " + courses[i].時間 + "</td></tr>";
+            }
+
+            if (isThechoose) filterCourse.push(dom);
           }
         }
         var originalText = '<tr><th class="course_name">課程名稱</th><th class="department_name" >開課系所</th><th class="teacher" >開課老師</th><th class="class_time">時間</th></tr>';
 
         filterCourse = filterCourse.join().replace(/\,/g, "");
         $("#course-table").html(originalText + filterCourse);
+
+
+        /* 綁定Ajaxshowcourse function */
+        $('.course-row').on('click',function(){
+          var courseid = this.getAttribute("data-id");
+          ajaxshowcourse(courseid);
+        });
+
+        /* modal 關閉時清空 modal 內容 */
+        $('#course-modal').on('hidden.bs.modal', function () {
+          $('#course-modal .modal-content').empty();
+          // $.fn.fullpage.destroy('all');
+        });
       });
    });
 
@@ -151,6 +182,19 @@
     var chooseWeeks = Object.keys(arr);
     chooseWeeks = chooseWeeks.join().replace(/\,/g, "");
     return chooseWeeks
+  }
+
+  function ajaxshowcourse(id){
+    var ajaxurl = '/course/'+ id;
+    console.log(ajaxurl);
+    $.ajax({
+      url:ajaxurl,
+      type: 'GET',
+      success: function(response) {
+        $('#course-modal .modal-content').prepend(response);
+        $('#course-modal').data('bs.modal').handleUpdate();
+      }
+    });
   }
 
 </script>

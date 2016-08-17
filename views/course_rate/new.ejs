@@ -89,7 +89,8 @@
         data: data,
         success: function(response) {
           $('#course-modal .sr-only').click();
-          $('.course_name[data-id='+courseid+']').click();
+          $('#course-'+courseid).click();
+          //$('.course_name[data-id='+courseid+']').click();
         }
       });
     });

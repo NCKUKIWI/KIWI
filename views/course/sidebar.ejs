@@ -175,6 +175,20 @@
           $('#course-modal .modal-content').empty();
           // $.fn.fullpage.destroy('all');
         });
+
+        // 檢查是否有心得篩選條件
+        var showpostwithcomment = 0;
+        $('.ui.checkbox').last().checkbox({
+          onChecked: function() {
+            $('.course-row.empty').hide();
+            showpostwithcomment=1;
+          },
+          onUnchecked: function() {
+            $('.course-row.empty').show();
+            showpostwithcomment=0;
+          }
+        });
+
       });
    });
 
@@ -186,7 +200,6 @@
 
   function ajaxshowcourse(id){
     var ajaxurl = '/course/'+ id;
-    console.log(ajaxurl);
     $.ajax({
       url:ajaxurl,
       type: 'GET',

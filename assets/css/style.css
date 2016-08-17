@@ -336,7 +336,7 @@ html *{
 }
 
 #course-table .course_name{
-  width:38%
+  width:40%
 }
 
 #course-table .department_name{
@@ -389,4 +389,3 @@ html *{
 @media (max-width:992px){
 
 }
-

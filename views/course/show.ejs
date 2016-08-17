@@ -20,11 +20,13 @@
       <% }else if (courseInfo.備註 != ""){%>
         <button class="ui grey button"><%= courseInfo.備註 %></button><br>
       <% } %>
+      <!--
       <% if(check !=null && check.length != 0){ %>
         <button class="ui grey button showdelcoursebtn" data-id="<%= courseInfo.id %>">移除課程</button><br>
       <% }else{ %>
         <button class="ui grey button showaddcoursebtn" data-id="<%= courseInfo.id %>">加入課程</button><br>
       <% } %>
+      -->
       <% if(courserate_id == 0){ %>
         <button class="ui grey button showcourseratebtn" data-id="<%= courseInfo.id %>">評分課程</button>
       <% }else{ %>

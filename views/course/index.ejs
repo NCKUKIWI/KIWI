@@ -214,7 +214,7 @@
           }
 
           /* 綁定ajaxshowcourse function */
-          $('.course-row .course_name').unbind('click').on('click', function(){
+          $('.course-row').unbind('click').on('click', function(){
             var courseid= this.getAttribute("data-id");
             ajaxshowcourse(courseid);
           });

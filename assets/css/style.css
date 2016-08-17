@@ -178,8 +178,9 @@ html *{
   width: 40%;
   left: 0px;
   bottom: auto;
-  margin-left: 27.5%;
-  margin-right: 32.5%;
+  margin-left: 30%;
+  margin-right: 30%;
+  min-width: 300px;
 }
 /* post table */
 

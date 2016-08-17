@@ -186,7 +186,7 @@ $(document).ready(function(){
       success: function(response) {
         if(response=="Success"){
           $('#course-modal .sr-only').click();
-          $('.course_name[data-id='+courseid+']').click();
+          $('#course-'+courseid).click();
         }
       }
     });

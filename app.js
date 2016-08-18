@@ -47,7 +47,7 @@ app.use('/', index);                              // get '/'時交給routes inde
 app.use('/post', post);                          // get '/post'時交給routes post處理
 app.use('/user',user);                          // get '/user'時交給routes user處理
 app.use('/schedule',schedule);                 // get '/schedule'時交給routes schedule
-app.use('/course',course);                     // get '/course'時交給routes course
+// app.use('/course',course);                     // get '/course'時交給routes course
 app.use('/course_rate',course_rate);          // get '/course_rate'時交給routes course_rate
 
 app.listen( process.env.PORT || 3000);                             //監聽3000port

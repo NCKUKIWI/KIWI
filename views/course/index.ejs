@@ -319,10 +319,11 @@
         $('.course-row').hide();
         for(var i in havecomment){
          $('#course-table').append(havecomment[i]);
-         $('.notempty').on('click',function(){
-          var courseid=this.getAttribute("data-id");
-          ajaxshowcourse(courseid);
-         });
+        }
+        $('.notempty').on('click',function(){
+         var courseid=this.getAttribute("data-id");
+         ajaxshowcourse(courseid);
+        });
         showempty=1;
       },
       onUnchecked: function() {

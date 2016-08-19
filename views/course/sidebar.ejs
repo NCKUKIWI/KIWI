@@ -205,7 +205,7 @@
    });
 
   function mergeArr(arr){
-    var chooseWeeks = Object.keys(arr);
+    var chooseWeeks = Object.keys(arr).sort();
     chooseWeeks = chooseWeeks.join().replace(/\,/g, "");
     return chooseWeeks
   }

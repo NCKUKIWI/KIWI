@@ -100,6 +100,7 @@
 
         var filterCourse = []; // 過濾後的課程
         havecomment.length = 0; // 清空資料
+        nowCourseDom.length = 0; // 清空資料
 
         for(var i = 0; i < courses.length; i++){
           var dom;
@@ -151,22 +152,27 @@
 
 
             if(courses[i].comment_amt == 0){
-              var dom = "<tr id='course-" + courses[i].id + "' class='course-row empty' data-toggle='modal' data-target='#course-modal' data-id='" + courses[i].id + "'><td class='course_name' > " + courses[i].課程名稱 + "</td><td> " + courses[i].系所名稱 + "</td><td>" + courses[i].老師 + "</td><td> " + courses[i].時間 + "</td></tr>";
+              dom = "<tr id='course-" + courses[i].id + "' class='course-row empty' data-toggle='modal' data-target='#course-modal' data-id='" + courses[i].id + "'><td class='course_name' > " + courses[i].課程名稱 + "</td><td> " + courses[i].系所名稱 + "</td><td>" + courses[i].老師 + "</td><td> " + courses[i].時間 + "</td></tr>";
             }
             else{
-              var dom = "<tr id='course-" + courses[i].id + "' class='course-row notempty' data-toggle='modal' data-target='#course-modal' data-id='" + courses[i].id + "' ><td class='course_name'> " + courses[i].課程名稱 + " <span class='badge'>" + courses[i].comment_amt + "</span>" + "</td><td> " + courses[i].系所名稱 + "</td><td>" + courses[i].老師 + "</td><td> " + courses[i].時間 + "</td></tr>";
+              dom = "<tr id='course-" + courses[i].id + "' class='course-row notempty' data-toggle='modal' data-target='#course-modal' data-id='" + courses[i].id + "' ><td class='course_name'> " + courses[i].課程名稱 + " <span class='badge'>" + courses[i].comment_amt + "</span>" + "</td><td> " + courses[i].系所名稱 + "</td><td>" + courses[i].老師 + "</td><td> " + courses[i].時間 + "</td></tr>";
 
               havecomment.push(dom);
             }
 
 
-            if (isThechoose) filterCourse.push(dom);
+            if (isThechoose) nowCourseDom.push(dom);
           }
         }
         var originalText = '<tr><th class="course_name">課程名稱</th><th class="department_name" >開課系所</th><th class="teacher" >開課老師</th><th class="class_time">時間</th></tr>';
 
         // filterCourse = filterCourse.join().replace(/\,/g, "");
-        $("#course-table").html(originalText + filterCourse.join().replace(/\,/g, ""));
+        $("#course-table").html(originalText);
+        for(var i = 0 ;i < 50 && nowCourseDom.length; i++){
+          $("#course-table").append(nowCourseDom[i]);
+        }
+        now_index = 0;
+        max_index = nowCourseDom.length;
 
 
         /* 綁定Ajaxshowcourse function */

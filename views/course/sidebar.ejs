@@ -2,6 +2,7 @@
 <script type="text/javascript">
 
   var nowCourse;
+  var havecomment = []; // 過濾＋有心得的課程
 
    $(document).ready(function() {
       $('.ui.search').search({
@@ -96,10 +97,11 @@
         var chooseWeeks = mergeArr(table); // 製作第一階段的篩選：week
 
         if(nowCourse === undefined) nowCourse = $('.course-row');
-        var filterCourse = [];
+
+        var filterCourse = []; // 過濾後的課程
+        havecomment.length = 0; // 清空資料
 
         for(var i = 0; i < courses.length; i++){
-          // var time = nowCourse[i].children[3].textContent;
           var dom;
           time = courses[i].時間;
 
@@ -152,16 +154,19 @@
               var dom = "<tr id='course-" + courses[i].id + "' class='course-row empty' data-toggle='modal' data-target='#course-modal' data-id='" + courses[i].id + "'><td class='course_name' > " + courses[i].課程名稱 + "</td><td> " + courses[i].系所名稱 + "</td><td>" + courses[i].老師 + "</td><td> " + courses[i].時間 + "</td></tr>";
             }
             else{
-              var dom = "<tr id='course-" + courses[i].id + "' class='course-row' data-toggle='modal' data-target='#course-modal' data-id='" + courses[i].id + "' ><td class='course_name'> " + courses[i].課程名稱 + " <span class='badge'>" + courses[i].comment_amt + "</span>" + "</td><td> " + courses[i].系所名稱 + "</td><td>" + courses[i].老師 + "</td><td> " + courses[i].時間 + "</td></tr>";
+              var dom = "<tr id='course-" + courses[i].id + "' class='course-row notempty' data-toggle='modal' data-target='#course-modal' data-id='" + courses[i].id + "' ><td class='course_name'> " + courses[i].課程名稱 + " <span class='badge'>" + courses[i].comment_amt + "</span>" + "</td><td> " + courses[i].系所名稱 + "</td><td>" + courses[i].老師 + "</td><td> " + courses[i].時間 + "</td></tr>";
+
+              havecomment.push(dom);
             }
+
 
             if (isThechoose) filterCourse.push(dom);
           }
         }
         var originalText = '<tr><th class="course_name">課程名稱</th><th class="department_name" >開課系所</th><th class="teacher" >開課老師</th><th class="class_time">時間</th></tr>';
 
-        filterCourse = filterCourse.join().replace(/\,/g, "");
-        $("#course-table").html(originalText + filterCourse);
+        // filterCourse = filterCourse.join().replace(/\,/g, "");
+        $("#course-table").html(originalText + filterCourse.join().replace(/\,/g, ""));
 
 
         /* 綁定Ajaxshowcourse function */
@@ -177,19 +182,35 @@
         });
 
         // 檢查是否有心得篩選條件
-        var showpostwithcomment = 0;
-        $('.ui.checkbox').last().checkbox({
-          onChecked: function() {
-            $('.course-row.empty').hide();
-            showpostwithcomment=1;
-          },
-          onUnchecked: function() {
-            $('.course-row.empty').show();
-            showpostwithcomment=0;
-          }
-        });
+        var showempty = 0;
 
+        // var havecomment=[];
+        // for(var i in courses){
+        //  if(courses[i].comment_amt != 0){ 
+        //    var dom = "<tr id='course-" + courses[i].id + "' class='notempty' data-toggle='modal' data-target='#course-modal' data-id='" + courses[i].id + "' ><td class='course_name'> " + courses[i].課程名稱 + " <span class='badge'>" + courses[i].comment_amt + "</span>" + "</td><td> " + courses[i].系所名稱 + "</td><td>" + courses[i].老師 + "</td><td> " + courses[i].時間 + "</td></tr>";
+        //   havecomment.push(dom);
+        //  }
+        // }
+
+        if($('.ui.checkbox').hasClass('checked')){
+          $('.course-row').hide();
+          for(var i in havecomment){
+           $('#course-table').append(havecomment[i]);
+          }
+          $('.notempty').on('click',function(){
+           var courseid=this.getAttribute("data-id");
+           ajaxshowcourse(courseid);
+          });
+          showempty=1;
+        }
       });
+
+      $('.timeTable p').on('click', function(){
+        if(this.parentNode.getElementsByClassName('button active').length == 0)
+          $(this.parentNode.getElementsByClassName('button')).addClass('active')
+        else $(this.parentNode.getElementsByClassName('button')).removeClass('active');
+      });
+
    });
 
   function mergeArr(arr){

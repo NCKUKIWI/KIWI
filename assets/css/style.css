@@ -182,6 +182,10 @@ html *{
   margin-right: 30%;
   min-width: 300px;
 }
+
+.timeTable p{
+  cursor: pointer;
+}
 /* post table */
 
 .orderbtn{

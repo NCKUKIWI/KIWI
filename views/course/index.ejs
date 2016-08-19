@@ -61,7 +61,7 @@
       var dom = "<tr id='course-" + courses[i].id + "' class='course-row empty' data-toggle='modal' data-target='#course-modal' data-id='" + courses[i].id + "'><td class='course_name' > " + courses[i].課程名稱 + "</td><td> " + courses[i].系所名稱 + "</td><td>" + courses[i].老師 + "</td><td> " + courses[i].時間 + "</td></tr>";
     }
     else{
-      var dom = "<tr id='course-" + courses[i].id + "' class='course-row notempty' data-toggle='modal' data-target='#course-modal' data-id='" + courses[i].id + "' ><td class='course_name'> " + courses[i].課程名稱 + " <span class='badge'>" + courses[i].comment_amt + "</span>" + "</td><td> " + courses[i].系所名稱 + "</td><td>" + courses[i].老師 + "</td><td> " + courses[i].時間 + "</td></tr>";
+      var dom = "<tr id='course-" + courses[i].id + "' class='course-row' data-toggle='modal' data-target='#course-modal' data-id='" + courses[i].id + "' ><td class='course_name'> " + courses[i].課程名稱 + " <span class='badge'>" + courses[i].comment_amt + "</span>" + "</td><td> " + courses[i].系所名稱 + "</td><td>" + courses[i].老師 + "</td><td> " + courses[i].時間 + "</td></tr>";
     }
     coursesDom.push(dom);
     nowCourseDom.push(dom);
@@ -187,7 +187,7 @@
     // var havecomment=[]; // 移到siber初始化，之後需要做js整合
     for(var i in courses){
      if(courses[i].comment_amt != 0){ 
-       var dom = "<tr id='course-" + courses[i].id + "' class='course-row notempty' data-toggle='modal' data-target='#course-modal' data-id='" + courses[i].id + "' ><td class='course_name'> " + courses[i].課程名稱 + " <span class='badge'>" + courses[i].comment_amt + "</span>" + "</td><td> " + courses[i].系所名稱 + "</td><td>" + courses[i].老師 + "</td><td> " + courses[i].時間 + "</td></tr>";
+       var dom = "<tr id='course-" + courses[i].id + "' class='notempty' data-toggle='modal' data-target='#course-modal' data-id='" + courses[i].id + "' ><td class='course_name'> " + courses[i].課程名稱 + " <span class='badge'>" + courses[i].comment_amt + "</span>" + "</td><td> " + courses[i].系所名稱 + "</td><td>" + courses[i].老師 + "</td><td> " + courses[i].時間 + "</td></tr>";
       havecomment.push(dom);
      }
     }

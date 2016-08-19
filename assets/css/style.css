@@ -336,7 +336,7 @@ html *{
 
 /* course */
 
-.course-row,.delcoursebtn,.addcoursebtn{
+.course-row,.delcoursebtn,.addcoursebtn, .notempty{
   cursor:pointer;
 }
 

@@ -6,7 +6,7 @@ var db = require('../model/db');
 router.get('/', function(req, res) {
   console.log('\n'+'GET /course');
   /*  設定要的欄位 */
-  var columns = ['id','課程名稱','系號', '課程碼','分班碼', '系所名稱','老師','時間','(SELECT COUNT(*) FROM post WHERE post.course_id = course.id ) AS comment_amt'];
+  var columns = ['id','課程名稱','系號', '選課序號', '課程碼','分班碼', '系所名稱','老師','時間','(SELECT COUNT(*) FROM post WHERE post.course_id = course.id ) AS comment_amt'];
   if(req.query.hasOwnProperty("queryw")){
     // clean the query to avoid sql injection
     var cleanQuery = req.query.queryw.replace(/\'|\#|\/\*/g,"");

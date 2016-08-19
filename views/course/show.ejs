@@ -13,7 +13,7 @@
       <p>評分比數:<%= rate_count %></p>
     </div>
     <div class="eight wide column" style="text-align:right;">
-      <button class="ui grey button"><%= courseInfo.系所名稱 %></button><br>
+      <button class="ui grey button"><%= courseInfo.系所名稱 %> - <%= courseInfo.選課序號 %></button><br>
       <button class="ui grey button"><%= courseInfo.學分 %> 學分</button><br>
       <% if(courseInfo.系所名稱 == "通識中心GE"){%>
         <button class="ui grey button"><%= courseInfo.類別 %></button><br>

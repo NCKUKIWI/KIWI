@@ -115,7 +115,7 @@ html *{
 }
 
 .ui.icon.input input{
-  font-family: Arial , "儷黑 Pro", "LiHei Pro", "微軟正黑體", "Microsoft JhengHei", "標楷體";
+  font-family: Arial , "儷黑", "LiHei", "微軟正黑體", "Microsoft JhengHei", "標楷體";
 }
 
 .sidebar-categories{
@@ -134,7 +134,7 @@ html *{
   text-align:center;
   width:44%;
   font-weight:500;
-  font-family: Arial , "儷黑 Pro", "LiHei Pro", "微軟正黑體", "Microsoft JhengHei", "標楷體";
+  font-family: Arial , "儷黑", "LiHei", "微軟正黑體", "Microsoft JhengHei", "標楷體";
 }
 
 .ui.button.catagory:hover{
@@ -398,6 +398,6 @@ html *{
 
 /*about*/
 .modal-body .partB a{
-  color: #34495e;
+  color:#34495e;
   font-weight:bold;
 }

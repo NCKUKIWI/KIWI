@@ -24,7 +24,7 @@
           或願意提供改善意見，<a href="https://www.messenger.com/t/nckuhub/" target="_blank">請聯絡我們</a>
           <br>
           <br>
-          NCKU HUB 相當需要您 <a href="#" data-toggle="modal" data-target="#new">提供更多心得</a><br>
+          NCKU HUB 相當需要您 <a href="#" class="aboutaddpost">提供更多心得</a><br>
           一起完善成大的選課環境！<br>
           <br>
           特別感謝<a href="https://www.facebook.com/nckucourseshare/" target="_blank">『成大選課心得分享』</a>授權資料使用!<br>
@@ -36,3 +36,11 @@
     </div>
   </div>
 </div>
+<script>
+  $(document).ready(function(){
+    $('.aboutaddpost').on('click',function(){
+      $('#about .close').click();
+      $('a[data-target="#new"]').click();
+    });
+  });
+</script>

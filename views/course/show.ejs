@@ -69,7 +69,7 @@
           <p><%- comment[i].comment %></p>
           <br>
           <div class="ui red tiny buttons">
-            <div class="ui button">檢舉文章</div>
+            <div class="ui button" style="cursor:default;">檢舉文章</div>
             <div class="ui floating dropdown icon button">
               <i class="dropdown icon"></i>
               <div class="menu">
@@ -91,7 +91,7 @@
           <p><%- comment[i].course_style %></p>
           <br>
           <div class="ui red tiny buttons">
-            <div class="ui button">檢舉文章</div>
+            <div class="ui button" style="cursor:default;">檢舉文章</div>
             <div class="ui floating dropdown icon button">
               <i class="dropdown icon"></i>
               <div class="menu">
@@ -113,7 +113,7 @@
           <p><%- comment[i].report_hw %></p>
           <br>
           <div class="ui red tiny buttons">
-            <div class="ui button">檢舉文章</div>
+            <div class="ui button" style="cursor:default;">檢舉文章</div>
             <div class="ui floating dropdown icon button">
               <i class="dropdown icon"></i>
               <div class="menu">
@@ -135,7 +135,7 @@
           <p><%- comment[i].score_style %></p>
           <br>
           <div class="ui red tiny buttons">
-            <div class="ui button">檢舉文章</div>
+            <div class="ui button" style="cursor:default;">檢舉文章</div>
             <div class="ui floating dropdown icon button">
               <i class="dropdown icon"></i>
               <div class="menu">
@@ -161,22 +161,22 @@ $(document).ready(function(){
   var content2m = new Hammer(content2);
   var content3m = new Hammer(content3);
   var content4m = new Hammer(content4);
-  content1m.on("swipeleft panleft",function(){
+  content1m.on("panleft",function(){
     moveAnimate("content2");
   });
-  content2m.on("swiperight panright",function(){
+  content2m.on("panright",function(){
     moveAnimate("content1");
   });
-  content2m.on("swipeleft panleft",function(){
+  content2m.on("panleft",function(){
     moveAnimate("content3");
   });
-  content3m.on("swiperight panright",function(){
+  content3m.on("panright",function(){
     moveAnimate("content2");
   });
-  content3m.on("swipeleft panleft",function(){
+  content3m.on("panleft",function(){
     moveAnimate("content4");
   });
-  content4m.on("swiperight panright",function(){
+  content4m.on("panright",function(){
     moveAnimate("content3");
   });
 
@@ -197,7 +197,7 @@ $(document).ready(function(){
           toastr.success('已經檢舉過囉!');
         }
         else{
-          toastr.warning('請先登入');
+          toastr.warning('<a href="/user/auth/facebook">請先登入</a>');
         }
       }
     });
@@ -211,7 +211,7 @@ $(document).ready(function(){
       type: 'GET',
       success: function(response) {
         if(response=="No login"){
-          toastr.warning('請先登入');
+          toastr.warning('<a href="/user/auth/facebook">請先登入</a>');
         }
         else{
           btn.hide();

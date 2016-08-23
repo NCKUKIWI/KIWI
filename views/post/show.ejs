@@ -52,7 +52,7 @@
         <div class="small ui button delbtn"  data-id="<%= post.id %>">刪除文章</div>
       <% } %>
       <div class="ui red tiny buttons">
-        <div class="ui button">檢舉文章</div>
+        <div class="ui button" style="cursor:default;">檢舉文章</div>
         <div class="ui floating dropdown icon button">
           <i class="dropdown icon"></i>
           <div class="menu">
@@ -95,7 +95,7 @@
           toastr.success('已經檢舉過囉!');
         }
         else{
-          toastr.warning('請先登入');
+          toastr.warning('<a href="/user/auth/facebook">請先登入</a>');
         }
       }
     });

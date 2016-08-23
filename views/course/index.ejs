@@ -79,7 +79,7 @@
 
   $(document).ready(function(){
 
-   
+
     /* 辨別目前用戶的清單中有哪些課程 並將該課程按鈕由加變減 */
     var carts = <%- JSON.stringify(carts) %>;
     if(carts != null ){
@@ -109,7 +109,7 @@
         type: 'POST',
         success: function(response) {
           if(response=='No login'){
-            toastr.warning('請先登入!');
+            toastr.warning('<a href="/user/auth/facebook">請先登入</a>');
           }
           else if(response=='Already choose'){
             toastr.warning('已經選過囉!');
@@ -186,7 +186,7 @@
     /* 找出有心得的課程 */
     // var havecomment=[]; // 移到siber初始化，之後需要做js整合
     for(var i in courses){
-     if(courses[i].comment_amt != 0){ 
+     if(courses[i].comment_amt != 0){
        var dom = "<tr id='course-" + courses[i].id + "' class='notempty' data-toggle='modal' data-target='#course-modal' data-id='" + courses[i].id + "' ><td class='course_name'> " + courses[i].課程名稱 + " <span class='badge'>" + courses[i].comment_amt + "</span>" + "</td><td> " + courses[i].系所名稱 + "</td><td>" + courses[i].老師 + "</td><td> " + courses[i].時間 + "</td></tr>";
       havecomment.push(dom);
      }
@@ -246,7 +246,7 @@
             type: 'POST',
             success: function(response) {
               if(response=='No login'){
-                toastr.warning('請先登入!');
+                toastr.warning('<a href="/user/auth/facebook">請先登入</a>');
               }
               else if(response=='Already choose'){
                 toastr.warning('已經選過囉!');

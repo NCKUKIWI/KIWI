@@ -38,22 +38,22 @@
   <div class="partA courseratepart"></div>
   <div class="partB">
     <div class="partB_button" style="margin-bottom:10px;">
-      <button class="ui button content1" onclick="moveAnimate('content1')">修課心得
+      <button class="ui button content1" onclick="moveAnimate('content1')" style="padding:10px 8px;">修課心得
         <% if(courseInfo.comment != 0){%>
           &nbsp;&nbsp;<span class="badge"><%= courseInfo.comment %></span>
         <% }%>
       </button>
-      <button class="ui button content2" onclick="moveAnimate('content2')">上課內容
+      <button class="ui button content2" onclick="moveAnimate('content2')" style="padding:10px 8px;">上課內容
         <% if(courseInfo.course_style != 0){%>
           &nbsp;&nbsp;<span class="badge"><%= courseInfo.course_style %></span>
         <% }%>
       </button>
-      <button class="ui button content3" onclick="moveAnimate('content3')">作業考試
+      <button class="ui button content3" onclick="moveAnimate('content3')" style="padding:10px 8px;">作業考試
         <% if(courseInfo.report_hw != 0){%>
           &nbsp;&nbsp;<span class="badge"><%= courseInfo.report_hw %></span>
         <% }%>
       </button>
-      <button class="ui button content4" onclick="moveAnimate('content4')">得分比重
+      <button class="ui button content4" onclick="moveAnimate('content4')" style="padding:10px 8px;">得分比重
         <% if(courseInfo.score_style != 0){%>
           &nbsp;&nbsp;<span class="badge"><%= courseInfo.score_style %></span>
         <% }%>
@@ -68,14 +68,10 @@
           <p>[<%- comment[i].semester %>]</p>
           <p><%- comment[i].comment %></p>
           <br>
-          <div class="ui red tiny buttons">
-            <div class="ui button" style="cursor:default;">檢舉文章</div>
-            <div class="ui floating dropdown icon button">
-              <i class="dropdown icon"></i>
-              <div class="menu">
-                <div class="item reportbtn" data-id="<%= comment[i].id %>" data-type="A">不實內容</div>
-                <div class="item reportbtn" data-id="<%= comment[i].id %>" data-type="B">辱罵</div>
-              </div>
+          <div class="ui red dropdown button">檢舉文章
+            <div class="menu">
+              <div class="item reportbtn" data-id="<%= comment[i].id %>" data-type="A">不實內容</div>
+              <div class="item reportbtn" data-id="<%= comment[i].id %>" data-type="B">辱罵</div>
             </div>
           </div>
         </div>
@@ -90,14 +86,10 @@
           <p>[<%- comment[i].semester %>]</p>
           <p><%- comment[i].course_style %></p>
           <br>
-          <div class="ui red tiny buttons">
-            <div class="ui button" style="cursor:default;">檢舉文章</div>
-            <div class="ui floating dropdown icon button">
-              <i class="dropdown icon"></i>
-              <div class="menu">
-                <div class="item reportbtn" data-id="<%= comment[i].id %>" data-type="A">不實內容</div>
-                <div class="item reportbtn" data-id="<%= comment[i].id %>" data-type="B">辱罵</div>
-              </div>
+          <div class="ui red dropdown button">檢舉文章
+            <div class="menu">
+              <div class="item reportbtn" data-id="<%= comment[i].id %>" data-type="A">不實內容</div>
+              <div class="item reportbtn" data-id="<%= comment[i].id %>" data-type="B">辱罵</div>
             </div>
           </div>
         </div>
@@ -112,14 +104,10 @@
           <p>[<%- comment[i].semester %>]</p>
           <p><%- comment[i].report_hw %></p>
           <br>
-          <div class="ui red tiny buttons">
-            <div class="ui button" style="cursor:default;">檢舉文章</div>
-            <div class="ui floating dropdown icon button">
-              <i class="dropdown icon"></i>
-              <div class="menu">
-                <div class="item reportbtn" data-id="<%= comment[i].id %>" data-type="A">不實內容</div>
-                <div class="item reportbtn" data-id="<%= comment[i].id %>" data-type="B">辱罵</div>
-              </div>
+          <div class="ui red dropdown button">檢舉文章
+            <div class="menu">
+              <div class="item reportbtn" data-id="<%= comment[i].id %>" data-type="A">不實內容</div>
+              <div class="item reportbtn" data-id="<%= comment[i].id %>" data-type="B">辱罵</div>
             </div>
           </div>
         </div>
@@ -134,14 +122,10 @@
           <p>[<%- comment[i].semester %>]</p>
           <p><%- comment[i].score_style %></p>
           <br>
-          <div class="ui red tiny buttons">
-            <div class="ui button" style="cursor:default;">檢舉文章</div>
-            <div class="ui floating dropdown icon button">
-              <i class="dropdown icon"></i>
-              <div class="menu">
-                <div class="item reportbtn" data-id="<%= comment[i].id %>" data-type="A">不實內容</div>
-                <div class="item reportbtn" data-id="<%= comment[i].id %>" data-type="B">辱罵</div>
-              </div>
+          <div class="ui red dropdown button">檢舉文章
+            <div class="menu">
+              <div class="item reportbtn" data-id="<%= comment[i].id %>" data-type="A">不實內容</div>
+              <div class="item reportbtn" data-id="<%= comment[i].id %>" data-type="B">辱罵</div>
             </div>
           </div>
         </div>

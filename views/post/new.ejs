@@ -5,7 +5,6 @@
   <h1 class="modal-title">新增心得</h1>
 </div>
 <div class="modal-body">
-  <% if(user){%>
     <form class="ui form" id="createform">
       <div class="partA">
         <div class="fields">
@@ -103,9 +102,6 @@
         </div>
       </div>
     </form>
-    <% }else{ %>
-      <a class="ui button" id="createform-fblogin-btn" href="/user/auth/facebook">請先登入Facebook</a>
-    <% } %>
 </div>
 <script>
 $(document).ready(function(){

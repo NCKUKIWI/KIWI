@@ -76,7 +76,7 @@
 
   var now_index = 50; // 起始值50筆
   var max_index = nowCourseDom.length;
-
+  var showempty = 0;
   $(document).ready(function(){
 
 
@@ -323,7 +323,6 @@
     });
 
     /* 如果用戶勾選只顯示有心得的課程 則將無心得的課程隱藏起來*/
-    var showempty = 0;
     $('.ui.checkbox').last().checkbox({
       onChecked: function() {
         $('.course-row').hide();

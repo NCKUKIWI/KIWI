@@ -195,7 +195,8 @@
     $(window).scroll(function(){
       if(showempty==0){
         var bottomHeight = $(document).height()-$(window).height(); // 計算置底的值
-
+        console.log("底部得值: " + $(document).height()-$(window).height());
+        console.log("滑動得值: " + $(window).scrollTop());
         if(bottomHeight - $(window).scrollTop() == 0  && now_index <= courses.length){
           for(var i = now_index; i < now_index + 50; i++ ){
             if(i >= max_index) break; // 大於query課程數就不在新增

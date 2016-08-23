@@ -43,7 +43,7 @@ border-spacing: 0;
 }
 
 html *{
-  font-family: Arial , "儷黑 Pro", "LiHei Pro", "微軟正黑體", "Microsoft JhengHei", "標楷體";
+  font-family: Arial , "儷黑", "LiHei", "微軟正黑體", "Microsoft JhengHei", "標楷體";
 }
 /* custom css */
 
@@ -338,6 +338,7 @@ html *{
 
 .course-row,.delcoursebtn,.addcoursebtn, .notempty{
   cursor:pointer;
+  font-size: 14px;
 }
 
 #course-table .course_name{
@@ -393,4 +394,10 @@ html *{
 /* md */
 @media (max-width:992px){
 
+}
+
+/*about*/
+.modal-body .partB a{
+  color: #34495e;
+  font-weight:bold;
 }

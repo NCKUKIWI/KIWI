@@ -130,7 +130,6 @@ html *{
   background:#dadada;
   padding:12px 5px;
   margin:6px 3%;
-  font-size:14px;
   text-align:center;
   width:44%;
   font-weight:500;
@@ -338,7 +337,7 @@ html *{
 
 .course-row,.delcoursebtn,.addcoursebtn, .notempty{
   cursor:pointer;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 #course-table .course_name{

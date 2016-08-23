@@ -51,7 +51,16 @@
       <% if(user && (user.id == post.user_id) ){ %>
         <div class="small ui button delbtn"  data-id="<%= post.id %>">刪除文章</div>
       <% } %>
-      <div class="small ui button reportbtn" data-id="<%= post.id %>">檢舉文章</div>
+      <div class="ui red tiny buttons">
+        <div class="ui button">檢舉文章</div>
+        <div class="ui floating dropdown icon button">
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item reportbtn" data-id="<%= post.id %>" data-type="A">不實內容</div>
+            <div class="item reportbtn" data-id="<%= post.id %>" data-type="B">辱罵</div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -74,8 +83,9 @@
   /* Ajax Report post */
   $('.reportbtn').on('click',function(){
     var postid = this.getAttribute("data-id");
+    var type = this.getAttribute("data-type");
     $.ajax({
-      url: '/post/report/'+postid,
+      url: '/post/report/'+postid+"?type="+type,
       type: 'POST',
       success: function(response) {
         if(response=="Success"){
@@ -90,4 +100,7 @@
       }
     });
   });
+  $(document).ready(function(){
+    $('.dropdown').dropdown({direction: 'upward'});
+  })
 </script>

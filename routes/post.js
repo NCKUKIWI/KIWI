@@ -118,10 +118,26 @@ router.post('/report/:id', function(req,res) {
         res.send('Already report');
       }
       else{
+        /* 區分檢舉原因 */
+        var type = req.query.type;
+        var reason="";
+        switch(type){
+          case 'A':
+            reason = "不實內容";
+            break;
+          case 'B':
+            reason = "辱罵";
+            break;
+          default:
+            reason = "無";
+            break;
+        }
+        console.log("檢舉原因:"+reason);
         /* 新增檢舉紀錄 */
         var report_post ={
           user_id:userid,
-          post_id:postid
+          post_id:postid,
+          reason:reason
         }
         db.Insert('report_post',report_post,function(err,results){
           if(err) throw err;

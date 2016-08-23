@@ -67,7 +67,17 @@
         <div class="ui vertical segment">
           <p>[<%- comment[i].semester %>]</p>
           <p><%- comment[i].comment %></p>
-          <div class="ui top right attached label red button reportbtn" data-id="<%= comment[i].id %>">檢舉心得</div>
+          <br>
+          <div class="ui red tiny buttons">
+            <div class="ui button">檢舉文章</div>
+            <div class="ui floating dropdown icon button">
+              <i class="dropdown icon"></i>
+              <div class="menu">
+                <div class="item reportbtn" data-id="<%= comment[i].id %>" data-type="A">不實內容</div>
+                <div class="item reportbtn" data-id="<%= comment[i].id %>" data-type="B">辱罵</div>
+              </div>
+            </div>
+          </div>
         </div>
       <% } }%>
     </div>
@@ -79,7 +89,17 @@
         <div class="ui vertical segment">
           <p>[<%- comment[i].semester %>]</p>
           <p><%- comment[i].course_style %></p>
-          <div class="ui top right attached label red button reportbtn" data-id="<%= comment[i].id %>">檢舉心得</div>
+          <br>
+          <div class="ui red tiny buttons">
+            <div class="ui button">檢舉文章</div>
+            <div class="ui floating dropdown icon button">
+              <i class="dropdown icon"></i>
+              <div class="menu">
+                <div class="item reportbtn" data-id="<%= comment[i].id %>" data-type="A">不實內容</div>
+                <div class="item reportbtn" data-id="<%= comment[i].id %>" data-type="B">辱罵</div>
+              </div>
+            </div>
+          </div>
         </div>
       <% } }%>
     </div>
@@ -91,7 +111,17 @@
         <div class="ui vertical segment">
           <p>[<%- comment[i].semester %>]</p>
           <p><%- comment[i].report_hw %></p>
-          <div class="ui top right attached label red button reportbtn" data-id="<%= comment[i].id %>">檢舉心得</div>
+          <br>
+          <div class="ui red tiny buttons">
+            <div class="ui button">檢舉文章</div>
+            <div class="ui floating dropdown icon button">
+              <i class="dropdown icon"></i>
+              <div class="menu">
+                <div class="item reportbtn" data-id="<%= comment[i].id %>" data-type="A">不實內容</div>
+                <div class="item reportbtn" data-id="<%= comment[i].id %>" data-type="B">辱罵</div>
+              </div>
+            </div>
+          </div>
         </div>
       <% } }%>
     </div>
@@ -103,7 +133,17 @@
         <div class="ui vertical segment">
           <p>[<%- comment[i].semester %>]</p>
           <p><%- comment[i].score_style %></p>
-          <div class="ui top right attached label red button reportbtn" data-id="<%= comment[i].id %>">檢舉心得</div>
+          <br>
+          <div class="ui red tiny buttons">
+            <div class="ui button">檢舉文章</div>
+            <div class="ui floating dropdown icon button">
+              <i class="dropdown icon"></i>
+              <div class="menu">
+                <div class="item reportbtn" data-id="<%= comment[i].id %>" data-type="A">不實內容</div>
+                <div class="item reportbtn" data-id="<%= comment[i].id %>" data-type="B">辱罵</div>
+              </div>
+            </div>
+          </div>
         </div>
       <% } }%>
     </div>
@@ -140,11 +180,14 @@ $(document).ready(function(){
     moveAnimate("content3");
   });
 
+  $('.dropdown').dropdown({direction: 'upward'});
+
   /* Ajax Report post */
   $('.reportbtn').on('click',function(){
     var postid = this.getAttribute("data-id");
+    var type = this.getAttribute("data-type");
     $.ajax({
-      url: '/post/report/'+postid,
+      url: '/post/report/'+postid+"?type="+type,
       type: 'POST',
       success: function(response) {
         if(response=="Success"){

@@ -29,7 +29,6 @@ router.get('/', function(req, res) {
   }
   else if(req.query.hasOwnProperty("catalog")){
     db.FindbyColumn('course', columns,{"系號": req.query.catalog} ,function(courses){
-      console.log(req.query.catalog);
       check_Login(courses);
     });
   }

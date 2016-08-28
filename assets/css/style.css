@@ -182,9 +182,10 @@ html *{
   min-width: 300px;
 }
 
-.timeTable p{
+.timeTable p, .chooseCourse p{
   cursor: pointer;
 }
+
 /* post table */
 
 .orderbtn{

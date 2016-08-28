@@ -119,7 +119,10 @@ function conditionjoin(conditions){
       condition = condition + i + " = " + conditions[i];
     }
     else{
-      condition = condition + i + " = \'" + conditions[i] + "\'";
+      if(conditions[i].split(",").length != 1 )
+        condition = condition + i + " in(" + conditions[i] + ")";
+      else
+        condition = condition + i + " in( \'" + conditions[i].replace(/\'/g, "") + "\')";
     }
     if(count == size){
       return condition;

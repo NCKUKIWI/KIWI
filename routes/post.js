@@ -17,7 +17,7 @@ router.post('/create', function(req, res) {
     var userid = parseInt(req.user.id);
     var courseid = parseInt(req.body.course_id.replace(/\'|\#|\/\*/g,""));
     console.log('User_id: '+req.user.id);
-    req.checkBody('comment', '修課心得不可為空').notEmpty();
+    //req.checkBody('comment', '修課心得不可為空').notEmpty();
     var errors = req.validationErrors();
     if (errors) {
       console.log("error");

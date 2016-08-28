@@ -2,7 +2,7 @@
   <button type="button" class="close" data-dismiss="modal">
     <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
   </button>
-  <h1 class="modal-title">新增心得</h1>
+  <h1 class="modal-title">新增心得(所有項目皆為選填)</h1>
 </div>
 <div class="modal-body">
     <form class="ui form" id="createform">
@@ -19,7 +19,7 @@
           </div>
           <div class="three wide field">
             <label>學期:</label>
-            <select name="semester" form="createform">
+            <select name="semester" form="createform" style="height: 42px;">
               <option value="104-2">104-2</option>
               <option value="104-1">104-1</option>
               <option value="103-2">103-2</option>
@@ -97,8 +97,9 @@
           <label>作業考試: </label>
           <textarea rows="4" cols="50" name="report_hw" form="createform"></textarea>
         </div>
-        <div class="field">
+        <div class="field" style="text-align:center;">
           <div class="ui button" id="createform-submit">送出</div>
+          <div class="ui button" data-dismiss="modal">返回</div>
         </div>
       </div>
     </form>

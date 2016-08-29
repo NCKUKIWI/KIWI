@@ -39,6 +39,14 @@
 - `views` -> template files (View)
   - `public` -> layouts
 
+##Cookie and Session
+
+操作session和cookie的方法
+
+`res.cookie('uid', 1, {maxAge: 60 * 1000});`
+
+`req.session.uid=1`
+
 ##View
 
 ###ejs locals turtorial

@@ -30,9 +30,11 @@ app.use("/assets",express.static(__dirname + "/assets"));
 
 //Handle sessions and cookie
 app.use(session({
+  cookie: { maxAge: 1000 * 60 * 30 },
+  //store:mysql(),
   secret:'secret',
+  resave: true,
   saveUninitialized: true,
-  resave: true
 }));
 app.use(cookieParser('secretString'));
 

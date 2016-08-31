@@ -2,8 +2,24 @@ var express = require('express');
 var router = express.Router();
 var db = require('../model/db');
 
+/* A router-level middleware for check login
+
+function auth() {
+  return function (req, res, next) {
+    if(req.user != undefined){
+      console.log("Log in");
+      return next()
+    }
+    else{
+      console.log("Not login");
+      res.redirect('../');
+    }
+  }
+}
+
+*/
 /* index */
-router.get('/', function(req, res) {
+router.get('/',function(req, res) {
   console.log('\n'+'GET /course');
   /*  設定要的欄位 */
   var columns = ['id','課程名稱','系號', '選課序號', '課程碼','分班碼', '系所名稱','老師','時間','(SELECT COUNT(*) FROM post WHERE post.course_id = course.id ) AS comment_amt'];

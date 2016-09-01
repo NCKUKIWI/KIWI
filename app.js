@@ -24,9 +24,11 @@ app.set('view engine','ejs');                   //使用ejs作為template
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
-/* A app-level middleware for check login
+/* A app-level middleware function
 app.use(function (req, res, next) {
-  console.log('Time:', Date.now());
+  req.test = function(){
+   console.log('action');
+  }
   next();
 });
 */

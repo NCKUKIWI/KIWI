@@ -28,6 +28,7 @@
       <% } %>
       -->
       <button class="ui grey button" onclick="window.open('http://class-qry.acad.ncku.edu.tw/syllabus/online_display.php?syear=0105&sem=1&co_no=<%= courseInfo.課程碼 %>&class_code=<%= courseInfo.分班碼 %>')" config='height = N,width = N'>課程大綱</button><br>
+      <button class="courseaddpost ui grey button">提供心得</button><br>
       <% if(courserate_id == 0){ %>
         <button class="ui grey button showcourseratebtn" data-id="<%= courseInfo.id %>">評分課程</button>
       <% }else{ %>
@@ -136,6 +137,11 @@
 <script src="../assets/js/hammer.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
+
+  $('.courseaddpost').on('click',function(){
+    $('#course-modal .close').click();
+    $('a[data-target="#new"]').click();
+  });
   // 將mobile的滑動效果裝上
   var content1 = document.getElementById('content1');
   var content2 = document.getElementById('content2');

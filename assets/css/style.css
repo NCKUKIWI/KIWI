@@ -53,6 +53,9 @@ html *{
   padding-right:10px;
   border-radius:0px;
   background:#34495e;
+  position: fixed;
+  width: 100%;
+  z-index: 999;
 }
 
 .navbar-toggle{
@@ -370,17 +373,22 @@ html *{
   height:15px;
 }
 
+.ui.button.courseaddpost{
+  display:block;
+  margin:10px auto;
+  width:25%;
+}
 /* cart table */
 #cart-table .option{
-  width:10%;
+  width:5%;
 }
 
 #cart-table .course_name{
-  width:60%;
+  width:80%;
 }
 
 #cart-table .course_time{
-  width:30%;
+  width:15%;
 }
 
 

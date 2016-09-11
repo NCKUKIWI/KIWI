@@ -13,12 +13,12 @@
       <p>評分比數:<%= rate_count %></p>
     </div>
     <div class="eight wide column" style="text-align:right;">
-      <button class="ui grey button" style="cursor: default;"><%= courseInfo.系所名稱 %> - <%= courseInfo.選課序號 %></button><br>
-      <button class="ui grey button" style="cursor: default;"><%= courseInfo.學分 %> 學分</button><br>
+      <button class="ui grey button" style="cursor:default;font-weight:normal;"><%= courseInfo.系所名稱 %> - <%= courseInfo.選課序號 %></button><br>
+      <button class="ui grey button" style="cursor:default;font-weight:normal;"><%= courseInfo.學分 %> 學分</button><br>
       <% if(courseInfo.系所名稱 == "通識中心GE"){%>
-        <button class="ui grey button" style="cursor: default;"><%= courseInfo.類別 %></button><br>
+        <button class="ui grey button" style="cursor:default;font-weight:normal;"><%= courseInfo.類別 %></button><br>
       <% }else if (courseInfo.備註 != ""){%>
-        <button class="ui grey button" style="cursor: default;"><%= courseInfo.備註 %></button><br>
+        <button class="ui grey button" style="cursor:default;font-weight:normal;"><%= courseInfo.備註 %></button><br>
       <% } %>
       <!--
       <% if(check !=null && check.length != 0){ %>
@@ -27,12 +27,11 @@
         <button class="ui grey button showaddcoursebtn" data-id="<%= courseInfo.id %>">加入課程</button><br>
       <% } %>
       -->
-      <button class="ui grey button" onclick="window.open('http://class-qry.acad.ncku.edu.tw/syllabus/online_display.php?syear=0105&sem=1&co_no=<%= courseInfo.課程碼 %>&class_code=<%= courseInfo.分班碼 %>')" config='height = N,width = N'>課程大綱</button><br>
-      <button class="courseaddpost ui grey button">提供心得</button><br>
+      <button class="ui grey button" onclick="window.open('http://class-qry.acad.ncku.edu.tw/syllabus/online_display.php?syear=0105&sem=1&co_no=<%= courseInfo.課程碼 %>&class_code=<%= courseInfo.分班碼 %>')" config='height = N,width = N' style="font-weight:normal;">課程大綱</button><br>
       <% if(courserate_id == 0){ %>
-        <button class="ui grey button showcourseratebtn" data-id="<%= courseInfo.id %>">評分課程</button>
+        <button class="ui grey button showcourseratebtn" style="font-weight:normal;" data-id="<%= courseInfo.id %>">評分課程</button>
       <% }else{ %>
-        <button class="ui grey button delcourseratebtn" data-id="<%= courserate_id %>" data-courseid="<%= courseInfo.id %>">刪除評分</button>
+        <button class="ui grey button delcourseratebtn" style="font-weight:normal;" data-id="<%= courserate_id %>" data-courseid="<%= courseInfo.id %>">刪除評分</button>
       <% } %>
     </div>
   </div>
@@ -64,6 +63,7 @@
       <% if(courseInfo.comment == 0){%>
         <br>
         <h1 style="text-align: center">尚無內容</h1>
+        <button class="courseaddpost ui button">提供心得</button>
       <%}else { for(var i = 0; i < courseInfo.comment; i++){ %>
         <div class="ui vertical segment">
           <p>[<%- comment[i].semester %>]</p>
@@ -82,6 +82,7 @@
       <% if(courseInfo.course_style == 0){%>
         <br>
         <h1 style="text-align: center">尚無內容</h1>
+        <button class="courseaddpost ui button">提供心得</button>
       <%}else { for(var i = 0; i < courseInfo.course_style; i++){ %>
         <div class="ui vertical segment">
           <p>[<%- comment[i].semester %>]</p>
@@ -100,6 +101,7 @@
       <% if(courseInfo.report_hw == 0){%>
         <br>
         <h1 style="text-align: center">尚無內容</h1>
+        <button class="courseaddpost ui button">提供心得</button>
       <%}else { for(var i = 0; i < courseInfo.report_hw; i++){ %>
         <div class="ui vertical segment">
           <p>[<%- comment[i].semester %>]</p>
@@ -118,6 +120,7 @@
       <% if(courseInfo.score_style == 0){%>
         <br>
         <h1 style="text-align: center">尚無內容</h1>
+        <button class="courseaddpost ui button">提供心得</button>
       <%} else { for(var i = 0; i < courseInfo.score_style; i++){ %>
         <div class="ui vertical segment">
           <p>[<%- comment[i].semester %>]</p>

@@ -2,31 +2,23 @@
 <table class="ui celled table unstackable" id="cart-table">
   <thead>
     <tr>
-      <th class="option">操作</th>
-      <th class="course_name">課程名稱</th>
-      <th class="course_time">時間</th>
+      <th colspan="3">課程清單</th>
     </tr>
   </thead>
   <tbody>
     <% if(user != undefined){ %>
-      <% if(carts.length!=0){ %>
-        <% for(var i in carts){ %>
-          <tr class="course-row" id="course-<%= carts[i].id %>" data-id="<%= carts[i].id %>">
-            <td>
-              <i class="trash icon delcoursebtn"  data-id="<%= carts[i].id %>"></i>
-              <i class="plus icon addschedulebtn" data-id="<%= carts[i].id %>" data-time="<%= carts[i].時間 %>" data-name="<%= carts[i].課程名稱 %>"></i>
-            </td>
-            <td class="course_name" data-toggle="modal" data-target="#course-modal" data-id="<%= carts[i].id %>">
-              <%= carts[i].課程名稱 %>
-            </td>
-            <td><%= carts[i].時間 %></td>
-          </tr>
-        <% } %>
-      <% }else{ %>
-        <td colspan="3" style="text-align:center;">無課程</td>
+      <% for(var i in carts){ %>
+        <tr class="course-row" id="course-<%= carts[i].id %>" data-id="<%= carts[i].id %>">
+          <td class="course_name" data-toggle="modal" data-target="#course-modal" data-id="<%= carts[i].id %>">
+            <%= carts[i].課程名稱 %>
+          </td>
+          <td class="course_time"><%= carts[i].時間 %></td>
+          <td class="option">
+            <i class="trash icon delcoursebtn"  data-id="<%= carts[i].id %>"></i>
+            <i class="plus icon addschedulebtn" data-id="<%= carts[i].id %>" data-time="<%= carts[i].時間 %>" data-name="<%= carts[i].課程名稱 %>"></i>
+          </td>
+        </tr>
       <% } %>
-    <% }else{ %>
-      <td colspan="3" style="text-align:center;">無課程</td>
     <% } %>
   </tbody>
 </table>

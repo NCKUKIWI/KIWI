@@ -140,10 +140,20 @@
 <script src="../assets/js/hammer.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
-
   $('.courseaddpost').on('click',function(){
+    var cid = "<%= courseInfo.id %>";
+    var cname = "<%= courseInfo.課程名稱 %>";
+    var cteacher = "<%- courseInfo.老師 %>";
+    var ccatalog = "<%- courseInfo.系所名稱 %>";
     $('#course-modal .close').click();
     $('a[data-target="#new"]').click();
+    setTimeout(function() {
+      $('input[name=course]').val(cname+"-"+cteacher);
+      $('input[name=catalog]').val(ccatalog);
+      $('input[name=course_name]').val(cname);
+      $('input[name=course_id]').val(cid);
+      $('input[name=teacher]').val(cteacher);
+    },2000);
   });
   // 將mobile的滑動效果裝上
   var content1 = document.getElementById('content1');

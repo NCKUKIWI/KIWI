@@ -29,7 +29,7 @@ router.get('/',function(req, res) {
     // if someone want to query alternately by "space"
     var QueryArray = cleanQuery.split(" ");
 
-    db.FindbyColumnFuzzy('course_105', columns, QueryArray ,function(courses){
+    db.FindbyColumnFuzzy('course_105_2', columns, QueryArray ,function(courses){
       check_Login(courses);
     });
   }

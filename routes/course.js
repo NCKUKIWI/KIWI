@@ -22,34 +22,34 @@ function auth() {
 router.get('/',function(req, res) {
   console.log('\n'+'GET /course');
   /*  設定要的欄位 */
-  var columns = ['id','課程名稱','系號', '選課序號', '課程碼','分班碼', '系所名稱','老師','時間','(SELECT COUNT(*) FROM post WHERE post.course_id = course.id ) AS comment_amt'];
+  var columns = ['id','課程名稱','系號', '課程碼','分班碼', '系所名稱','老師','時間','(SELECT COUNT(*) FROM post WHERE post.course_id = course_105_2.id ) AS comment_amt'];
   if(req.query.hasOwnProperty("queryw")){
     // clean the query to avoid sql injection
     var cleanQuery = req.query.queryw.replace(/\'|\#|\/\*/g,"");
     // if someone want to query alternately by "space"
     var QueryArray = cleanQuery.split(" ");
 
-    db.FindbyColumnFuzzy('course', columns, QueryArray ,function(courses){
+    db.FindbyColumnFuzzy('course_105', columns, QueryArray ,function(courses){
       check_Login(courses);
     });
   }
   else if(req.query.hasOwnProperty("teacher")){
-    db.FindbyColumn('course', columns,{"老師": req.query.teacher} ,function(courses){
+    db.FindbyColumn('course_105_2', columns,{"老師": req.query.teacher} ,function(courses){
       check_Login(courses);
     });
   }
   else if(req.query.hasOwnProperty("course_name")){
-    db.FindbyColumn('course', columns,{"課程名稱": req.query.course_name} ,function(courses){
+    db.FindbyColumn('course_105_2', columns,{"課程名稱": req.query.course_name} ,function(courses){
       check_Login(courses);
     });
   }
   else if(req.query.hasOwnProperty("catalog")){
-    db.FindbyColumn('course', columns,{"系號": req.query.catalog} ,function(courses){
+    db.FindbyColumn('course_105_2', columns,{"系號": req.query.catalog} ,function(courses){
       check_Login(courses);
     });
   }
   else{
-    db.GetColumn('course',columns,{'column':'id','order':'DESC'},function(courses){
+    db.GetColumn('course_105_2',columns,{'column':'id','order':'DESC'},function(courses){
       check_Login(courses);
     });
   }

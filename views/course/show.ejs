@@ -27,7 +27,7 @@
         <button class="ui grey button showaddcoursebtn" data-id="<%= courseInfo.id %>">加入課程</button><br>
       <% } %>
       -->
-      <button class="ui grey button" onclick="window.open('http://class-qry.acad.ncku.edu.tw/syllabus/online_display.php?syear=0105&sem=1&co_no=<%= courseInfo.課程碼 %>&class_code=<%= courseInfo.分班碼 %>')" config='height = N,width = N' style="font-weight:normal;">課程大綱</button><br>
+      <button class="ui grey button" onclick="window.open('http://class-qry.acad.ncku.edu.tw/syllabus/online_display.php?syear=0105&sem=2&co_no=<%= courseInfo.課程碼 %>&class_code=<%= courseInfo.分班碼 %>')" config='height = N,width = N' style="font-weight:normal;">課程大綱</button><br>
       <% if(courserate_id == 0){ %>
         <button class="ui grey button showcourseratebtn" style="font-weight:normal;" data-id="<%= courseInfo.id %>">評分課程</button>
       <% }else{ %>

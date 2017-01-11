@@ -135,10 +135,10 @@
 
           var courseWeek = mergeArr(time);
 
-          if(chooseWeeks.match(courseWeek) != null){
+          if(matchFind(chooseWeeks, courseWeek)){
             var isThechoose = true;
             for(var j in time){
-              if(table[j].match(time[j]) == null){
+              if(!matchFind(table[j], time[j])){
                 isThechoose = false;
                 break;
               }
@@ -233,6 +233,14 @@
         $('#course-modal').data('bs.modal').handleUpdate();
       }
     });
+  }
+
+  function matchFind(choose, course){
+    course = course.split("");
+    for(var i in course){
+      if(!choose.match(course[i])) return false;
+    } // 為了避免課程24沒被[234]的搜尋找到，所以把課程2, 4拆開去match
+    return true;
   }
 
 </script>

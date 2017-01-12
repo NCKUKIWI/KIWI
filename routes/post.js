@@ -57,7 +57,7 @@ router.post('/create', function(req, res) {
 router.get('/new', function(req, res) {
   console.log('\n'+'GET /post/new');
   var colmuns = ['id','課程名稱','老師','時間','系所名稱'];
-  db.GetColumn('course_105',colmuns,{'column':'id','order':'DESC'},function(course){
+  db.GetColumn('course',colmuns,{'column':'id','order':'DESC'},function(course){
     res.render('post/new',{
       'course': course,
       'user': req.user

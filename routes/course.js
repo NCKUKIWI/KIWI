@@ -106,22 +106,16 @@ router.get('/:id', function(req, res) {
         var sweet=0;
         var hard=0;
         var recommand=0;
-        var give =0;
-        var got =0;
         var rate_count=0;
         if(datas.length>0){
           for(var i in datas ){
             sweet+=datas[i].sweet;
             hard+=datas[i].hard;
             recommand+=datas[i].recommand;
-            give+=datas[i].give;
-            got+=datas[i].got;
           }
           sweet/=datas.length;
           hard/=datas.length;
           recommand/=datas.length;
-          give/=datas.length;
-          got/=datas.length;
           rate_count=datas.length;
         }
         if(req.user == undefined){
@@ -129,8 +123,6 @@ router.get('/:id', function(req, res) {
             'recommand':recommand,
             'hard':hard,
             'sweet':sweet,
-            'give':give,
-            'got':got,
             'rate_count':rate_count,
             'courseInfo': courseInfo,
             'comment': comment,

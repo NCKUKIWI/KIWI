@@ -23,6 +23,14 @@
     </p>
   </div>
   <div class="partA">
+    <% if(rate != null){ %>
+      <p><span class="post_title">付出程度:</span>
+        <%= rate.give %>&nbsp;&nbsp;&nbsp;&nbsp;
+        <span class="post_title">收穫程度:</span>
+        <%= rate.got %>
+      </p>
+      <br>
+    <% } %>
     <p><span class="post_title">上課內容:</span>
       <br>
       <%- post.course_style %>

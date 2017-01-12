@@ -37,6 +37,7 @@ router.post('/create', function(req, res) {
       }
       db.Insert('post',post,function(err,results){
         if(err) throw err;
+        console.log(results);
         var rate = {
           sweet:parseInt(req.body.sweet.replace(/\'|\#|\/\*/g,"")),
           hard:parseInt(req.body.hard.replace(/\'|\#|\/\*/g,"")),
@@ -44,7 +45,8 @@ router.post('/create', function(req, res) {
           give:parseInt(req.body.give.replace(/\'|\#|\/\*/g,"")),
           got:parseInt(req.body.got.replace(/\'|\#|\/\*/g,"")),
           course_id:courseid,
-          user_id: userid
+          user_id: userid,
+          post_id: results.insertId
         }
         db.Insert('course_rate',rate,function(err,results){
           if(err) throw err;
@@ -77,9 +79,21 @@ router.get('/:id', function(req, res) {
   else{
     console.log('\n'+'GET /post/'+id);
     db.FindbyID('post',id,function(post){
-      res.render('post/show',{
-        'post':post,
-        'user': req.user
+      db.FindbyColumn('course_rate',['give','got'],{"post_id":post.id} ,function(rate){
+        if(rate.length > 0){
+          res.render('post/show',{
+            'post':post,
+            'user': req.user,
+            'rate':rate[0]
+          });
+        }
+        else{
+          res.render('post/show',{
+            'post':post,
+            'user': req.user,
+            'rate':null
+          });
+        }
       });
     });
   }

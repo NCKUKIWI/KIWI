@@ -41,6 +41,8 @@ router.post('/create', function(req, res) {
           sweet:parseInt(req.body.sweet.replace(/\'|\#|\/\*/g,"")),
           hard:parseInt(req.body.hard.replace(/\'|\#|\/\*/g,"")),
           recommand:parseInt(req.body.recommand.replace(/\'|\#|\/\*/g,"")),
+          give:parseInt(req.body.give.replace(/\'|\#|\/\*/g,"")),
+          got:parseInt(req.body.got.replace(/\'|\#|\/\*/g,"")),
           course_id:courseid,
           user_id: userid
         }

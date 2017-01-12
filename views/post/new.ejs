@@ -20,6 +20,7 @@
           <div class="three wide field">
             <label>學期:</label>
             <select name="semester" form="createform" style="height: 42px;">
+              <option value="105-1">105-1</option>
               <option value="104-2">104-2</option>
               <option value="104-1">104-1</option>
               <option value="103-2">103-2</option>
@@ -33,6 +34,8 @@
       <input type="hidden" name="recommand" value="1">
       <input type="hidden" name="hard" value="1">
       <input type="hidden" name="sweet" value="1">
+      <input type="hidden" name="give" value="1">
+      <input type="hidden" name="got" value="1">
       <input type="hidden" name="catalog" value="0">
       <input type="hidden" name="course_name" value="0">
       <input type="hidden" name="course_id" value="0">
@@ -71,6 +74,36 @@
         <div class="field">
           <label>分數甜度:</label>
           <div class="scorebar" id="sweet">
+            <div class="scorebtn" style="border-left:1px solid black;" data-score="1">1</div>
+            <div class="scorebtn" data-score="2">2</div>
+            <div class="scorebtn" data-score="3">3</div>
+            <div class="scorebtn" data-score="4">4</div>
+            <div class="scorebtn" data-score="5">5</div>
+            <div class="scorebtn" data-score="6">6</div>
+            <div class="scorebtn" data-score="7">7</div>
+            <div class="scorebtn" data-score="8">8</div>
+            <div class="scorebtn" data-score="9">9</div>
+            <div class="scorebtn" data-score="10">10</div>
+          </div>
+        </div>
+        <div class="field">
+          <label>付出程度:</label>
+          <div class="scorebar" id="give">
+            <div class="scorebtn" style="border-left:1px solid black;" data-score="1">1</div>
+            <div class="scorebtn" data-score="2">2</div>
+            <div class="scorebtn" data-score="3">3</div>
+            <div class="scorebtn" data-score="4">4</div>
+            <div class="scorebtn" data-score="5">5</div>
+            <div class="scorebtn" data-score="6">6</div>
+            <div class="scorebtn" data-score="7">7</div>
+            <div class="scorebtn" data-score="8">8</div>
+            <div class="scorebtn" data-score="9">9</div>
+            <div class="scorebtn" data-score="10">10</div>
+          </div>
+        </div>
+        <div class="field">
+          <label>收穫程度:</label>
+          <div class="scorebar" id="got">
             <div class="scorebtn" style="border-left:1px solid black;" data-score="1">1</div>
             <div class="scorebtn" data-score="2">2</div>
             <div class="scorebtn" data-score="3">3</div>
@@ -172,6 +205,19 @@ $(document).ready(function(){
     $(this).css('background','#D8D8D8');
     var rate = this.getAttribute("data-score");
     $('input[name=sweet]').val(rate);
+  })
+
+  $('#give .scorebtn').on('click',function(){
+    $('#give .scorebtn').css('background','white');
+    $(this).css('background','#D8D8D8');
+    var rate = this.getAttribute("data-score");
+    $('input[name=give]').val(rate);
+  })
+  $('#got .scorebtn').on('click',function(){
+    $('#got .scorebtn').css('background','white');
+    $(this).css('background','#D8D8D8');
+    var rate = this.getAttribute("data-score");
+    $('input[name=got]').val(rate);
   })
 });
 </script>

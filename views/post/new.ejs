@@ -2,7 +2,7 @@
   <button type="button" class="close" data-dismiss="modal">
     <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
   </button>
-  <h1 class="modal-title">新增心得(所有項目皆為選填)</h1>
+  <h1 class="modal-title">新增心得</h1>
 </div>
 <div class="modal-body">
     <form class="ui form" id="createform">
@@ -37,9 +37,9 @@
       <input type="hidden" name="give" value="1">
       <input type="hidden" name="got" value="1">
       <input type="hidden" name="catalog" value="0">
-      <input type="hidden" name="course_name" value="0">
+      <input type="hidden" name="course_name" value="">
       <input type="hidden" name="course_id" value="0">
-      <input type="hidden" name="teacher" value="0">
+      <input type="hidden" name="teacher" value="">
       <div class="partB">
         <div class="field">
           <label>推薦程度:</label>
@@ -173,12 +173,12 @@ $(document).ready(function(){
           window.location.href = "/";
         }
         else {
-          var errosbox = "<div class='ui negative message'><div class='header'>錯誤</div><ul class='list'>";
+          var errosbox = "<div class='partA' style='padding:10px 25px;'>";
           for (var i in response) {
-            var dom = "<li>" + response[i].msg + "</li>";
+            var dom = "<p style='color:red;'>" + response[i].msg + "</p>";
             errosbox += dom;
           }
-          errosbox += "</ul></div>";
+          errosbox+="</div>";
           $('#new .modal-body').prepend(errosbox);
           $('#new').data('bs.modal').handleUpdate();
         }

@@ -420,25 +420,18 @@
 
     // 大學部、研究所按鈕清除or全選
     $('#courseSelect').on('click', function(){
-      // if($('.bachelor')[1].style.display == 'flex'){
-      //   if($('.bachelor .button.active').length == 0) $('.bachelor .mini.button').addClass('active');
-      //   else $('.bachelor .mini.button.active').removeClass('active');
-      // }
-      // else{
-      //   if($('.master .button.active').length == 0) $('.master .mini.button').addClass('active');
-      //   else $('.master .mini.button.active').removeClass('active');
-      // }
       if ($('.chooseCourse .ui.inverted.button.mini.active').length == 0){
         $('.chooseCourse .ui.inverted.button.mini').addClass('active');
       }
       else $('.chooseCourse .ui.inverted.button.mini.active').removeClass('active');
-
+      startQuery();
     });
 
     // 課表按鈕清除or全選
     $('#tableSelect').on('click', function(){
       if($('.timeTable .mini.button.active').length == 0) $('.timeTable .mini.button').addClass('active');
       else $('.timeTable .mini.button.active').removeClass('active');
+      startQuery();
     });
 
     // 切換大學部、研究所
@@ -460,9 +453,7 @@
 
     // 送出時間表查詢
     $('#sendTable').on('click', function(){
-      queryCourseDepartment();
-      filterCourseByTimetable();
-      changeCourse();
+      $('.timeTable').modal('hide');
     });
 
     $('.timeTable p, .chooseCourse p').on('click', function(){
@@ -476,13 +467,11 @@
         if($(this)[0].textContent == '工學院')
           $(this.parentNode.nextElementSibling.getElementsByClassName('button')).removeClass('active');
       }
-      $('#courseQuery').click(); // 每次點擊玩會開始query;（query course 或是timetable都一樣，所以選一個click();
+      startQuery(); // 每次點擊玩會開始query
     }); // 選擇大項目可以整條"被選" ex: 『理學院 』、『星期一』
 
     $('#courseQuery').on('click', function(){
-      queryCourseDepartment();
-      filterCourseByTimetable();
-      changeCourse();
+      $('.chooseCourse').modal('hide');
     });
 
     // 前面六個快捷系所的listener 
@@ -511,19 +500,25 @@
         default:
           console.log(catalog);
       }
-      $('#courseQuery').click();
+      startQuery();
     })
 
     // 為了讓每次點擊背後的課程自動篩選
     $('.chooseCourse .ui.inverted.button.mini').on('click', function(){
-      $('#courseQuery').click();
+      startQuery();
     });
 
     // 為了讓每次點擊背後的時間表自動篩選
     $('.timeTable .ui.inverted.button.mini').on('click', function(){
-      $('#sendTable').click();
+      startQuery();
     });
   });
+
+  function startQuery(){
+      queryCourseDepartment();
+      filterCourseByTimetable();
+      changeCourse();
+  }
 
   function queryCourseDepartment(){
     // $('.chooseCourse').modal('hide');

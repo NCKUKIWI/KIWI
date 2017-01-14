@@ -364,6 +364,7 @@
     $('.hotKey').on('click', function(){
       var catalog = this.text;
       $('.chooseCourse .ui.inverted.button.mini').removeClass('active');
+      $('.hotKey').css('background', '#dadada');
       switch(catalog){
         case 'A9 通識中心':
           $("div[departId = 'A9'").click();
@@ -386,6 +387,7 @@
         default:
           console.log(catalog);
       }
+      $(this).css('background', '#CACBCD')
       startQuery();
     })
 

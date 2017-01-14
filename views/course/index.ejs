@@ -58,7 +58,7 @@
 
   var nowCourse = []; // 用來裝目前query的系所課程（未用時間表篩選過的）
   var courses_Department = {}; // 用來分類所有系所，下面使用object property的方式逐一分類
-  
+
   for(var i in rawCourses){
     nowCourse.push(rawCourses[i]);
     if(courses_Department.hasOwnProperty(rawCourses[i].系號)){
@@ -360,26 +360,26 @@
       $('.chooseCourse').modal('hide');
     });
 
-    // 前面六個快捷系所的listener 
+    // 前面六個快捷系所的listener
     $('.hotKey').on('click', function(){
       var catalog = this.text;
       $('.chooseCourse .ui.inverted.button.mini').removeClass('active');
       $('.hotKey').css('background', '#dadada');
       switch(catalog){
         case 'A9 通識中心':
-          $("div[departId = 'A9'").click();
+          $("div[departId = 'A9']").click();
           break;
         case 'A2 體育室':
-          $("div[departId = 'A2'").click();
+          $("div[departId = 'A2']").click();
           break;
         case 'A1 外國語言':
-          $("div[departId = 'A1'").click();
+          $("div[departId = 'A1']").click();
           break;
         case 'A7 基礎國文':
-          $("div[departId = 'A7'").click();
+          $("div[departId = 'A7']").click();
           break;
         case 'A6 服務學習':
-          $("div[departId = 'A6'").click();
+          $("div[departId = 'A6']").click();
           break;
         case '全部課程':
           $('#courseSelect').click();

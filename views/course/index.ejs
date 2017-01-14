@@ -5,10 +5,10 @@
     </div>
     <div class="twelve wide column">
       <div id="content">
-        <div class="ui toggle checkbox" style="margin-bottom: 10px">
+        <div class="ui toggle checkbox" id="filter_haspost" style="margin-bottom: 10px">
             <input type="checkbox">
             <label >僅顯示有心得之課程</label>
-          </div>
+        </div>
         <table class="table" id="course-table">
           <tr>
             <!--
@@ -79,7 +79,7 @@
   //   }
   //   else{
   //     var dom = "<tr id='course-" + courses[i].id + "' class='notempty' data-toggle='modal' data-target='#course-modal' data-id='" + courses[i].id + "'><td class='course_name'> " + courses[i].課程名稱 + " <span class='badge'>" + courses[i].comment_amt + "</span>" + "</td><td> " + courses[i].系所名稱 + "</td><td>" + courses[i].老師 + "</td><td> " + courses[i].時間 + "</td></tr>";
-      
+
   //     if(coursesDomDepartment_haveComment.hasOwnProperty(courses[i].系號)){
   //       coursesDomDepartment_haveComment[courses[i].系號].push(dom);
   //     }
@@ -352,7 +352,7 @@
     });
 
     /* 如果用戶勾選只顯示有心得的課程 則將無心得的課程隱藏起來*/
-    $('.ui.checkbox').last().checkbox({
+    $('#filter_haspost').checkbox({
       onChecked: function() {
         $('.course-row').hide();
         for(var i in nowCourse){
@@ -418,9 +418,6 @@
       }
     });
 
-    $('.ui.checkbox').checkbox({debug: true});
-
-
     // 大學部、研究所按鈕清除or全選
     $('#courseSelect').on('click', function(){
       if($('.bachelor')[1].style.display == 'flex'){
@@ -431,7 +428,7 @@
         if($('.master .button.active').length == 0) $('.master .mini.button').addClass('active');
         else $('.master .mini.button.active').removeClass('active');
       }
-    }); 
+    });
 
     // 課表按鈕清除or全選
     $('#tableSelect').on('click', function(){
@@ -471,7 +468,7 @@
       }
       else {
         $(this.parentNode.getElementsByClassName('button')).removeClass('active');
-        if($(this)[0].textContent == '工學院') 
+        if($(this)[0].textContent == '工學院')
           $(this.parentNode.nextElementSibling.getElementsByClassName('button')).removeClass('active');
       }
     }); // 選擇大項目可以整條"被選" ex: 『理學院 』、『星期一』
@@ -604,7 +601,7 @@
       $("#course-table").append(courseTransforToDom(nowCourse[i]));
       now_index++;
     }
-    
+
     max_index = nowCourse.length;
 
 

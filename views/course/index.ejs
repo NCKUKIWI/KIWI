@@ -360,39 +360,46 @@
       $('.chooseCourse').modal('hide');
     });
 
-    // 前面六個快捷系所的listener 
+    // 前面五個快捷系所的listener 
     $('.hotKey').on('click', function(){
       var catalog = this.text;
       $('.chooseCourse .ui.inverted.button.mini').removeClass('active');
-      $('.hotKey').css('background', '#dadada');
-      switch(catalog){
-        case 'A9 通識中心':
-          $("div[departId = 'A9'").click();
-          break;
-        case 'A2 體育室':
-          $("div[departId = 'A2'").click();
-          break;
-        case 'A1 外國語言':
-          $("div[departId = 'A1'").click();
-          break;
-        case 'A7 基礎國文':
-          $("div[departId = 'A7'").click();
-          break;
-        case 'A6 服務學習':
-          $("div[departId = 'A6'").click();
-          break;
-        case '全部課程':
-          $('#courseSelect').click();
-          break;
-        default:
-          console.log(catalog);
+
+      if($(this).hasClass('active')){
+        $(this).removeClass('active');
+        $(this).css('background', '#dadada');
       }
-      $(this).css('background', '#CACBCD');
+      else {
+        $(this).addClass('active');
+        $(this).css('background', 'rgba(0,0,0,0.3)');
+      }
+
+      // 找出目前被選的
+      var catagoryArr = $('.hotKey.active');
+      for(var i = 0; i < catagoryArr.length; i++){
+        var department_id = catagoryArr[i].text[0] + catagoryArr[i].text[1];
+        $("div[departId = " + department_id + "]").addClass('active')
+      }
+
+      $('.hotKeyAll').css('background', '#dadada');
+
       startQuery();
-    })
+    });
+
+    $('.hotKeyAll').on('click', function(){
+      $('.hotKey').removeClass('active');
+      $('.hotKey').css('background', '#dadada');
+      $('.chooseCourse .ui.inverted.button.mini').removeClass('active');
+      $('#courseSelect').click();
+      $(this).css('background', 'rgba(0,0,0,0.3)');
+      startQuery();
+    });
 
     // 為了讓每次點擊背後的課程自動篩選
     $('.chooseCourse .ui.inverted.button.mini').on('click', function(){
+      $('.hotKey').removeClass('active');
+      $('.hotKey').css('background', '#dadada');
+      $('.hotKeyAll').css('background', '#dadada');
       startQuery();
     });
 

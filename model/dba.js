@@ -5,8 +5,8 @@ DELETE 3
 UPDATE 4
 */
 
-//var connection = require('../config');
-//connection = connection.connection;
+var connection = require('../config');
+connection = connection.connection;
 
 var start;
 var end;
@@ -324,12 +324,12 @@ db.prototype.run = function (callback){
   }
   console.log("\n"+this.sql);
   var sql = this.sql;
-  end = new Date().getTime();
-  var time = end - start;
-  console.log("Execute time: "+time+" ms");
   this.init();
   connection.query(sql,function(err, results, fields){
     if (err) throw err;
+    end = new Date().getTime();
+    var time = end - start;
+    console.log("Execute time: "+time+" ms");
     callback(results);
   });
 };
@@ -359,12 +359,12 @@ db.prototype.get = function (callback){
   }
   console.log("\n"+this.sql);
   var sql = this.sql;
-  end = new Date().getTime();
-  var time = end - start;
-  console.log("Execute time: "+time+" ms");
   this.init();
   connection.query(sql,function(err, results, fields){
     if (err) throw err;
+    end = new Date().getTime();
+    var time = end - start;
+    console.log("Execute time: "+time+" ms");
     return results;
   });
 };

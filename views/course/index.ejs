@@ -420,14 +420,19 @@
 
     // 大學部、研究所按鈕清除or全選
     $('#courseSelect').on('click', function(){
-      if($('.bachelor')[1].style.display == 'flex'){
-        if($('.bachelor .button.active').length == 0) $('.bachelor .mini.button').addClass('active');
-        else $('.bachelor .mini.button.active').removeClass('active');
+      // if($('.bachelor')[1].style.display == 'flex'){
+      //   if($('.bachelor .button.active').length == 0) $('.bachelor .mini.button').addClass('active');
+      //   else $('.bachelor .mini.button.active').removeClass('active');
+      // }
+      // else{
+      //   if($('.master .button.active').length == 0) $('.master .mini.button').addClass('active');
+      //   else $('.master .mini.button.active').removeClass('active');
+      // }
+      if ($('.chooseCourse .ui.inverted.button.mini.active').length == 0){
+        $('.chooseCourse .ui.inverted.button.mini').addClass('active');
       }
-      else{
-        if($('.master .button.active').length == 0) $('.master .mini.button').addClass('active');
-        else $('.master .mini.button.active').removeClass('active');
-      }
+      else $('.chooseCourse .ui.inverted.button.mini.active').removeClass('active');
+
     });
 
     // 課表按鈕清除or全選
@@ -471,6 +476,7 @@
         if($(this)[0].textContent == '工學院')
           $(this.parentNode.nextElementSibling.getElementsByClassName('button')).removeClass('active');
       }
+      $('#courseQuery').click(); // 每次點擊玩會開始query;（query course 或是timetable都一樣，所以選一個click();
     }); // 選擇大項目可以整條"被選" ex: 『理學院 』、『星期一』
 
     $('#courseQuery').on('click', function(){
@@ -479,10 +485,48 @@
       changeCourse();
     });
 
+    // 前面六個快捷系所的listener 
+    $('.hotKey').on('click', function(){
+      var catalog = this.text;
+      $('.chooseCourse .ui.inverted.button.mini').removeClass('active');
+      switch(catalog){
+        case 'A9 通識中心':
+          $("div[departId = 'A9'").click();
+          break;
+        case 'A2 體育室':
+          $("div[departId = 'A2'").click();
+          break;
+        case 'A1 外國語言':
+          $("div[departId = 'A1'").click();
+          break;
+        case 'A7 基礎國文':
+          $("div[departId = 'A7'").click();
+          break;
+        case 'A6 服務學習':
+          $("div[departId = 'A6'").click();
+          break;
+        case '全部課程':
+          $('#courseSelect').click();
+          break;
+        default:
+          console.log(catalog);
+      }
+      $('#courseQuery').click();
+    })
+
+    // 為了讓每次點擊背後的課程自動篩選
+    $('.chooseCourse .ui.inverted.button.mini').on('click', function(){
+      $('#courseQuery').click();
+    });
+
+    // 為了讓每次點擊背後的時間表自動篩選
+    $('.timeTable .ui.inverted.button.mini').on('click', function(){
+      $('#sendTable').click();
+    });
   });
 
   function queryCourseDepartment(){
-    $('.chooseCourse').modal('hide');
+    // $('.chooseCourse').modal('hide');
     var chooseCourse = $('.chooseCourse  div div .active');
     var selectDepart = [];
     for(var i = 1; i < chooseCourse.length; i++){
@@ -499,7 +543,7 @@
   }
 
   function filterCourseByTimetable(){
-    $('.timeTable').modal('hide');
+    // $('.timeTable').modal('hide');
     chooseTable = $('.timeTable  div div .active');
     var table = {};
     for(var i = 0; i < chooseTable.length; i++){

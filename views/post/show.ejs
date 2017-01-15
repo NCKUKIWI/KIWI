@@ -63,42 +63,44 @@
   </div>
 </div>
 <script>
-  /* Ajax DEL post */
-  $('.delbtn').on('click',function(){
-    console.log('Click');
-    var postid = this.getAttribute("data-id");
-    console.log(postid);
-    $.ajax({
-      url: '/post/'+postid,
-      type: 'DELETE',
-      success: function(response) {
-        $('#post-modal .close').click();
-        $('#post-'+postid).remove();
-      }
-    });
-  });
-
-  /* Ajax Report post */
-  $('.reportbtn').on('click',function(){
-    var postid = this.getAttribute("data-id");
-    var type = this.getAttribute("data-type");
-    $.ajax({
-      url: '/post/report/'+postid+"?type="+type,
-      type: 'POST',
-      success: function(response) {
-        if(response=="Success"){
-          toastr.success('檢舉成功!');
-        }
-        else if(response=="Already report"){
-          toastr.success('已經檢舉過囉!');
-        }
-        else{
-          toastr.warning('<a href="/user/auth/facebook">請先登入</a>');
-        }
-      }
-    });
-  });
   $(document).ready(function(){
+    /* Dropdown for Report btn */
     $('.dropdown').dropdown({direction: 'upward'});
+
+    /* Ajax DEL post */
+    $('.delbtn').on('click',function(){
+      console.log('Click');
+      var postid = this.getAttribute("data-id");
+      console.log(postid);
+      $.ajax({
+        url: '/post/'+postid,
+        type: 'DELETE',
+        success: function(response) {
+          $('#post-modal .close').click();
+          $('#post-'+postid).remove();
+        }
+      });
+    });
+
+    /* Ajax Report post */
+    $('.reportbtn').on('click',function(){
+      var postid = this.getAttribute("data-id");
+      var type = this.getAttribute("data-type");
+      $.ajax({
+        url: '/post/report/'+postid+"?type="+type,
+        type: 'POST',
+        success: function(response) {
+          if(response=="Success"){
+            toastr.success('檢舉成功!');
+          }
+          else if(response=="Already report"){
+            toastr.success('已經檢舉過囉!');
+          }
+          else{
+            toastr.warning('<a href="/user/auth/facebook">請先登入</a>');
+          }
+        }
+      });
+    });
   })
 </script>

@@ -1,242 +1,3 @@
-<script src="../assets/js/searchItem.js"></script>
-<script type="text/javascript">
-
-  var nowCourse;
-  var havecomment = []; // 過濾＋有心得的課程
-
-   $(document).ready(function() {
-      $('.ui.search').search({
-         source: content,
-         error : {
-            source      : 'Cannot search. No source used, and Semantic API module was not included',
-            noResults   : '目前沒有此\"老師\"或是\"課程\"的心得',
-            logging     : 'Error in debug logging, exiting.',
-            noTemplate  : 'A valid template name was not specified.',
-            serverError : 'There was an issue with querying the server.',
-            maxResults  : 'Results must be an array to use maxResults setting',
-            method      : 'The method you called is not defined.'
-        },
-        maxResults: 10
-      });
-
-      // Got enter in query input
-      var last;
-      $(".query").keyup(function (e) {
-         if (e.keyCode == 13 && last == 13) {
-            var query = $('.query').val();
-            window.location.href = "/course?queryw="+query.replace(/\\/g, "");
-         }
-         last = e.keyCode;
-      });
-
-      $('.course').on('click', function(){
-         $('.chooseCourse').modal('show');
-      });
-      $('.tables').on('click', function(){
-         $('.timeTable').modal('show');
-      });
-
-      $('.ui.inverted.button.mini').on('click', function(){
-        if($(this).hasClass('active')){
-          $(this).removeClass('active');
-        }
-        else{
-          $(this).addClass('active');
-        }
-      });
-
-      $('.ui.checkbox').checkbox({debug: true});
-
-
-      // 大學部、研究所按鈕清除or全選
-      $('#courseSelect').on('click', function(){
-        if($('.bachelor')[1].style.display == 'flex'){
-          if($('.bachelor .button.active').length == 0) $('.bachelor .mini.button').addClass('active');
-          else $('.bachelor .mini.button.active').removeClass('active');
-        }
-        else{
-          if($('.master .button.active').length == 0) $('.master .mini.button').addClass('active');
-          else $('.master .mini.button.active').removeClass('active');
-        }
-      });
-
-      // 課表按鈕清除or全選
-      $('#tableSelect').on('click', function(){
-        if($('.timeTable .mini.button.active').length == 0) $('.timeTable .mini.button').addClass('active');
-        else $('.timeTable .mini.button.active').removeClass('active');
-      });
-
-      // 切換大學部、研究所
-      $('.button.Tiny.master').on('click', function(){
-        $('.button.Tiny.master').addClass('active');
-        $('.button.Tiny.bachelor').removeClass('active');
-
-        $('.bachelor')[1].style.display = 'none';
-        $('.master')[1].style.display = 'flex';
-
-      });
-      $('.button.Tiny.bachelor').on('click', function(){
-        $('.button.Tiny.bachelor').addClass('active');
-        $('.button.Tiny.master').removeClass('active');
-
-        $('.master')[1].style.display = 'none';
-        $('.bachelor')[1].style.display = 'flex';
-      });
-
-      // 送出時間表查詢
-      $('#sendTable').on('click', function(){
-        $('.timeTable').modal('hide');
-        chooseTable = $('.timeTable  div div .active');
-        var table = {};
-        for(var i = 0; i < chooseTable.length; i++){
-
-          var time = chooseTable[i].getAttribute('tableid').split("-");
-          if(table.hasOwnProperty(time[0])) table[time[0]] += time[1];
-          else table[time[0]] = time[1];
-        }
-
-        var chooseWeeks = mergeArr(table); // 製作第一階段的篩選：week
-
-        if(nowCourse === undefined) nowCourse = $('.course-row');
-
-        var filterCourse = []; // 過濾後的課程
-        havecomment.length = 0; // 清空資料
-        nowCourseDom.length = 0; // 清空資料
-
-        for(var i = 0; i < courses.length; i++){
-          var dom;
-          time = courses[i].時間;
-
-          if(time == "未定"){
-            continue;
-          }
-          time = time.split("[");
-          time.shift();
-
-          var buffer = time;
-          time = {}; // 重新排列time
-
-          for(var j in buffer){
-            afterSplit = buffer[j].split("]");
-
-            if(afterSplit[1].match("~")){
-              var num = afterSplit[1].replace("~", "");
-              if(num[0] == "N") num[0] = "4";
-              if(num[1] == "N") num[1] = "5";
-              afterSplit[1] = num[0];
-              for(var k = 1; k < num[1] - num[0]; k++){
-                afterSplit[1] += (Number(num[0]) + Number(k));
-              }
-              afterSplit[1] += num[1] ;
-            }
-            if(time.hasOwnProperty(afterSplit[0])) time[afterSplit[0]] += afterSplit[1];
-            else time[afterSplit[0]] = afterSplit[1];
-          }
-
-          var courseWeek = mergeArr(time);
-
-          if(chooseWeeks.match(courseWeek) != null){
-            var isThechoose = true;
-            for(var j in time){
-              if(table[j].match(time[j]) == null){
-                isThechoose = false;
-                break;
-              }
-            }
-
-            if (isThechoose) nowCourseDom.push(coursesDom[i]);
-            if (isThechoose && courses[i].comment_amt != 0) {
-              var dom = "<tr id='course-" + courses[i].id + "' class='notempty' data-toggle='modal' data-target='#course-modal' data-id='" + courses[i].id + "' ><td class='course_name'> " + courses[i].課程名稱 + " <span class='badge'>" + courses[i].comment_amt + "</span>" + "</td><td> " + courses[i].系所名稱 + "</td><td>" + courses[i].老師 + "</td><td> " + courses[i].時間 + "</td></tr>";
-              havecomment.push(dom);
-            } // 有notempty的屬性，所以要另外放
-          }
-        }
-        var originalText = '<tr><th class="course_name">課程名稱</th><th class="department_name" >開課系所</th><th class="teacher" >開課老師</th><th class="class_time">時間</th></tr>';
-
-
-        $("#course-table").html(originalText);
-        for(var i = 0 ;i < 50 && nowCourseDom.length; i++){
-          $("#course-table").append(nowCourseDom[i]);
-        }
-        now_index = 0;
-        max_index = nowCourseDom.length;
-
-
-        /* 綁定Ajaxshowcourse function */
-        $('.course-row').on('click',function(){
-          var courseid = this.getAttribute("data-id");
-          ajaxshowcourse(courseid);
-        });
-
-        /* modal 關閉時清空 modal 內容 */
-        $('#course-modal').on('hidden.bs.modal', function () {
-          $('#course-modal .modal-content').empty();
-          // $.fn.fullpage.destroy('all');
-        });
-
-        // 檢查是否有心得篩選條件
-        var showempty = 0;
-
-        if($('.ui.checkbox').hasClass('checked')){
-          $('.course-row').hide();
-          for(var i in havecomment){
-           $('#course-table').append(havecomment[i]);
-          }
-          $('.notempty').on('click',function(){
-           var courseid=this.getAttribute("data-id");
-           ajaxshowcourse(courseid);
-          });
-          showempty=1;
-        }
-      });
-
-      $('.timeTable p, .chooseCourse p').on('click', function(){
-        if(this.parentNode.getElementsByClassName('button active').length == 0){
-          $(this.parentNode.getElementsByClassName('button')).addClass('active');
-          if($(this)[0].textContent == '工學院')  // 因為工學院有兩條
-            $(this.parentNode.nextElementSibling.getElementsByClassName('button')).addClass('active');
-        }
-        else {
-          $(this.parentNode.getElementsByClassName('button')).removeClass('active');
-          if($(this)[0].textContent == '工學院')
-            $(this.parentNode.nextElementSibling.getElementsByClassName('button')).removeClass('active');
-        }
-      }); // 選擇大項目可以整條"被選" ex: 『理學院 』、『星期一』
-
-      $('#courseQuery').on('click', function(){
-        $('.chooseCourse').modal('hide');
-        var chooseCourse = $('.chooseCourse  div div .active');
-        var selectDepart = [];
-        for(var i = 1; i < chooseCourse.length; i++){
-          selectDepart.push("'" + chooseCourse[i].getAttribute('departId') + "'");
-        }
-        // console.log("/catalog=" + selectDepart);
-        window.location.href = "/course?catalog=" + selectDepart;
-
-      });
-
-   });
-
-  function mergeArr(arr){
-    var chooseWeeks = Object.keys(arr).sort();
-    chooseWeeks = chooseWeeks.join().replace(/\,/g, "");
-    return chooseWeeks
-  }
-
-  function ajaxshowcourse(id){
-    var ajaxurl = '/course/'+ id;
-    $.ajax({
-      url:ajaxurl,
-      type: 'GET',
-      success: function(response) {
-        $('#course-modal .modal-content').prepend(response);
-        $('#course-modal').data('bs.modal').handleUpdate();
-      }
-    });
-  }
-
-</script>
-
 <div id="sidebar">
    <div class="ui search" style = "display: flex;flex-direction: column;">
       <div class="ui icon input" >
@@ -254,16 +15,14 @@
 
       <hr style="width:94%;margin:10px 3%;border:solid 1px rgb(221,221,221);">
       <ul>
-         <a class="small ui button catagory" href="/course?catalog=A9">A9 通識中心</a>
-         <a class="small ui button catagory" href="/course?catalog=A2">A2 體育室</a>
-         <a class="small ui button catagory" href="/course?catalog=A1">A1 外國語言</a>
-         <a class="small ui button catagory" href="/course?catalog=A7">A7 基礎國文</a>
-         <a class="small ui button catagory" href="/course?catalog=A6">A6 服務學習</a>
-         <a class="small ui button catagory course" >其他系所</a>
-         <a class="small ui button catagory tables" id="catagory-all">依課程時段選擇</a>
-         <hr style="width:94%;margin:15px 3%;border:solid 1px rgb(221,221,221);">
-         <a class="small ui button catagory" href="/course" id="catagory-all">回到所有課程</a>
-
+         <a class="small ui button catagory hotKey" >A9 通識中心</a>
+         <a class="small ui button catagory hotKey" >A2 體育室</a>
+         <a class="small ui button catagory hotKey" >A1 外國語言</a>
+         <a class="small ui button catagory hotKey" >A7 基礎國文</a>
+         <a class="small ui button catagory hotKey" >A6 服務學習</a>
+         <a class="small ui button catagory hotKeyAll" >全部課程</a>
+         <a class="small ui button catagory course" id="catagory-all">篩選開課單位</a>
+         <a class="small ui button catagory tables" id="catagory-all">篩選課堂時段</a>
          <a class="small ui button catagory" href="/course?catalog=M" style="background-color: rgb(217, 176, 177); display: none;">清除所選</a>
          <a class="small ui button catagory" href="/course?catalog=C" style="background-color: rgb(167, 188, 214); display: none;">確認送出</a>
       </ul>
@@ -285,123 +44,123 @@
           <br>
           <p>其他</p>
           <br>
-          <div class="ui inverted button mini" departId="A2">體育室</div>
-          <div class="ui inverted button mini" departId="A3">軍訓室</div>
-          <div class="ui inverted button mini" departId="A4">師培中心</div>
-          <div class="ui inverted button mini" departId="A5">計網中心</div>
-          <div class="ui inverted button mini" departId="A6">服務學習</div>
-          <div class="ui inverted button mini" departId="AA">共同英授</div>
-          <div class="ui inverted button mini" departId="AH">華語中心</div>
+          <div class="ui inverted button mini active" departId="A2">體育室</div>
+          <div class="ui inverted button mini active" departId="A3">軍訓室</div>
+          <div class="ui inverted button mini active" departId="A4">師培中心</div>
+          <div class="ui inverted button mini active" departId="A5">計網中心</div>
+          <div class="ui inverted button mini active" departId="A6">服務學習</div>
+          <div class="ui inverted button mini active" departId="AA">共同英授</div>
+          <div class="ui inverted button mini active" departId="AH">華語中心</div>
         </div>
         <div class="sideber-course">
           <br>
           <p>不分學院</p>
           <br>
-          <div class="ui inverted button mini" departId="AN">不分系學程</div>
-          <div class="ui inverted button mini" departId="C0">科學班</div>
+          <div class="ui inverted button mini active" departId="AN">不分系學程</div>
+          <div class="ui inverted button mini active" departId="C0">科學班</div>
         </div>
         <div class="sideber-course">
           <br>
           <p>通識課程</p>
           <br>
-          <div class="ui inverted button mini" departId="A1">外國語言</div>
-          <div class="ui inverted button mini" departId="A7">基礎國文</div>
-          <div class="ui inverted button mini" departId="A9">通識中心</div>
+          <div class="ui inverted button mini active" departId="A1">外國語言</div>
+          <div class="ui inverted button mini active" departId="A7">基礎國文</div>
+          <div class="ui inverted button mini active" departId="A9">通識中心</div>
         </div>
         <div class="sideber-course">
           <br>
           <p>文學院</p>
           <br>
-          <div class="ui inverted button mini" departId="B1">中文</div>
-          <div class="ui inverted button mini" departId="B2">外文</div>
-          <div class="ui inverted button mini" departId="B3">歷史</div>
-          <div class="ui inverted button mini" departId="B5">台文</div>
+          <div class="ui inverted button mini active" departId="B1">中文</div>
+          <div class="ui inverted button mini active" departId="B2">外文</div>
+          <div class="ui inverted button mini active" departId="B3">歷史</div>
+          <div class="ui inverted button mini active" departId="B5">台文</div>
         </div>
         <div class="sideber-course">
           <br>
           <p>理學院</p>
           <br>
-          <div class="ui inverted button mini" departId="C1">數學</div>
-          <div class="ui inverted button mini" departId="C2">物理</div>
-          <div class="ui inverted button mini" departId="C3">化學</div>
-          <div class="ui inverted button mini" departId="C4">地科</div>
-          <div class="ui inverted button mini" departId="F8">光電</div>
+          <div class="ui inverted button mini active" departId="C1">數學</div>
+          <div class="ui inverted button mini active" departId="C2">物理</div>
+          <div class="ui inverted button mini active" departId="C3">化學</div>
+          <div class="ui inverted button mini active" departId="C4">地科</div>
+          <div class="ui inverted button mini active" departId="F8">光電</div>
         </div>
         <div class="sideber-course">
           <br>
           <p>工學院</p>
           <br>
-          <div class="ui inverted button mini" departId="E0">工學院</div>
-          <div class="ui inverted button mini" departId="E1">機械</div>
-          <div class="ui inverted button mini" departId="E3">化工</div>
-          <div class="ui inverted button mini" departId="E4">資源</div>
-          <div class="ui inverted button mini" departId="E5">材料</div>
-          <div class="ui inverted button mini" departId="E6">土木</div>
-          <div class="ui inverted button mini" departId="E8">水利</div>
+          <div class="ui inverted button mini active" departId="E0">工學院</div>
+          <div class="ui inverted button mini active" departId="E1">機械</div>
+          <div class="ui inverted button mini active" departId="E3">化工</div>
+          <div class="ui inverted button mini active" departId="E4">資源</div>
+          <div class="ui inverted button mini active" departId="E5">材料</div>
+          <div class="ui inverted button mini active" departId="E6">土木</div>
+          <div class="ui inverted button mini active" departId="E8">水利</div>
         </div>
         <div class="sideber-course" style="margin-left: 1px !important;">
           <br>
           <br>
           <br>
-          <div class="ui inverted button mini" departId="E9">工科</div>
-          <div class="ui inverted button mini" departId="F0">能源</div>
-          <div class="ui inverted button mini" departId="F1">系統</div>
-          <div class="ui inverted button mini" departId="F4">航太</div>
-          <div class="ui inverted button mini" departId="F5">環工</div>
-          <div class="ui inverted button mini" departId="F6">測量</div>
-          <div class="ui inverted button mini" departId="F9">醫工</div>
+          <div class="ui inverted button mini active" departId="E9">工科</div>
+          <div class="ui inverted button mini active" departId="F0">能源</div>
+          <div class="ui inverted button mini active" departId="F1">系統</div>
+          <div class="ui inverted button mini active" departId="F4">航太</div>
+          <div class="ui inverted button mini active" departId="F5">環工</div>
+          <div class="ui inverted button mini active" departId="F6">測量</div>
+          <div class="ui inverted button mini active" departId="F9">醫工</div>
         </div>
         <div class="sideber-course">
           <br>
           <p>管理學院</p>
           <br>
-          <div class="ui inverted button mini" departId="H1">會計</div>
-          <div class="ui inverted button mini" departId="H2">統計</div>
-          <div class="ui inverted button mini" departId="H3">工資</div>
-          <div class="ui inverted button mini" departId="H4">企管</div>
-          <div class="ui inverted button mini" departId="H5">交管</div>
+          <div class="ui inverted button mini active" departId="H1">會計</div>
+          <div class="ui inverted button mini active" departId="H2">統計</div>
+          <div class="ui inverted button mini active" departId="H3">工資</div>
+          <div class="ui inverted button mini active" departId="H4">企管</div>
+          <div class="ui inverted button mini active" departId="H5">交管</div>
         </div>
         <div class="sideber-course">
           <br>
           <p>醫學院</p>
           <br>
-          <div class="ui inverted button mini" departId="I2">護理</div>
-          <div class="ui inverted button mini" departId="I3">醫技</div>
-          <div class="ui inverted button mini" departId="I5">醫學</div>
-          <div class="ui inverted button mini" departId="I6">物治</div>
-          <div class="ui inverted button mini" departId="I7">職治</div>
-          <div class="ui inverted button mini" departId="I8">藥學</div>
+          <div class="ui inverted button mini active" departId="I2">護理</div>
+          <div class="ui inverted button mini active" departId="I3">醫技</div>
+          <div class="ui inverted button mini active" departId="I5">醫學</div>
+          <div class="ui inverted button mini active" departId="I6">物治</div>
+          <div class="ui inverted button mini active" departId="I7">職治</div>
+          <div class="ui inverted button mini active" departId="I8">藥學</div>
         </div>
         <div class="sideber-course">
           <br>
           <p>社會學院</p>
           <br>
-          <div class="ui inverted button mini" departId="D2">法律</div>
-          <div class="ui inverted button mini" departId="D4">政治</div>
-          <div class="ui inverted button mini" departId="D5">經濟</div>
-          <div class="ui inverted button mini" departId="D8">心理</div>
+          <div class="ui inverted button mini active" departId="D2">法律</div>
+          <div class="ui inverted button mini active" departId="D4">政治</div>
+          <div class="ui inverted button mini active" departId="D5">經濟</div>
+          <div class="ui inverted button mini active" departId="D8">心理</div>
         </div>
         <div class="sideber-course">
           <br>
           <p>電資學院</p>
           <br>
-          <div class="ui inverted button mini" departId="E2">電機</div>
-          <div class="ui inverted button mini" departId="F7">資訊</div>
+          <div class="ui inverted button mini active" departId="E2">電機</div>
+          <div class="ui inverted button mini active" departId="F7">資訊</div>
         </div>
         <div class="sideber-course">
           <br>
           <p>規劃學院</p>
           <br>
-          <div class="ui inverted button mini" departId="E7">建築</div>
-          <div class="ui inverted button mini" departId="F2">都計</div>
-          <div class="ui inverted button mini" departId="F3">工設</div>
+          <div class="ui inverted button mini active" departId="E7">建築</div>
+          <div class="ui inverted button mini active" departId="F2">都計</div>
+          <div class="ui inverted button mini active" departId="F3">工設</div>
         </div>
         <div class="sideber-course">
           <br>
           <p>生科學院</p>
           <br>
-          <div class="ui inverted button mini" departId="C5">生命</div>
-          <div class="ui inverted button mini" departId="C6">生技</div>
+          <div class="ui inverted button mini active" departId="C5">生命</div>
+          <div class="ui inverted button mini active" departId="C6">生技</div>
         </div>
       </div>
       <div class="master" style="display: none;">
@@ -409,106 +168,156 @@
           <br>
           <p>文學院</p>
           <br>
-          <div class="ui inverted button mini" departId="K1">中文</div>
-          <div class="ui inverted button mini" departId="K2">外文</div>
-          <div class="ui inverted button mini" departId="K3">歷史</div>
-          <div class="ui inverted button mini" departId="K5">台文</div>
-          <div class="ui inverted button mini" departId="K4">藝術</div>
-          <div class="ui inverted button mini" departId="K7">考古</div>
+          <div class="ui inverted button mini active" departId="K1">中文</div>
+          <div class="ui inverted button mini active" departId="K2">外文</div>
+          <div class="ui inverted button mini active" departId="K3">歷史</div>
+          <div class="ui inverted button mini active" departId="K5">台文</div>
+          <div class="ui inverted button mini active" departId="K4">藝術</div>
+          <div class="ui inverted button mini active" departId="K7">考古</div>
         </div>
         <div class="sideber-course">
           <br>
           <p>理學院</p>
           <br>
-          <div class="ui inverted button mini" departId="C1">應數</div>
-          <div class="ui inverted button mini" departId="C2">物理</div>
-          <div class="ui inverted button mini" departId="C3">化學</div>
-          <div class="ui inverted button mini" departId="C4">地科</div>
-          <div class="ui inverted button mini" departId="F8">光電</div>
+          <div class="ui inverted button mini active" departId="L1">應數</div>
+          <div class="ui inverted button mini active" departId="L2">物理</div>
+          <div class="ui inverted button mini active" departId="L3">化學</div>
+          <div class="ui inverted button mini active" departId="L4">地科</div>
+          <div class="ui inverted button mini active" departId="L7">光電</div>
+          <div class="ui inverted button mini active" departId="LA">電漿</div>
         </div>
         <div class="sideber-course">
           <br>
           <p>工學院</p>
           <br>
-          <div class="ui inverted button mini" departId="E0">工學院</div>
-          <div class="ui inverted button mini" departId="E1">機械</div>
-          <div class="ui inverted button mini" departId="E3">化工</div>
-          <div class="ui inverted button mini" departId="E4">資源</div>
-          <div class="ui inverted button mini" departId="E5">材料</div>
-          <div class="ui inverted button mini" departId="E6">土木</div>
-          <div class="ui inverted button mini" departId="E8">水利</div>
+          <div class="ui inverted button mini active" departId="N1">機械</div>
+          <div class="ui inverted button mini active" departId="N3">化工</div>
+          <div class="ui inverted button mini active" departId="N4">資源</div>
+          <div class="ui inverted button mini active" departId="N5">材料</div>
+          <div class="ui inverted button mini active" departId="N6">土木</div>
+          <div class="ui inverted button mini active" departId="N8">水利</div>
+          <div class="ui inverted button mini active" departId="N9">工科</div>
+          <div class="ui inverted button mini active" departId="P1">系統</div>
+          <div class="ui inverted button mini active" departId="P4">航太</div>
         </div>
         <div class="sideber-course" style="margin-left: 1px !important;">
           <br>
           <br>
           <br>
-          <div class="ui inverted button mini" departId="E9">工科</div>
-          <div class="ui inverted button mini" departId="F0">能源</div>
-          <div class="ui inverted button mini" departId="F1">系統</div>
-          <div class="ui inverted button mini" departId="F4">航太</div>
-          <div class="ui inverted button mini" departId="F5">環工</div>
-          <div class="ui inverted button mini" departId="F6">測量</div>
-          <div class="ui inverted button mini" departId="F9">醫工</div>
+          <div class="ui inverted button mini active" departId="P5">環工</div>
+          <div class="ui inverted button mini active" departId="P6">測量</div>
+          <div class="ui inverted button mini active" departId="P9">醫工</div>
+          <div class="ui inverted button mini active" departId="N0">工程管理</div>
+          <div class="ui inverted button mini active" departId="NA">海事</div>
+          <div class="ui inverted button mini active" departId="NB">尖端</div>
+          <div class="ui inverted button mini active" departId="NC">自災</div>
+          <div class="ui inverted button mini active" departId="Q4">民航</div>
         </div>
         <div class="sideber-course">
           <br>
           <p>管理學院</p>
           <br>
-          <div class="ui inverted button mini" departId="H1">會計</div>
-          <div class="ui inverted button mini" departId="H2">統計</div>
-          <div class="ui inverted button mini" departId="H3">工資</div>
-          <div class="ui inverted button mini" departId="H4">企管</div>
-          <div class="ui inverted button mini" departId="H5">交管</div>
+          <div class="ui inverted button mini active" departId="R1">會計</div>
+          <div class="ui inverted button mini active" departId="R2">統計</div>
+          <div class="ui inverted button mini active" departId="R3">工管</div>
+          <div class="ui inverted button mini active" departId="R4">企管</div>
+          <div class="ui inverted button mini active" departId="R5">交管</div>
+          <div class="ui inverted button mini active" departId="R0">EMBA</div>
+          <div class="ui inverted button mini active" departId="R6">國企</div>
+
+        </div>
+        <div class="sideber-course" style="margin-left: 1px !important;">
+          <br>
+          <br>
+          <br>
+          <div class="ui inverted button mini active" departId="R7">資管</div>
+          <div class="ui inverted button mini active" departId="R8">財金</div>
+          <div class="ui inverted button mini active" departId="R9">電管</div>
+          <div class="ui inverted button mini active" departId="RA">IMBA</div>
+          <div class="ui inverted button mini active" departId="RB">體健所</div>
+          <div class="ui inverted button mini active" departId="RD">AMBA</div>
+          <div class="ui inverted button mini active" departId="RZ">管理學院</div>
         </div>
         <div class="sideber-course">
           <br>
           <p>醫學院</p>
           <br>
-          <div class="ui inverted button mini" departId="I2">護理</div>
-          <div class="ui inverted button mini" departId="I3">醫技</div>
-          <div class="ui inverted button mini" departId="I5">醫學</div>
-          <div class="ui inverted button mini" departId="I6">物治</div>
-          <div class="ui inverted button mini" departId="I7">職治</div>
-          <div class="ui inverted button mini" departId="I8">藥學</div>
+          <div class="ui inverted button mini active" departId="T2">護理</div>
+          <div class="ui inverted button mini active" departId="T3">醫技</div>
+          <div class="ui inverted button mini active" departId="T6">物治</div>
+          <div class="ui inverted button mini active" departId="T7">職治</div>
+          <div class="ui inverted button mini active" departId="S1">生化</div>
+          <div class="ui inverted button mini active" departId="S2">藥理</div>
+          <div class="ui inverted button mini active" departId="S3">生理</div>
+          <div class="ui inverted button mini active" departId="S4">微免</div>
+          <div class="ui inverted button mini active" departId="S5">基醫</div>
+          <div class="ui inverted button mini active" departId="S6">臨藥科技</div>
+          <div class="ui inverted button mini active" departId="S7">環醫</div>
+        </div>
+        <div class="sideber-course" style="margin-left: 1px !important;">
+          <br>
+          <br>
+          <br>
+          <div class="ui inverted button mini active" departId="S8">行醫</div>
+          <div class="ui inverted button mini active" departId="S9">臨醫</div>
+          <div class="ui inverted button mini active" departId="SA">神經學程</div>
+          <div class="ui inverted button mini active" departId="SB">公衛在職</div>
+          <div class="ui inverted button mini active" departId="T1">分醫</div>
+          <div class="ui inverted button mini active" departId="T4">口醫</div>
+          <div class="ui inverted button mini active" departId="T8">公衛</div>
+          <div class="ui inverted button mini active" departId="T9">細胞</div>
+          <div class="ui inverted button mini active" departId="TA">健照</div>
+          <div class="ui inverted button mini active" departId="TC">老年</div>
         </div>
         <div class="sideber-course">
           <br>
           <p>社會學院</p>
           <br>
-          <div class="ui inverted button mini" departId="D2">法律</div>
-          <div class="ui inverted button mini" departId="D4">政治</div>
-          <div class="ui inverted button mini" departId="D5">經濟</div>
-          <div class="ui inverted button mini" departId="D8">心理</div>
+          <div class="ui inverted button mini active" departId="U2">法律</div>
+          <div class="ui inverted button mini active" departId="U6">科法</div>
+          <div class="ui inverted button mini active" departId="U5">經濟</div>
+          <div class="ui inverted button mini active" departId="U7">心理</div>
+          <div class="ui inverted button mini active" departId="U1">政經</div>
+          <div class="ui inverted button mini active" departId="U3">教育</div>
         </div>
         <div class="sideber-course">
           <br>
           <p>電資學院</p>
           <br>
-          <div class="ui inverted button mini" departId="E2">電機</div>
-          <div class="ui inverted button mini" departId="F7">資訊</div>
+          <div class="ui inverted button mini active" departId="N2">電機</div>
+          <div class="ui inverted button mini active" departId="P7">資訊</div>
+          <div class="ui inverted button mini active" departId="ND">多媒學程</div>
+          <div class="ui inverted button mini active" departId="P9">製造</div>
+          <div class="ui inverted button mini active" departId="Q1">微電</div>
+          <div class="ui inverted button mini active" departId="Q3">電通</div>
+          <div class="ui inverted button mini active" departId="Q5">醫資</div>
         </div>
         <div class="sideber-course">
           <br>
           <p>規劃學院</p>
           <br>
-          <div class="ui inverted button mini" departId="E7">建築</div>
-          <div class="ui inverted button mini" departId="F2">都計</div>
-          <div class="ui inverted button mini" departId="F3">工設</div>
+          <div class="ui inverted button mini active" departId="N7">建築</div>
+          <div class="ui inverted button mini active" departId="P2">都計</div>
+          <div class="ui inverted button mini active" departId="P3">工設</div>
+          <div class="ui inverted button mini active" departId="PA">創意</div>
+          <div class="ui inverted button mini active" departId="PB">科藝學程</div>
         </div>
         <div class="sideber-course">
           <br>
           <p>生科學院</p>
           <br>
-          <div class="ui inverted button mini" departId="C5">生命</div>
-          <div class="ui inverted button mini" departId="C6">生技</div>
+          <div class="ui inverted button mini active" departId="L5">生命</div>
+          <div class="ui inverted button mini active" departId="L6">生技</div>
+          <div class="ui inverted button mini active" departId="Z2">生訊所</div>
+          <div class="ui inverted button mini active" departId="Z3">熱植所</div>
         </div>
       </div>
       <br>
       <div style="display: flex; justify-content: center;">
-        <div class="ui inverted button red" id="courseSelect" >全選/全部清除</div>
+        <div class="ui inverted button red" id="courseSelect" >全選/全部清除</div>  
         <div class="ui inverted button blue" id="courseQuery">完成選擇</div>
       </div>
-
+      
       <br>
    </div>
 
@@ -536,103 +345,123 @@
           <br>
           <p>星期一</p>
           <br>
-          <div class="ui inverted button mini" tableid="1-1">1</div>
-          <div class="ui inverted button mini" tableid="1-2">2</div>
-          <div class="ui inverted button mini" tableid="1-3">3</div>
-          <div class="ui inverted button mini" tableid="1-4">4</div>
-
+          <div class="ui inverted button mini active" tableid="1-1">1</div>
+          <div class="ui inverted button mini active" tableid="1-2">2</div>
+          <div class="ui inverted button mini active" tableid="1-3">3</div>
+          <div class="ui inverted button mini active" tableid="1-4">4</div>
+          
           <!-- <div class="ui inverted button mini" tableid="1-N">&nbsp;</div> -->
           <br>
-          <div class="ui inverted button mini" tableid="1-N">午</div>
+          <div class="ui inverted button mini active" tableid="1-N">午</div>
           <br>
-          <div class="ui inverted button mini" tableid="1-5">5</div>
-          <div class="ui inverted button mini" tableid="1-6">6</div>
-          <div class="ui inverted button mini" tableid="1-7">7</div>
-          <div class="ui inverted button mini" tableid="1-8">8</div>
+          <div class="ui inverted button mini active" tableid="1-5">5</div>
+          <div class="ui inverted button mini active" tableid="1-6">6</div>
+          <div class="ui inverted button mini active" tableid="1-7">7</div>
+          <div class="ui inverted button mini active" tableid="1-8">8</div>
+          <div class="ui inverted button mini active" tableid="1-9">9</div>
+          <br>
+          <div class="ui inverted button mini active" tableid="1-ABCDE">晚</div>
+          <br>
 <!--           <div class="ui inverted button mini" tableid="1-A">&nbsp;</div>
           <div class="ui inverted button mini" tableid="1-B">&nbsp;</div>
           <div class="ui inverted button mini" tableid="1-C">&nbsp;</div>
           <div class="ui inverted button mini" tableid="1-D">&nbsp;</div> -->
         </div>
-        <div class="sideber-course">
+        <div class="sideber-course" style="margin-left:5px;">
           <br>
           <p>星期二</p>
           <br>
-          <div class="ui inverted button mini" tableid="2-1">1</div>
-          <div class="ui inverted button mini" tableid="2-2">2</div>
-          <div class="ui inverted button mini" tableid="2-3">3</div>
-          <div class="ui inverted button mini" tableid="2-4">4</div>
+          <div class="ui inverted button mini active" tableid="2-1">1</div>
+          <div class="ui inverted button mini active" tableid="2-2">2</div>
+          <div class="ui inverted button mini active" tableid="2-3">3</div>
+          <div class="ui inverted button mini active" tableid="2-4">4</div>
           <!-- <div class="ui inverted button mini" tableid="1-N">&nbsp;</div> -->
           <br>
-          <div class="ui inverted button mini" tableid="2-N">午</div>
+          <div class="ui inverted button mini active" tableid="2-N">午</div>
           <br>
-          <div class="ui inverted button mini" tableid="2-5">5</div>
-          <div class="ui inverted button mini" tableid="2-6">6</div>
-          <div class="ui inverted button mini" tableid="2-7">7</div>
-          <div class="ui inverted button mini" tableid="2-8">8</div>
+          <div class="ui inverted button mini active" tableid="2-5">5</div>
+          <div class="ui inverted button mini active" tableid="2-6">6</div>
+          <div class="ui inverted button mini active" tableid="2-7">7</div>
+          <div class="ui inverted button mini active" tableid="2-8">8</div>
+          <div class="ui inverted button mini active" tableid="2-9">9</div>
+          <br>
+          <div class="ui inverted button mini active" tableid="2-ABCDE">晚</div>
+          <br>
 <!--           <div class="ui inverted button mini" tableid="1-A">&nbsp;</div>
           <div class="ui inverted button mini" tableid="1-B">&nbsp;</div>
           <div class="ui inverted button mini" tableid="1-C">&nbsp;</div>
           <div class="ui inverted button mini" tableid="1-D">&nbsp;</div> -->
         </div>
-        <div class="sideber-course">
+        <div class="sideber-course" style="margin-left:5px;">
           <br>
           <p>星期三</p>
           <br>
-          <div class="ui inverted button mini" tableid="3-1">1</div>
-          <div class="ui inverted button mini" tableid="3-2">2</div>
-          <div class="ui inverted button mini" tableid="3-3">3</div>
-          <div class="ui inverted button mini" tableid="3-4">4</div>
+          <div class="ui inverted button mini active" tableid="3-1">1</div>
+          <div class="ui inverted button mini active" tableid="3-2">2</div>
+          <div class="ui inverted button mini active" tableid="3-3">3</div>
+          <div class="ui inverted button mini active" tableid="3-4">4</div>
           <!-- <div class="ui inverted button mini" tableid="1-N">&nbsp;</div> -->
           <br>
-          <div class="ui inverted button mini" tableid="3-N">午</div>
+          <div class="ui inverted button mini active" tableid="3-N">午</div>
           <br>
-          <div class="ui inverted button mini" tableid="3-5">5</div>
-          <div class="ui inverted button mini" tableid="3-6">6</div>
-          <div class="ui inverted button mini" tableid="3-7">7</div>
-          <div class="ui inverted button mini" tableid="3-8">8</div>
+          <div class="ui inverted button mini active" tableid="3-5">5</div>
+          <div class="ui inverted button mini active" tableid="3-6">6</div>
+          <div class="ui inverted button mini active" tableid="3-7">7</div>
+          <div class="ui inverted button mini active" tableid="3-8">8</div>
+          <div class="ui inverted button mini active" tableid="3-9">9</div>
+          <br>
+          <div class="ui inverted button mini active" tableid="3-ABCDE">晚</div>
+          <br>
 <!--           <div class="ui inverted button mini" tableid="1-A">&nbsp;</div>
           <div class="ui inverted button mini" tableid="1-B">&nbsp;</div>
           <div class="ui inverted button mini" tableid="1-C">&nbsp;</div>
           <div class="ui inverted button mini" tableid="1-D">&nbsp;</div> -->
         </div>
-        <div class="sideber-course">
+        <div class="sideber-course" style="margin-left:5px;">
           <br>
           <p>星期四</p>
           <br>
-          <div class="ui inverted button mini" tableid="4-1">1</div>
-          <div class="ui inverted button mini" tableid="4-2">2</div>
-          <div class="ui inverted button mini" tableid="4-3">3</div>
-          <div class="ui inverted button mini" tableid="4-4">4</div>
+          <div class="ui inverted button mini active" tableid="4-1">1</div>
+          <div class="ui inverted button mini active" tableid="4-2">2</div>
+          <div class="ui inverted button mini active" tableid="4-3">3</div>
+          <div class="ui inverted button mini active" tableid="4-4">4</div>
           <!-- <div class="ui inverted button mini" tableid="1-N">&nbsp;</div> -->
           <br>
-          <div class="ui inverted button mini" tableid="4-N">午</div>
+          <div class="ui inverted button mini active" tableid="4-N">午</div>
           <br>
-          <div class="ui inverted button mini" tableid="4-5">5</div>
-          <div class="ui inverted button mini" tableid="4-6">6</div>
-          <div class="ui inverted button mini" tableid="4-7">7</div>
-          <div class="ui inverted button mini" tableid="4-8">8</div>
+          <div class="ui inverted button mini active" tableid="4-5">5</div>
+          <div class="ui inverted button mini active" tableid="4-6">6</div>
+          <div class="ui inverted button mini active" tableid="4-7">7</div>
+          <div class="ui inverted button mini active" tableid="4-8">8</div>
+          <div class="ui inverted button mini active" tableid="4-9">9</div>
+          <br>
+          <div class="ui inverted button mini active" tableid="4-ABCDE">晚</div>
+          <br>
 <!--           <div class="ui inverted button mini" tableid="1-A">&nbsp;</div>
           <div class="ui inverted button mini" tableid="1-B">&nbsp;</div>
           <div class="ui inverted button mini" tableid="1-C">&nbsp;</div>
           <div class="ui inverted button mini" tableid="1-D">&nbsp;</div> -->
         </div>
-        <div class="sideber-course">
+        <div class="sideber-course" style="margin-left:5px;">
           <br>
           <p>星期五</p>
           <br>
-          <div class="ui inverted button mini" tableid="5-1">1</div>
-          <div class="ui inverted button mini" tableid="5-2">2</div>
-          <div class="ui inverted button mini" tableid="5-3">3</div>
-          <div class="ui inverted button mini" tableid="5-4">4</div>
+          <div class="ui inverted button mini active" tableid="5-1">1</div>
+          <div class="ui inverted button mini active" tableid="5-2">2</div>
+          <div class="ui inverted button mini active" tableid="5-3">3</div>
+          <div class="ui inverted button mini active" tableid="5-4">4</div>
           <!-- <div class="ui inverted button mini" tableid="1-N">&nbsp;</div> -->
           <br>
-          <div class="ui inverted button mini" tableid="5-N">午</div>
+          <div class="ui inverted button mini active" tableid="5-N">午</div>
           <br>
-          <div class="ui inverted button mini" tableid="5-5">5</div>
-          <div class="ui inverted button mini" tableid="5-6">6</div>
-          <div class="ui inverted button mini" tableid="5-7">7</div>
-          <div class="ui inverted button mini" tableid="5-8">8</div>
+          <div class="ui inverted button mini active" tableid="5-5">5</div>
+          <div class="ui inverted button mini active" tableid="5-6">6</div>
+          <div class="ui inverted button mini active" tableid="5-7">7</div>
+          <div class="ui inverted button mini active" tableid="5-8">8</div>
+          <div class="ui inverted button mini active" tableid="5-9">9</div>
+          <br>
+          <div class="ui inverted button mini active" tableid="5-ABCDE">晚</div>
+          <br>
           <!-- <div class="ui inverted button mini" tableid="1-A">&nbsp;</div>
           <div class="ui inverted button mini" tableid="1-B">&nbsp;</div>
           <div class="ui inverted button mini" tableid="1-C">&nbsp;</div>
@@ -642,7 +471,7 @@
       <br>
       <div style="display: flex; justify-content: center; margin-left: 0%;">
         <div class="ui inverted button red" id="tableSelect" >全選/全部清除</div>
-        <div class="ui inverted button blue" id="sendTable" >完成選擇</div>
+        <div class="ui inverted button blue" id="sendTable">完成選擇</div>
       </div>
    </div>
 

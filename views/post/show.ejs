@@ -23,29 +23,31 @@
     </p>
   </div>
   <div class="partA">
-    <p><span class="post_title">報告作業:</span>
+    <% if(rate != null){ %>
+      <p><span class="post_title">付出程度:</span>
+        <%= rate.give %>&nbsp;&nbsp;&nbsp;&nbsp;
+        <span class="post_title">收穫程度:</span>
+        <%= rate.got %>
+      </p>
       <br>
-      <%- post.report_hw %>
-    </p>
-    <br>
-    <p><span class="post_title">考試方式:</span>
-      <br>
-      <%- post.exam_style %>
-    </p>
-    <br>
-    <p><span class="post_title">評分方式:</span>
-      <br>
-      <%- post.score_style %>
-    </p>
-    <br>
-    <p><span class="post_title">老師上課教材:</span>
-      <br>
-      <%- post.course_need %>
-    </p>
-    <br>
-    <p><span class="post_title">老師上課方式:</span>
+    <% } %>
+    <p><span class="post_title">上課內容:</span>
       <br>
       <%- post.course_style %>
+    </p>
+    <br>
+    <p><span class="post_title">作業考試:</span>
+      <br>
+      <% if(post.report_hw !="無"){ %>
+        <%- post.report_hw %>
+        <br>
+      <% } %>
+      <% if(post.exam_style !="無"){ %>
+        <%- post.exam_style %>
+      <% } %>
+      <% if(post.exam_style =="無" && post.report_hw =="無"){ %>
+        無
+      <% } %>
     </p>
     <div class="showbtnbar">
       <% if(user && (user.id == post.user_id) ){ %>

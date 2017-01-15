@@ -17,7 +17,8 @@ router.post('/create', function(req, res) {
     var userid = parseInt(req.user.id);
     var courseid = parseInt(req.body.course_id.replace(/\'|\#|\/\*/g,""));
     console.log('User_id: '+req.user.id);
-    //req.checkBody('comment', '修課心得不可為空').notEmpty();
+    req.checkBody('course_name', '課程名稱不可為空').notEmpty();
+    req.checkBody('comment', '修課心得不可為空').notEmpty();
     var errors = req.validationErrors();
     if (errors) {
       console.log("error");
@@ -37,12 +38,16 @@ router.post('/create', function(req, res) {
       }
       db.Insert('post',post,function(err,results){
         if(err) throw err;
+        console.log(results);
         var rate = {
           sweet:parseInt(req.body.sweet.replace(/\'|\#|\/\*/g,"")),
           hard:parseInt(req.body.hard.replace(/\'|\#|\/\*/g,"")),
           recommand:parseInt(req.body.recommand.replace(/\'|\#|\/\*/g,"")),
+          give:parseInt(req.body.give.replace(/\'|\#|\/\*/g,"")),
+          got:parseInt(req.body.got.replace(/\'|\#|\/\*/g,"")),
           course_id:courseid,
-          user_id: userid
+          user_id: userid,
+          post_id: results.insertId
         }
         db.Insert('course_rate',rate,function(err,results){
           if(err) throw err;
@@ -56,21 +61,13 @@ router.post('/create', function(req, res) {
 /* new */
 router.get('/new', function(req, res) {
   console.log('\n'+'GET /post/new');
-  if(req.user == undefined){
+  var colmuns = ['id','課程名稱','老師','時間','系所名稱'];
+  db.GetColumn('course',colmuns,{'column':'id','order':'DESC'},function(course){
     res.render('post/new',{
-      'course': null,
+      'course': course,
       'user': req.user
     });
-  }
-  else{
-    var colmuns = ['id','課程名稱','老師','時間','系所名稱'];
-    db.GetColumn('course',colmuns,{'column':'id','order':'DESC'},function(course){
-      res.render('post/new',{
-        'course': course,
-        'user': req.user
-      });
-    });
-  }
+  });
 });
 
 /* show */
@@ -83,9 +80,21 @@ router.get('/:id', function(req, res) {
   else{
     console.log('\n'+'GET /post/'+id);
     db.FindbyID('post',id,function(post){
-      res.render('post/show',{
-        'post':post,
-        'user': req.user
+      db.FindbyColumn('course_rate',['give','got'],{"post_id":post.id} ,function(rate){
+        if(rate.length > 0){
+          res.render('post/show',{
+            'post':post,
+            'user': req.user,
+            'rate':rate[0]
+          });
+        }
+        else{
+          res.render('post/show',{
+            'post':post,
+            'user': req.user,
+            'rate':null
+          });
+        }
       });
     });
   }

@@ -185,9 +185,8 @@ html *{
   width: 40%;
   left: 0px;
   bottom: auto;
-  margin-left: 30%;
-  margin-right: 30%;
-  min-width: 300px;
+  margin: auto;
+  min-width: 350px;
 }
 
 .timeTable p, .chooseCourse p{

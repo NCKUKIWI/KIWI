@@ -374,7 +374,7 @@ exports.query_post = function query_post(datas, req, item,callback){
 
 exports.query_post2 = function query_post2(id, callback){
 
-  var sql_1 = "SELECT * FROM course WHERE id = " + id;
+  var sql_1 = "SELECT * FROM course_105_2 WHERE id = " + id;
   connection.query(sql_1,function(err, courseInfo){
     if (err) throw err;
 

@@ -1,7 +1,7 @@
 var passport = require('passport');
 var FacebookStrategy = require('passport-facebook').Strategy;
 var config = require('../config');
-var db = require('./db');
+var database = require('./dba');
 
 //Passport
 //step 1
@@ -13,7 +13,8 @@ passport.use(new FacebookStrategy({
     profileFields: ['id', 'displayName']
   },
   function(accessToken, refreshToken, profile, cb){
-    db.FindbyColumn('user',["id"],{'fb_id':profile.id},function(users){
+    var db = new database();
+    db.select().field('id').from('user').where("fb_id=",profile.id).run(function(users){
       if(users.length > 0 ){
         cb(null,users[0]);
       }
@@ -22,10 +23,11 @@ passport.use(new FacebookStrategy({
           fb_id:profile.id,
           name:profile.displayName,
         }
-        db.Insert('user',user,function(err,results){
-          if(err) throw err;
-          db.FindbyID('user',results.insertId,function(user){
-            cb(null,user);
+        db.insert().into('user').set(user).run(function(result){
+          db.select().field("*").from("user").where("id="+results.insertId).run(function(user){
+            db=null;
+            delete db;
+            cb(null,user[0]);
           });
         });
       }
@@ -40,8 +42,11 @@ passport.serializeUser(function(user, done) {
 
 //step 3
 passport.deserializeUser(function(id, done) {
-  db.FindbyID('user',id,function(data){
-    done(null,data);
+  var db = new database();
+  db.select().field("*").from("user").where("id=",id).run(function(user){
+    db=null;
+    delete db;
+    done(null,user[0]);
   });
 });
 

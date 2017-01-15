@@ -457,7 +457,13 @@
     // 檢查是否有心得篩選條件
     // var showempty = 0;
     if($('.ui.checkbox').hasClass('checked')){
+      for(var i = 0 ;i < nowCourse.length; i++){
+        $("#course-table").append(courseTransforToDom(nowCourse[i]));
+        now_index++;
+      }
+      now_index = nowCourse.length;
       $('.course-row').hide();
+
       for(var i in nowCourse){
        if(nowCourse[i].comment_amt != 0)$('#course-table').append(courseTransforToDom(nowCourse[i]));
       }

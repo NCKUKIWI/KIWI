@@ -246,8 +246,9 @@ html *{
 
 .partA button{
   margin-bottom: 10px !important;
+  /*
   background-color: #ebebeb !important;
-  color: #464646 !important;
+  color: #464646 !important;*/
 }
 
 .partB_button{

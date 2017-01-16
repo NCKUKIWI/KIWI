@@ -24,7 +24,7 @@ passport.use(new FacebookStrategy({
           name:profile.displayName,
         }
         db.insert().into('user').set(user).run(function(result){
-          db.select().field("*").from("user").where("id="+results.insertId).run(function(user){
+          db.select().field("*").from("user").where("id="+result.insertId).run(function(user){
             db=null;
             delete db;
             cb(null,user[0]);

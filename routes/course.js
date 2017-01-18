@@ -213,7 +213,7 @@ router.post('/inputaddcourse/:courseid', function(req, res) {
   console.log('\n'+'POST /course/inputaddcourse/'+courseserial);
   var column=["id","課程名稱","時間"];
   /* 透過輸入的選課序號 查找課程 */
-  db.FindbyColumn('course',column,{'選課序號':courseserial},function(course){
+  db.FindbyColumn('course_105_2',column,{'選課序號':courseserial},function(course){
     /* 若該選課序號無對應的課程 回傳not found */
     if(course.length==0){
       console.log("Course "+courseserial+" not found");

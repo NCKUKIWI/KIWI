@@ -6189,8 +6189,8 @@ var content = [
     url:'/course?teacher=郭耀昌 '
   },
   {
-    title: '環境,職業與健康人生',
-    url:'/course?course_name=環境,職業與健康人生'
+    title: '環境\,職業與健康人生',
+    url:'/course?course_name=環境\,職業與健康人生'
   },
   
   {

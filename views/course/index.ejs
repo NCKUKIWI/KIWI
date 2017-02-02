@@ -55,11 +55,18 @@
 
 <script>
   var rawCourses = <%- JSON.stringify(courses) %>; //所有課程的資料 (移出document.ready為了使其他script可以全域使用此資料)
-  var nowCourse = []; // 用來裝目前query的系所課程（未用時間表篩選過的）
+  var nowCourse = <%- JSON.stringify(custom_courses) %>; // 用來裝目前query的系所課程（未用時間表篩選過的）
   var courses_Department = {}; // 用來分類所有系所，下面使用object property的方式逐一分類
 
+  var now_index = 50 // 全部課程起始值50筆
+
+  if (nowCourse.length != 0){
+    now_index = nowCourse.length;
+    var hasCustomSearchCourses = true; // 代表有使用者客製化條件的課程
+    changeCourse(); // 放入課表
+  }
   for(var i in rawCourses){
-    nowCourse.push(rawCourses[i]);
+    if(hasCustomSearchCourses === undefined) nowCourse.push(rawCourses[i]);
     if(courses_Department.hasOwnProperty(rawCourses[i].系號)){
       courses_Department[rawCourses[i].系號].push(rawCourses[i]);
     }
@@ -68,7 +75,7 @@
       courses_Department[rawCourses[i].系號].push(rawCourses[i]);
     }
   }
-  var now_index = 50; // 起始值50筆
+  
   var max_index = nowCourse.length;
   var showempty = 0;
   $(document).ready(function(){

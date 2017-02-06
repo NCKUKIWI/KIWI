@@ -9,22 +9,6 @@ $(document).ready(function(){
     "extendedTimeOut": "1000"
   }
 
-  $('#new').on('shown.bs.modal', function (){
-    var ajaxurl = '/post/new';
-    $.ajax({
-      url:ajaxurl,
-      type: 'GET',
-      success: function(response) {
-        $('#new .modal-content').append(response);
-        $('#new').data('bs.modal').handleUpdate();
-      }
-    });
-  });
-
-  $('#new').on('hidden.bs.modal', function () {
-    $('#new .modal-content').empty();
-  });
-
 });
 
   //Parse URL function

@@ -11,17 +11,18 @@ router.get('/', function(req, res) {
 router.post('/create', function(req, res) {
   console.log('\n'+'POST /post/create');
   if(req.user == undefined){
-    res.redirect('../');
+    console.log("Not login");
+    res.send([{msg:"請重新登入!"}]);
   }
   else{
     var userid = parseInt(req.user.id);
     var courseid = parseInt(req.body.course_id.replace(/\'|\#|\/\*/g,""));
-    console.log('User_id: '+req.user.id);
+    console.log('User_id: '+req.user.id+' User_name: '+req.user.name);
     req.checkBody('course_name', '課程名稱不可為空').notEmpty();
     req.checkBody('comment', '修課心得不可為空').notEmpty();
     var errors = req.validationErrors();
     if (errors) {
-      console.log("error");
+      console.log("Error "+errors);
       res.send(errors);
     }
     else{

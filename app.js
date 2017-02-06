@@ -39,7 +39,7 @@ app.use("/assets",express.static(__dirname + "/assets"));
 
 //Handle sessions and cookie
 app.use(session({
-  cookie: { maxAge: 1000 * 60 * 30 },
+  cookie: { maxAge: 1000 * 60 * 60 * 2 },
   //store:mysql(),
   secret:'secret',
   resave: true,

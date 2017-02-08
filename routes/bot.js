@@ -1,8 +1,9 @@
 var express = require('express');
 var request = require('request');
+var config = require('../config');
 var router = express.Router();
 var db = require('../model/db');
-
+var token = config.msgtoken;
 
 router.get('/webhook/', function(req, res) {
   if (req.query['hub.verify_token'] === 'nckuhubbver49') {
@@ -33,8 +34,6 @@ router.post('/webhook/', function(req, res) {
   }
   res.sendStatus(200)
 })
-
-var token = "EAAUCXLsXLngBACdMmJX3pW7ux5qJuwazfLrOm16rZAyCGqT7pjpDglTaIUfQWqZAC7r5HJudsmGv6BAqfUvhdLawSSI1HNtlKU2465DWwjMhpzkrag2SfLrbgo3qE7qfSZALChe8otEvLN795VmtVftdLMlPvwZA70tJqsSfrAZDZD"
 
 // function to echo back messages - added by Stefan
 
@@ -73,23 +72,6 @@ function sendGenericMessage(sender) {
       "payload": {
         "template_type": "generic",
         "elements": [{
-          "title": "Ai Chat Bot Communities",
-          "subtitle": "Communities to Follow",
-          "image_url": "http://1u88jj3r4db2x4txp44yqfj1.wpengine.netdna-cdn.com/wp-content/uploads/2016/04/chatbot-930x659.jpg",
-          "buttons": [{
-            "type": "web_url",
-            "url": "https://www.facebook.com/groups/aichatbots/",
-            "title": "FB Chatbot Group"
-          }, {
-            "type": "web_url",
-            "url": "https://www.reddit.com/r/Chat_Bots/",
-            "title": "Chatbots on Reddit"
-          }, {
-            "type": "web_url",
-            "url": "https://twitter.com/aichatbots",
-            "title": "Chatbots on Twitter"
-          }],
-        }, {
           "title": "Chatbots FAQ",
           "subtitle": "Aking the Deep Questions",
           "image_url": "https://tctechcrunch2011.files.wordpress.com/2016/04/facebook-chatbots.png?w=738",
@@ -106,23 +88,6 @@ function sendGenericMessage(sender) {
             "title": "The Future",
             "payload": "Chatbots are fun! One day your BFF might be a Chatbot",
           }],
-        }, {
-          "title": "Learning More",
-          "subtitle": "Aking the Deep Questions",
-          "image_url": "http://www.brandknewmag.com/wp-content/uploads/2015/12/cortana.jpg",
-          "buttons": [{
-            "type": "postback",
-            "title": "AIML",
-            "payload": "Checkout Artificial Intelligence Mark Up Language. Its easier than you think!",
-          }, {
-            "type": "postback",
-            "title": "Machine Learning",
-            "payload": "Use python to teach your maching in 16D space in 15min",
-          }, {
-            "type": "postback",
-            "title": "Communities",
-            "payload": "Online communities & Meetups are the best way to stay ahead of the curve!",
-          }],
         }]
       }
     }
@@ -130,12 +95,12 @@ function sendGenericMessage(sender) {
   request({
     url: 'https://graph.facebook.com/v2.6/me/messages',
     qs: {
-      access_token: token
+      access_token:token
     },
     method: 'POST',
     json: {
       recipient: {
-        id: sender
+        id:"1284221988270657"
       },
       message: messageData,
     }

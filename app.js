@@ -60,5 +60,12 @@ app.use('/schedule',schedule);                 // get '/schedule'時交給routes
 app.use('/course',course);                     // get '/course'時交給routes course
 app.use('/course_rate',course_rate);          // get '/course_rate'時交給routes course_rate
 
+app.get('/webhook/', function(req, res) {
+  if (req.query['hub.verify_token'] === 'nckuhubbver49') {
+    res.send(req.query['hub.challenge'])
+  }
+  res.send('Error, wrong token')
+});
+
 app.listen( process.env.PORT || 3000);                             //監聽3000port
 console.log('running on port 3000');

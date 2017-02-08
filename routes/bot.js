@@ -17,24 +17,21 @@ router.post('/webhook/', function(req, res) {
   messaging_events = req.body.entry[0].messaging
   for (i = 0; i < messaging_events.length; i++) {
     event = req.body.entry[0].messaging[i]
-    console.log(event);
     sender = event.sender.id
-    console.log(sender);
     if (event.message && event.message.text) {
       text = event.message.text
-      if (text === 'hi') {
-        sendGenericMessage(sender)
-        continue
+      if (text === '小幫手') {
+        sendGenericMessage(sender);
+        continue;
       }
-      sendTextMessage(sender, "parrot: " + text.substring(0, 200))
     }
     if (event.postback) {
-      text = JSON.stringify(event.postback)
-      sendTextMessage(sender, "Postback received: " + text.substring(0, 200), token)
-      continue
+      text = JSON.stringify(event.postback).payload;
+      sendTextMessage(sender,text,token);
+      continue;
     }
   }
-  res.sendStatus(200)
+  res.sendStatus(200);
 })
 
 // function to echo back messages - added by Stefan
@@ -72,23 +69,18 @@ function sendGenericMessage(sender) {
     "attachment": {
       "type": "template",
       "payload": {
-        "template_type": "generic",
+        "template_type":"generic",
         "elements": [{
-          "title": "Chatbots FAQ",
-          "subtitle": "Aking the Deep Questions",
-          "image_url": "https://tctechcrunch2011.files.wordpress.com/2016/04/facebook-chatbots.png?w=738",
+          "title": "NCKUHUB",
+          "subtitle": "需要什麼幫助嗎?",
           "buttons": [{
             "type": "postback",
-            "title": "What's the benefit?",
-            "payload": "Chatbots make content interactive instead of static",
-          }, {
+            "title": "問課",
+            "payload":"請輸入課程代碼",
+          },{
             "type": "postback",
-            "title": "What can Chatbots do",
-            "payload": "One day Chatbots will control the Internet of Things! You will be able to control your homes temperature with a text",
-          }, {
-            "type": "postback",
-            "title": "The Future",
-            "payload": "Chatbots are fun! One day your BFF might be a Chatbot",
+            "title": "打個招呼",
+            "payload": "歡迎多到nckuhub晃晃",
           }],
         }]
       }

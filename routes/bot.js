@@ -26,9 +26,8 @@ router.post('/webhook/', function(req, res) {
       }
     }
     if (event.postback) {
-      console.log(event.postback);
-      text = JSON.stringify(event.postback).payload;
-      sendTextMessage(sender,text,token);
+      console.log(event.postback.payload);
+      sendTextMessage(sender,event.postback.payload,token);
       continue;
     }
   }

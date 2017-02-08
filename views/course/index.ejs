@@ -56,6 +56,7 @@
 <script>
   var rawCourses = <%- JSON.stringify(courses) %>; //所有課程的資料 (移出document.ready為了使其他script可以全域使用此資料)
   var nowCourse = <%- JSON.stringify(custom_courses) %>; // 用來裝目前query的系所課程（未用時間表篩選過的）
+  var nowCourse_hasComment = []; // 裝nowCourse的有comment的課程
   var courses_Department = {}; // 用來分類所有系所，下面使用object property的方式逐一分類
 
   var now_index = 50 // 全部課程起始值50筆
@@ -75,8 +76,14 @@
       courses_Department[rawCourses[i].系號].push(rawCourses[i]);
     }
   }
+
+  for(var i in nowCourse){
+    if(nowCourse[i].comment_amt != 0){
+      nowCourse_hasComment.push(nowCourse[i]);
+    }
+  }
   
-  var max_index = nowCourse.length;
+  // var max_index = nowCourse.length;
   var showempty = 0;
   $(document).ready(function(){
     /* 辨別目前用戶的清單中有哪些課程 並將該課程按鈕由加變減 */
@@ -92,7 +99,7 @@
         var bottomHeight = $(document).height()-$(window).height(); // 計算置底的值
         if(bottomHeight - $(window).scrollTop() < 1  && now_index <= nowCourse.length){
           for(var i = now_index; i < now_index + 50; i++ ){
-            if(i >= max_index) break; // 大於query課程數就不在新增
+            if(i >= nowCourse.length) break; // 大於query課程數就不在新增
             // $('#course-table').append(nowCourseDom[i]);
             $('#course-table').append(courseTransforToDom(nowCourse[i]));
           }
@@ -111,17 +118,30 @@
     /* 如果用戶勾選只顯示有心得的課程 則將無心得的課程隱藏起來*/
     $('#filter_haspost').checkbox({
       onChecked: function() {
-        $('.course-row').hide();
-        for(var i in nowCourse){
-         if(nowCourse[i].comment_amt != 0)$('#course-table').append(courseTransforToDom(nowCourse[i]));
+        var originalText = '<tr><th class="course_name">課程名稱</th><th class="department_name" >開課系所</th><th class="teacher" >開課老師</th><th class="class_time">時間</th></tr>';
+        $("#course-table").html(originalText);
+        for(var i in nowCourse_hasComment){
+          $('#course-table').append(courseTransforToDom(nowCourse_hasComment[i]));
         }
-        showempty=1;
+        now_index = nowCourse.length;
+        // showempty = 1;
+        // $('.course-row').hide();
+        // for(var i in nowCourse){
+        //  if(nowCourse[i].comment_amt != 0)$('#course-table').append(courseTransforToDom(nowCourse[i]));
+        // }
+        // showempty=1;
         addCourseEventlistener();
       },
       onUnchecked: function() {
-        $('.course-row').show();
-        $('.notempty').remove();
-        showempty=0;
+        var originalText = '<tr><th class="course_name">課程名稱</th><th class="department_name" >開課系所</th><th class="teacher" >開課老師</th><th class="class_time">時間</th></tr>';
+        $("#course-table").html(originalText);
+        for(var i = 0; i < nowCourse.length && i < 50; i++ ){
+          $('#course-table').append(courseTransforToDom(nowCourse[i]));
+        }
+        now_index = nowCourse.length > 50 ? 50 : nowCourse.length;
+        // $('.course-row').show();
+        // $('.notempty').remove();
+        // showempty=0;
       }
     });
     /* 搜尋欄的的設定 */
@@ -320,6 +340,14 @@
       }
     }
     nowCourse = filterCourse;
+
+    // 重新製作有心得的nowCourse_hasComment
+    nowCourse_hasComment.length = 0;
+    for(var i in nowCourse){
+      if(nowCourse[i].comment_amt != 0){
+        nowCourse_hasComment.push(nowCourse[i]);
+      }
+    }
   }
   /* 將篩選完的課顯示於網頁上 */
   function changeCourse(){
@@ -330,23 +358,22 @@
       $("#course-table").append(courseTransforToDom(nowCourse[i]));
       now_index++;
     }
-    max_index = nowCourse.length;
 
     // 檢查是否有心得篩選條件
     // var showempty = 0;
     if($('.ui.checkbox').hasClass('checked')){
-      for(var i = 0 ;i < nowCourse.length; i++){
-        $("#course-table").append(courseTransforToDom(nowCourse[i]));
-        now_index++;
+      $("#course-table").html(originalText);
+      for(var i in nowCourse_hasComment){
+          $('#course-table').append(courseTransforToDom(nowCourse_hasComment[i]));
       }
-      now_index = nowCourse.length;
-      $('.course-row').hide();
-
-      for(var i in nowCourse){
-       if(nowCourse[i].comment_amt != 0)$('#course-table').append(courseTransforToDom(nowCourse[i]));
-      }
+      now_index = nowCourse.length; // 避免丟出沒有心得的課程
+      // $('.course-row').hide();
+      // for(var i in nowCourse){
+      //   if(nowCourse[i].comment_amt != 0)$('#course-table').append(courseTransforToDom(nowCourse[i]));
+      // }
       showempty=1;
     }
+
   }
   function mergeArr(arr){
     var chooseWeeks = Object.keys(arr).sort();

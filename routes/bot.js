@@ -178,7 +178,7 @@ function sendCoursePlaceById(sender,keyword2) {
   db.select().field(["系所名稱","課程名稱","時間","教室"]).from("course_105_2").where("選課序號=",keyword2).run(function(course){
     if(course.length > 0){
       messageData = {
-        text:course[0].系所名稱+" "+course[0].課程名稱+" "+course[0].時間+" 上課地點為"+course[0].教室
+        text:course[0].系所名稱+" "+course[0].課程名稱+" "+course[0].時間+" \n上課地點為\n"+course[0].教室
       }
     }else{
       messageData = {

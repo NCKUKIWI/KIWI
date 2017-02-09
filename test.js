@@ -1,6 +1,6 @@
 var dbsystem = require('./model/dba');
 var db = new dbsystem();
-db.select().field(["系所名稱","課程名稱","時間","教室"]).from("course_105_2").where("課程名稱 LIKE '%微積分%'").run(function(course){
+db.select().field(["系所名稱","課程名稱","時間","教室"]).from("course_105_2").where("課程名稱 LIKE '%實驗診斷學%'").run(function(course){
   messageData = {
     "attachment":{
       "type": "template",
@@ -24,9 +24,10 @@ db.select().field(["系所名稱","課程名稱","時間","教室"]).from("cours
       "payload":course[i].教室,
     }
     card["buttons"].push(data);
-    if(i%3==2){
+    if(i%3==2 || i == course.length-1){
       messageData["attachment"]["payload"]["elements"].push(card);
     }
   }
+  console.log(messageData["attachment"]["payload"]["elements"].length);
   console.log(messageData["attachment"]["payload"]["elements"]);
 });

@@ -137,10 +137,11 @@ function sendCoursePlace(sender,keyword) {
         "payload":course[i].教室,
       }
       card["buttons"].push(data);
-      if(i%3==2){
+      if(i%3==2 || i == course.length-1){
         messageData["attachment"]["payload"]["elements"].push(card);
       }
     }
+    console.log(messageData["attachment"]["payload"]["elements"].length);
     db=null;
     delete db;
     request({

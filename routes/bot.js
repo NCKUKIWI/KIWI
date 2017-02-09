@@ -25,9 +25,9 @@ router.post('/webhook/', function(req, res) {
         continue;
       }
       else{
-        var word = text.match(/^@[\u4e00-\u9fa5]{1,}/i);
-        if(word){
-          word=word[0].replace(/@|\s/g,"");
+        var keyword = text.match(/^@[\u4e00-\u9fa5]{1,}/i);
+        if(keyword){
+          keyword=keyword[0].replace(/@|\s/g,"");
           sendCoursePlace(sender,keyword);
           continue;
         }

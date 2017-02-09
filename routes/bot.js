@@ -33,8 +33,8 @@ router.post('/webhook/', function(req, res) {
         }
         var keyword2 = text.match(/^#[a-zA-Z0-9]{1,}/i);
         if(keyword2){
-          keyword=keyword[0].replace(/#|\s/g,"");
-          sendCoursePlaceById(sender,keyword);
+          keyword2=keyword2[0].replace(/#|\s/g,"");
+          sendCoursePlaceById(sender,keyword2);
           continue;
         }
         continue;

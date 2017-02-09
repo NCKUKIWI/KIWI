@@ -2,7 +2,7 @@ var express = require('express');
 var request = require('request');
 var config = require('../config');
 var router = express.Router();
-var db = require('../model/db');
+var dbsystem = require('../model/dba');
 var token = config.msgtoken;
 
 router.get('/webhook/', function(req, res) {
@@ -24,17 +24,24 @@ router.post('/webhook/', function(req, res) {
         sendGenericMessage(sender);
         continue;
       }
+      else{
+        var word = text.match(/^@[\u4e00-\u9fa5]{1,}/i);
+        if(word){
+          word=word[0].replace(/@|\s/g,"");
+          sendCoursePlace(sender,keyword);
+          continue;
+        }
+        continue;
+      }
     }
     if (event.postback) {
-      console.log(event.postback.payload);
-      sendTextMessage(sender,event.postback.payload,token);
+      sendTextMessage(sender,event.postback.payload);
       continue;
     }
   }
   res.sendStatus(200);
 })
 
-// function to echo back messages - added by Stefan
 
 function sendTextMessage(sender, text) {
   messageData = {
@@ -61,9 +68,6 @@ function sendTextMessage(sender, text) {
   })
 }
 
-
-// Send an test message back as two cards.
-
 function sendGenericMessage(sender) {
   messageData = {
     "attachment": {
@@ -72,15 +76,15 @@ function sendGenericMessage(sender) {
         "template_type":"generic",
         "elements": [{
           "title": "NCKUHUB",
-          "subtitle": "需要什麼幫助嗎?",
+          "subtitle": "你好，我是 NCKU HUB 新來的小幫手。請問需要什麼幫助嗎？?",
           "buttons": [{
             "type": "postback",
-            "title": "問課",
-            "payload":"請輸入課程代碼",
+            "title": "找上課地點",
+            "payload":"馬上為你尋找上課地點，請告訴我們課程名稱，例如 @微積分",
           },{
             "type": "postback",
-            "title": "打個招呼",
-            "payload": "歡迎多到nckuhub晃晃",
+            "title": "追課程餘額",
+            "payload": "馬上為你追蹤課程餘額，請告訴我們課程名稱，例如 #微積分",
           }],
         }]
       }
@@ -105,6 +109,52 @@ function sendGenericMessage(sender) {
       console.log('Error: ', response.body.error)
     }
   })
+}
+
+function sendCoursePlace(sender,keyword) {
+  var db = new dbsystem();
+  db.select().field(["系所名稱","課程名稱","時間","教室"]).where("課程名稱 LIKE '%" + keyword + "%'").run(function(course){
+    messageData = {
+      "attachment":{
+        "type": "template",
+        "payload": {
+          "template_type":"generic",
+          "elements": [{
+            "title": "NCKUHUB",
+            "subtitle": "你好，我是 NCKU HUB 新來的小幫手。請問需要什麼幫助嗎？?",
+            "buttons": [],
+          }]
+        }
+      }
+    }
+    for(var i in course){
+      var data = {
+        "type": "postback",
+        "title": course[i].系所名稱+" "+course[i].課程名稱+" "+course[i].時間,
+        "payload":course[i].教室,
+      }
+      messageData["attachment"]["payload"]["elements"]["buttons"].append(data);
+      request({
+        url: 'https://graph.facebook.com/v2.6/me/messages',
+        qs: {
+          access_token:token
+        },
+        method: 'POST',
+        json: {
+          recipient: {
+            id:sender
+          },
+          message: messageData,
+        }
+      }, function(error, response, body) {
+        if (error) {
+          console.log('Error sending messages: ', error)
+        } else if (response.body.error) {
+          console.log('Error: ', response.body.error)
+        }
+      })
+    }
+  });
 }
 
 

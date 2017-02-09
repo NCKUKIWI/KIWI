@@ -133,7 +133,7 @@ function sendCoursePlace(sender,keyword) {
         "title": course[i].系所名稱+" "+course[i].課程名稱+" "+course[i].時間,
         "payload":course[i].教室,
       }
-      messageData["attachment"]["payload"]["elements"][0]["buttons"].append(data);
+      messageData["attachment"]["payload"]["elements"][0]["buttons"].push(data);
       request({
         url: 'https://graph.facebook.com/v2.6/me/messages',
         qs: {

@@ -28,7 +28,13 @@ router.post('/webhook/', function(req, res) {
         var keyword = text.match(/^@[\u4e00-\u9fa5]{1,}/i);
         if(keyword){
           keyword=keyword[0].replace(/@|\s/g,"");
-          sendCoursePlace(sender,keyword);
+          sendCoursePlaceByName(sender,keyword);
+          continue;
+        }
+        var keyword2 = text.match(/^#[a-zA-Z0-9]{1,}/i);
+        if(keyword){
+          keyword=keyword[0].replace(/#|\s/g,"");
+          sendCoursePlaceById(sender,keyword);
           continue;
         }
         continue;
@@ -80,7 +86,7 @@ function sendGenericMessage(sender) {
           "buttons": [{
             "type": "postback",
             "title": "找上課地點",
-            "payload":"馬上為你尋找上課地點，請告訴我們課程名稱，例如 @微積分",
+            "payload":"馬上為你尋找上課地點，請告訴我們課程名稱或是選課序號，例如 @微積分 或是 #h3001",
           },{
             "type": "postback",
             "title": "追課程餘額",
@@ -111,7 +117,7 @@ function sendGenericMessage(sender) {
   })
 }
 
-function sendCoursePlace(sender,keyword) {
+function sendCoursePlaceByName(sender,keyword) {
   var db = new dbsystem();
   db.select().field(["系所名稱","課程名稱","時間","教室"]).from("course_105_2").where("課程名稱 LIKE '%" + keyword + "%'").run(function(course){
     messageData = {
@@ -153,6 +159,43 @@ function sendCoursePlace(sender,keyword) {
       json: {
         recipient: {
           id:sender
+        },
+        message: messageData,
+      }
+    }, function(error, response, body) {
+      if (error) {
+        console.log('Error sending messages: ', error)
+      } else if (response.body.error) {
+        console.log('Error: ', response.body.error)
+      }
+    });
+  });
+}
+
+function sendCoursePlaceById(sender,keyword2) {
+  keyword2=keyword2.toUpperCase();
+  var db = new dbsystem();
+  db.select().field(["系所名稱","課程名稱","時間","教室"]).from("course_105_2").where("選課序號=",keyword2).run(function(course){
+    if(course.length > 0){
+      messageData = {
+        text:course[0].系所名稱+" "+course[0].課程名稱+" "+course[0].時間+" 上課地點為"+course[0].教室
+      }
+    }else{
+      messageData = {
+        text:"查無課程"
+      }
+    }
+    db=null;
+    delete db;
+    request({
+      url: 'https://graph.facebook.com/v2.6/me/messages',
+      qs: {
+        access_token: token
+      },
+      method: 'POST',
+      json: {
+        recipient: {
+          id: sender
         },
         message: messageData,
       }

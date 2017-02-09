@@ -119,41 +119,49 @@ function sendCoursePlace(sender,keyword) {
         "type": "template",
         "payload": {
           "template_type":"generic",
-          "elements": [{
-            "title": "NCKUHUB",
-            "subtitle": "你好，我是 NCKU HUB 新來的小幫手。請問需要什麼幫助嗎？?",
-            "buttons": [],
-          }]
+          "elements": []
         }
       }
     }
     for(var i in course){
+      if(i%3==0){
+        var card = {
+          "title": "NCKUHUB",
+          "subtitle": "你好，我是 NCKU HUB 新來的小幫手。請問需要什麼幫助嗎？?",
+          "buttons": [],
+        }
+      }
       var data = {
         "type": "postback",
         "title": course[i].系所名稱+" "+course[i].課程名稱+" "+course[i].時間,
         "payload":course[i].教室,
       }
-      messageData["attachment"]["payload"]["elements"][0]["buttons"].push(data);
-      request({
-        url: 'https://graph.facebook.com/v2.6/me/messages',
-        qs: {
-          access_token:token
-        },
-        method: 'POST',
-        json: {
-          recipient: {
-            id:sender
-          },
-          message: messageData,
-        }
-      }, function(error, response, body) {
-        if (error) {
-          console.log('Error sending messages: ', error)
-        } else if (response.body.error) {
-          console.log('Error: ', response.body.error)
-        }
-      })
+      card["buttons"].push(data);
+      if(i%3==2){
+        messageData["attachment"]["payload"]["elements"].push(card);
+      }
     }
+    db=null;
+    delete db;
+    request({
+      url: 'https://graph.facebook.com/v2.6/me/messages',
+      qs: {
+        access_token:token
+      },
+      method: 'POST',
+      json: {
+        recipient: {
+          id:sender
+        },
+        message: messageData,
+      }
+    }, function(error, response, body) {
+      if (error) {
+        console.log('Error sending messages: ', error)
+      } else if (response.body.error) {
+        console.log('Error: ', response.body.error)
+      }
+    });
   });
 }
 

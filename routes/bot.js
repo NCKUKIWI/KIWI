@@ -81,7 +81,7 @@ function sendGenericMessage(sender) {
         "template_type":"generic",
         "elements": [{
           "title": "NCKUHUB",
-          "subtitle": "你好，我是 NCKU HUB 新來的小幫手。請問需要什麼幫助嗎?",
+          "subtitle": "你好 👋👋 我是 NCKU HUB 新來的小幫手，請問需要什麼幫助嗎❓",
           "buttons": [{
             "type": "postback",
             "title": "找上課地點",
@@ -141,8 +141,8 @@ function sendCoursePlaceByName(sender,keyword) {
         }
         var data = {
           "type": "postback",
-          "title": course[i].系所名稱+" "+course[i].課程名稱+" "+course[i].時間,
-          "payload":(course[i].教室=="") ? "無" : course[i].教室,
+          "title": course[i].系所名稱.replace(/[A-Z0-9]/g,"")+" "+course[i].課程名稱.replace(/\w/g,"")+" "+course[i].時間,
+          "payload":(course[i].教室=="") ? "無" : "你選擇的課程為：\n"+course[0].系所名稱.replace(/[A-Z0-9]/g,"")+" "+course[i].課程名稱.replace(/\w/g,"")+" "+course[i].時間+"\n上課教室在「"+course[i].教室.replace(/\w/g,"")+"」唷！",
         }
         card["buttons"].push(data);
         if(i%3==2 || i == course.length-1){
@@ -203,7 +203,7 @@ function sendCoursePlaceById(sender,keyword2) {
   db.select().field(["系所名稱","課程名稱","時間","教室"]).from("course_105_2").where("選課序號=",keyword2).run(function(course){
     if(course.length > 0){
       messageData = {
-        text:course[0].系所名稱+" "+course[0].課程名稱+" "+course[0].時間+" \n上課地點為\n"+course[0].教室
+        text:"你選擇的課程為：\n"+course[0].系所名稱.replace(/[A-Z0-9]/g,"")+" "+course[0].課程名稱.replace(/\w/g,"")+" "+course[0].時間+"\n上課教室在「"+course[0].教室.replace(/\w/g,"")+"」唷！",
       }
     }else{
       messageData = {

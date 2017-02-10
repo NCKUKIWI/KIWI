@@ -510,6 +510,7 @@ function addFollowCourse(sender,course_id){
 }
 
 function sendCancelFollow(sender){
+  var db = new dbsystem();
   db.select().field(["*"]).from("follow").where("fb_id=",sender).run(function(follow){
     db=null;
     delete db;

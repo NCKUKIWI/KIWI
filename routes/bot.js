@@ -493,7 +493,7 @@ function sendFollowCourseById(sender,keyword) {
       db.select().field("*").from("follow").where("course_id=",course[0].id).where("fb_id=",sender).run(function(follow){
         if(follow.length < 1){
           var text = "你選擇的課程為：\n"+course[0].系所名稱.replace(/[A-Z0-9]/g,"")+" "+course[0].課程名稱.replace(/[（|）|\s]/g,"")+"   "+course[0].時間+"\n已為你追蹤餘額!";
-          sendTextMessage(text);
+          sendTextMessage(sender,text);
           var data = {
             course_id:course[0].id,
             fb_id:sender

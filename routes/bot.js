@@ -455,7 +455,7 @@ function sendFollowCourseList(sender){
 
 function cancelFollowCourse(sender,follow_id){
   var db = new dbsystem();
-  db.select().field("content").from("follow").where("id=",follow_id).run(function(follow){
+  db.select().field(["content","teacher","time"]).from("follow").where("id=",follow_id).run(function(follow){
     if(follow.length > 0){
       var text = "你選擇的課程為："+follow[0].content+"／"+follow[0].teacher+"／"+follow[0].time+" 已經為你取消追蹤囉 🙂🙂";
       sendTextMessage(sender,text);

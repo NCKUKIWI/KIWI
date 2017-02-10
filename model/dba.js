@@ -79,7 +79,7 @@ db.prototype.field = function (field){
 };
 
 db.prototype.where = function(condition,value) {
-  if(value === undefined) {
+  if(typeof value === "undefined") {
     this.condition.push(condition);
   }
   else{
@@ -105,6 +105,13 @@ db.prototype.where = function(condition,value) {
     else{
       this.condition.push(condition+value);
     }
+  }
+  return this;
+};
+
+db.prototype.whereCheck = function(condition,value) {
+  if(value !== null){
+    this.condition.push(condition);
   }
   return this;
 };
@@ -309,7 +316,7 @@ db.prototype.order = function(order,type) {
 }
 
 db.prototype.limit = function(number) {
-  this.limitAmt += " LIMIT "+number;
+  this.limitAmt += "LIMIT "+number;
   return this;
 };
 
@@ -358,7 +365,6 @@ db.prototype.run = function (callback){
   var sql = this.sql;
   this.init();
   connection.query(sql,function(err, results, fields){
-    if(err) throw err;
     end = new Date().getTime();
     var time = end - start;
     console.log(chalk.green("Execute time: "+time+" ms"));
@@ -393,7 +399,7 @@ db.prototype.get = function (callback){
   var sql = this.sql;
   this.init();
   connection.query(sql,function(err, results, fields){
-    if (err) console.log(err);
+    if (err) throw err;
     end = new Date().getTime();
     var time = end - start;
     console.log(chalk.green("Execute time: "+time+" ms"));

@@ -322,7 +322,7 @@ function sendCoursePlaceById(sender,keyword) {
 function sendFollowCourseByName(sender,keyword,dpt) {
   var db = new dbsystem();
   if(dpt){
-    db.select().field(["系所名稱","課程名稱","時間"]).from("course_105_2").where("課程名稱 LIKE '%" + keyword + "%'").where("系所名稱 LIKE '%" + dpt + "%'").run(function(course){
+    db.select().field(["id","系所名稱","課程名稱","時間"]).from("course_105_2").where("課程名稱 LIKE '%" + keyword + "%'").where("系所名稱 LIKE '%" + dpt + "%'").run(function(course){
       db=null;
       delete db;
       if(course.length>0){
@@ -400,7 +400,7 @@ function sendFollowCourseByName(sender,keyword,dpt) {
     });
   }
   else{
-    db.select().field(["系所名稱","課程名稱","時間"]).from("course_105_2").where("課程名稱 LIKE '%" + keyword + "%'").run(function(course){
+    db.select().field(["id","系所名稱","課程名稱","時間"]).from("course_105_2").where("課程名稱 LIKE '%" + keyword + "%'").run(function(course){
       db=null;
       delete db;
       if(course.length>0){
@@ -488,7 +488,7 @@ function sendFollowCourseByName(sender,keyword,dpt) {
 function sendFollowCourseById(sender,keyword) {
   keyword=keyword.toUpperCase();
   var db = new dbsystem();
-  db.select().field(["系所名稱","課程名稱","時間"]).from("course_105_2").where("選課序號=",keyword).run(function(course){
+  db.select().field(["id","系所名稱","課程名稱","時間"]).from("course_105_2").where("選課序號=",keyword).run(function(course){
     if(course.length > 0){
       db.select().field("*").from("follow").where("course_id=",course[0].id).where("fb_id=",sender).run(function(follow){
         if(follow.length < 0){

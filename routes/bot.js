@@ -573,7 +573,7 @@ function sendCancelFollow(sender){
 function cancelFollowCourse(sender,follow_id){
   var db = new dbsystem();
   db.select().field("*").from("follow").where("id=",follow_id).run(function(follow){
-    if(follow > 0){
+    if(follow.length > 0){
       var text = "你選擇取消的課程為"+follow[0].content+"\n已為你取消追蹤!";
       sendTextMessage(sender,text);
       db.delete().from("follow").where("id=",follow_id).run(function(result){

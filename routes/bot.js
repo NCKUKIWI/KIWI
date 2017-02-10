@@ -170,7 +170,7 @@ function sendCoursePlaceByName(sender,keyword,dpt,teacher) {
     delete db;
     if(course.length>0){
       if(course.length>30){
-        var subtitle = "以下是找到的前 30 筆結果 😈😈 要精準搜尋，請輸入 @課程名稱 $系所 %老師名";
+        var subtitle = "以下是找到的前 30 筆結果。要精準搜尋，請輸入 @課程名稱 $系所 %老師名";
       }else{
         var subtitle = "哎呀！我找到了這些，請問哪門是你要的呢 😇😇😇";
       }
@@ -264,7 +264,7 @@ function sendFollowCourseByName(sender,keyword,dpt,teacher) {
     delete db;
     if(course.length>0){
       if(course.length>30){
-        var subtitle = "以下是找到的前 30 筆結果 😈😈 要精準搜尋，請輸入 #課程名稱 $系所 %老師名";
+        var subtitle = "以下是找到的前 30 筆結果。要精準搜尋，請輸入 #課程名稱 $系所 %老師名";
       }else{
         var subtitle = "哎呀！我找到了這些，請問哪門是你要的呢 😇😇😇";
       }

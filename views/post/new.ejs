@@ -144,7 +144,7 @@ $(document).ready(function(){
         title:'<%- course[i].課程名稱 %> - <%- course[i].老師 %>',
         description:'<%- course[i].時間 %>',
         coursename:'<%- course[i].課程名稱 %>',
-        courseid:'<%- course[i].id %>',
+        courseid: 0, // 因為每年都會變所以先設0
         teacher:'<%- course[i].老師 %>',
         category:'<%- course[i].系所名稱 %>',
       },

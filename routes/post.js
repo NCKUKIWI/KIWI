@@ -26,6 +26,7 @@ router.post('/create', function(req, res) {
       res.send(errors);
     }
     else{
+      console.log(req.body.course_name);
       var post = {
         course_name:req.body.course_name.replace(/\'|\#|\/\*/g,""),
         teacher:req.body.teacher.replace(/\'|\#|\/\*/g,""),
@@ -63,7 +64,7 @@ router.post('/create', function(req, res) {
 router.get('/new', function(req, res) {
   console.log('\n'+'GET /post/new');
   var colmuns = ['id','課程名稱','老師','時間','系所名稱'];
-  db.GetColumn('course',colmuns,{'column':'id','order':'DESC'},function(course){
+  db.GetColumn('course UNION SELECT id, 課程名稱,老師,時間,系所名稱 FROM course_105_2',colmuns,{'column':'id','order':'DESC'},function(course){
     res.render('post/new',{
       'course': course,
       'user': req.user

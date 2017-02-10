@@ -571,12 +571,20 @@ function sendFollowCourseList(sender){
 }
 
 function cancelFollowCourse(sender,follow_id){
-
-  var text = "你選擇的課程為："+follow.content+"已經為你取消追蹤囉 🙂🙂";
-  sendTextMessage(sender,text);
-  sendGoodbye(sender);
   var db = new dbsystem();
-  db.delete().from("follow").where("id=",follow_id).run(function(result){});
+  db.select().field("content").from("follow").where("id=",follow_id).run(function(follow){
+    if(follow.length > 0){
+      var text = "你選擇的課程為："+follow[0].content+"已經為你取消追蹤囉 🙂🙂";
+      sendTextMessage(sender,text);
+      sendGoodbye(sender);
+      db.delete().from("follow").where("id=",follow_id).run(function(result){});
+    }
+    else{
+      var text = "已經為你取消追蹤囉 🙂🙂";
+      sendTextMessage(sender,text);
+      sendGoodbye(sender);
+    }
+  });
 }
 
 function cancelAllFollowCourse(sender){

@@ -1,0 +1,169 @@
+
+
+
+$menuheight: 65px;
+$logoheight: 30px;
+$burgerheight: 3px;
+$deepblue: #07689f;
+$deepblueact: #1f608c;
+$blue: #a2d5f2;
+$grey: #fafafa;
+$orange: #ff7e67;
+
+// z-index: 15 ~ 30
+
+.menu {
+	.fixed {
+		position: fixed;
+		z-index: 30;
+	}
+	.background {
+		position: fixed;
+		z-index: 20;
+		width: 100vw;
+		height: $menuheight;
+		background: $grey;
+		box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2);
+	}
+	.sidestuff {
+		position: relative;
+		float: left;
+		height: $menuheight;
+		width: 0px;
+	}
+	.burger {
+		position: relative;
+		z-index: 30;
+		float: left;
+		top: 0px;
+		height: $menuheight;
+		width: $menuheight;
+		cursor: pointer;
+		background: $grey;
+		span, span:before, span:after {
+			position: relative;
+			content: '';
+			display: block;
+			margin: auto;
+			height: $burgerheight;
+			top: 48%;
+			width: 20px;
+			background: $deepblue;
+	    }
+	    span:before {
+			top: -6px - $burgerheight;
+		}
+		span:after {
+			top: 6px;
+		}
+		&:hover {
+			background: $deepblue;
+			span, span:before, span:after {
+				background: $grey;
+			}
+		}
+		&:active {
+			background: $deepblueact;
+		}
+	}
+	.search {
+		position: relative;
+		z-index: 30;
+		float: left;
+		height: $menuheight;
+		width: $menuheight;
+		box-shadow: 0px -2px 0px 1px rgba(0,0,0,0.2);
+		cursor: pointer;
+		background: $grey;
+		.searchicon {
+			position: absolute;
+			margin-left: 23px;
+			height: ($menuheight * 0.3);
+			margin-top: ($menuheight * 0.34);
+		}
+		&:hover {
+			background: $deepblue;
+		}
+		&:active {
+			background: $deepblueact;
+		}
+	}
+	.searchbar {
+		position: relative;
+		z-index: 29;
+		float: left;
+		height: $menuheight - 3px;
+	    background-color: $grey;
+	    border-width: 0px;
+	    color: $deepblue;
+	    letter-spacing: 5px;
+	    font-size: 16px;
+	    padding-left: 3vw;
+	    outline: none;
+	}
+	.title {
+		position: fixed;
+		text-align: center;
+		display: block;
+		left: 0;
+		right: 0;
+		z-index: 25;
+		.logo {
+			height: $logoheight;
+			margin: ($menuheight - $logoheight)/2 2vw;
+			transition: opacity 0.5s ease;
+			&:hover {
+				opacity: 0.7;
+			}
+		}
+	}
+	.start {
+		position: fixed;
+		z-index: 30;
+		right: 0;
+		height: $menuheight;
+		width: $menuheight;
+		box-shadow: 0px -2px 0px 1px rgba(0,0,0,0.2);
+		cursor: pointer;
+		background: $deepblue;
+		.starticon {
+			position: absolute;
+			margin-left: 23px;
+			height: ($menuheight * 0.3);
+			margin-top: ($menuheight * 0.34);
+		}
+		&:active {
+			background: $deepblueact;
+		}
+	}
+	.filter {
+		position: fixed;
+		z-index: 30;
+		right: 0;
+		height: $menuheight;
+		width: $menuheight;
+		box-shadow: 0px -2px 0px 1px rgba(0,0,0,0.2);
+		cursor: pointer;
+		.filtericon {
+			position: absolute;
+			margin-left: 23px;
+			height: ($menuheight * 0.3);
+			margin-top: ($menuheight * 0.34);
+		}
+		&:hover {
+			background: $deepblue;
+		}
+		&:active {
+			background: $deepblueact;
+		}
+	}
+	.cover {
+		position: fixed;
+		z-index: 15;
+		height: 100vh;
+		width: 100vw;
+		background: black;
+		opacity: 0.2;
+	}
+}
+

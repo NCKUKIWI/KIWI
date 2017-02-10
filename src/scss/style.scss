@@ -1,0 +1,27 @@
+
+
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans');
+
+$sidewidth: 250px;
+$bg_color: #ffffff;
+$deepblue: #07689f;
+$deepblueact: #1f608c;
+$blue: #a2d5f2;
+$grey: #fafafa;
+$orange: #ff7e67;
+
+
+body {
+    background: $bg_color;
+    font-family: 'Noto Sans', helvetica, Microsoft JhengHei, serif, sans-serif, monospace;
+}
+
+.sidebar {
+	position: fixed;
+	z-index: 40;
+	height: 100vh;
+	width: $sidewidth;
+	left: - $sidewidth;
+	background: $grey;
+	box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2);
+}

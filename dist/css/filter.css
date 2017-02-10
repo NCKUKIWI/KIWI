@@ -1,0 +1,13 @@
+.filtercont {
+  position: fixed;
+  z-index: 10;
+  width: 100vw;
+  height: 65px;
+  background: #fafafa;
+  box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.2); }
+
+.filterstuff {
+  position: relative;
+  width: 100vw;
+  height: 65px;
+  background: transparent; }

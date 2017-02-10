@@ -1,0 +1,27 @@
+
+
+
+$menuheight: 65px;
+$logoheight: 30px;
+$burgerheight: 3px;
+$deepblue: #07689f;
+$deepblueact: #1f608c;
+$blue: #a2d5f2;
+$grey: #fafafa;
+$orange: #ff7e67;
+
+.filtercont {
+	position: fixed;
+	z-index: 10;
+	width: 100vw;
+	height: $menuheight;
+	background: $grey;
+	box-shadow: 0px 0px 0px 1px rgba(0,0,0,0.2);
+}
+
+.filterstuff {
+	position: relative;
+	width: 100vw;
+	height: $menuheight;
+	background: transparent;
+}

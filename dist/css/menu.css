@@ -1,0 +1,135 @@
+.menu .fixed {
+  position: fixed;
+  z-index: 30; }
+
+.menu .background {
+  position: fixed;
+  z-index: 20;
+  width: 100vw;
+  height: 65px;
+  background: #fafafa;
+  box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.2); }
+
+.menu .sidestuff {
+  position: relative;
+  float: left;
+  height: 65px;
+  width: 0px; }
+
+.menu .burger {
+  position: relative;
+  z-index: 30;
+  float: left;
+  top: 0px;
+  height: 65px;
+  width: 65px;
+  cursor: pointer;
+  background: #fafafa; }
+  .menu .burger span, .menu .burger span:before, .menu .burger span:after {
+    position: relative;
+    content: '';
+    display: block;
+    margin: auto;
+    height: 3px;
+    top: 48%;
+    width: 20px;
+    background: #07689f; }
+  .menu .burger span:before {
+    top: -9px; }
+  .menu .burger span:after {
+    top: 6px; }
+  .menu .burger:hover {
+    background: #07689f; }
+    .menu .burger:hover span, .menu .burger:hover span:before, .menu .burger:hover span:after {
+      background: #fafafa; }
+  .menu .burger:active {
+    background: #1f608c; }
+
+.menu .search {
+  position: relative;
+  z-index: 30;
+  float: left;
+  height: 65px;
+  width: 65px;
+  box-shadow: 0px -2px 0px 1px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  background: #fafafa; }
+  .menu .search .searchicon {
+    position: absolute;
+    margin-left: 23px;
+    height: 19.5px;
+    margin-top: 22.1px; }
+  .menu .search:hover {
+    background: #07689f; }
+  .menu .search:active {
+    background: #1f608c; }
+
+.menu .searchbar {
+  position: relative;
+  z-index: 29;
+  float: left;
+  height: 62px;
+  background-color: #fafafa;
+  border-width: 0px;
+  color: #07689f;
+  letter-spacing: 5px;
+  font-size: 16px;
+  padding-left: 3vw;
+  outline: none; }
+
+.menu .title {
+  position: fixed;
+  text-align: center;
+  display: block;
+  left: 0;
+  right: 0;
+  z-index: 25; }
+  .menu .title .logo {
+    height: 30px;
+    margin: 17.5px 2vw;
+    transition: opacity 0.5s ease; }
+    .menu .title .logo:hover {
+      opacity: 0.7; }
+
+.menu .start {
+  position: fixed;
+  z-index: 30;
+  right: 0;
+  height: 65px;
+  width: 65px;
+  box-shadow: 0px -2px 0px 1px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  background: #07689f; }
+  .menu .start .starticon {
+    position: absolute;
+    margin-left: 23px;
+    height: 19.5px;
+    margin-top: 22.1px; }
+  .menu .start:active {
+    background: #1f608c; }
+
+.menu .filter {
+  position: fixed;
+  z-index: 30;
+  right: 0;
+  height: 65px;
+  width: 65px;
+  box-shadow: 0px -2px 0px 1px rgba(0, 0, 0, 0.2);
+  cursor: pointer; }
+  .menu .filter .filtericon {
+    position: absolute;
+    margin-left: 23px;
+    height: 19.5px;
+    margin-top: 22.1px; }
+  .menu .filter:hover {
+    background: #07689f; }
+  .menu .filter:active {
+    background: #1f608c; }
+
+.menu .cover {
+  position: fixed;
+  z-index: 15;
+  height: 100vh;
+  width: 100vw;
+  background: black;
+  opacity: 0.2; }

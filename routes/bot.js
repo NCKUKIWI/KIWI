@@ -472,12 +472,12 @@ function addFollowCourse(sender,course_id){
             fb_id:sender,
             content:course[0].系所名稱.replace(/[A-Z0-9]/g,"")+" "+course[0].課程名稱.replace(/[（|）|\s]/g,""),
             time:course[0].時間,
-            serial:(course[0].選課序號)?"":course[0].選課序號
+            serial:(course[0].選課序號)?course[0].選課序號:""
           }
           db.insert().into("follow").set(data).run(function(result){});
         }
         else{
-          var text = "你選擇的課程為：\n"+course[0].系所名稱.replace(/[A-Z0-9]/g,"")+" "+course[0].課程名稱.replace(/[（|）|\s]/g,"")+" "+course[0].時間+"\n已經追蹤過囉！";
+          var text = "你選擇的課程為：\n"+course[0].系所名稱.replace(/[A-Z0-9]/g,"")+" "+course[0].課程名稱.replace(/[（|）|\s]/g,"")+" "+course[0].時間+"\n這堂課目前無餘額，已為你設定過追蹤囉！";
           sendTextMessage(sender,text);
           sendGoodbye(sender);
         }

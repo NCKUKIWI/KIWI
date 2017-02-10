@@ -56,6 +56,7 @@ router.post('/webhook/', function(req, res) {
     if (event.postback) {
       var keyword5 = event.postback.payload.match(/^![0-9]{1,}/i);
       var keyword6 = event.postback.payload.match(/^&[0-9]{1,}/i);
+      var keyword7 = event.postback.payload.match(/^@[0-9]{1,}/i);
       if(keyword5){
         keyword5=keyword5[0].replace(/!|\s/g,"");
         addFollowCourse(sender,keyword5);
@@ -64,16 +65,22 @@ router.post('/webhook/', function(req, res) {
         keyword6=keyword6[0].replace(/&|\s/g,"");
         cancelFollowCourse(sender,keyword6);
       }
+      else if(keyword7){
+        keyword7=keyword7[0].replace(/@|\s/g,"");
+        sendCourseInfo(sender,keyword7);
+      }
       else {
         if(event.postback.payload=="cancelfollow"){
-          sendCancelFollow(sender);
+          sendFollowCourseList(sender);
         }
         else if(event.postback.payload=="callagain"){
           sendHelloMessage(sender);
         }
+        else if(event.postback.payload=="cancelall"){
+          cancelAllFollowCourse(sender);
+        }
         else{
           sendTextMessage(sender,event.postback.payload);
-          sendGoodbye(sender);
         }
       }
     }
@@ -123,7 +130,7 @@ function sendHelloMessage(sender) {
           },{
             "type": "postback",
             "title": "追課程餘額",
-            "payload": "馬上為你追蹤課程餘額，請告訴我們課程名稱，例如 #微積分",
+            "payload": "馬上為你追蹤課程餘額 😀😀 請告訴我們課程名稱或是選課序號（例如 #微積分 或是 #h3001）",
           },{
             "type": "postback",
             "title": "取消追蹤課程餘額",
@@ -181,7 +188,7 @@ function sendCoursePlaceByName(sender,keyword,dpt) {
           var data = {
             "type": "postback",
             "title": course[i].系所名稱.replace(/[A-Z0-9]/g,"")+" "+course[i].課程名稱.replace(/[（|）|\s]/g,"")+" "+course[i].時間,
-            "payload":(course[i].教室=="") ? "無" : "你選擇的課程為：\n"+course[i].課程名稱.replace(/[（|）|\s]/g,"")+"   "+course[i].時間+"\n上課教室在「"+course[i].教室.replace(/\s/g,"")+"」唷！",
+            "payload":"@"+course[i].id,
           }
           card["buttons"].push(data);
           if(i%3==2 || i == course.length-1){
@@ -221,7 +228,7 @@ function sendCoursePlaceByName(sender,keyword,dpt) {
       delete db;
       if(course.length>0){
         if(course.length>30){
-          var subtitle = "以下是找到的前 30 筆結果，要精準搜尋，請輸入 @課程名稱 $系所";
+          var subtitle = "以下是找到的前 30 筆結果 😈😈 要精準搜尋，請輸入 @課程名稱 $系所";
         }else{
           var subtitle = "哎呀！我找到了這些，請問哪門是你要的呢 😇😇😇";
         }
@@ -246,7 +253,7 @@ function sendCoursePlaceByName(sender,keyword,dpt) {
           var data = {
             "type": "postback",
             "title": course[i].系所名稱.replace(/[A-Z0-9]/g,"")+" "+course[i].課程名稱.replace(/[（|）|\s]/g,"")+" "+course[i].時間,
-            "payload":(course[i].教室=="") ? "無" : "你選擇的課程為：\n"+course[i].課程名稱.replace(/[（|）|\s]/g,"")+"   "+course[i].時間+"\n上課教室在「"+course[i].教室.replace(/\s/g,"")+"」唷！",
+            "payload":"@"+course[i].id,
           }
           card["buttons"].push(data);
           if(i%3==2 || i == course.length-1){
@@ -285,14 +292,25 @@ function sendCoursePlaceByName(sender,keyword,dpt) {
 function sendCoursePlaceById(sender,keyword) {
   keyword=keyword.toUpperCase();
   var db = new dbsystem();
-  db.select().field(["系所名稱","課程名稱","時間","教室"]).from("course_105_2").where("選課序號=",keyword).run(function(course){
+  db.select().field(["id"]).from("course_105_2").where("選課序號=",keyword).run(function(course){
     db=null;
     delete db;
     if(course.length > 0){
-      var text = "你選擇的課程為：\n"+course[0].系所名稱.replace(/[A-Z0-9]/g,"")+" "+course[0].課程名稱.replace(/[（|）|\s]/g,"")+"   "+course[0].時間+"\n上課教室在「"+course[0].教室.replace(/\s/g,"")+"」唷！";
+      sendCourseInfo(sender,course_id);
     }else{
       var text = "查無課程唷 😱😱 會不會是這學期沒開課，或是關鍵字有打錯呢？";
+      sendTextMessage(sender,text);
+      sendGoodbye(sender);
     }
+  });
+}
+
+function sendCourseInfo(sender,course_id) {
+  var db = new dbsystem();
+  db.select().field(["系所名稱","課程名稱","時間","教室"]).from("course_105_2").where("id=",course_id).run(function(course){
+    db=null;
+    delete db;
+    var text = "你選擇的課程為：\n"+course[0].系所名稱.replace(/[A-Z0-9]/g,"")+" "+course[0].課程名稱.replace(/[（|）|\s]/g,"")+"   "+course[0].時間+"\n上課教室在「"+course[0].教室.replace(/\s/g,"")+"」唷！";
     sendTextMessage(sender,text);
     sendGoodbye(sender);
   });
@@ -353,28 +371,9 @@ function sendFollowCourseByName(sender,keyword,dpt) {
         });
       }
       else{
-        messageData = {
-          text:"查無課程唷 😱😱 會不會是這學期沒開課，或是關鍵字有打錯呢？"
-        }
-        request({
-          url: 'https://graph.facebook.com/v2.6/me/messages',
-          qs: {
-            access_token: token
-          },
-          method: 'POST',
-          json: {
-            recipient: {
-              id: sender
-            },
-            message: messageData,
-          }
-        }, function(error, response, body) {
-          if (error) {
-            console.log('Error sending messages: ', error)
-          } else if (response.body.error) {
-            console.log('Error: ', response.body.error)
-          }
-        });
+        var text="查無課程唷 😱😱 會不會是這學期沒開課，或是關鍵字有打錯呢？";
+        sendTextMessage(sender,text);
+        sendGoodbye(sender);
       }
     });
   }
@@ -384,7 +383,7 @@ function sendFollowCourseByName(sender,keyword,dpt) {
       delete db;
       if(course.length>0){
         if(course.length>30){
-          var subtitle = "以下是找到的前 30 筆結果，要精準搜尋，請輸入 #課程名稱 $系所";
+          var subtitle = "以下是找到的前 30 筆結果 😈😈 要精準搜尋，請輸入 #課程名稱 $系所";
         }else{
           var subtitle = "哎呀！我找到了這些，請問哪門是你要的呢 😇😇😇";
         }
@@ -437,28 +436,9 @@ function sendFollowCourseByName(sender,keyword,dpt) {
         });
       }
       else{
-        messageData = {
-          text:"查無課程唷 😱😱 會不會是這學期沒開課，或是關鍵字有打錯呢？"
-        }
-        request({
-          url: 'https://graph.facebook.com/v2.6/me/messages',
-          qs: {
-            access_token: token
-          },
-          method: 'POST',
-          json: {
-            recipient: {
-              id: sender
-            },
-            message: messageData,
-          }
-        }, function(error, response, body) {
-          if (error) {
-            console.log('Error sending messages: ', error)
-          } else if (response.body.error) {
-            console.log('Error: ', response.body.error)
-          }
-        });
+        var text = "查無課程唷 😱😱 會不會是這學期沒開課，或是關鍵字有打錯呢？";
+        sendTextMessage(sender,text);
+        sendGoodbye(sender);
       }
     });
   }
@@ -467,57 +447,48 @@ function sendFollowCourseByName(sender,keyword,dpt) {
 function sendFollowCourseById(sender,keyword) {
   keyword=keyword.toUpperCase();
   var db = new dbsystem();
-  db.select().field(["id","系所名稱","課程名稱","時間"]).from("course_105_2").where("選課序號=",keyword).run(function(course){
+  db.select().field(["id"]).from("course_105_2").where("選課序號=",keyword).run(function(course){
     if(course.length > 0){
-      db.select().field("*").from("follow").where("course_id=",course[0].id).where("fb_id=",sender).run(function(follow){
-        if(follow.length < 1){
-          var text = "你選擇的課程為：\n"+course[0].系所名稱.replace(/[A-Z0-9]/g,"")+" "+course[0].課程名稱.replace(/[（|）|\s]/g,"")+"   "+course[0].時間+"\n已為你追蹤餘額!";
-          sendTextMessage(sender,text);
-          var data = {
-            course_id:course[0].id,
-            fb_id:sender,
-            content:course[0].系所名稱.replace(/[A-Z0-9]/g,"")+" "+course[0].課程名稱.replace(/[（|）|\s]/g,"")+"   "+course[0].時間
-          }
-          db.insert().into("follow").set(data).run(function(result){
-            db=null;
-            delete db;
-          });
-        }
-        else{
-          var text = "你選擇的課程為：\n"+course[0].系所名稱.replace(/[A-Z0-9]/g,"")+" "+course[0].課程名稱.replace(/[（|）|\s]/g,"")+"   "+course[0].時間+"\n已經追蹤過囉!";
-          sendTextMessage(sender,text);
-        }
-      });
+      addFollowCourse(sender,course[0].id);
     }else{
       var text="查無課程唷 😱😱 會不會是這學期沒開課，或是關鍵字有打錯呢？";
       sendTextMessage(sender,text);
+      sendGoodbye(sender);
     }
   });
 }
 
 function addFollowCourse(sender,course_id){
   var db = new dbsystem();
-  db.select().field(["系所名稱","課程名稱","時間"]).from("course_105_2").where("id=",course_id).run(function(course){
-    db.select().field("*").from("follow").where("course_id=",course_id).where("fb_id=",sender).run(function(follow){
-      if(follow.length < 1){
-        var text = "你選擇的課程為：\n"+course[0].系所名稱.replace(/[A-Z0-9]/g,"")+" "+course[0].課程名稱.replace(/[（|）|\s]/g,"")+"   "+course[0].時間+"\n已為你追蹤餘額!";
-        sendTextMessage(sender,text);
-        var data = {
-          course_id:course_id,
-          fb_id:sender,
-          content:course[0].系所名稱.replace(/[A-Z0-9]/g,"")+" "+course[0].課程名稱.replace(/[（|）|\s]/g,"")+"   "+course[0].時間
+  db.select().field(["系所名稱","課程名稱","時間","餘額","選課序號"]).from("course_105_2").where("id=",course_id).run(function(course){
+    if(course[0].餘額 =="額滿"){
+      db.select().field("*").from("follow").where("course_id=",course_id).where("fb_id=",sender).run(function(follow){
+        if(follow.length < 1){
+          var text = "你選擇的課程為：\n"+course[0].系所名稱.replace(/[A-Z0-9]/g,"")+" "+course[0].課程名稱.replace(/[（|）|\s]/g,"")+" "+course[0].時間+"\n已為你追蹤餘額!";
+          sendTextMessage(sender,text);
+          sendGoodbye(sender);
+          var data = {
+            course_id:course_id,
+            fb_id:sender,
+            content:course[0].系所名稱.replace(/[A-Z0-9]/g,"")+" "+course[0].課程名稱.replace(/[（|）|\s]/g,"")+" "+course[0].時間
+          }
+          db.insert().into("follow").set(data).run(function(result){});
         }
-        db.insert().into("follow").set(data).run(function(result){});
-      }
-      else{
-        var text = "你選擇的課程為：\n"+course[0].系所名稱.replace(/[A-Z0-9]/g,"")+" "+course[0].課程名稱.replace(/[（|）|\s]/g,"")+"   "+course[0].時間+"\n已經追蹤過囉!";
-        sendTextMessage(sender,text);
-      }
-    });
+        else{
+          var text = "你選擇的課程為：\n"+course[0].系所名稱.replace(/[A-Z0-9]/g,"")+" "+course[0].課程名稱.replace(/[（|）|\s]/g,"")+" "+course[0].時間+"\n已經追蹤過囉!";
+          sendTextMessage(sender,text);
+          sendGoodbye(sender);
+        }
+      });
+    }else{
+      var text = "你選擇的課程為：\n"+course[0].系所名稱.replace(/[A-Z0-9]/g,"")+" "+course[0].課程名稱.replace(/[（|）|\s]/g,"")+" "+course[0].時間+"\n目前有 "+course[0].餘額+" 個餘額！趕快去選吧!";
+      sendTextMessage(sender,text);
+      sendGoodbye(sender);
+    }
   });
 }
 
-function sendCancelFollow(sender){
+function sendFollowCourseList(sender){
   var db = new dbsystem();
   db.select().field(["*"]).from("follow").where("fb_id=",sender).run(function(follow){
     db=null;
@@ -537,7 +508,7 @@ function sendCancelFollow(sender){
         if(i%3==0){
           var card = {
             "title": "NCKUHUB",
-            "subtitle":"以下是您目前追蹤餘額的課程，點擊以取消追蹤",
+            "subtitle":"以下是你目前追蹤的課程，請問要取消哪一個呢？",
             "buttons": [],
           }
         }
@@ -550,6 +521,26 @@ function sendCancelFollow(sender){
         if(i%3==2 || i == follow.length-1){
           messageData["attachment"]["payload"]["elements"].push(card);
         }
+      }
+      if(follow.length %3 == 0){
+        var card = {
+          "title": "NCKUHUB",
+          "subtitle":"以下是你目前追蹤的課程，請問要取消哪一個呢？",
+          "buttons": [{
+            "type": "postback",
+            "title":"全部取消",
+            "payload":"cancelall",
+          }],
+        }
+        messageData["attachment"]["payload"]["elements"].push(card);
+      }
+      else{
+        var data = {
+          "type": "postback",
+          "title":"全部取消",
+          "payload":"cancelall",
+        }
+        messageData["attachment"]["payload"]["elements"][messageData["attachment"]["payload"]["elements"].length-1].push(data);
       }
       request({
         url: 'https://graph.facebook.com/v2.6/me/messages',
@@ -574,25 +565,26 @@ function sendCancelFollow(sender){
     else{
       var text = "目前沒有追蹤中的課程喔!";
       sendTextMessage(sender,text);
+      sendGoodbye(sender);
     }
   });
 }
 
 function cancelFollowCourse(sender,follow_id){
-  var db = new dbsystem();
-  db.select().field("*").from("follow").where("id=",follow_id).run(function(follow){
-    if(follow.length > 0){
-      var text = "你選擇取消的課程為"+follow[0].content+"\n已為你取消追蹤!";
-      sendTextMessage(sender,text);
-      db.delete().from("follow").where("id=",follow_id).run(function(result){
 
-      });
-    }
-    else {
-      var text = "該課程已取消追蹤了喔!"
-      sendTextMessage(sender,text);
-    }
-  });
+  var text = "你選擇的課程為："+follow.content+"已經為你取消追蹤囉 🙂🙂";
+  sendTextMessage(sender,text);
+  sendGoodbye(sender);
+  var db = new dbsystem();
+  db.delete().from("follow").where("id=",follow_id).run(function(result){});
+}
+
+function cancelAllFollowCourse(sender){
+  var text = "沒問題，已經為你取消追蹤囉！";
+  sendTextMessage(sender,text);
+  sendGoodbye(sender);
+  var db = new dbsystem();
+  db.delete().from("follow").where("fb_id=",sender).run(function(result){});
 }
 
 function sendGoodbye(sender){

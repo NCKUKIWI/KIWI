@@ -142,7 +142,7 @@ function sendCoursePlaceByName(sender,keyword) {
         var data = {
           "type": "postback",
           "title": course[i].系所名稱+" "+course[i].課程名稱+" "+course[i].時間,
-          "payload":course[i].教室,
+          "payload":(course[i].教室==""):"無"?course[i].教室,
         }
         card["buttons"].push(data);
         if(i%3==2 || i == course.length-1){

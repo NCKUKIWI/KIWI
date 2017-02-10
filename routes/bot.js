@@ -464,7 +464,7 @@ function addFollowCourse(sender,course_id){
     if(course[0].餘額 =="額滿"){
       db.select().field("*").from("follow").where("course_id=",course_id).where("fb_id=",sender).run(function(follow){
         if(follow.length < 1){
-          var text = "你選擇的課程為：\n"+course[0].系所名稱.replace(/[A-Z0-9]/g,"")+" "+course[0].課程名稱.replace(/[（|）|\s]/g,"")+" "+course[0].時間+"\n已為你追蹤餘額!";
+          var text = "你選擇的課程為：\n"+course[0].系所名稱.replace(/[A-Z0-9]/g,"")+" "+course[0].課程名稱.replace(/[（|）|\s]/g,"")+" "+course[0].時間+"\n這堂課目前已無餘額，已為你追蹤。請抱著既期待又怕受傷害的心情等待！!";
           sendTextMessage(sender,text);
           sendGoodbye(sender);
           var data = {

@@ -540,7 +540,7 @@ function sendFollowCourseList(sender){
           "title":"全部取消",
           "payload":"cancelall",
         }
-        messageData["attachment"]["payload"]["elements"][messageData["attachment"]["payload"]["elements"].length-1].push(data);
+        messageData["attachment"]["payload"]["elements"][messageData["attachment"]["payload"]["elements"].length-1]["buttons"].push(data);
       }
       request({
         url: 'https://graph.facebook.com/v2.6/me/messages',

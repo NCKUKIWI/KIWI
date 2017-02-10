@@ -613,7 +613,7 @@ function sendGoodbye(sender){
           },{
             "type": "postback",
             "title": "用完了，謝謝!",
-            "payload": "不客氣，也謝謝你的使用:)",
+            "payload": "不客氣，也謝謝你的使用 ☺",
           }],
         }]
       }

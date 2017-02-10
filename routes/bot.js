@@ -353,7 +353,7 @@ function addFollowCourse(sender,course_id){
             content:course[0].系所名稱.replace(/[A-Z0-9]/g,"")+"／"+course[0].課程名稱.replace(/[（|）|\s]/g,""),
             time:course[0].時間,
             serial:(course[0].選課序號)?course[0].選課序號:"",
-            teacher:course[0].teacher
+            teacher:course[0].老師
           }
           db.insert().into("follow").set(data).run(function(result){});
         }

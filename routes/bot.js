@@ -477,13 +477,13 @@ function addFollowCourse(sender,course_id){
           db.insert().into("follow").set(data).run(function(result){});
         }
         else{
-          var text = "你選擇的課程為：\n"+course[0].系所名稱.replace(/[A-Z0-9]/g,"")+" "+course[0].課程名稱.replace(/[（|）|\s]/g,"")+" "+course[0].時間+"\n已經追蹤過囉!";
+          var text = "你選擇的課程為：\n"+course[0].系所名稱.replace(/[A-Z0-9]/g,"")+" "+course[0].課程名稱.replace(/[（|）|\s]/g,"")+" "+course[0].時間+"\n已經追蹤過囉！";
           sendTextMessage(sender,text);
           sendGoodbye(sender);
         }
       });
     }else{
-      var text = "你選擇的課程為：\n"+course[0].系所名稱.replace(/[A-Z0-9]/g,"")+" "+course[0].課程名稱.replace(/[（|）|\s]/g,"")+" "+course[0].時間+"\n這門課還有 "+course[0].餘額+" 個餘額！趕快去選吧 🏄🏄!";
+      var text = "你選擇的課程為：\n"+course[0].系所名稱.replace(/[A-Z0-9]/g,"")+" "+course[0].課程名稱.replace(/[（|）|\s]/g,"")+" "+course[0].時間+"\n這門課還有 "+course[0].餘額+" 個餘額！趕快去選吧 🏄🏄";
       sendTextMessage(sender,text);
       sendGoodbye(sender);
     }

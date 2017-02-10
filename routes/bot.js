@@ -25,29 +25,29 @@ router.post('/webhook/', function(req, res) {
         continue;
       }
       else{
-        var dpt = text.match(/\$[\u4e00-\u9fa5]{1,}/i);
-        if(dpt) dpt=dpt[0].replace(/\$|\s/g,"");
-        var keyword = text.match(/^@[\u4e00-\u9fa5]{1,}/i);
+        var dpt = text.match(/[\$|\uff04][\u4e00-\u9fa5]{1,}/i);
+        if(dpt) dpt=dpt[0].replace(/[\$|\uff04|\s]/g,"");
+        var keyword = textx.match(/^[\uff20|@][\u4e00-\u9fa5]{1,}/i);
         if(keyword){
-          keyword=keyword[0].replace(/@|\s/g,"");
+          keyword=keyword[0].replace(/[\uff20|@|\s]/g,"");
           sendCoursePlaceByName(sender,keyword,dpt);
           continue;
         }
-        var keyword2 = text.match(/^@[a-zA-Z0-9]{1,}/i);
+        var keyword2 = text.match(/^[\uff20|@][a-zA-Z0-9]{1,}/i);
         if(keyword2){
-          keyword2=keyword2[0].replace(/@|\s/g,"");
+          keyword2=keyword2[0].replace(/[\uff20|@|\s]/g,"");
           sendCoursePlaceById(sender,keyword2);
           continue;
         }
-        var keyword3 = text.match(/^#[\u4e00-\u9fa5]{1,}/i);
+        var keyword3 = text.match(/^[#|\uff03][\u4e00-\u9fa5]{1,}/i);
         if(keyword3){
-          keyword3=keyword3[0].replace(/#|\s/g,"");
+          keyword3=keyword3[0].replace(/[#|\uff03|\s]/g,"");
           sendFollowCourseByName(sender,keyword3,dpt);
           continue;
         }
-        var keyword4 = text.match(/^#[a-zA-Z0-9]{1,}/i);
+        var keyword4 = text.match(/^[#|\uff03][a-zA-Z0-9]{1,}/i);
         if(keyword4){
-          keyword4=keyword4[0].replace(/#|\s/g,"");
+          keyword4=keyword4[0].replace(/[#|\uff03|\s]/g,"");
           sendFollowCourseById(sender,keyword4);
           continue;
         }

@@ -12,15 +12,9 @@ if(keyword2){
   console.log(keyword2);
 }
 
-var x="&微積分 $氣管"
-var keyword = x.match(/^&[\u4e00-\u9fa5]{1,}/i);
-var dpt = x.match(/\$[\u4e00-\u9fa5]{1,}/i);
-console.log(dpt);
+var x="＠微積分-"
+var keyword = x.match(/^[\uff20|@][\u4e00-\u9fa5]{1,}/i);
 if(keyword){
-  keyword=keyword[0].replace(/&|\s/g,"");
-  if(dpt){
-    dpt=dpt[0].replace(/\$|\s/g,"");
-  }
+  keyword=keyword[0].replace(/\uff20|@|\s/g,"");
   console.log(keyword);
-  console.log(dpt);
 }

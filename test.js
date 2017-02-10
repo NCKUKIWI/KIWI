@@ -12,5 +12,5 @@ if(keyword2){
   console.log(keyword2);
 }
 
-var x="微積分（二）    xx"
-console.log(x.replace(/[（|）|\s]/g,""));
+var x="@微積分（二）    xx"
+console.log(x.replace(/@|\s/g,""));

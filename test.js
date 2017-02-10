@@ -12,5 +12,5 @@ if(keyword2){
   console.log(keyword2);
 }
 
-var x="生技系BBS 微積分（二） [3]2"
-console.log(x.replace(/[A-Z0-9]/g,""));
+var x="微積分（二）    xx"
+console.log(x.replace(/[（|）|\s]/g,""));

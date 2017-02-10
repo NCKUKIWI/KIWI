@@ -141,8 +141,8 @@ function sendCoursePlaceByName(sender,keyword) {
         }
         var data = {
           "type": "postback",
-          "title": course[i].系所名稱.replace(/[A-Z0-9]/g,"")+" "+course[i].課程名稱.replace(/\s/g,"")+" "+course[i].時間,
-          "payload":(course[i].教室=="") ? "無" : "你選擇的課程為：\n"+course[i].課程名稱.replace(/\s/g,"")+" "+course[i].時間+"\n上課教室在「"+course[i].教室.replace(/\s/g,"")+"」唷！",
+          "title": course[i].系所名稱.replace(/[A-Z0-9]/g,"")+" "+course[i].課程名稱.replace(/[（|）|\s]/g,"")+" "+course[i].時間,
+          "payload":(course[i].教室=="") ? "無" : "你選擇的課程為：\n"+course[i].課程名稱.replace(/[（|）|\s]/g,"")+" "+course[i].時間+"\n上課教室在「"+course[i].教室.replace(/\s/g,"")+"」唷！",
         }
         card["buttons"].push(data);
         if(i%3==2 || i == course.length-1){
@@ -203,7 +203,7 @@ function sendCoursePlaceById(sender,keyword2) {
   db.select().field(["系所名稱","課程名稱","時間","教室"]).from("course_105_2").where("選課序號=",keyword2).run(function(course){
     if(course.length > 0){
       messageData = {
-        text:"你選擇的課程為：\n"+course[0].系所名稱.replace(/[A-Z0-9]/g,"")+" "+course[0].課程名稱.replace(/\s/g,"")+" "+course[0].時間+"\n上課教室在「"+course[0].教室.replace(/\s/g,"")+"」唷！",
+        text:"你選擇的課程為：\n"+course[0].系所名稱.replace(/[A-Z0-9]/g,"")+" "+course[0].課程名稱.replace(/[（|）|\s]/g,"")+" "+course[0].時間+"\n上課教室在「"+course[0].教室.replace(/\s/g,"")+"」唷！",
       }
     }else{
       messageData = {

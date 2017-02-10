@@ -136,7 +136,7 @@ function sendCoursePlaceByName(sender,keyword,dpt) {
             }
           }
         }
-        for(var i =0;i<30;i++){
+        for(var i in course){
           if(i%3==0){
             var card = {
               "title": "NCKUHUB",
@@ -154,7 +154,6 @@ function sendCoursePlaceByName(sender,keyword,dpt) {
             messageData["attachment"]["payload"]["elements"].push(card);
           }
         }
-        console.log(messageData["attachment"]["payload"]["elements"].length);
         request({
           url: 'https://graph.facebook.com/v2.6/me/messages',
           qs: {
@@ -220,7 +219,8 @@ function sendCoursePlaceByName(sender,keyword,dpt) {
             }
           }
         }
-        for(var i =0;i<30;i++){
+        for(var i in course){
+          if(i == 30) break;
           if(i%3==0){
             var card = {
               "title": "NCKUHUB",
@@ -238,7 +238,6 @@ function sendCoursePlaceByName(sender,keyword,dpt) {
             messageData["attachment"]["payload"]["elements"].push(card);
           }
         }
-        console.log(messageData["attachment"]["payload"]["elements"].length);
         request({
           url: 'https://graph.facebook.com/v2.6/me/messages',
           qs: {

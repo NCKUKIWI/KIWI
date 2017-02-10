@@ -129,7 +129,7 @@ function sendHelloMessage(sender) {
             "payload":"馬上為你尋找上課地點 😁😁 請告訴我們課程名稱或是選課序號（例如 @微積分 或是 @h3001）",
           },{
             "type": "postback",
-            "title": "追課程餘額",
+            "title": "追蹤課程餘額",
             "payload": "馬上為你追蹤課程餘額 😀😀 請告訴我們課程名稱或是選課序號（例如 #微積分 或是 #h3001）",
           },{
             "type": "postback",
@@ -464,7 +464,7 @@ function addFollowCourse(sender,course_id){
     if(course[0].餘額 =="額滿"){
       db.select().field("*").from("follow").where("course_id=",course_id).where("fb_id=",sender).run(function(follow){
         if(follow.length < 1){
-          var text = "你選擇的課程為：\n"+course[0].系所名稱.replace(/[A-Z0-9]/g,"")+" "+course[0].課程名稱.replace(/[（|）|\s]/g,"")+" "+course[0].時間+"\n這堂課目前已無餘額，已為你追蹤。請抱著既期待又怕受傷害的心情等待！!";
+          var text = "你選擇的課程為：\n"+course[0].系所名稱.replace(/[A-Z0-9]/g,"")+" "+course[0].課程名稱.replace(/[（|）|\s]/g,"")+" "+course[0].時間+"\n這堂課目前無餘額，已為你設定追蹤 👌 有餘額的時候會私訊你，請抱著既期待又怕受傷害的心情等候 🙌🙌";
           sendTextMessage(sender,text);
           sendGoodbye(sender);
           var data = {
@@ -605,7 +605,7 @@ function sendGoodbye(sender){
         "template_type":"generic",
         "elements": [{
           "title": "NCKUHUB",
-          "subtitle": "希望能幫到你",
+          "subtitle": "感謝使用 🙏 希望有幫上你的忙！",
           "buttons": [{
             "type": "postback",
             "title": "再次呼喚小幫手",
@@ -619,24 +619,26 @@ function sendGoodbye(sender){
       }
     }
   }
-  request({
-    url: 'https://graph.facebook.com/v2.6/me/messages',
-    qs: {
-      access_token:token
-    },
-    method: 'POST',
-    json: {
-      recipient: {
-        id:sender
+  setTimeout(function(){
+    request({
+      url: 'https://graph.facebook.com/v2.6/me/messages',
+      qs: {
+        access_token:token
       },
-      message: messageData,
-    }
-  }, function(error, response, body) {
-    if (error) {
-      console.log('Error sending messages: ', error)
-    } else if (response.body.error) {
-      console.log('Error: ', response.body.error)
-    }
-  })
+      method: 'POST',
+      json: {
+        recipient: {
+          id:sender
+        },
+        message: messageData,
+      }
+    }, function(error, response, body) {
+      if (error) {
+        console.log('Error sending messages: ', error)
+      } else if (response.body.error) {
+        console.log('Error: ', response.body.error)
+      }
+    })
+  },3000);
 }
 module.exports = router;

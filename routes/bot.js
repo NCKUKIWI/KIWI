@@ -296,7 +296,7 @@ function sendCoursePlaceById(sender,keyword) {
     db=null;
     delete db;
     if(course.length > 0){
-      sendCourseInfo(sender,course_id);
+      sendCourseInfo(sender,course[0].id);
     }else{
       var text = "查無課程唷 😱😱 會不會是這學期沒開課，或是關鍵字有打錯呢？";
       sendTextMessage(sender,text);

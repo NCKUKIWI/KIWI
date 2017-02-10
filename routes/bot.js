@@ -164,7 +164,7 @@ function sendHelloMessage(sender) {
 function sendCoursePlaceByName(sender,keyword,dpt) {
   var db = new dbsystem();
   if(dpt){
-    db.select().field(["系所名稱","課程名稱","時間","教室"]).from("course_105_2").where("課程名稱 LIKE '%" + keyword + "%'").where("系所名稱 LIKE '%" + dpt + "%'").run(function(course){
+    db.select().field(["id","系所名稱","課程名稱","時間","教室"]).from("course_105_2").where("課程名稱 LIKE '%" + keyword + "%'").where("系所名稱 LIKE '%" + dpt + "%'").run(function(course){
       db=null;
       delete db;
       if(course.length>0){
@@ -223,7 +223,7 @@ function sendCoursePlaceByName(sender,keyword,dpt) {
     });
   }
   else{
-    db.select().field(["系所名稱","課程名稱","時間","教室"]).from("course_105_2").where("課程名稱 LIKE '%" + keyword + "%'").run(function(course){
+    db.select().field(["id","系所名稱","課程名稱","時間","教室"]).from("course_105_2").where("課程名稱 LIKE '%" + keyword + "%'").run(function(course){
       db=null;
       delete db;
       if(course.length>0){

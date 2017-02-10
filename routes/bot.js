@@ -498,7 +498,7 @@ function sendFollowCourseById(sender,keyword) {
             course_id:course[0].id,
             fb_id:sender
           }
-          db.insert().into("follow").set(dat).run(function(result){
+          db.insert().into("follow").set(data).run(function(result){
             db=null;
             delete db;
           });

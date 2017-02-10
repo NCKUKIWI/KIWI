@@ -184,6 +184,7 @@ function sendCoursePlaceByName(sender,keyword,dpt,teacher) {
         }
       }
       for(var i in course){
+        if(i==30) break;
         if(i%3==0){
           var card = {
             "title": "NCKUHUB",
@@ -247,10 +248,10 @@ function sendCoursePlaceById(sender,keyword) {
 
 function sendCourseInfo(sender,course_id) {
   var db = new dbsystem();
-  db.select().field(["系所名稱","課程名稱","時間","教室"]).from("course_105_2").where("id=",course_id).run(function(course){
+  db.select().field(["系所名稱","課程名稱","時間","教室","老師"]).from("course_105_2").where("id=",course_id).run(function(course){
     db=null;
     delete db;
-    var text = "你選擇的課程為：\n"+course[0].系所名稱.replace(/[A-Z0-9]/g,"")+" "+course[0].課程名稱.replace(/[（|）|\s]/g,"")+"   "+course[0].時間+"\n上課教室在「"+course[0].教室.replace(/\s/g,"")+"」唷！";
+    var text = "你選擇的課程為：\n"+course[0].系所名稱.replace(/[A-Z0-9]/g,"")+" "+course[0].課程名稱.replace(/[（|）|\s]/g,"")+" "+course[0].老師+"\n"+course[0].時間+"\n上課教室在「"+course[0].教室.replace(/\s/g,"")+"」唷！";
     sendTextMessage(sender,text);
     sendGoodbye(sender);
   });
@@ -277,6 +278,7 @@ function sendFollowCourseByName(sender,keyword,dpt,teacher) {
         }
       }
       for(var i in course){
+        if(i==30) break;
         if(i%3==0){
           var card = {
             "title": "NCKUHUB",

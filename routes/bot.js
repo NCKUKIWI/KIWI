@@ -58,13 +58,11 @@ router.post('/webhook/', function(req, res) {
       if(keyword5){
         keyword5=keyword5[0].replace(/!|\s/g,"");
         addFollowCourse(sender,keyword5);
-        continue;
       }
       var keyword6 = event.postback.payload.match(/^&[0-9]{1,}/i);
       else if(keyword6){
         keyword6=keyword6[0].replace(/&|\s/g,"");
         cancelFollowCourse(sender,keyword6);
-        continue;
       }
       else {
         if(event.postback.payload=="cancelfollow"){
@@ -72,7 +70,6 @@ router.post('/webhook/', function(req, res) {
         }else{
           sendTextMessage(sender,event.postback.payload);
         }
-        continue;
       }
     }
   }

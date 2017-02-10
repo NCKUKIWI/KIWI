@@ -612,7 +612,7 @@ function sendGoodbye(sender){
             "payload":"callagain",
           },{
             "type": "postback",
-            "title": "用完了，謝謝!",
+            "title": "用完了，謝謝！",
             "payload": "不客氣，也謝謝你的使用 ☺",
           }],
         }]

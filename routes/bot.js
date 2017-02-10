@@ -60,8 +60,18 @@ router.post('/webhook/', function(req, res) {
         addFollowCourse(sender,keyword5);
         continue;
       }
+      var keyword6 = event.postback.payload.match(/^&[0-9]{1,}/i);
+      else if(keyword6){
+        keyword6=keyword6[0].replace(/&|\s/g,"");
+        cancelFollowCourse(sender,keyword6);
+        continue;
+      }
       else {
-        sendTextMessage(sender,event.postback.payload);
+        if(event.postback.payload=="cancelfollow"){
+          sendCancelFollow(sender);
+        }else{
+          sendTextMessage(sender,event.postback.payload);
+        }
         continue;
       }
     }
@@ -112,6 +122,10 @@ function sendGenericMessage(sender) {
             "type": "postback",
             "title": "追課程餘額",
             "payload": "馬上為你追蹤課程餘額，請告訴我們課程名稱，例如 #微積分",
+          },{
+            "type": "postback",
+            "title": "取消追蹤課程餘額",
+            "payload": "cancelfollow",
           }],
         }]
       }
@@ -193,28 +207,8 @@ function sendCoursePlaceByName(sender,keyword,dpt) {
         });
       }
       else{
-        messageData = {
-          text:"查無課程唷 😱😱 會不會是這學期沒開課，或是關鍵字有打錯呢？"
-        }
-        request({
-          url: 'https://graph.facebook.com/v2.6/me/messages',
-          qs: {
-            access_token: token
-          },
-          method: 'POST',
-          json: {
-            recipient: {
-              id: sender
-            },
-            message: messageData,
-          }
-        }, function(error, response, body) {
-          if (error) {
-            console.log('Error sending messages: ', error)
-          } else if (response.body.error) {
-            console.log('Error: ', response.body.error)
-          }
-        });
+        var text = "查無課程唷 😱😱 會不會是這學期沒開課，或是關鍵字有打錯呢？";
+        sendTextMessage(sender,text);
       }
     });
   }
@@ -277,28 +271,8 @@ function sendCoursePlaceByName(sender,keyword,dpt) {
         });
       }
       else{
-        messageData = {
-          text:"查無課程唷 😱😱 會不會是這學期沒開課，或是關鍵字有打錯呢？"
-        }
-        request({
-          url: 'https://graph.facebook.com/v2.6/me/messages',
-          qs: {
-            access_token: token
-          },
-          method: 'POST',
-          json: {
-            recipient: {
-              id: sender
-            },
-            message: messageData,
-          }
-        }, function(error, response, body) {
-          if (error) {
-            console.log('Error sending messages: ', error)
-          } else if (response.body.error) {
-            console.log('Error: ', response.body.error)
-          }
-        });
+        var text = "查無課程唷 😱😱 會不會是這學期沒開課，或是關鍵字有打錯呢？";
+        sendTextMessage(sender,text);
       }
     });
   }
@@ -496,7 +470,8 @@ function sendFollowCourseById(sender,keyword) {
           sendTextMessage(sender,text);
           var data = {
             course_id:course[0].id,
-            fb_id:sender
+            fb_id:sender,
+            content:course[0].系所名稱.replace(/[A-Z0-9]/g,"")+" "+course[0].課程名稱.replace(/[（|）|\s]/g,"")+"   "+course[0].時間
           }
           db.insert().into("follow").set(data).run(function(result){
             db=null;
@@ -524,7 +499,8 @@ function addFollowCourse(sender,course_id){
         sendTextMessage(sender,text);
         var data = {
           course_id:course_id,
-          fb_id:sender
+          fb_id:sender,
+          content:course[0].系所名稱.replace(/[A-Z0-9]/g,"")+" "+course[0].課程名稱.replace(/[（|）|\s]/g,"")+"   "+course[0].時間
         }
         db.insert().into("follow").set(data).run(function(result){});
       }
@@ -536,4 +512,80 @@ function addFollowCourse(sender,course_id){
   });
 }
 
+function sendCancelFollow(sender){
+  db.select().field(["*"]).from("follow").where("fb_id=",sender).run(function(follow){
+    db=null;
+    delete db;
+    if(follow.length>0){
+      messageData = {
+        "attachment":{
+          "type": "template",
+          "payload": {
+            "template_type":"generic",
+            "elements": []
+          }
+        }
+      }
+      for(var i in follow){
+        if(i == 30) break;
+        if(i%3==0){
+          var card = {
+            "title": "NCKUHUB",
+            "subtitle":"以下是您目前追蹤餘額的課程，點擊以取消追蹤",
+            "buttons": [],
+          }
+        }
+        var data = {
+          "type": "postback",
+          "title":follow[i].content,
+          "payload":"&"+follow[i].id,
+        }
+        card["buttons"].push(data);
+        if(i%3==2 || i == course.length-1){
+          messageData["attachment"]["payload"]["elements"].push(card);
+        }
+      }
+      request({
+        url: 'https://graph.facebook.com/v2.6/me/messages',
+        qs: {
+          access_token:token
+        },
+        method: 'POST',
+        json: {
+          recipient: {
+            id:sender
+          },
+          message: messageData,
+        }
+      }, function(error, response, body) {
+        if (error) {
+          console.log('Error sending messages: ', error)
+        } else if (response.body.error) {
+          console.log('Error: ', response.body.error)
+        }
+      });
+    }
+    else{
+      var text = "目前沒有追蹤中的課程喔!";
+      sendTextMessage(sender,text);
+    }
+  });
+}
+
+function cancelFollowCourse(sender,follow_id){
+  var db = new dbsystem();
+  db.select().field("*").from("follow").where("id=",follow_id).run(function(follow){
+    if(follow > 0){
+      var text = "你選擇取消的課程為"+follow[0].content+"\n已為你取消追蹤!";
+      sendTextMessage(sender,text);
+      db.delete().from("follow").where("id=",follow_id).run(function(result){
+
+      });
+    }
+    else {
+      var text = "該課程已取消追蹤了喔!"
+      sendTextMessage(sender,text);
+    }
+  });
+}
 module.exports = router;

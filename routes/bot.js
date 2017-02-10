@@ -123,7 +123,7 @@ function sendGenericMessage(sender) {
 function sendCoursePlaceByName(sender,keyword,dpt) {
   var db = new dbsystem();
   if(dpt){
-    db.select().field(["系所名稱","課程名稱","時間","教室"]).from("course_105_2").where("課程名稱 LIKE '%" + keyword + "%'").where("系所名稱 LIKE '%" + dpt + "%'").run(function(course){
+    db.select().field(["系所名稱","課程名稱","時間","教室"]).from("course_105_2").where("課程名稱 LIKE '%" + keyword + "%'").where("系所名稱 LIKE '%" + dpt + "%'").where("老師 !='未定'").run(function(course){
       db=null;
       delete db;
       if(course.length>0){
@@ -201,7 +201,7 @@ function sendCoursePlaceByName(sender,keyword,dpt) {
     });
   }
   else{
-    db.select().field(["系所名稱","課程名稱","時間","教室"]).from("course_105_2").where("課程名稱 LIKE '%" + keyword + "%'").run(function(course){
+    db.select().field(["系所名稱","課程名稱","時間","教室"]).from("course_105_2").where("課程名稱 LIKE '%" + keyword + "%'").where("老師 !='未定'").run(function(course){
       db=null;
       delete db;
       if(course.length>0){
@@ -289,7 +289,7 @@ function sendCoursePlaceByName(sender,keyword,dpt) {
 function sendCoursePlaceById(sender,keyword2) {
   keyword2=keyword2.toUpperCase();
   var db = new dbsystem();
-  db.select().field(["系所名稱","課程名稱","時間","教室"]).from("course_105_2").where("選課序號=",keyword2).run(function(course){
+  db.select().field(["系所名稱","課程名稱","時間","教室"]).from("course_105_2").where("選課序號=",keyword2).where("老師 !='未定'").run(function(course){
     if(course.length > 0){
       messageData = {
         text:"你選擇的課程為：\n"+course[0].系所名稱.replace(/[A-Z0-9]/g,"")+" "+course[0].課程名稱.replace(/[（|）|\s]/g,"")+"   "+course[0].時間+"\n上課教室在「"+course[0].教室.replace(/\s/g,"")+"」唷！",

@@ -26,11 +26,11 @@ router.post('/webhook/', function(req, res) {
       }
       else{
         var keyword = text.match(/^@[\u4e00-\u9fa5]{1,}/i);
-        var dpt = text.match(/^$[\u4e00-\u9fa5]{1,}/i);
+        var dpt = text.match(/\$[\u4e00-\u9fa5]{1,}/i);
         if(keyword){
           keyword=keyword[0].replace(/@|\s/g,"");
           if(dpt){
-            dpt=dpt[0].replace(/$|\s/g,"");
+            dpt=dpt[0].replace(/\$|\s/g,"");
           }
           sendCoursePlaceByName(sender,keyword,dpt);
           continue;

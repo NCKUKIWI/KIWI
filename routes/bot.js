@@ -539,7 +539,7 @@ function sendCancelFollow(sender){
           "payload":"&"+follow[i].id,
         }
         card["buttons"].push(data);
-        if(i%3==2 || i == course.length-1){
+        if(i%3==2 || i == follow.length-1){
           messageData["attachment"]["payload"]["elements"].push(card);
         }
       }

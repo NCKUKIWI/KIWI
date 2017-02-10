@@ -21,7 +21,7 @@ router.post('/webhook/', function(req, res) {
     if (event.message && event.message.text) {
       text = event.message.text
       if (text === '小幫手') {
-        sendGenericMessage(sender);
+        sendHelloMessage(sender);
         continue;
       }
       else{
@@ -67,8 +67,13 @@ router.post('/webhook/', function(req, res) {
       else {
         if(event.postback.payload=="cancelfollow"){
           sendCancelFollow(sender);
-        }else{
+        }
+        else if(event.postback.payload=="callagain"){
+          sendHelloMessage(sender);
+        }
+        else{
           sendTextMessage(sender,event.postback.payload);
+          sendGoodbye(sender);
         }
       }
     }
@@ -102,7 +107,7 @@ function sendTextMessage(sender, text) {
   })
 }
 
-function sendGenericMessage(sender) {
+function sendHelloMessage(sender) {
   messageData = {
     "attachment": {
       "type": "template",
@@ -206,6 +211,7 @@ function sendCoursePlaceByName(sender,keyword,dpt) {
       else{
         var text = "查無課程唷 😱😱 會不會是這學期沒開課，或是關鍵字有打錯呢？";
         sendTextMessage(sender,text);
+        sendGoodbye(sender);
       }
     });
   }
@@ -270,6 +276,7 @@ function sendCoursePlaceByName(sender,keyword,dpt) {
       else{
         var text = "查無課程唷 😱😱 會不會是這學期沒開課，或是關鍵字有打錯呢？";
         sendTextMessage(sender,text);
+        sendGoodbye(sender);
       }
     });
   }
@@ -287,6 +294,7 @@ function sendCoursePlaceById(sender,keyword) {
       var text = "查無課程唷 😱😱 會不會是這學期沒開課，或是關鍵字有打錯呢？";
     }
     sendTextMessage(sender,text);
+    sendGoodbye(sender);
   });
 }
 
@@ -585,5 +593,48 @@ function cancelFollowCourse(sender,follow_id){
       sendTextMessage(sender,text);
     }
   });
+}
+
+function sendGoodbye(sender){
+  messageData = {
+    "attachment": {
+      "type": "template",
+      "payload": {
+        "template_type":"generic",
+        "elements": [{
+          "title": "NCKUHUB",
+          "subtitle": "希望能幫到你",
+          "buttons": [{
+            "type": "postback",
+            "title": "再次呼喚小幫手",
+            "payload":"callagain",
+          },{
+            "type": "postback",
+            "title": "用完了，謝謝!",
+            "payload": "不客氣，也謝謝你的使用:)",
+          }],
+        }]
+      }
+    }
+  }
+  request({
+    url: 'https://graph.facebook.com/v2.6/me/messages',
+    qs: {
+      access_token:token
+    },
+    method: 'POST',
+    json: {
+      recipient: {
+        id:sender
+      },
+      message: messageData,
+    }
+  }, function(error, response, body) {
+    if (error) {
+      console.log('Error sending messages: ', error)
+    } else if (response.body.error) {
+      console.log('Error: ', response.body.error)
+    }
+  })
 }
 module.exports = router;

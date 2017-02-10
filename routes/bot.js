@@ -397,7 +397,7 @@ function sendFollowCourseList(sender){
         }
         var data = {
           "type": "postback",
-          "title":follow[i].content+" "+follow[i].serial,
+          "title":follow[i].content.replace(/\uff0f/g," ")+" "+follow[i].serial,
           "payload":"&"+follow[i].id,
         }
         card["buttons"].push(data);

@@ -127,11 +127,11 @@ function sendHelloMessage(sender) {
           "buttons": [{
             "type": "postback",
             "title": "尋找上課地點",
-            "payload":"馬上為你尋找上課地點 😁😁\n\n請告訴我們課程名稱或是選課序號，例如「@微積分」或是「@h3001」\n\n你也可以加上「$系所」「%老師名」以使用進階搜尋，例如「@微積分 $工資 %侯世章」",
+            "payload":"馬上為你尋找上課地點 😁😁\n\n請告訴我們課程名稱或是選課序號，例如「@微積分」或是「@h3001」\n\n你也可以加上「$系所 %老師名」，來精準搜尋課程，例如「@微積分 $工資管 %侯世章」",
           },{
             "type": "postback",
             "title": "追蹤課程餘額",
-            "payload":"馬上為你追蹤課程餘額 😀😀\n\n請告訴我們課程名稱或是選課序號，例如「#微積分」或是「#h3001」\n\n你也可以加上「$系所」「%老師名」以使用進階搜尋，例如「#微積分 $工資 %侯世章」",
+            "payload":"馬上為你追蹤課程餘額 😀😀\n\n請告訴我們課程名稱或是選課序號，例如「#微積分」或是「#h3001」\n\n你也可以加上「$系所 %老師名」，來精準搜尋課程，例如「#微積分 $工資管 %侯世章」",
           },{
             "type": "postback",
             "title": "取消追蹤餘額",
@@ -343,7 +343,7 @@ function addFollowCourse(sender,course_id){
     if(course[0].餘額 =="額滿"){
       db.select().field("*").from("follow").where("course_id=",course_id).where("fb_id=",sender).run(function(follow){
         if(follow.length < 1){
-          var text = "你選擇的課程是：\n\n"+course[0].系所名稱.replace(/[A-Z0-9]/g,"")+"／"+course[0].課程名稱.replace(/[（|）|\s]/g,"")+"／"+course[0].老師.replace(/\s/g,"")+"／"+course[0].時間+"\n\n這堂課目前無餘額，已為你設定追蹤 👌 有餘額的時候會私訊你，請抱著既期待又怕受傷害的心情等候 🙌🙌";
+          var text = "你選擇的課程是：\n\n"+course[0].系所名稱.replace(/[A-Z0-9]/g,"")+"／"+course[0].課程名稱.replace(/[（|）|\s]/g,"")+"／"+course[0].老師.replace(/\s/g,"")+"／"+course[0].時間+"\n\n這堂課目前無餘額，已為你設定追蹤 👌 有餘額的時候會私訊你唷！請抱著既期待又怕受傷害的心情等候 🙌🙌";
           sendTextMessage(sender,text);
           sendGoodbye(sender);
           var data = {

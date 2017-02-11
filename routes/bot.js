@@ -344,7 +344,7 @@ function addFollowCourse(sender,course_id){
     if(course[0].餘額 =="額滿"){
       db.select().field("*").from("follow").where("course_id=",course_id).where("fb_id=",sender).run(function(follow){
         if(follow.length < 1){
-          var text = "你選擇的課程為：\n"+course[0].系所名稱.replace(/[A-Z0-9]/g,"")+"／"+course[0].課程名稱.replace(/[（|）|\s]/g,"")+"／"+course[0].老師.replace(/\s/g,"")+"／"+course[0].時間+"\n這堂課目前無餘額，已為你設定追蹤 👌 有餘額的時候會私訊你，請抱著既期待又怕受傷害的心情等候 🙌🙌";
+          var text = "你選擇的課程為：\n"+course[0].系所名稱.replace(/[A-Z0-9]/g,"")+"／"+course[0].課程名稱.replace(/[（|）|\s]/g,"")+"／"+course[0].老師.replace(/\s/g,"")+"／"+course[0].時間+"。這堂課目前無餘額，已為你設定追蹤 👌 有餘額的時候會私訊你，請抱著既期待又怕受傷害的心情等候 🙌🙌";
           sendTextMessage(sender,text);
           sendGoodbye(sender);
           var data = {
@@ -358,13 +358,13 @@ function addFollowCourse(sender,course_id){
           db.insert().into("follow").set(data).run(function(result){});
         }
         else{
-          var text = "你選擇的課程為：\n"+course[0].系所名稱.replace(/[A-Z0-9]/g,"")+"／"+course[0].課程名稱.replace(/[（|）|\s]/g,"")+"／"+course[0].老師.replace(/\s/g,"")+"／"+course[0].時間+"\n這堂課目前無餘額，已為你設定過追蹤囉！";
+          var text = "你選擇的課程為：\n"+course[0].系所名稱.replace(/[A-Z0-9]/g,"")+"／"+course[0].課程名稱.replace(/[（|）|\s]/g,"")+"／"+course[0].老師.replace(/\s/g,"")+"／"+course[0].時間+"。這堂課目前無餘額，已為你設定過追蹤囉！";
           sendTextMessage(sender,text);
           sendGoodbye(sender);
         }
       });
     }else{
-      var text = "你選擇的課程為：\n"+course[0].系所名稱.replace(/[A-Z0-9]/g,"")+"／"+course[0].課程名稱.replace(/[（|）|\s]/g,"")+"／"+course[0].老師.replace(/\s/g,"")+"／"+course[0].時間+"\n這門課還有 "+course[0].餘額+" 個餘額！趕快去選吧 🏄🏄";
+      var text = "你選擇的課程為：\n"+course[0].系所名稱.replace(/[A-Z0-9]/g,"")+"／"+course[0].課程名稱.replace(/[（|）|\s]/g,"")+"／"+course[0].老師.replace(/\s/g,"")+"／"+course[0].時間+"。這門課還有 "+course[0].餘額+" 個餘額！趕快去選吧 🏄🏄";
       sendTextMessage(sender,text);
       sendGoodbye(sender);
     }

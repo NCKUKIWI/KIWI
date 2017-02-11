@@ -540,7 +540,7 @@ function checkCoureseCredit(){
 }
 
 function sendCreditNotify(course){
-  var text = "你選擇的課程為："+course.content+"／"+course.teacher+"／"+course.time+"。\n\n這門課有 "+course.餘額+" 個餘額了！趕快去選吧 🏄🏄";
+  var text = "你選擇的課程為：\n\n"+course.content+"／"+course.teacher+"／"+course.time+"。\n\n這門課有 "+course.餘額+" 個餘額了！趕快去選吧 🏄🏄";
   sendTextMessage(course.fb_id,text);
   if(course.count==2){
     var count = 0;
@@ -549,7 +549,7 @@ function sendCreditNotify(course){
     var count = course.count+1;
   }
   var db = new dbsystem();
-  db.update().table("follow").set("count=",count).where("id=",course.id).run(function(result){
+  db.update().table("follow").set({count:count}).where("id=",course.id).run(function(result){
     db=null;
     delete db;
   });

@@ -363,7 +363,7 @@ function addFollowCourse(sender,course_id){
         }
       });
     }else{
-      var text = "你選擇的課程是：\n\n"+course[0].系所名稱.replace(/[A-Z0-9]/g,"")+"／"+course[0].課程名稱.replace(/[（|）|\s]/g,"")+"／"+course[0].老師.replace(/\s/g,"")+"／"+course[0].時間+"。\n\n這門課還有 "+course[0].餘額+" 個餘額！趕快去選吧 🏄🏄";
+      var text = "你選擇的課程是：ㄋㄧ\n\n"+course[0].系所名稱.replace(/[A-Z0-9]/g,"")+"／"+course[0].課程名稱.replace(/[（|）|\s]/g,"")+"／"+course[0].老師.replace(/\s/g,"")+"／"+course[0].時間+"。\n\n這門課還有 "+course[0].餘額+" 個餘額！趕快去選吧 🏄🏄";
       sendTextMessage(sender,text);
       sendGoodbye(sender);
     }
@@ -521,4 +521,42 @@ function sendGoodbye(sender){
     })
   },3000);
 }
+
+function checkCoureseCredit(){
+  var db = new dbsystem();
+  db.select().field(["f.*","c.餘額"]).from("follow f").join("course_105_2 c").where("c.id=f.course_id").run(function(follow){
+    for(var i in follow){
+      if(follow[i].餘額!="額滿" && follow[i].count == 0 ){
+        sendCreditNotify(follow[i]);
+      }
+      else if(follow[i].餘額=="額滿" && follow[i].count !=0 ){
+        db.update().table("follow").set({count:0}).where("id=",follow[i].id).run(function(result){
+        });
+      }
+    }
+    db=null;
+    delete db;
+  });
+}
+
+function sendCreditNotify(course){
+  var text = "你選擇的課程為："+course.content+"／"+course.teacher+"／"+course.time+"。\n\n這門課有 "+course.餘額+" 個餘額了！趕快去選吧 🏄🏄";
+  sendTextMessage(course.fb_id,text);
+  if(course.count==2){
+    var count = 0;
+  }
+  else{
+    var count = course.count+1;
+  }
+  var db = new dbsystem();
+  db.update().table("follow").set("count=",count).where("id=",course.id).run(function(result){
+    db=null;
+    delete db;
+  });
+}
+
+setInterval(function(){
+  checkCoureseCredit();
+},1000 * 60);
+
 module.exports = router;

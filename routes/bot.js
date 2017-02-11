@@ -357,7 +357,7 @@ function addFollowCourse(sender,course_id){
           db.insert().into("follow").set(data).run(function(result){});
         }
         else{
-          var text = "你選擇的課程是：\n\n"+course[0].系所名稱.replace(/[A-Z0-9]/g,"")+"／"+course[0].課程名稱.replace(/[（|）|\s]/g,"")+"／"+course[0].老師.replace(/\s/g,"")+"／"+course[0].時間+"\n\n這堂課目前無餘額，已為你設定過追蹤囉！";
+          var text = "你選擇的課程是：\n\n"+course[0].系所名稱.replace(/[A-Z0-9]/g,"")+"／"+course[0].課程名稱.replace(/[（|）|\s]/g,"")+"／"+course[0].老師.replace(/\s/g,"")+"／"+course[0].時間+"\n\n這堂課目前無餘額，已經為你設定過追蹤囉！";
           sendTextMessage(sender,text);
           sendGoodbye(sender);
         }
@@ -456,7 +456,7 @@ function cancelFollowCourse(sender,follow_id){
   var db = new dbsystem();
   db.select().field(["content","teacher","time"]).from("follow").where("id=",follow_id).run(function(follow){
     if(follow.length > 0){
-      var text = "你選擇的課程是："+follow[0].content+"／"+follow[0].teacher+"／"+follow[0].time+"\n\n已經為你取消追蹤囉 🙂🙂";
+      var text = "你選擇的課程是：\n\n"+follow[0].content+"／"+follow[0].teacher+"／"+follow[0].time+"\n\n已經為你取消追蹤囉 🙂🙂";
       sendTextMessage(sender,text);
       sendGoodbye(sender);
       db.delete().from("follow").where("id=",follow_id).run(function(result){});

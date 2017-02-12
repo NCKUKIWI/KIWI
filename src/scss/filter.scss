@@ -4,6 +4,7 @@
 $menuheight: 65px;
 $logoheight: 30px;
 $burgerheight: 3px;
+$lineheight: 65px;
 $deepblue: #07689f;
 $deepblueact: #1f608c;
 $blue: #a2d5f2;
@@ -11,17 +12,70 @@ $grey: #fafafa;
 $orange: #ff7e67;
 
 .filtercont {
-	position: fixed;
+	position: relative;
 	z-index: 10;
 	width: 100vw;
-	height: $menuheight;
+	top: $menuheight;
+	height: $lineheight;
 	background: $grey;
 	box-shadow: 0px 0px 0px 1px rgba(0,0,0,0.2);
 }
 
-.filterstuff {
+.filteroption {
 	position: relative;
-	width: 100vw;
-	height: $menuheight;
+	float: left;
+	display: block;
+	text-align: center;
+	width: 14vw;
+	left: 10vw;
+	line-height: $lineheight;
+	letter-spacing: 5px;
+	font-size: 16px;
+	cursor: pointer;
 	background: transparent;
+	&.short {
+		width: 10vw;
+	}
+	&.long {
+		width: 32vw;
+	}
+	&:hover {
+		color: $deepblue;
+	}
 }
+
+.coursedata {
+	position: relative;
+	z-index: 10;
+	width: 100vw;
+	top: $menuheight;
+	height: $lineheight;
+	background: transparent;
+	margin-top: 1px;
+	box-shadow: 0px 0px 0px 1px rgba(0,0,0,0.1);
+}
+
+.courseinfo {
+	position: relative;
+	float: left;
+	display: block;
+	text-align: center;
+	width: 14vw;
+	left: 10vw;
+	line-height: $lineheight;
+	letter-spacing: 5px;
+	font-size: 16px;
+	cursor: pointer;
+	background: transparent;
+	&.short {
+		width: 10vw;
+	}
+	&.long {
+		width: 32vw;
+	}
+	&:hover {
+		color: $deepblue;
+	}
+}
+
+

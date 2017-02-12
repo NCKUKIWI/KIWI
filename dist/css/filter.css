@@ -1,13 +1,56 @@
 .filtercont {
-  position: fixed;
+  position: relative;
   z-index: 10;
   width: 100vw;
+  top: 65px;
   height: 65px;
   background: #fafafa;
   box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.2); }
 
-.filterstuff {
+.filteroption {
   position: relative;
-  width: 100vw;
-  height: 65px;
+  float: left;
+  display: block;
+  text-align: center;
+  width: 14vw;
+  left: 10vw;
+  line-height: 65px;
+  letter-spacing: 5px;
+  font-size: 16px;
+  cursor: pointer;
   background: transparent; }
+  .filteroption.short {
+    width: 10vw; }
+  .filteroption.long {
+    width: 32vw; }
+  .filteroption:hover {
+    color: #07689f; }
+
+.coursedata {
+  position: relative;
+  z-index: 10;
+  width: 100vw;
+  top: 65px;
+  height: 65px;
+  background: transparent;
+  margin-top: 1px;
+  box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1); }
+
+.courseinfo {
+  position: relative;
+  float: left;
+  display: block;
+  text-align: center;
+  width: 14vw;
+  left: 10vw;
+  line-height: 65px;
+  letter-spacing: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  background: transparent; }
+  .courseinfo.short {
+    width: 10vw; }
+  .courseinfo.long {
+    width: 32vw; }
+  .courseinfo:hover {
+    color: #07689f; }

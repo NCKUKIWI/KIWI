@@ -7,7 +7,7 @@ function menustart() {
 	// Initialize
 
 	var search_open = 0;
-	var filter_open = 0;
+	// var filter_open = 0;
 	var sidebar_open = 0;
 	var winwidth = $(window).width(); 
 	var menuheight = 65;
@@ -41,9 +41,9 @@ function menustart() {
 		})
 		.mouseleave(function(){
 			$(".filtericon").attr("src","img/filter_b.png");
-		})
-		.click(function(){
-			filterswitch();
+		// })
+		// .click(function(){
+		// 	filterswitch();
 		});
 
 	$(".cover").click(function(){ menuswitch();});
@@ -56,11 +56,19 @@ function menustart() {
 			sidebar_open = 1 ;
 			$(".sidebar").animate({"left": "+="+sidewidth }, 400);
 			$(".sidestuff").animate({"width": "+="+sidewidth }, 400);
+			$(".filteroption").animate({"width": "-="+sidewidth/6 }, 400);
+			$(".courseinfo").animate({"width": "-="+sidewidth/6 }, 400);
+			// $(".filteroption").animate({"left": "0" }, 400);
+			// $(".courseinfo").animate({"left": "0" }, 400);
 		}
 		else if (sidebar_open == 1){
 			sidebar_open = 0 ;
 			$(".sidebar").animate({"left": "-="+sidewidth }, 400);
 			$(".sidestuff").animate({"width": "-="+sidewidth }, 400);
+			$(".filteroption").animate({"width": "+="+sidewidth/6 }, 400);
+			$(".courseinfo").animate({"width": "+="+sidewidth/6 }, 400);
+			// $(".filteroption").animate({"left": "10vw" }, 400);
+			// $(".courseinfo").animate({"left": "10vw" }, 400);
 		}
 	}
 
@@ -87,18 +95,18 @@ function menustart() {
 		}
 	}
 
-	function filterswitch() {
-		if (filter_open == 0){
-			filter_open = 1 ;
-			$(".filtercont").animate({"top": "+="+menuheight }, 400);
-			$(".filterstuff").animate({"height": "+="+menuheight }, 400);
-		}
-		else if (filter_open == 1){
-			filter_open = 0 ;
-			$(".filtercont").animate({"top": "-="+menuheight }, 400);
-			$(".filterstuff").animate({"height": "-="+menuheight }, 400);
-		}
-	}
+	// function filterswitch() {
+	// 	if (filter_open == 0){
+	// 		filter_open = 1 ;
+	// 		$(".filtercont").animate({"top": "+="+menuheight }, 400);
+	// 		$(".filterstuff").animate({"height": "+="+menuheight }, 400);
+	// 	}
+	// 	else if (filter_open == 1){
+	// 		filter_open = 0 ;
+	// 		$(".filtercont").animate({"top": "-="+menuheight }, 400);
+	// 		$(".filterstuff").animate({"height": "-="+menuheight }, 400);
+	// 	}
+	// }
 
 }
 

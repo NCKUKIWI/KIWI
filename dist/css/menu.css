@@ -10,12 +10,6 @@
   background: #fafafa;
   box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.2); }
 
-.menu .sidestuff {
-  position: relative;
-  float: left;
-  height: 65px;
-  width: 0px; }
-
 .menu .burger {
   position: relative;
   z-index: 30;

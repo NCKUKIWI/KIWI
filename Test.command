@@ -1,2 +1,2 @@
-cd Documents/Codes/vue_test
+cd Documents/Codes/nckuhub_new
 gulp

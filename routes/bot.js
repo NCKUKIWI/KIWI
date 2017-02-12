@@ -532,30 +532,25 @@ function checkCoureseCredit(){
       if(follow[i].餘額!="額滿" && follow[i].count == 0 ){
         sendCreditNotify(follow[i]);
       }
+      else if (follow[i].餘額!="額滿" && follow[i].count != 0){
+        if(follow[i].count==2){
+          var count = 0;
+        }
+        else{
+          var count = follow[i].count+1;
+        }
+        db.update().table("follow").set({count:count}).where("id=",follow[i].id).run(function(result){});
+      }
       else if(follow[i].餘額=="額滿" && follow[i].count !=0 ){
-        db.update().table("follow").set({count:0}).where("id=",follow[i].id).run(function(result){
-        });
+        db.update().table("follow").set({count:0}).where("id=",follow[i].id).run(function(result){});
       }
     }
-    db=null;
-    delete db;
   });
 }
 
 function sendCreditNotify(course){
   var text = "餘額通知！\n\n"+course.content+"／"+course.teacher+"／"+course.time+"。\n\n這門課有 "+course.餘額+" 個餘額了！趕快去選吧 🏄🏄";
   sendTextMessage(course.fb_id,text);
-  if(course.count==2){
-    var count = 0;
-  }
-  else{
-    var count = course.count+1;
-  }
-  var db = new dbsystem();
-  db.update().table("follow").set({count:count}).where("id=",course.id).run(function(result){
-    db=null;
-    delete db;
-  });
 }
 
 setInterval(function(){

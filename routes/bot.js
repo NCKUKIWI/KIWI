@@ -533,7 +533,7 @@ function checkCoureseCredit(){
         sendCreditNotify(follow[i]);
       }
       else if (follow[i].餘額!="額滿" && follow[i].count != 0){
-        if(follow[i].count==3){
+        if(follow[i].count==5){
           var count = 0;
         }
         else{
@@ -551,7 +551,7 @@ function checkCoureseCredit(){
 function sendCreditNotify(course){
   var text = "餘額通知！\n\n"+course.content+"／"+course.teacher+"／"+course.time+"。\n\n這門課有 "+course.餘額+" 個餘額了！趕快去選吧 🏄🏄";
   sendTextMessage(course.fb_id,text);
-  if(course.count==3){
+  if(course.count==5){
     var count = 0;
   }
   else{

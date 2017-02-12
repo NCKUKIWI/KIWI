@@ -4,7 +4,6 @@ var config = require('../config');
 var router = express.Router();
 var dbsystem = require('../model/dba');
 var token = config.msgtoken;
-var visitor = ua('UA-80432472-1');
 
 router.get('/webhook/', function(req, res) {
   if (req.query['hub.verify_token'] === 'nckuhubbver49') {

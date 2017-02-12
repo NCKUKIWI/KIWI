@@ -448,7 +448,7 @@ function sendFollowCourseList(sender){
       });
     }
     else{
-      var text = "目前沒有追蹤中的課程喔!";
+      var text = "目前沒有追蹤中的課程喔！";
       sendTextMessage(sender,text);
       sendGoodbye(sender);
     }

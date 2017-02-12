@@ -549,7 +549,7 @@ function checkCoureseCredit(){
 }
 
 function sendCreditNotify(course){
-  var text = "餘額通知！\n\n"+course.serial+"／"+course.content+"／"+course.teacher+"／"+course.time+"。\n\n這門課有 "+course.餘額+" 個餘額了！趕快去選吧 🏄🏄";
+  var text = "餘額通知（"+course.serial+"）！\n\n"+course.content+"／"+course.teacher+"／"+course.time+"。\n\n這門課有 "+course.餘額+" 個餘額了！趕快去選吧 🏄🏄";
   sendTextMessage(course.fb_id,text);
   var db = new dbsystem();
   db.update().table("follow").set({count:1}).where("id=",course.id).run(function(result){

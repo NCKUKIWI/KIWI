@@ -114,6 +114,13 @@ function sendTextMessage(sender, text) {
     }
   })
 }
+/*
+{
+  "type": "postback",
+  "title": "尋找上課地點",
+  "payload":"馬上為你尋找上課地點 😁😁\n\n請告訴我們課程名稱或是選課序號，例如「@微積分」或是「@h3001」\n\n你也可以加上「$系所 %老師名」，來精準搜尋課程，例如「@微積分 $工資管 %侯世章」",
+},
+*/
 
 function sendHelloMessage(sender) {
   messageData = {
@@ -125,10 +132,6 @@ function sendHelloMessage(sender) {
           "title": "NCKUHUB",
           "subtitle": "你好 👋👋 我是 NCKU HUB 新來的小幫手，請問需要什麼幫助嗎❓",
           "buttons": [{
-            "type": "postback",
-            "title": "尋找上課地點",
-            "payload":"馬上為你尋找上課地點 😁😁\n\n請告訴我們課程名稱或是選課序號，例如「@微積分」或是「@h3001」\n\n你也可以加上「$系所 %老師名」，來精準搜尋課程，例如「@微積分 $工資管 %侯世章」",
-          },{
             "type": "postback",
             "title": "追蹤課程餘額",
             "payload":"馬上為你追蹤課程餘額 😀😀\n\n請告訴我們課程名稱或是選課序號，例如「#微積分」或是「#h3001」\n\n你也可以加上「$系所 %老師名」，來精準搜尋課程，例如「#微積分 $工資管 %侯世章」",

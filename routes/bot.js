@@ -543,6 +543,7 @@ function checkCoureseCredit(){
   db.select().field(["f.*","c.餘額"]).from("follow f").join("course_105_2 c").where("c.id=f.course_id").run(function(follow){
     for(var i in follow){
       if(follow[i].餘額!="額滿" && follow[i].count == 0 ){
+        visitor.event("Bot", "通知有餘額").send();
         sendCreditNotify(follow[i]);
       }
       else if (follow[i].餘額!="額滿" && follow[i].count != 0){

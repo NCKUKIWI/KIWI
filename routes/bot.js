@@ -4,8 +4,6 @@ var config = require('../config');
 var router = express.Router();
 var dbsystem = require('../model/dba');
 var token = config.msgtoken;
-var ua = require('universal-analytics');
-var visitor = ua('UA-80432472-1');
 
 router.get('/webhook/', function(req, res) {
   if (req.query['hub.verify_token'] === 'nckuhubbver49') {
@@ -22,7 +20,6 @@ router.post('/webhook/', function(req, res) {
     if (event.message && event.message.text) {
       text = event.message.text
       if (text === '小幫手') {
-        visitor.event("Bot", "啟動小幫手").send();
         sendHelloMessage(sender);
         continue;
       }
@@ -34,28 +31,24 @@ router.post('/webhook/', function(req, res) {
         var keyword = text.match(/^[\uff20|@][\u4e00-\u9fa5]{1,}/i);
         if(keyword){
           keyword=keyword[0].replace(/[\uff20|@|\s]/g,"");
-          visitor.event("Bot", "課程名稱查找地點").send();
           sendCoursePlaceByName(sender,keyword,dpt,teacher);
           continue;
         }
         var keyword2 = text.match(/^[\uff20|@][a-zA-Z0-9]{1,}/i);
         if(keyword2){
           keyword2=keyword2[0].replace(/[\uff20|@|\s]/g,"");
-          visitor.event("Bot", "選課序號查找地點").send();
           sendCoursePlaceById(sender,keyword2);
           continue;
         }
         var keyword3 = text.match(/^[#|\uff03][\u4e00-\u9fa5]{1,}/i);
         if(keyword3){
           keyword3=keyword3[0].replace(/[#|\uff03|\s]/g,"");
-          visitor.event("Bot", "課程名稱追蹤課程").send();
           sendFollowCourseByName(sender,keyword3,dpt,teacher);
           continue;
         }
         var keyword4 = text.match(/^[#|\uff03][a-zA-Z0-9]{1,}/i);
         if(keyword4){
           keyword4=keyword4[0].replace(/[#|\uff03|\s]/g,"");
-          visitor.event("Bot", "選課序號追蹤課程").send();
           sendFollowCourseById(sender,keyword4);
           continue;
         }
@@ -67,30 +60,24 @@ router.post('/webhook/', function(req, res) {
       var keyword7 = event.postback.payload.match(/^@[0-9]{1,}/i);
       if(keyword5){
         keyword5=keyword5[0].replace(/!|\s/g,"");
-        visitor.event("Bot", "新增追蹤課程").send();
         addFollowCourse(sender,keyword5);
       }
       else if(keyword6){
         keyword6=keyword6[0].replace(/&|\s/g,"");
-        visitor.event("Bot", "取消追蹤課程").send();
         cancelFollowCourse(sender,keyword6);
       }
       else if(keyword7){
         keyword7=keyword7[0].replace(/@|\s/g,"");
-        visitor.event("Bot", "傳送教室地點").send();
         sendCourseInfo(sender,keyword7);
       }
       else {
         if(event.postback.payload=="cancelfollow"){
-          visitor.event("Bot", "顯示追蹤清單").send();
           sendFollowCourseList(sender);
         }
         else if(event.postback.payload=="callagain"){
-          visitor.event("Bot", "再次呼叫小幫手").send();
           sendHelloMessage(sender);
         }
         else if(event.postback.payload=="cancelall"){
-          visitor.event("Bot", "取消全部追蹤課程").send();
           cancelAllFollowCourse(sender);
         }
         else{

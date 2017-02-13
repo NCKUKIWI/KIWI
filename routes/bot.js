@@ -560,6 +560,6 @@ function sendCreditNotify(course){
 
 setInterval(function(){
   checkCoureseCredit();
-},2000 * 60);
+},1000 * 60);
 
 module.exports = router;

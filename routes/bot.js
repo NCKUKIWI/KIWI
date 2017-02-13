@@ -366,7 +366,7 @@ function addFollowCourse(sender,course_id){
         }
       });
     }else{
-      var text = "你選擇的課程是：\n\n"+course[0].系所名稱.replace(/[A-Z0-9]/g,"")+"／"+course[0].課程名稱.replace(/[（|）|\s]/g,"")+"／"+course[0].老師.replace(/\s/g,"")+"／"+course[0].時間+"\n\n這門課還有 "+course[0].餘額+" 個餘額！趕快去選吧 🏄🏄";
+      var text = "你選擇的課程是：\n\n"+course[0].系所名稱.replace(/[A-Z0-9]/g,"")+"／"+course[0].課程名稱.replace(/[（|）|\s]/g,"")+"／"+course[0].老師.replace(/\s/g,"")+"／"+course[0].時間+"\n\n這門課還有 "+course[0].餘額+" 個餘額！趕快去選吧 🏄🏄\n\n成大選課連結：https://goo.gl/o8zPZH";
       sendTextMessage(sender,text);
       sendGoodbye(sender);
     }
@@ -549,7 +549,7 @@ function checkCoureseCredit(){
 }
 
 function sendCreditNotify(course){
-  var text = "餘額通知（"+course.serial+"）！\n\n"+course.content+"／"+course.teacher+"／"+course.time+"。\n\n這門課有 "+course.餘額+" 個餘額了！趕快去選吧 🏄🏄";
+  var text = "餘額通知（"+course.serial+"）！\n\n"+course.content+"／"+course.teacher+"／"+course.time+"\n\n這門課有 "+course.餘額+" 個餘額了！趕快去選吧 🏄🏄\n\n成大選課連結：https://goo.gl/o8zPZH";
   sendTextMessage(course.fb_id,text);
   var db = new dbsystem();
   db.update().table("follow").set({count:1}).where("id=",course.id).run(function(result){

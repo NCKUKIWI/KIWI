@@ -357,7 +357,11 @@ function addFollowCourse(sender,course_id){
             serial:(course[0].選課序號)?course[0].選課序號:"",
             teacher:course[0].老師
           }
-          db.insert().into("follow").set(data).run(function(result){});
+          db.insert().into("follow").set(data).run(function(result){
+            //for record
+            db.insert().into("follow_copy").set(data).run(function(result){
+            });
+          });
         }
         else{
           var text = "你選擇的課程是：\n\n"+course[0].系所名稱.replace(/[A-Z0-9]/g,"")+"／"+course[0].課程名稱.replace(/[（|）|\s]/g,"")+"／"+course[0].老師.replace(/\s/g,"")+"／"+course[0].時間+"\n\n這堂課目前無餘額，已經為你設定過追蹤囉！";
@@ -553,8 +557,11 @@ function sendCreditNotify(course){
   sendTextMessage(course.fb_id,text);
   var db = new dbsystem();
   db.update().table("follow").set({count:1,hadNotify:1}).where("id=",course.id).run(function(result){
-    db=null;
-    delete db;
+    //for record
+    db.update().table("follow_copy").set({hadNotify:1}).where("id=",course.id).run(function(result){
+      db=null;
+      delete db;
+    });
   });
 }
 

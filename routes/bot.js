@@ -370,7 +370,7 @@ function addFollowCourse(sender,course_id){
         }
       });
     }else{
-      var text = "你選擇的課程是：\n\n"+course[0].選課序號+"/"+course[0].系所名稱.replace(/[A-Z0-9]/g,"")+"／"+course[0].課程名稱.replace(/[（|）|\s]/g,"")+"／"+course[0].老師.replace(/\s/g,"")+"／"+course[0].時間+"\n\n這門課還有 "+course[0].餘額+" 個餘額！趕快去選吧 🏄🏄\n\n成大選課連結：https://goo.gl/o8zPZH";
+      var text = "你選擇的課程是：\n\n"+course[0].選課序號+"／"+course[0].系所名稱.replace(/[A-Z0-9]/g,"")+"／"+course[0].課程名稱.replace(/[（|）|\s]/g,"")+"／"+course[0].老師.replace(/\s/g,"")+"／"+course[0].時間+"\n\n這門課還有 "+course[0].餘額+" 個餘額！趕快去選吧 🏄🏄\n\n成大選課連結：https://goo.gl/o8zPZH";
       sendTextMessage(sender,text);
       sendGoodbye(sender);
     }

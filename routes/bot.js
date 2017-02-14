@@ -536,15 +536,6 @@ function checkCoureseCredit(){
       if(follow[i].餘額!="額滿" && follow[i].count == 0 ){
         sendCreditNotify(follow[i]);
       }
-      else if (follow[i].餘額!="額滿" && follow[i].count != 0){
-        if(follow[i].count==60){
-          var count = 0;
-        }
-        else{
-          var count = follow[i].count+1;
-        }
-        db.update().table("follow").set({count:count}).where("id=",follow[i].id).run(function(result){});
-      }
       else if(follow[i].餘額=="額滿" && follow[i].count !=0 ){
         db.update().table("follow").set({count:0}).where("id=",follow[i].id).run(function(result){});
       }

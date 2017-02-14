@@ -537,7 +537,7 @@ function checkCoureseCredit(){
         sendCreditNotify(follow[i]);
       }
       else if (follow[i].餘額!="額滿" && follow[i].count != 0){
-        if(follow[i].count==10){
+        if(follow[i].count==60){
           var count = 0;
         }
         else{

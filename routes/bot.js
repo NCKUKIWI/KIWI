@@ -537,7 +537,7 @@ function checkCoureseCredit(){
         sendCreditNotify(follow[i]);
       }
       else if (follow[i].餘額!="額滿" && follow[i].count != 0){
-        if(follow[i].count==5){
+        if(follow[i].count==10){
           var count = 0;
         }
         else{
@@ -567,6 +567,6 @@ function sendCreditNotify(course){
 
 setInterval(function(){
   checkCoureseCredit();
-},1000 * 60);
+},1000 * 30);
 
 module.exports = router;

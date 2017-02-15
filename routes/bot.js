@@ -556,8 +556,9 @@ function sendCreditNotify(course){
   });
 }
 
+/*
 setInterval(function(){
   checkCoureseCredit();
-},1000 * 30);
+},1000 * 30);*/
 
 module.exports = router;

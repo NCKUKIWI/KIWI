@@ -19,24 +19,7 @@
             <th class="teacher" >開課老師</th>
             <th class="class_time">時間</th>
           </tr>
-          <% for(var i = 0 ; i < courses.length && i < 50  ; i++){ %>
-              <tr id="course-<%= courses[i].id %>" class="course-row" data-toggle="modal" data-target="#course-modal" data-id="<%=courses[i].id %>">
-                <!--
-                <td>
-                  <i class="plus icon addcoursebtn" id="<%= courses[i].id %>" data-id="<%=courses[i].id %>"></i>
-                </td>
-                -->
-                <td class="course_name" data-id="<%= courses[i].id %>">
-                  <%- courses[i].課程名稱 %>
-                  <% if(courses[i].comment_amt != 0){ %>
-                    <span class="badge"><%- courses[i].comment_amt %></span>
-                  <% } %>
-                </td>
-                <td><%- courses[i].系所名稱 %></td>
-                <td><%- courses[i].老師 %></td>
-                <td><%- courses[i].時間 %></td>
-              </tr>
-          <% } %>
+
         </table>
       </div>
     </div>
@@ -50,16 +33,13 @@
   </div>
 </div>
 
-<!-- 搜尋格裡面的資料 -->
-<script src="../assets/js/searchItem.js"></script>
-
 <script>
   var rawCourses = <%- JSON.stringify(courses) %>; //所有課程的資料 (移出document.ready為了使其他script可以全域使用此資料)
   var nowCourse = <%- JSON.stringify(custom_courses) %>; // 用來裝目前query的系所課程（未用時間表篩選過的）
   var nowCourse_hasComment = []; // 裝nowCourse的有comment的課程
   var courses_Department = {}; // 用來分類所有系所，下面使用object property的方式逐一分類
 
-  var now_index = 50 // 全部課程起始值50筆
+  var now_index = 0 // 全部課程起始值50筆
 
   if (nowCourse.length != 0){
     now_index = nowCourse.length;
@@ -78,7 +58,7 @@
   }
 
   for(var i in nowCourse){
-    if(nowCourse[i].comment_amt != 0){
+    if(nowCourse[i].comment_num != 0){
       nowCourse_hasComment.push(nowCourse[i]);
     }
   }
@@ -93,17 +73,29 @@
         $('#'+carts[i].course_id).removeClass('plus addcoursebtn').addClass('minus delcoursebtn');
       }
     }
+
+    /* 先加入<=50筆的課程數進去course */
+    for(var maxCourse = nowCourse.length; now_index < 50; now_index++ ){
+      if(i == maxCourse){
+        now_index = maxCourse;
+        break; // 大於query課程數就不在新增
+      }
+      $('#course-table').append(courseTransforToDom(nowCourse[now_index]));
+    }
+
     /* 往下滑動至底如果有資料繼續新增 */
     $(window).scroll(function(){
       if(showempty==0){
         var bottomHeight = $(document).height()-$(window).height(); // 計算置底的值
         if(bottomHeight - $(window).scrollTop() < 1  && now_index <= nowCourse.length){
-          for(var i = now_index; i < now_index + 50; i++ ){
-            if(i >= nowCourse.length) break; // 大於query課程數就不在新增
+          for(var i = now_index, maxCourse = nowCourse.length; now_index - i < 50; now_index++ ){
+            if(i == maxCourse){
+              now_index = maxCourse;
+              break; // 大於query課程數就不在新增
+            }
             // $('#course-table').append(nowCourseDom[i]);
-            $('#course-table').append(courseTransforToDom(nowCourse[i]));
+            $('#course-table').append(courseTransforToDom(nowCourse[now_index]));
           }
-          now_index += 50; // 每次新增50筆
           /* 將先加入的課程中用戶已選過的課符號變為減號 */
           if(carts != null ){
             for(var i in carts){
@@ -127,7 +119,7 @@
         // showempty = 1;
         // $('.course-row').hide();
         // for(var i in nowCourse){
-        //  if(nowCourse[i].comment_amt != 0)$('#course-table').append(courseTransforToDom(nowCourse[i]));
+        //  if(nowCourse[i].comment_num != 0)$('#course-table').append(courseTransforToDom(nowCourse[i]));
         // }
         // showempty=1;
         addCourseEventlistener();
@@ -146,7 +138,7 @@
     });
     /* 搜尋欄的的設定 */
     $('.ui.search').search({
-       source: content,
+       source: rawCourses,
        error : {
           source      : 'Cannot search. No source used, and Semantic API module was not included',
           noResults   : '目前沒有此\"老師\"或是\"課程\"的心得',
@@ -156,14 +148,35 @@
           maxResults  : 'Results must be an array to use maxResults setting',
           method      : 'The method you called is not defined.'
       },
-      maxResults: 10 // 一次顯示10筆
+      maxResults: 20,// 一次顯示10筆
+      onSelect: function(result, response){
+        console.log(result);
+        getCourseByKeywords('course_name', result["課程名稱"]);
+      },
+      searchFields:['課程名稱', '老師'],
+      fields: {
+        categories      : 'results',     // array of categories (category view)
+        categoryName    : 'name',        // name of category (category view)
+        categoryResults : 'results',     // array of results (category view)
+        description     : '老師', // result description
+        image           : 'image',       // result image
+        price           : 'price',       // result price
+        results         : 'results',     // array of results (standard)
+        title           : '課程名稱',       // result title
+        action          : 'action',      // "view more" object name
+        actionText      : 'text',        // "view more" text
+        actionURL       : 'url'          // "view more" url
+      }
     });
+
     // Got enter in query input
     var last;
     $(".query").keyup(function (e) {
        if (e.keyCode == 13 && last == 13) {
           var query = $('.query').val();
-          window.location.href = "/course?queryw="+query.replace(/\\/g, "");
+          // window.location.href = "/course?queryw="+query.replace(/\\/g, "");
+          getCourseByKeywords('queryw', query);
+          $('.ui.search').search('hide results');
        }
        last = e.keyCode;
     });
@@ -344,7 +357,7 @@
     // 重新製作有心得的nowCourse_hasComment
     nowCourse_hasComment.length = 0;
     for(var i in nowCourse){
-      if(nowCourse[i].comment_amt != 0){
+      if(nowCourse[i].comment_num != 0){
         nowCourse_hasComment.push(nowCourse[i]);
       }
     }
@@ -360,18 +373,9 @@
     }
 
     // 檢查是否有心得篩選條件
-    // var showempty = 0;
     if($('.ui.checkbox').hasClass('checked')){
-      $("#course-table").html(originalText);
-      for(var i in nowCourse_hasComment){
-          $('#course-table').append(courseTransforToDom(nowCourse_hasComment[i]));
-      }
-      now_index = nowCourse.length; // 避免丟出沒有心得的課程
-      // $('.course-row').hide();
-      // for(var i in nowCourse){
-      //   if(nowCourse[i].comment_amt != 0)$('#course-table').append(courseTransforToDom(nowCourse[i]));
-      // }
-      showempty=1;
+      $('#filter_haspost').checkbox('uncheck');
+      $('#filter_haspost').checkbox('check');
     }
 
   }
@@ -390,11 +394,11 @@
   }
   /* 轉換成html來方便加入網頁 */
   function courseTransforToDom(course){
-    if(course.comment_amt == 0){
+    if(course.comment_num == 0){
       var dom = "<tr id='course-" + course.id + "' class='course-row' data-toggle='modal' data-target='#course-modal' data-id='" + course.id + "'><td class='course_name' > " + course.課程名稱 + "</td><td> " + course.系所名稱 + "</td><td>" + course.老師 + "</td><td> " + course.時間 + "</td></tr>";
     }
     else{
-      var dom = "<tr id='course-" + course.id + "' class='notempty' data-toggle='modal' data-target='#course-modal' data-id='" + course.id + "'><td class='course_name'> " + course.課程名稱 + " <span class='badge'>" + course.comment_amt + "</span>" + "</td><td> " + course.系所名稱 + "</td><td>" + course.老師 + "</td><td> " + course.時間 + "</td></tr>";
+      var dom = "<tr id='course-" + course.id + "' class='notempty' data-toggle='modal' data-target='#course-modal' data-id='" + course.id + "'><td class='course_name'> " + course.課程名稱 + " <span class='badge'>" + course.comment_num + "</span>" + "</td><td> " + course.系所名稱 + "</td><td>" + course.老師 + "</td><td> " + course.時間 + "</td></tr>";
     }
     return dom;
   }
@@ -582,4 +586,31 @@
       delcourse(courseid,btn);
     });
   }
+
+  /* Ajax to get All course */
+  function getAllcourse(){
+    var ajaxurl = '/course/allCourse';
+    $.ajax({
+      url:ajaxurl,
+      type: 'GET',
+      success: function(response) {
+        console.log(response);
+      }
+    });
+  }
+
+  /* Ajax to get course by Keyword */
+  function getCourseByKeywords(catagory, keyword){
+    var ajaxurl = '/course/CourseByKeywords?' + catagory + "=" + keyword;
+    $.ajax({
+      url:ajaxurl,
+      type: 'GET',
+      success: function(response) {
+        nowCourse = response;
+        changeCourse();
+        addCourseEventlistener();
+      }
+    });
+  }
+
 </script>

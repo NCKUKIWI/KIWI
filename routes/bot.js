@@ -19,7 +19,8 @@ router.post('/webhook/', function(req, res) {
     var sender = event.sender.id
     if (event.message && event.message.text) {
       var text = event.message.text
-      if (text === '小幫手') {
+      var keyword8 = text.match(/(小幫手)/i);
+      if (text === '小幫手' || keyword8 != null) {
         sendHelloMessage(sender);
         continue;
       }

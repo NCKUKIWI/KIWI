@@ -5,6 +5,7 @@ DELETE 3
 UPDATE 4
 */
 
+var chalk = require('chalk');
 var connection = require('../config');
 connection = connection.connection;
 
@@ -18,7 +19,7 @@ var db = function(){
   this.tableName = "";
   this.fieldList = [];
   this.condition = [];
-  this.orderby = "";
+  this.orderby = [];
   /* INSERT */
   this.datakey =[];
   this.datavalue =[];
@@ -34,7 +35,7 @@ db.prototype.init = function () {
   this.tableName = "";
   this.fieldList = [];
   this.condition = [];
-  this.orderby = "";
+  this.orderby = [];
   /* INSERT */
   this.datakey =[];
   this.datavalue =[];
@@ -52,7 +53,7 @@ db.prototype.select = function(){
 
 db.prototype.from = function (table) {
   if(this.sqlType != 1 && this.sqlType != 3){
-    throw "Error: from() Must follow with select() or delete()"
+    throw chalk.red("Error: from() Must follow with select() or delete()");
   }
   else{
     this.tableName = table;
@@ -62,16 +63,23 @@ db.prototype.from = function (table) {
 
 db.prototype.field = function (field){
   if(this.sqlType != 1){
-    throw "Error: field() Must follow with select()"
+    throw chalk.red("Error: field() Must follow with select()");
   }
   else{
-    this.fieldList.push(field);
+    if(typeof field == "object"){
+      for(var i in field){
+        this.fieldList.push(field[i]);
+      }
+    }
+    else{
+      this.fieldList.push(field);
+    }
     return this;
   }
 };
 
 db.prototype.where = function(condition,value) {
-  if(value === undefined) {
+  if(typeof value === "undefined") {
     this.condition.push(condition);
   }
   else{
@@ -101,6 +109,13 @@ db.prototype.where = function(condition,value) {
   return this;
 };
 
+db.prototype.whereCheck = function(condition,value) {
+  if(value !== null){
+    this.condition.push(condition);
+  }
+  return this;
+};
+
 db.prototype.SelectQueryBuilder = function(){
   for(var i in this.fieldList){
     if(i == this.fieldList.length-1){
@@ -116,8 +131,16 @@ db.prototype.SelectQueryBuilder = function(){
     this.ConditionBuilder();
   }
 
-  if(this.orderby !=""){
-    this.sql += this.orderby;
+  if(this.orderby.length != 0){
+    this.sql += " ORDER BY ";
+    for(var i in this.orderby){
+      if( i == this.orderby.length-1){
+        this.sql += this.orderby[i]+" ";
+      }
+      else{
+        this.sql += this.orderby[i]+" , ";
+      }
+    }
   }
   if(this.limitAmt !=""){
     this.sql += this.limitAmt;
@@ -134,7 +157,7 @@ db.prototype.insert = function (){
 
 db.prototype.into = function (table){
   if(this.sqlType != 2){
-    throw "Error: into() Must follow with insert()";
+    throw chalk.red("Error: into() Must follow with insert()");
   }
   else{
     this.sql += "INTO "+table;
@@ -144,7 +167,7 @@ db.prototype.into = function (table){
 
 db.prototype.set = function (data){
   if(this.sqlType != 2 && this.sqlType != 4 ){
-    throw "Error: set() Must follow with insert() or update()";
+    throw chalk.red("Error: set() Must follow with insert() or update()");
   }
   else{
     for(var i in data){
@@ -196,8 +219,16 @@ db.prototype.DeleteQueryBuilder = function (){
   if(this.condition.length > 0){
     this.ConditionBuilder();
   }
-  if(this.orderby !=""){
-    this.sql += this.orderby;
+  if(this.orderby.length != 0){
+    this.sql += " ORDER BY ";
+    for(var i in this.orderby){
+      if( i == this.orderby.length-1){
+        this.sql += this.orderby[i]+" ";
+      }
+      else{
+        this.sql += this.orderby[i]+" , ";
+      }
+    }
   }
   if(this.limitAmt !=""){
     this.sql += this.limitAmt;
@@ -213,7 +244,7 @@ db.prototype.update = function (){
 
 db.prototype.table = function (table) {
   if(this.sqlType != 4 ){
-    throw "Error: table() Must follow with update()"
+    throw chalk.red("Error: table() Must follow with update()");
   }
   else{
     this.tableName = table;
@@ -257,8 +288,16 @@ db.prototype.JoinQueryBuilder = function() {
   if(this.condition.length > 0){
     this.ConditionBuilder();
   }
-  if(this.orderby !=""){
-    this.sql += this.orderby;
+  if(this.orderby.length != 0){
+    this.sql += " ORDER BY ";
+    for(var i in this.orderby){
+      if( i == this.orderby.length-1){
+        this.sql += this.orderby[i]+" ";
+      }
+      else{
+        this.sql += this.orderby[i]+" , ";
+      }
+    }
   }
   if(this.limitAmt !=""){
     this.sql += this.limitAmt;
@@ -267,12 +306,12 @@ db.prototype.JoinQueryBuilder = function() {
 
 db.prototype.order = function(order,type) {
   if(type === undefined) {
-    type = true;
+    type = "ASC";
   }
   else{
-    type = false;
+    type = "DESC";
   }
-  this.orderby = " ORDER BY " + order + ((type) ? " DESC ": " ASC ");
+  this.orderby.push(order+" "+type);
   return this;
 }
 
@@ -326,11 +365,10 @@ db.prototype.run = function (callback){
   var sql = this.sql;
   this.init();
   connection.query(sql,function(err, results, fields){
-    if (err) throw err;
     end = new Date().getTime();
     var time = end - start;
-    console.log("Execute time: "+time+" ms");
-    callback(results);
+    console.log(chalk.green("Execute time: "+time+" ms"));
+    callback(results,err);
   });
 };
 
@@ -364,7 +402,7 @@ db.prototype.get = function (callback){
     if (err) throw err;
     end = new Date().getTime();
     var time = end - start;
-    console.log("Execute time: "+time+" ms");
+    console.log(chalk.green("Execute time: "+time+" ms"));
     return results;
   });
 };
@@ -396,7 +434,7 @@ db.prototype.test = function (){
   var sql = this.sql;
   end = new Date().getTime();
   var time = end - start;
-  console.log("Execute time: "+time+" ms");
+  console.log(chalk.green("Execute time: "+time+" ms"));
   this.init();
 };
 

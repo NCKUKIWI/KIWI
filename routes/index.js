@@ -4,7 +4,6 @@ var db = require('../model/db');
 
 /* root */
 router.get('/', function(req, res) {
-
   // Log
   console.log("\n")
   console.log("========================================");

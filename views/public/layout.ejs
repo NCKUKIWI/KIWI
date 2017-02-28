@@ -45,11 +45,11 @@
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav navbar-right">
-          
+
           <li>
             <a href="/course" >課程查詢</a>
           </li>
-          
+
           <li>
             <a href="#" data-toggle="modal" data-target="#about">關於</a>
           </li>
@@ -58,9 +58,9 @@
           </li>
           <li>
             <% if(user){ %>
-              <a href="#" data-toggle="modal" data-target="#new">提供心得</a>
+              <a href="/post/new" >提供心得</a>
             <% }else{ %>
-              <a href="#" data-target="#new" onclick="toastr.warning('請先登入');">提供心得</a>
+              <a href="#" onclick="toastr.warning('請先登入');">提供心得</a>
             <% } %>
           </li>
           <% if(user){%>

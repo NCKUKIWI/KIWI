@@ -297,6 +297,7 @@ html *{
 .scorebar{
   width:90%;
   display:flex;
+  margin:0 auto;
 }
 
 .scorebar .scorebtn{
@@ -306,6 +307,8 @@ html *{
   border:1px solid black;
   border-left:0px;
   background:white;
+  height: 25px;
+  line-height: 25px;
 }
 
 /* report form */

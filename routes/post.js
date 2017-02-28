@@ -11,20 +11,22 @@ router.get('/', function(req, res) {
 router.post('/create', function(req, res) {
   console.log('\n'+'POST /post/create');
   if(req.user == undefined){
-    res.redirect('../');
+    console.log("Not login");
+    res.send([{msg:"請重新登入!"}]);
   }
   else{
     var userid = parseInt(req.user.id);
     var courseid = parseInt(req.body.course_id.replace(/\'|\#|\/\*/g,""));
-    console.log('User_id: '+req.user.id);
+    console.log('User_id: '+req.user.id+' User_name: '+req.user.name);
     req.checkBody('course_name', '課程名稱不可為空').notEmpty();
     req.checkBody('comment', '修課心得不可為空').notEmpty();
     var errors = req.validationErrors();
     if (errors) {
-      console.log("error");
+      console.log("Error "+errors);
       res.send(errors);
     }
     else{
+      console.log(req.body.course_name);
       var post = {
         course_name:req.body.course_name.replace(/\'|\#|\/\*/g,""),
         teacher:req.body.teacher.replace(/\'|\#|\/\*/g,""),
@@ -62,7 +64,7 @@ router.post('/create', function(req, res) {
 router.get('/new', function(req, res) {
   console.log('\n'+'GET /post/new');
   var colmuns = ['id','課程名稱','老師','時間','系所名稱'];
-  db.GetColumn('course',colmuns,{'column':'id','order':'DESC'},function(course){
+  db.GetColumn('course UNION SELECT id, 課程名稱,老師,時間,系所名稱 FROM course_105_2',colmuns,{'column':'id','order':'DESC'},function(course){
     res.render('post/new',{
       'course': course,
       'user': req.user

@@ -24,7 +24,7 @@ router.post('/webhook/', function(req, res) {
         sendHelloMessage(sender);
         continue;
       }
-      else if(text === "broadcast"){
+      else if(text === "broadcaststart"){
         broadcast();
       }
       else{
@@ -559,7 +559,7 @@ function sendCreditNotify(course){
 
 function broadcast(){
   var db = new dbsystem();
-  db.select().field("distinct fb_id").from("follow").where("fb_id=","1169375359801678").run(function(user){
+  db.select().field("distinct fb_id").from("follow").run(function(user){
     for(var i in user){
       db.select().field(["f.*","c.系號"]).from("follow f").join("course_105_2 c").where("c.id=f.course_id").where("f.fb_id=",user[i].fb_id).where("c.系號!=","A9").run(function(follow){
         var courseinfo="";

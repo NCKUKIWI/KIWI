@@ -20,9 +20,12 @@ router.post('/webhook/', function(req, res) {
     if (event.message && event.message.text) {
       var text = event.message.text
       var keyword8 = text.match(/(小幫手)/i);
-      if (text === '小幫手' || keyword8 != null) {
+      if (text === "小幫手" || keyword8 != null) {
         sendHelloMessage(sender);
         continue;
+      }
+      else if(text === "broadcast"){
+        broadcast();
       }
       else{
         var teacher = text.match(/[\%|\uff05][\u4e00-\u9fa5]{1,}/i);
@@ -35,7 +38,7 @@ router.post('/webhook/', function(req, res) {
           sendCoursePlaceByName(sender,keyword,dpt,teacher);
           continue;
         }
-        var keyword2 = text.match(/^[\uff20|@][a-zA-Z0-9]{1,}/i);
+        var keyword2 = text.match(/^[\uff20|@][a-zA-Z0-9]{5}/i);
         if(keyword2){
           keyword2=keyword2[0].replace(/[\uff20|@|\s]/g,"");
           sendCoursePlaceById(sender,keyword2);
@@ -47,7 +50,7 @@ router.post('/webhook/', function(req, res) {
           sendFollowCourseByName(sender,keyword3,dpt,teacher);
           continue;
         }
-        var keyword4 = text.match(/^[#|\uff03][a-zA-Z0-9]{1,}/i);
+        var keyword4 = text.match(/^[#|\uff03][a-zA-Z0-9]{5}/i);
         if(keyword4){
           keyword4=keyword4[0].replace(/[#|\uff03|\s]/g,"");
           sendFollowCourseById(sender,keyword4);
@@ -529,7 +532,7 @@ function sendGoodbye(sender){
 
 function checkCoureseCredit(){
   var db = new dbsystem();
-  db.select().field(["f.*","c.餘額"]).from("follow f").join("course_105_2 c").where("c.id=f.course_id").run(function(follow){
+  db.select().field(["f.*","c.餘額","c.系號"]).from("follow f").join("course_105_2 c").where("c.id=f.course_id").where("c.系號!=","A9").run(function(follow){
     for(var i in follow){
       if(follow[i].餘額!="額滿" && follow[i].count == 0 ){
         sendCreditNotify(follow[i]);
@@ -550,6 +553,26 @@ function sendCreditNotify(course){
     db.update().table("follow_copy").set({hadNotify:1}).where("id=",course.id).run(function(result){
       db=null;
       delete db;
+    });
+  });
+}
+
+function broadcast(){
+  var db = new dbsystem();
+  db.select().field("distinct fb_id").from("follow").where("fb_id=","1169375359801678").run(function(fb_id){
+    fb_id.forEach(function(sender) {
+      db.select().field(["f.*","c.系號"]).from("follow f").join("course_105_2 c").where("c.id=f.course_id").where("f.fb_id=",sender).where("c.系號!=","A9").run(function(follow){
+        var courseinfo="";
+        for(var i in follow ){
+          courseinfo+= (follow[i].serial+"／"+follow[i].content+"\n");
+        }
+        var msg ="同學您好！\n\
+        本訊息為小幫手的自動通知，\n\
+        提醒您三階選課就在明天囉！\n\n\
+        由於本階段通識採用抽籤方式，故系統已為大家取消通識餘額的追蹤狀態，避免通知不斷跳出。\n\n\
+        扣除通識之後 ，您所追蹤中的課程如下：\n"+courseinfo+"小幫手預祝各位選課順利：）";
+        sendTextMessage(sender,msg);
+      });
     });
   });
 }

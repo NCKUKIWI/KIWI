@@ -24,9 +24,6 @@ router.post('/webhook/', function(req, res) {
         sendHelloMessage(sender);
         continue;
       }
-      else if(text === "broadcaststart"){
-        broadcast();
-      }
       else{
         var teacher = text.match(/[\%|\uff05][\u4e00-\u9fa5]{1,}/i);
         var dpt = text.match(/[\$|\uff04][\u4e00-\u9fa5]{1,}/i);
@@ -556,7 +553,7 @@ function sendCreditNotify(course){
     });
   });
 }
-
+/*
 function broadcast(){
   var db = new dbsystem();
   db.select().field("distinct fb_id").from("follow").run(function(users){
@@ -571,7 +568,7 @@ function broadcast(){
       });
     });
   });
-}
+}*/
 
 /*
 setInterval(function(){

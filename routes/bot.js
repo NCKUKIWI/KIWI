@@ -564,13 +564,9 @@ function broadcast(){
       db.select().field(["f.*","c.系號"]).from("follow f").join("course_105_2 c").where("c.id=f.course_id").where("f.fb_id=",user[i].fb_id).where("c.系號!=","A9").run(function(follow){
         var courseinfo="";
         for(var j in follow ){
-          courseinfo+= (follow[j].serial+"／"+follow[j].content+"\n");
+          courseinfo+= (follow[j].serial+"／"+follow[j].content+"\n\n");
         }
-        var msg ="同學您好！\n\
-        本訊息為小幫手的自動通知，\n\
-        提醒您三階選課就在明天囉！\n\n\
-        由於本階段通識採用抽籤方式，故系統已為大家取消通識餘額的追蹤狀態，避免通知不斷跳出。\n\n\
-        扣除通識之後 ，您所追蹤中的課程如下：\n"+courseinfo+"小幫手預祝各位選課順利：）";
+        var msg ="同學您好！\n本訊息為小幫手的自動通知，\n提醒您三階選課就在明天囉！\n\n由於本階段通識採用抽籤方式，故系統已為大家取消通識餘額的追蹤狀態，避免通知不斷跳出。\n\n扣除通識之後，您所追蹤中的課程如下：\n"+courseinfo+"小幫手預祝各位選課順利：）";
         sendTextMessage(user[i].fb_id,msg);
       });
     }

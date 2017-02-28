@@ -560,8 +560,8 @@ function sendCreditNotify(course){
 function broadcast(){
   var db = new dbsystem();
   db.select().field("distinct fb_id").from("follow").where("fb_id=","1169375359801678").run(function(fb_id){
-    fb_id.forEach(function(sender) {
-      db.select().field(["f.*","c.系號"]).from("follow f").join("course_105_2 c").where("c.id=f.course_id").where("f.fb_id=",sender).where("c.系號!=","A9").run(function(follow){
+    for(var i in fb_id){
+      db.select().field(["f.*","c.系號"]).from("follow f").join("course_105_2 c").where("c.id=f.course_id").where("f.fb_id=",fb_id[i]).where("c.系號!=","A9").run(function(follow){
         var courseinfo="";
         for(var i in follow ){
           courseinfo+= (follow[i].serial+"／"+follow[i].content+"\n");
@@ -571,9 +571,9 @@ function broadcast(){
         提醒您三階選課就在明天囉！\n\n\
         由於本階段通識採用抽籤方式，故系統已為大家取消通識餘額的追蹤狀態，避免通知不斷跳出。\n\n\
         扣除通識之後 ，您所追蹤中的課程如下：\n"+courseinfo+"小幫手預祝各位選課順利：）";
-        sendTextMessage(sender,msg);
+        sendTextMessage(fb_id[i],msg);
       });
-    });
+    }
   });
 }
 

@@ -559,19 +559,19 @@ function sendCreditNotify(course){
 
 function broadcast(){
   var db = new dbsystem();
-  db.select().field("distinct fb_id").from("follow").where("fb_id=","1169375359801678").run(function(fb_id){
-    for(var i in fb_id){
-      db.select().field(["f.*","c.系號"]).from("follow f").join("course_105_2 c").where("c.id=f.course_id").where("f.fb_id=",fb_id[i]).where("c.系號!=","A9").run(function(follow){
+  db.select().field("distinct fb_id").from("follow").where("fb_id=","1169375359801678").run(function(user){
+    for(var i in user){
+      db.select().field(["f.*","c.系號"]).from("follow f").join("course_105_2 c").where("c.id=f.course_id").where("f.fb_id=",user[i].fb_id).where("c.系號!=","A9").run(function(follow){
         var courseinfo="";
-        for(var i in follow ){
-          courseinfo+= (follow[i].serial+"／"+follow[i].content+"\n");
+        for(var j in follow ){
+          courseinfo+= (follow[j].serial+"／"+follow[j].content+"\n");
         }
         var msg ="同學您好！\n\
         本訊息為小幫手的自動通知，\n\
         提醒您三階選課就在明天囉！\n\n\
         由於本階段通識採用抽籤方式，故系統已為大家取消通識餘額的追蹤狀態，避免通知不斷跳出。\n\n\
         扣除通識之後 ，您所追蹤中的課程如下：\n"+courseinfo+"小幫手預祝各位選課順利：）";
-        sendTextMessage(fb_id[i],msg);
+        sendTextMessage(user[i].fb_id,msg);
       });
     }
   });

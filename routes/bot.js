@@ -401,7 +401,7 @@ function sendFollowCourseList(sender){
         if(i%3==0){
           var card = {
             "title": "NCKUHUB",
-            "subtitle":"以下是你目前追蹤的課程，請問要取消哪一個呢？",
+            "subtitle":"以下是你目前追蹤的課程，請問要取消追蹤哪一個呢？",
             "buttons": [],
           }
         }
@@ -418,10 +418,10 @@ function sendFollowCourseList(sender){
       if(follow.length %3 == 0){
         var card = {
           "title": "NCKUHUB",
-          "subtitle":"以下是你目前追蹤的課程，請問要取消哪一個呢？",
+          "subtitle":"以下是你目前追蹤的課程，請問要取消追蹤哪一個呢？",
           "buttons": [{
             "type": "postback",
-            "title":"全部取消",
+            "title":"全部取消追蹤",
             "payload":"cancelall",
           }],
         }
@@ -430,7 +430,7 @@ function sendFollowCourseList(sender){
       else{
         var data = {
           "type": "postback",
-          "title":"全部取消",
+          "title":"全部取消追蹤",
           "payload":"cancelall",
         }
         messageData["attachment"]["payload"]["elements"][messageData["attachment"]["payload"]["elements"].length-1]["buttons"].push(data);

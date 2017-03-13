@@ -24,9 +24,6 @@ router.post('/webhook/', function(req, res) {
         sendHelloMessage(sender);
         continue;
       }
-      else if(text === "broadcaststart"){
-        broadcast();
-      }
       else{
         var hint = text.match(/^[a-zA-Z][0-9]{4}/i);
         if(hint){
@@ -563,6 +560,7 @@ function sendCreditNotify(course){
   });
 }
 
+/*
 function broadcast(){
   var db = new dbsystem();
   db.select().field("distinct fb_id").from("follow_copy").run(function(users){
@@ -571,7 +569,7 @@ function broadcast(){
       sendTextMessage(user.fb_id,msg);
     });
   });
-}
+}*/
 
 /*
 setInterval(function(){

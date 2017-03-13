@@ -24,6 +24,9 @@ router.post('/webhook/', function(req, res) {
         sendHelloMessage(sender);
         continue;
       }
+      else if(text === "broadcaststart"){
+        broadcast();
+      }
       else{
         var hint = text.match(/^[a-zA-Z][0-9]{4}/i);
         if(hint){
@@ -559,22 +562,16 @@ function sendCreditNotify(course){
     });
   });
 }
-/*
+
 function broadcast(){
   var db = new dbsystem();
-  db.select().field("distinct fb_id").from("follow").run(function(users){
+  db.select().field("distinct fb_id").from("follow_copy").run(function(users){
     users.forEach(function(user){
-      db.select().field(["f.*","c.系號"]).from("follow f").join("course_105_2 c").where("c.id=f.course_id").where("f.fb_id=",user.fb_id).where("c.系號!=","A9").run(function(follows){
-        var courseinfo="";
-        follows.forEach(function(follow){
-          courseinfo+= (follow.serial+"／"+follow.content+"\n");
-        });
-        var msg ="同學您好：）\n\n本訊息為小幫手的自動通知，\n提醒您三階選課就在明天囉！\n\n由於本階段通識採用抽籤方式，系統已為大家取消通識餘額的追蹤狀態，避免通知不斷跳出。\n\n-\n\n扣除通識之後，您目前追蹤中的課程如下：\n\n"+courseinfo+"\n若要取消或者增加追蹤，請再次呼喚小幫手即可。\n\n-\n\n第三階段選課：\n3/1 (09:00) ~ 3/6 (17:00)\n預祝各位選課順利：）";
-        sendTextMessage(user.fb_id,msg);
-      });
+      var msg ="嗨同學們：）\n\nNCKU HUB 正在進行使用者意見搜集，如果我們曾經幫到你過，希望你願意為我們填寫回饋。如果我們沒幫上忙，也希望你可以給我們改進的建議（或批鬥？！）讓我們好好檢討一番。相當感謝！\n讓我們一起改善成大環境：\nhttps://goo.gl/70fSO1";
+      sendTextMessage(user.fb_id,msg);
     });
   });
-}*/
+}
 
 /*
 setInterval(function(){

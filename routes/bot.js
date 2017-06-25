@@ -20,38 +20,44 @@ router.post('/webhook/', function(req, res) {
     if (event.message && event.message.text) {
       var text = event.message.text
       var keyword8 = text.match(/(小幫手)/i);
-      if (text === '小幫手' || keyword8 != null) {
+      if (text === "小幫手" || keyword8 != null) {
         sendHelloMessage(sender);
         continue;
       }
       else{
-        var teacher = text.match(/[\%|\uff05][\u4e00-\u9fa5]{1,}/i);
-        var dpt = text.match(/[\$|\uff04][\u4e00-\u9fa5]{1,}/i);
-        if(dpt) dpt=dpt[0].replace(/[\$|\uff04|\s]/g,"");
-        if(teacher) teacher=teacher[0].replace(/[\%|\uff05|\s]/g,"");
-        var keyword = text.match(/^[\uff20|@][\u4e00-\u9fa5]{1,}/i);
-        if(keyword){
-          keyword=keyword[0].replace(/[\uff20|@|\s]/g,"");
-          sendCoursePlaceByName(sender,keyword,dpt,teacher);
+        var hint = text.match(/^[a-zA-Z][0-9]{4}/i);
+        if(hint){
+          sendTextMessage(sender,"請記得開頭要加上＠或＃喔！");
           continue;
-        }
-        var keyword2 = text.match(/^[\uff20|@][a-zA-Z0-9]{1,}/i);
-        if(keyword2){
-          keyword2=keyword2[0].replace(/[\uff20|@|\s]/g,"");
-          sendCoursePlaceById(sender,keyword2);
-          continue;
-        }
-        var keyword3 = text.match(/^[#|\uff03][\u4e00-\u9fa5]{1,}/i);
-        if(keyword3){
-          keyword3=keyword3[0].replace(/[#|\uff03|\s]/g,"");
-          sendFollowCourseByName(sender,keyword3,dpt,teacher);
-          continue;
-        }
-        var keyword4 = text.match(/^[#|\uff03][a-zA-Z0-9]{1,}/i);
-        if(keyword4){
-          keyword4=keyword4[0].replace(/[#|\uff03|\s]/g,"");
-          sendFollowCourseById(sender,keyword4);
-          continue;
+        }else{
+          var teacher = text.match(/[\%|\uff05][\u4e00-\u9fa5]{1,}/i);
+          var dpt = text.match(/[\$|\uff04][\u4e00-\u9fa5]{1,}/i);
+          if(dpt) dpt=dpt[0].replace(/[\$|\uff04|\s]/g,"");
+          if(teacher) teacher=teacher[0].replace(/[\%|\uff05|\s]/g,"");
+          var keyword = text.match(/^[\uff20|@][\u4e00-\u9fa5]{1,}/i);
+          if(keyword){
+            keyword=keyword[0].replace(/[\uff20|@|\s]/g,"");
+            sendCoursePlaceByName(sender,keyword,dpt,teacher);
+            continue;
+          }
+          var keyword2 = text.match(/^[\uff20|@][a-zA-Z0-9]{5}/i);
+          if(keyword2){
+            keyword2=keyword2[0].replace(/[\uff20|@|\s]/g,"");
+            sendCoursePlaceById(sender,keyword2);
+            continue;
+          }
+          var keyword3 = text.match(/^[#|\uff03][\u4e00-\u9fa5]{1,}/i);
+          if(keyword3){
+            keyword3=keyword3[0].replace(/[#|\uff03|\s]/g,"");
+            sendFollowCourseByName(sender,keyword3,dpt,teacher);
+            continue;
+          }
+          var keyword4 = text.match(/^[#|\uff03][a-zA-Z0-9]{5}/i);
+          if(keyword4){
+            keyword4=keyword4[0].replace(/[#|\uff03|\s]/g,"");
+            sendFollowCourseById(sender,keyword4);
+            continue;
+          }
         }
       }
     }
@@ -395,7 +401,7 @@ function sendFollowCourseList(sender){
         if(i%3==0){
           var card = {
             "title": "NCKUHUB",
-            "subtitle":"以下是你目前追蹤的課程，請問要取消哪一個呢？",
+            "subtitle":"以下是你目前追蹤的課程，請問要取消追蹤哪一個呢？",
             "buttons": [],
           }
         }
@@ -412,10 +418,10 @@ function sendFollowCourseList(sender){
       if(follow.length %3 == 0){
         var card = {
           "title": "NCKUHUB",
-          "subtitle":"以下是你目前追蹤的課程，請問要取消哪一個呢？",
+          "subtitle":"以下是你目前追蹤的課程，請問要取消追蹤哪一個呢？",
           "buttons": [{
             "type": "postback",
-            "title":"全部取消",
+            "title":"全部取消追蹤",
             "payload":"cancelall",
           }],
         }
@@ -424,7 +430,7 @@ function sendFollowCourseList(sender){
       else{
         var data = {
           "type": "postback",
-          "title":"全部取消",
+          "title":"全部取消追蹤",
           "payload":"cancelall",
         }
         messageData["attachment"]["payload"]["elements"][messageData["attachment"]["payload"]["elements"].length-1]["buttons"].push(data);
@@ -529,7 +535,7 @@ function sendGoodbye(sender){
 
 function checkCoureseCredit(){
   var db = new dbsystem();
-  db.select().field(["f.*","c.餘額"]).from("follow f").join("course_105_2 c").where("c.id=f.course_id").run(function(follow){
+  db.select().field(["f.*","c.餘額","c.系號"]).from("follow f").join("course_105_2 c").where("c.id=f.course_id").where("c.系號!=","A9").run(function(follow){
     for(var i in follow){
       if(follow[i].餘額!="額滿" && follow[i].count == 0 ){
         sendCreditNotify(follow[i]);
@@ -555,8 +561,19 @@ function sendCreditNotify(course){
 }
 
 /*
+function broadcast(){
+  var db = new dbsystem();
+  db.select().field("distinct fb_id").from("follow_copy").run(function(users){
+    users.forEach(function(user){
+      var msg ="嗨同學們：）\n\nNCKU HUB 正在進行使用者意見搜集，如果我們曾經幫到你過，希望你願意為我們填寫回饋。如果我們沒幫上忙，也希望你可以給我們改進的建議（或批鬥？！）讓我們好好檢討一番。相當感謝！\n讓我們一起改善成大環境：\nhttps://goo.gl/70fSO1";
+      sendTextMessage(user.fb_id,msg);
+    });
+  });
+}*/
+
+/*
 setInterval(function(){
   checkCoureseCredit();
-},1000 * 30);*/
+},1000 * 10);*/
 
 module.exports = router;

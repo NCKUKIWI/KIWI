@@ -181,10 +181,12 @@
        last = e.keyCode;
     });
     $('.course').on('click', function(){
-       $('.chooseCourse').modal('show');
+      $('.chooseCourse .ui.inverted.button.mini').removeClass('active');
+      $('.chooseCourse').modal('show');
     });
     $('.tables').on('click', function(){
-       $('.timeTable').modal('show');
+      $('.timeTable .ui.inverted.button.mini').removeClass('active');
+      $('.timeTable').modal('show');
     });
     $('.ui.inverted.button.mini').on('click', function(){
       if($(this).hasClass('active')){

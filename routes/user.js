@@ -14,6 +14,15 @@ router.get('/auth/facebook/callback',
   })
 );
 
+router.get('/auth/facebook/postCreate',
+  passport.authenticate('facebook', {
+    successRedirect: '/post/new',
+    successFlash: '登入成功!',
+    failureRedirect: '../../../',
+    failureFlash: '請重新再試一次!',
+  })
+);
+
 router.get('/logout', function(req, res){
   req.logout();
   res.redirect('/');

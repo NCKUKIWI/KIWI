@@ -25,7 +25,7 @@ router.get('/allCourse', function(req, res){
   console.log('\n'+'GET /allCourse');
 
   var columns = ['id','課程名稱','系號', '課程碼','分班碼', '系所名稱','老師','時間', 'comment_num'];
-  db.GetColumn('course_105_2',columns,{'column':'id','order':'DESC'},function(courses){
+  db.GetColumn('course_new',columns,{'column':'id','order':'DESC'},function(courses){
     var nowCourse = [];
     var nowCourse_hasComment = []; // 裝nowCourse的有comment的課程
     var courses_Department = {}; // 用來分類所有系所，下面使用object property的方式逐一分類
@@ -55,7 +55,7 @@ router.get('/CourseByKeywords', function(req, res){
   console.log(req.query);
 
   var columns = ['id','課程名稱','系號', '課程碼','分班碼', '系所名稱','老師','時間', 'comment_num'];
-  db.GetColumn('course_105_2',columns,{'column':'id','order':'DESC'},function(courses){
+  db.GetColumn('course_new',columns,{'column':'id','order':'DESC'},function(courses){
     all_courses = courses;
 
     if(req.query.hasOwnProperty("queryw")){
@@ -64,22 +64,22 @@ router.get('/CourseByKeywords', function(req, res){
       // if someone want to query alternately by "space"
       var QueryArray = cleanQuery.split(" ");
 
-      db.FindbyColumnFuzzy('course_105_2', columns, QueryArray ,function(custom_courses){
+      db.FindbyColumnFuzzy('course_new', columns, QueryArray ,function(custom_courses){
         res.send(custom_courses);
       });
     }
     else if(req.query.hasOwnProperty("teacher")){
-      db.FindbyColumn('course_105_2', columns,{"老師": req.query.teacher} ,function(custom_courses){
+      db.FindbyColumn('course_new', columns,{"老師": req.query.teacher} ,function(custom_courses){
         res.send(custom_courses);
       });
     }
     else if(req.query.hasOwnProperty("course_name")){
-      db.FindbyColumn('course_105_2', columns,{"課程名稱": req.query.course_name} ,function(custom_courses){
+      db.FindbyColumn('course_new', columns,{"課程名稱": req.query.course_name} ,function(custom_courses){
         res.send(custom_courses);
       });
     }
     else if(req.query.hasOwnProperty("catalog")){
-      db.FindbyColumn('course_105_2', columns,{"系號": req.query.catalog} ,function(custom_courses){
+      db.FindbyColumn('course_new', columns,{"系號": req.query.catalog} ,function(custom_courses){
         res.send(custom_courses);
       });
     }
@@ -98,7 +98,7 @@ router.get('/',function(req, res) {
   var all_courses = [];
   var custom_courses = [];
 
-  db.GetColumn('course_105_2',columns,{'column':'id','order':'DESC'},function(courses){
+  db.GetColumn('course_new',columns,{'column':'id','order':'DESC'},function(courses){
     all_courses = courses;
 
     if(req.query.hasOwnProperty("queryw")){
@@ -107,22 +107,22 @@ router.get('/',function(req, res) {
       // if someone want to query alternately by "space"
       var QueryArray = cleanQuery.split(" ");
 
-      db.FindbyColumnFuzzy('course_105_2', columns, QueryArray ,function(custom_courses){
+      db.FindbyColumnFuzzy('course_new', columns, QueryArray ,function(custom_courses){
         check_Login(all_courses, custom_courses);
       });
     }
     else if(req.query.hasOwnProperty("teacher")){
-      db.FindbyColumn('course_105_2', columns,{"老師": req.query.teacher} ,function(custom_courses){
+      db.FindbyColumn('course_new', columns,{"老師": req.query.teacher} ,function(custom_courses){
         check_Login(all_courses, custom_courses);
       });
     }
     else if(req.query.hasOwnProperty("course_name")){
-      db.FindbyColumn('course_105_2', columns,{"課程名稱": req.query.course_name} ,function(custom_courses){
+      db.FindbyColumn('course_new', columns,{"課程名稱": req.query.course_name} ,function(custom_courses){
         check_Login(all_courses, custom_courses);
       });
     }
     else if(req.query.hasOwnProperty("catalog")){
-      db.FindbyColumn('course_105_2', columns,{"系號": req.query.catalog} ,function(custom_courses){
+      db.FindbyColumn('course_new', columns,{"系號": req.query.catalog} ,function(custom_courses){
         
       });
     }
@@ -294,7 +294,7 @@ router.post('/inputaddcourse/:courseid', function(req, res) {
   console.log('\n'+'POST /course/inputaddcourse/'+courseserial);
   var column=["id","課程名稱","時間"];
   /* 透過輸入的選課序號 查找課程 */
-  db.FindbyColumn('course_105_2',column,{'選課序號':courseserial},function(course){
+  db.FindbyColumn('course_new',column,{'選課序號':courseserial},function(course){
     /* 若該選課序號無對應的課程 回傳not found */
     if(course.length==0){
       console.log("Course "+courseserial+" not found");

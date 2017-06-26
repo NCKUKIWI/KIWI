@@ -371,10 +371,10 @@ exports.query_post = function query_post(datas, req, item,callback){
 
 // =======================
 // for course
-
+// 這邊是指定course_new為搜尋的table，不知這樣做是否好，可能要再修
 exports.query_post2 = function query_post2(id, callback){
 
-  var sql_1 = "SELECT * FROM course_105_2 WHERE id = " + id;
+  var sql_1 = "SELECT * FROM course_new WHERE id = " + id;
   connection.query(sql_1,function(err, courseInfo){
     if (err) throw err;
 

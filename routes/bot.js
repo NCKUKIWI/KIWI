@@ -10,17 +10,21 @@ router.get('/sendmsg/', function(req, res) {
 });
 
 router.post('/sendmsg/', function(req, res) {
-  if(req.body.type == "test"){
-    sendTextMessage("1169375359801678",req.body.msg);
-  }else if(req.body.type == "broadcast"){
-    var db = new dbsystem();
-    db.select().field("distinct fb_id").from("follow_copy").run(function(users){
-      users.forEach(function(user){
-        sendTextMessage(user.fb_id,req.body.msg);
+  if(req.body.pw !="nckuhubmsg"){
+    res.send("fail");
+  }else{
+    if(req.body.type == "test"){
+      sendTextMessage("1169375359801678",req.body.msg);
+    }else if(req.body.type == "broadcast"){
+      var db = new dbsystem();
+      db.select().field("distinct fb_id").from("follow_copy").run(function(users){
+        users.forEach(function(user){
+          sendTextMessage(user.fb_id,req.body.msg);
+        });
       });
-    });
+    }
+    res.send('ok');
   }
-  res.send('ok');
 });
 
 router.get('/webhook/', function(req, res) {

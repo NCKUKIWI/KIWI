@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>NCKU HUB</title>
+  <meta charset="UTF-8">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="../assets/css/semantic.css">
+</head>
+<body>
+<div class="ui centered grid" style="padding-top:50px;">
+  <div class="ten wide tablet six wide computer column">
+    <h1>FB MSG</h1>
+    <form class="ui form" id="msgform">
+      <div class="field">
+        <label>Type</label>
+        <select class="ui fluid dropdown" name="type">
+          <option value="test">測試</option>
+          <option value="broadcast">Broadcast</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Text</label>
+        <textarea name="msg" placeholder="msg"></textarea>
+      </div>
+      <div class="ui button" id="sendmsg">Send</div>
+    </form>
+  </div>
+</div>
+<script>
+  $(document).ready(function(){
+    $("#sendmsg").on("click",function(){
+      $.ajax({
+        url: "/bot/sendmsg",
+        type: "POST",
+        data: $("#msgform").serialize(),
+        success: function(response) {
+          console.log(response);
+        }
+      });
+    })
+  });
+</script>
+
+</body>
+</html>

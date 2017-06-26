@@ -5,6 +5,24 @@ var router = express.Router();
 var dbsystem = require('../model/dba');
 var token = config.msgtoken;
 
+router.get('/sendmsg/', function(req, res) {
+  res.render('sendmsg');
+});
+
+router.post('/sendmsg/', function(req, res) {
+  if(req.body.type == "test"){
+    sendTextMessage("xxxxxx",req.body.msg);
+  }else if(req.body.type == "broadcast"){
+    var db = new dbsystem();
+    db.select().field("distinct fb_id").from("follow_copy").run(function(users){
+      users.forEach(function(user){
+        sendTextMessage(user.fb_id,req.body.msg);
+      });
+    });
+  }
+  res.send('ok');
+});
+
 router.get('/webhook/', function(req, res) {
   if (req.query['hub.verify_token'] === 'nckuhubbver49') {
     res.send(req.query['hub.challenge'])
@@ -17,6 +35,9 @@ router.post('/webhook/', function(req, res) {
   for (i = 0; i < messaging_events.length; i++) {
     var event = req.body.entry[0].messaging[i]
     var sender = event.sender.id
+    console.log("sender: "+sender);
+    console.log("content: "+event.message.text);
+    console.log("---------------");
     if (event.message && event.message.text) {
       var text = event.message.text
       var keyword8 = text.match(/(小幫手)/i);

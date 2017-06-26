@@ -11,7 +11,7 @@ router.get('/sendmsg/', function(req, res) {
 
 router.post('/sendmsg/', function(req, res) {
   if(req.body.type == "test"){
-    sendTextMessage("xxxxxx",req.body.msg);
+    sendTextMessage("1169375359801678",req.body.msg);
   }else if(req.body.type == "broadcast"){
     var db = new dbsystem();
     db.select().field("distinct fb_id").from("follow_copy").run(function(users){
@@ -35,10 +35,10 @@ router.post('/webhook/', function(req, res) {
   for (i = 0; i < messaging_events.length; i++) {
     var event = req.body.entry[0].messaging[i]
     var sender = event.sender.id
-    console.log("sender: "+sender);
-    console.log("content: "+event.message.text);
-    console.log("---------------");
     if (event.message && event.message.text) {
+      console.log("sender: "+sender);
+      console.log("content: "+event.message.text);
+      console.log("---------------");
       var text = event.message.text
       var keyword8 = text.match(/(小幫手)/i);
       if (text === "小幫手" || keyword8 != null) {

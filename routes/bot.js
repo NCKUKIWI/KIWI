@@ -14,7 +14,9 @@ router.post('/sendmsg/', function(req, res) {
     res.send("fail");
   }else{
     if(req.body.type == "test"){
+      sendTextMessage("1346773338719764",req.body.msg);
       sendTextMessage("1169375359801678",req.body.msg);
+      sendTextMessage("1364925580245632",req.body.msg);
     }else if(req.body.type == "broadcast"){
       var db = new dbsystem();
       db.select().field("distinct fb_id").from("follow_copy").run(function(users){

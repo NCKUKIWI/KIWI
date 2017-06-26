@@ -60,7 +60,7 @@ app.use('/user',user);                          // get '/user'時交給routes us
 app.use('/schedule',schedule);                 // get '/schedule'時交給routes schedule
 app.use('/course',course);                     // get '/course'時交給routes course
 app.use('/course_rate',course_rate);          // get '/course_rate'時交給routes course_rate
-app.use('/bot',bot);
+//app.use('/bot',bot);
 
 app.listen( process.env.PORT || 3000);                             //監聽3000port
 console.log('running on port 3000');

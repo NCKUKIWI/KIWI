@@ -146,7 +146,7 @@ $(document).ready(function(){
     var cteacher = "<%- courseInfo.老師 %>";
     var ccatalog = "<%- courseInfo.系所名稱 %>";
     $('#course-modal .close').click();
-    $('a[data-target="#new"]').click();
+    $('#addpost').click();
     setTimeout(function() {
       $('input[name=course]').val(cname+"-"+cteacher);
       $('input[name=catalog]').val(ccatalog);

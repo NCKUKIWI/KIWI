@@ -4,7 +4,7 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var expressValidator = require('express-validator');
 var session = require('express-session');
-var passport = require('passport');
+var db = require('./model/db');
 var flash = require('express-flash');
 var cookieParser = require('cookie-parser');
 // 引入router檔案位於routes資料夾中
@@ -25,15 +25,6 @@ app.set('view engine','ejs');                   //使用ejs作為template
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
-/* A app-level middleware function
-app.use(function (req, res, next) {
-  req.test = function(){
-   console.log('action');
-  }
-  next();
-});
-*/
-
 //Validator
 app.use(expressValidator());
 app.use("/assets",express.static(__dirname + "/assets"));
@@ -47,12 +38,21 @@ app.use(session({
 }));
 app.use(cookieParser('secretString'));
 
+app.use(function(req, res, next) {
+  if(req.cookies.isLogin){
+    db.FindbyID('user',req.cookies.id,function(user){
+      req.user = user;
+      next();
+    });
+  }
+  else {
+    next();
+  }
+});
+
 //flah message
 app.use(flash());
 
-//passport
-app.use(passport.initialize());
-app.use(passport.session());
 //Route
 app.use('/', index);                              // get '/'時交給routes index處理
 app.use('/post', post);                          // get '/post'時交給routes post處理

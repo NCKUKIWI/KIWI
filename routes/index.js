@@ -21,7 +21,7 @@ router.get('/', function(req, res) {
   }
   /*  設定要的欄位 */
   var colmuns = ['id','course_name','catalog','teacher','semester','user_id'];
-  db.GetColumn('post',colmuns,{'column':order,'order':'DESC'},function(posts){
+  db.GetColumn('post_new',colmuns,{'column':order,'order':'DESC'},function(posts){
     if(req.query.hasOwnProperty("queryw")){
 	  	db.query_post(posts, req.query.queryw,"query",function(posts,teachers,course_name){
         if(req.query.order){

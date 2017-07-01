@@ -21,8 +21,6 @@
     "fbgraph": "^1.4.1",
     "mysql": "^2.11.1",
     "nodemon": "^1.9.2",
-    "passport": "^0.3.2",
-    "passport-facebook": "^2.1.1",
     "request": "^2.79.0",
     "universal-analytics": "^0.4.8"
   }

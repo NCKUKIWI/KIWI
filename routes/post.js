@@ -64,7 +64,8 @@ router.post('/create', function(req, res) {
 router.get('/new', function(req, res) {
   console.log('\n'+'GET /post/new');
   var colmuns = ['id','課程名稱','老師','系所名稱'];
-  db.GetColumn('course_105_2 group by 課程名稱',colmuns,{'column':'id','order':'DESC'},function(course){
+  //只取出上一學期的課程
+  db.FindbyColumn('course_all',colmuns,{'semester':'105-2'},function(course){
     res.render('post/new',{
       'course': course,
       'user': req.user
@@ -81,7 +82,7 @@ router.get('/:id', function(req, res) {
   }
   else{
     console.log('\n'+'GET /post/'+id);
-    db.FindbyID('post',id,function(post){
+    db.FindbyID('post_new',id,function(post){
       db.FindbyColumn('course_rate',['give','got'],{"post_id":post.id} ,function(rate){
         if(rate.length > 0){
           res.render('post/show',{

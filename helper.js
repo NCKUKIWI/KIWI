@@ -17,3 +17,13 @@ exports.checkLogin = function checkLogin(v){
     }
   }
 }
+
+exports.apiAuth = function apiAuth(){
+  return function(req, res, next) {
+    if (req.user) {
+      next();
+    } else {
+      res.send("No login");
+    }
+  }
+}

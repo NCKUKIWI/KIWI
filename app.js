@@ -47,7 +47,7 @@ app.use(session({
 }));
 app.use(cookieParser('secretString'));
 
-//flah message
+//flaSh message
 app.use(flash());
 
 //passport

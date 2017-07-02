@@ -39,7 +39,7 @@
 - `views` -> template files (View)
   - `public` -> layouts
 
-##Cookie and Session
+## Cookie and Session
 
 操作session和cookie的方法
 
@@ -47,9 +47,9 @@
 
 `req.session.uid=1`
 
-##View
+## View
 
-###ejs locals turtorial
+### ejs locals turtorial
 
 設置該頁面的layout
 
@@ -59,9 +59,9 @@
 
 `<% include path/view %>`
 
-##Controller
+## Controller
 
-###REST
+### REST
 
 - `index` -> GET: show all
 - `show` -> GET: show single
@@ -71,7 +71,7 @@
 - `update` -> POST: update into db
 - `delete` -> DEL: del data in db
 
-###Body parser
+### Body parser
 
 `url?id=1`
 
@@ -85,7 +85,7 @@ req.params.id
 
 req.body.id
 
-##Model
+## Model
 
 請先加入
 
@@ -93,11 +93,11 @@ req.body.id
 
 datas就是資料庫回傳的資料
 
-###Insert data into table
+### Insert data into table
 
 db.Insert(table,data,callback);
 
-####Example:
+#### Example:
 
 ```
 var data = {
@@ -109,11 +109,11 @@ db.Insert('table_name',data,function(err,result){...});
 //result.insertId = the id of the data you just insert
 ```
 
-###Delete data by Id
+### Delete data by Id
 
 db.DeleteById(table,id,callbak);
 
-####Example:
+#### Example:
 
 `db.DeleteById('table_name','2',function(err){...});`
 
@@ -121,15 +121,15 @@ db.DeleteById(table,id,callbak);
 
 db.GetAll(table,order,callback);
 
-####Example:
+#### Example:
 
 `db.GetAll('table_name','columns_name',function(datas){...});`
 
-###Get specific data from table order by column
+### Get specific data from table order by column
 
 db.GetCols(table,columns,order,callback);
 
-####Example:
+#### Example:
 
 ```
 var columns = ['columns_name1','columns_name2'];
@@ -137,11 +137,11 @@ var columns = ['columns_name1','columns_name2'];
 db.GetCols('table_name',columns,'columns_name',function(datas){...});
 ```
 
-###Find one data by Id (just on data)
+### Find one data by Id (just on data)
 
 db.FindbyID(table,id,callback);
 
-####Example:
+#### Example:
 
 `db.FindbyID('table_name','2',function(data){...});`
 
@@ -149,7 +149,7 @@ db.FindbyID(table,id,callback);
 
 db.FindbyColumn(table,conditions,callback);
 
-####Example:
+#### Example:
 
 ```
 var conditions ={
@@ -159,11 +159,11 @@ var conditions ={
 db.FindbyColumn('user',conditions,function(datas){...});
 ```
 
-###Find datas by conditions and order by column (one or more datas)
+### Find datas by conditions and order by column (one or more datas)
 
 db.FindbyColumnOrder(table,conditions,order,callback);
 
-####Example:
+#### Example:
 
 ```
 var conditions ={
@@ -173,11 +173,11 @@ var conditions ={
 db.FindbyColumnOrder('post',conditions,{'column':ordercolumn,'order':'ASC/DESC'},function(datas){...});
 ```
 
-###Update data
+### Update data
 
 Update(table,datas,conditions,callback);
 
-####Example:
+#### Example:
 
 ```
 var datas ={
@@ -191,11 +191,11 @@ var conditions ={
 db.Update('user',datas,conditions,function(results){...});
 ```
 
-###Inner Join table
+### Inner Join table
 
 InnerJoin(tables,cols,conditions,callback);
 
-####Example:
+#### Example:
 ```
 var tables = {'table':'post','jointable':'user'};
 

@@ -446,3 +446,11 @@ exports.FindbyColumnFuzzy = function FindbyColumn(table,cols,conditions,callback
     callback(results);
   });
 }
+
+exports.Query = function Query(sql,callback){
+  console.log(sql);
+  connection.query(sql,function(err,results,fields){
+    if (err) throw err;
+    callback(results);
+  });
+}

@@ -38,7 +38,7 @@ router.post('/create', function(req, res) {
         course_id:courseid,
         user_id: userid
       }
-      db.Insert('post',post,function(err,results){
+      db.Insert('post_new',post,function(err,results){
         if(err) throw err;
         console.log(results);
         var rate = {

@@ -35,7 +35,7 @@ router.get('/webhook/', function(req, res) {
   }
   res.send('Error, wrong token')
 });
-/*
+
 router.post('/webhook/', function(req, res) {
   var messaging_events = req.body.entry[0].messaging
   for (i = 0; i < messaging_events.length; i++) {
@@ -121,8 +121,8 @@ router.post('/webhook/', function(req, res) {
     }
   }
   res.sendStatus(200);
-})
-*/
+});
+
 
 function sendTextMessage(sender, text) {
   messageData = {
@@ -198,7 +198,7 @@ function sendHelloMessage(sender) {
 
 function sendCoursePlaceByName(sender,keyword,dpt,teacher) {
   var db = new dbsystem();
-  db.select().field(["id","系所名稱","課程名稱","時間","教室"]).from("course_105_2").where("課程名稱 LIKE '%" + keyword + "%'").whereCheck("系所名稱 LIKE '%" + dpt + "%'",dpt).whereCheck("老師 LIKE '%" + teacher + "%'",teacher).run(function(course){
+  db.select().field(["id","系所名稱","課程名稱","時間","教室"]).from("course_new").where("課程名稱 LIKE '%" + keyword + "%'").whereCheck("系所名稱 LIKE '%" + dpt + "%'",dpt).whereCheck("老師 LIKE '%" + teacher + "%'",teacher).run(function(course){
     db=null;
     delete db;
     if(course.length>0){
@@ -266,7 +266,7 @@ function sendCoursePlaceByName(sender,keyword,dpt,teacher) {
 function sendCoursePlaceById(sender,keyword) {
   keyword=keyword.toUpperCase();
   var db = new dbsystem();
-  db.select().field(["id"]).from("course_105_2").where("選課序號=",keyword).run(function(course){
+  db.select().field(["id"]).from("course_new").where("選課序號=",keyword).run(function(course){
     db=null;
     delete db;
     if(course.length > 0){
@@ -281,7 +281,7 @@ function sendCoursePlaceById(sender,keyword) {
 
 function sendCourseInfo(sender,course_id) {
   var db = new dbsystem();
-  db.select().field(["系所名稱","課程名稱","時間","教室","老師"]).from("course_105_2").where("id=",course_id).run(function(course){
+  db.select().field(["系所名稱","課程名稱","時間","教室","老師"]).from("course_new").where("id=",course_id).run(function(course){
     db=null;
     delete db;
     var text = "你選擇的課程是：\n\n"+course[0].系所名稱.replace(/[A-Z0-9]/g,"")+"／"+course[0].課程名稱.replace(/[（|）|\s]/g,"")+"／"+course[0].老師.replace(/\s/g,"")+"／"+course[0].時間+"\n\n上課地點在「"+course[0].教室.replace(/\s/g,"")+"」唷！";
@@ -292,7 +292,7 @@ function sendCourseInfo(sender,course_id) {
 
 function sendFollowCourseByName(sender,keyword,dpt,teacher) {
   var db = new dbsystem();
-  db.select().field(["id","系所名稱","課程名稱","時間"]).from("course_105_2").where("課程名稱 LIKE '%" + keyword + "%'").whereCheck("系所名稱 LIKE '%" + dpt + "%'",dpt).whereCheck("老師 LIKE '%" + teacher + "%'",teacher).run(function(course){
+  db.select().field(["id","系所名稱","課程名稱","時間"]).from("course_new").where("課程名稱 LIKE '%" + keyword + "%'").whereCheck("系所名稱 LIKE '%" + dpt + "%'",dpt).whereCheck("老師 LIKE '%" + teacher + "%'",teacher).run(function(course){
     db=null;
     delete db;
     if(course.length>0){
@@ -360,7 +360,7 @@ function sendFollowCourseByName(sender,keyword,dpt,teacher) {
 function sendFollowCourseById(sender,keyword) {
   keyword=keyword.toUpperCase();
   var db = new dbsystem();
-  db.select().field(["id"]).from("course_105_2").where("選課序號=",keyword).run(function(course){
+  db.select().field(["id"]).from("course_new").where("選課序號=",keyword).run(function(course){
     if(course.length > 0){
       addFollowCourse(sender,course[0].id);
     }else{
@@ -373,7 +373,7 @@ function sendFollowCourseById(sender,keyword) {
 
 function addFollowCourse(sender,course_id){
   var db = new dbsystem();
-  db.select().field(["系所名稱","課程名稱","時間","餘額","選課序號","老師"]).from("course_105_2").where("id=",course_id).run(function(course){
+  db.select().field(["系所名稱","課程名稱","時間","餘額","選課序號","老師"]).from("course_new").where("id=",course_id).run(function(course){
     if(course[0].餘額 =="額滿"){
       db.select().field("*").from("follow").where("course_id=",course_id).where("fb_id=",sender).run(function(follow){
         if(follow.length < 1){
@@ -562,7 +562,7 @@ function sendGoodbye(sender){
 
 function checkCoureseCredit(){
   var db = new dbsystem();
-  db.select().field(["f.*","c.餘額","c.系號"]).from("follow f").join("course_105_2 c").where("c.id=f.course_id").where("c.系號!=","A9").run(function(follow){
+  db.select().field(["f.*","c.餘額","c.系號"]).from("follow f").join("course_new c").where("c.id=f.course_id").where("c.系號!=","A9").run(function(follow){
     for(var i in follow){
       if(follow[i].餘額!="額滿" && follow[i].count == 0 ){
         sendCreditNotify(follow[i]);
@@ -586,17 +586,6 @@ function sendCreditNotify(course){
     });
   });
 }
-
-/*
-function broadcast(){
-  var db = new dbsystem();
-  db.select().field("distinct fb_id").from("follow_copy").run(function(users){
-    users.forEach(function(user){
-      var msg ="嗨同學們：）\n\nNCKU HUB 正在進行使用者意見搜集，如果我們曾經幫到你過，希望你願意為我們填寫回饋。如果我們沒幫上忙，也希望你可以給我們改進的建議（或批鬥？！）讓我們好好檢討一番。相當感謝！\n讓我們一起改善成大環境：\nhttps://goo.gl/70fSO1";
-      sendTextMessage(user.fb_id,msg);
-    });
-  });
-}*/
 
 /*
 setInterval(function(){

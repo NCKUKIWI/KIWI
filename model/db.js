@@ -379,7 +379,7 @@ exports.query_post2 = function query_post2(id, callback){
     if (err) throw err;
 
     var sql_2 = "SELECT id,comment, course_style, course_need, exam_style, semester, score_style, report_hw ";
-    sql_2 += "FROM post_new WHERE teacher = " + "\'" + courseInfo[0]["老師"] + "\' ";
+    sql_2 += "FROM post WHERE teacher = " + "\'" + courseInfo[0]["老師"] + "\' ";
     sql_2 += "AND course_name = " + "\'" + courseInfo[0]["課程名稱"] + "\'" + " ORDER BY semester DESC";
 
     connection.query(sql_2,function(err, comment){

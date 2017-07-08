@@ -35,7 +35,7 @@ router.get('/webhook/', function(req, res) {
   }
   res.send('Error, wrong token')
 });
-
+/*
 router.post('/webhook/', function(req, res) {
   var messaging_events = req.body.entry[0].messaging
   for (i = 0; i < messaging_events.length; i++) {
@@ -122,7 +122,7 @@ router.post('/webhook/', function(req, res) {
   }
   res.sendStatus(200);
 });
-
+*/
 
 function sendTextMessage(sender, text) {
   messageData = {

@@ -11,8 +11,9 @@ router.get('/new/:id', function(req, res) {
   }
   else{
     res.render('course_rate/new',{
-      'course_name':req.body.course_name.replace(/\'|\#|\/\*/g,""),
-      'teacher':req.body.teacher.replace(/\'|\#|\/\*/g,"")
+      'courseid':req.params.id,
+      'course_name':req.query.course_name.replace(/\'|\#|\/\*/g,""),
+      'teacher':req.query.teacher.replace(/\'|\#|\/\*/g,"")
     });
   }
 });

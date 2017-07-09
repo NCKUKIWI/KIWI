@@ -247,18 +247,18 @@ router.get('/:id', function(req, res) {
             'rate_count':rate_count,
             'courseInfo': courseInfo,
             'comment': comment,
-            'hasrate':0,
+            'courserate_id':0,
             'user': req.user,
             'check':null
           })
         }
         else{
           var userid = parseInt(req.user.id);
-          var hasrate=0;
+          var courserate_id=0;
           if(rates.length>0){
             for(var i in rates ){
               if(rates[i].user_id == userid){
-                hasrate=rates[i].id;
+                courserate_id=rates[i].id;
               }
             }
           }
@@ -271,7 +271,7 @@ router.get('/:id', function(req, res) {
               'rate_count':rate_count,
               'courseInfo': courseInfo,
               'comment': comment,
-              'hasrate':hasrate,
+              'courserate_id':courserate_id,
               'user': req.user,
               'check':check
             });

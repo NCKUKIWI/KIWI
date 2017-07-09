@@ -54,6 +54,7 @@
 </form>
 
 <script type="text/javascript">
+  var courseid = <%= courseid %>;
   $(document).ready(function(){
     $('.closecourserate').on('click',function(){
       $('.courseratepart').empty();
@@ -82,7 +83,6 @@
     })
 
     $('#courserateform-submit').on('click', function() {
-      var courseid=$('input[name=course_id]').val();
       var data = $("#courserateform").serialize();
       $.ajax({
         url: '/course_rate/create',
@@ -91,7 +91,6 @@
         success: function(response) {
           $('#course-modal .sr-only').click();
           $('#course-'+courseid).click();
-          //$('.course_name[data-id='+courseid+']').click();
         }
       });
     });

@@ -34,7 +34,6 @@ router.post('/create', function(req, res) {
         comment:req.body.comment.replace(/\n/g,"<br>").replace(/\'|\#|\/\*/g,""),
         report_hw:req.body.report_hw.replace(/\'|\#|\/\*/g,""),
         course_style:req.body.course_style.replace(/\'|\#|\/\*/g,""),
-        course_id:courseid,
         user_id: userid
       }
       db.Insert('post',post,function(err,results){

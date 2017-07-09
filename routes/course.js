@@ -223,21 +223,21 @@ router.get('/:id', function(req, res) {
           courseInfo[j]++;
         }
       }
-      db.FindbyColumn('course_rate',["*"],{course_id:parseInt(id)},function(datas){
+      db.FindbyColumn('course_rate',["*"],{course_name:courseInfo.課程名稱,teacher:courseInfo.老師},function(rates){
         var sweet=0;
         var hard=0;
         var recommand=0;
         var rate_count=0;
-        if(datas.length>0){
-          for(var i in datas ){
-            sweet+=datas[i].sweet;
-            hard+=datas[i].hard;
-            recommand+=datas[i].recommand;
+        if(rates.length>0){
+          for(var i in rates ){
+            sweet+=rates[i].sweet;
+            hard+=rates[i].hard;
+            recommand+=rates[i].recommand;
           }
-          sweet/=datas.length;
-          hard/=datas.length;
-          recommand/=datas.length;
-          rate_count=datas.length;
+          sweet/=rates.length;
+          hard/=rates.length;
+          recommand/=rates.length;
+          rate_count=rates.length;
         }
         if(req.user == undefined){
           res.render('course/show', {
@@ -247,23 +247,23 @@ router.get('/:id', function(req, res) {
             'rate_count':rate_count,
             'courseInfo': courseInfo,
             'comment': comment,
-            'courserate_id':0,
+            'hasrate':0,
             'user': req.user,
             'check':null
           })
         }
         else{
           var userid = parseInt(req.user.id);
-          var courserateid=0;
-          if(datas.length>0){
-            for(var i in datas ){
-              if(datas[i].user_id == userid){
-                courserateid=datas[i].id;
+          var hasrate=0;
+          if(rates.length>0){
+            for(var i in rates ){
+              if(rates[i].user_id == userid){
+                hasrate=rates[i].id;
               }
             }
           }
           /* 有登入 抓取用戶的選課清單 */
-          db.FindbyColumn('cart',['id'],{'course_id':parseInt(id)},function(check){
+          db.FindbyColumn('cart',['id'],{'user_id':req.user.id},function(check){
             res.render('course/show',{
               'recommand':recommand,
               'hard':hard,
@@ -271,7 +271,7 @@ router.get('/:id', function(req, res) {
               'rate_count':rate_count,
               'courseInfo': courseInfo,
               'comment': comment,
-              'courserate_id':courserateid,
+              'hasrate':hasrate,
               'user': req.user,
               'check':check
             });

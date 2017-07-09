@@ -28,10 +28,10 @@
       <% } %>
       -->
       <button class="ui blue button" onclick="window.open('http://class-qry.acad.ncku.edu.tw/syllabus/online_display.php?syear=0106&sem=1&co_no=<%= courseInfo.課程碼 %>&class_code=<%= courseInfo.分班碼 %>')" config='height = N,width = N'>課程大綱</button><br>
-      <% if(courserate_id == 0){ %>
-        <button class="ui blue button showcourseratebtn" data-id="<%= courseInfo.id %>">評分課程</button>
+      <% if(hasrate == 0){ %>
+        <button class="ui blue button showcourseratebtn" data-name="<%= courseInfo.課程名稱 %>" data-teacher="<%= courseInfo.老師 %>">評分課程</button>
       <% }else{ %>
-        <button class="ui red button delcourseratebtn" data-id="<%= courserate_id %>" data-courseid="<%= courseInfo.id %>">刪除評分</button>
+        <button class="ui red button delcourseratebtn" data-id="<%= courserate_id %>">刪除評分</button>
       <% } %>
     </div>
   </div>
@@ -141,7 +141,6 @@
 <script type="text/javascript">
 $(document).ready(function(){
   $('.courseaddpost').on('click',function(){
-    var cid = "<%= courseInfo.id %>";
     var cname = "<%= courseInfo.課程名稱 %>";
     var cteacher = "<%- courseInfo.老師 %>";
     var ccatalog = "<%- courseInfo.系所名稱 %>";
@@ -151,7 +150,6 @@ $(document).ready(function(){
       $('input[name=course]').val(cname+"-"+cteacher);
       $('input[name=catalog]').val(ccatalog);
       $('input[name=course_name]').val(cname);
-      $('input[name=course_id]').val(cid);
       $('input[name=teacher]').val(cteacher);
     },2000);
   });
@@ -212,6 +210,10 @@ $(document).ready(function(){
     $.ajax({
       url: '/course_rate/new/'+courseid,
       type: 'GET',
+      data:{
+        course_name:"<%= courseInfo.課程名稱 %>",
+        teacher = "<%= courseInfo.老師 %>"
+      },
       success: function(response) {
         if(response=="No login"){
           toastr.warning('<a href="/user/auth/facebook">請先登入</a>');

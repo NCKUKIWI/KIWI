@@ -4,15 +4,15 @@ var db = require('../model/db');
 
 /* course_rate form */
 router.get('/new/:id', function(req, res) {
-  console.log('\n'+'GET /course_rate/new');
-  console.log(req.params.id);
+  console.log('\n'+'GET /course_rate/new/'+req.params.id);
   if(req.user == undefined){
     console.log('No login');
     res.send('No login');
   }
   else{
     res.render('course_rate/new',{
-      'courseid':req.params.id
+      'course_name':req.body.course_name.replace(/\'|\#|\/\*/g,""),
+      'teacher':req.body.teacher.replace(/\'|\#|\/\*/g,"")
     });
   }
 });
@@ -24,12 +24,12 @@ router.post('/create', function(req, res) {
   }
   else{
     var userid = parseInt(req.user.id);
-    var courseid = parseInt(req.body.course_id.replace(/\'|\#|\/\*/g,""));
     var rate = {
       sweet:parseInt(req.body.sweet.replace(/\'|\#|\/\*/g,"")),
       hard:parseInt(req.body.hard.replace(/\'|\#|\/\*/g,"")),
       recommand:parseInt(req.body.recommand.replace(/\'|\#|\/\*/g,"")),
-      course_id:courseid,
+      course_name:req.body.course_name.replace(/\'|\#|\/\*/g,""),
+      teacher:req.body.teacher.replace(/\'|\#|\/\*/g,""),
       user_id: userid
     }
     db.Insert('course_rate',rate,function(err,results){

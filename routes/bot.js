@@ -40,58 +40,59 @@ router.post('/webhook/', function(req, res) {
   var messaging_events = req.body.entry[0].messaging
   for (i = 0; i < messaging_events.length; i++) {
     var event = req.body.entry[0].messaging[i]
-    var sender = event.sender.id
+    var sender = event.sender.id  //使用者messenger id
     if (event.message && event.message.text) {
       console.log("sender: "+sender);
       console.log("content: "+event.message.text);
       console.log("---------------");
-      var text = event.message.text
+      var text = event.message.text     //用戶傳送的訊息
       var keyword8 = text.match(/(小幫手)/i);
       if (text === "小幫手" || keyword8 != null) {
         sendHelloMessage(sender);
         continue;
       }
       else{
-        var hint = text.match(/^[a-zA-Z][0-9]{4}/i);
+        var hint = text.match(/^[a-zA-Z][0-9]{4}/i); //檢查是否忘記加@或#
         if(hint){
           sendTextMessage(sender,"請記得開頭要加上＠或＃喔！");
           continue;
         }else{
-          var teacher = text.match(/[\%|\uff05][\u4e00-\u9fa5]{1,}/i);
-          var dpt = text.match(/[\$|\uff04][\u4e00-\u9fa5]{1,}/i);
-          if(dpt) dpt=dpt[0].replace(/[\$|\uff04|\s]/g,"");
+          var teacher = text.match(/[\%|\uff05][\u4e00-\u9fa5]{1,}/i); //檢查 %老師名稱
+          var dpt = text.match(/[\$|\uff04][\u4e00-\u9fa5]{1,}/i);   //檢查 $系所名稱
+          if(dpt) dpt=dpt[0].replace(/[\$|\uff04|\s]/g,"");          //過濾掉不該有的內容
           if(teacher) teacher=teacher[0].replace(/[\%|\uff05|\s]/g,"");
-          var keyword = text.match(/^[\uff20|@][\u4e00-\u9fa5]{1,}/i);
+          var keyword = text.match(/^[\uff20|@][\u4e00-\u9fa5]{1,}/i);  //檢查 @課程名稱
           if(keyword){
             keyword=keyword[0].replace(/[\uff20|@|\s]/g,"");
-            sendCoursePlaceByName(sender,keyword,dpt,teacher);
+            sendCoursePlaceByName(sender,keyword,dpt,teacher);         //透過課程名稱搜尋並傳送課程地點
             continue;
           }
-          var keyword2 = text.match(/^[\uff20|@][a-zA-Z0-9]{5}/i);
+          var keyword2 = text.match(/^[\uff20|@][a-zA-Z0-9]{5}/i);   //檢查 @選課序號
           if(keyword2){
             keyword2=keyword2[0].replace(/[\uff20|@|\s]/g,"");
-            sendCoursePlaceById(sender,keyword2);
+            sendCoursePlaceById(sender,keyword2);                 //透過課程序號搜尋並傳送課程地點
             continue;
           }
-          var keyword3 = text.match(/^[#|\uff03][\u4e00-\u9fa5]{1,}/i);
+          var keyword3 = text.match(/^[#|\uff03][\u4e00-\u9fa5]{1,}/i);      //檢查 #課程名稱
           if(keyword3){
             keyword3=keyword3[0].replace(/[#|\uff03|\s]/g,"");
-            sendFollowCourseByName(sender,keyword3,dpt,teacher);
+            sendFollowCourseByName(sender,keyword3,dpt,teacher);            //透過課程名稱搜尋並傳送追蹤課程按鈕
             continue;
           }
-          var keyword4 = text.match(/^[#|\uff03][a-zA-Z0-9]{5}/i);
+          var keyword4 = text.match(/^[#|\uff03][a-zA-Z0-9]{5}/i);       //檢查 #選課序號
           if(keyword4){
             keyword4=keyword4[0].replace(/[#|\uff03|\s]/g,"");
-            sendFollowCourseById(sender,keyword4);
+            sendFollowCourseById(sender,keyword4);               //透過選課序號搜尋並傳送追蹤課程按鈕
             continue;
           }
         }
       }
     }
+    //檢查使用者是否按下訊息中的按鈕
     if (event.postback) {
-      var keyword5 = event.postback.payload.match(/^![0-9]{1,}/i);
-      var keyword6 = event.postback.payload.match(/^&[0-9]{1,}/i);
-      var keyword7 = event.postback.payload.match(/^@[0-9]{1,}/i);
+      var keyword5 = event.postback.payload.match(/^![0-9]{1,}/i);  //抓payload中的 course_id 用來追蹤課程
+      var keyword6 = event.postback.payload.match(/^&[0-9]{1,}/i);  //抓payload中的 course_id 用來取消追蹤課程
+      var keyword7 = event.postback.payload.match(/^@[0-9]{1,}/i);  //抓payload中的 course_id 用來傳送單一課程詳細資訊
       if(keyword5){
         keyword5=keyword5[0].replace(/!|\s/g,"");
         addFollowCourse(sender,keyword5);

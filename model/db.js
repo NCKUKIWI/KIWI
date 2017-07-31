@@ -436,12 +436,20 @@ exports.FindbyColumnFuzzy = function FindbyColumn(table,cols,conditions,callback
   // var condition = conditionjoin(conditions);
   var whereCondition = "課程名稱 like ";
   for(var i in conditions){
-    whereCondition += "\'" + "%" + conditions[i] + "%" + "\'"; 
+    whereCondition += "\'" + "%" + conditions[i] + "%" + "\'";
     if(i != conditions.length - 1) whereCondition += " or 課程名稱 like ";
   }
   var sql = "SELECT " + columns + " FROM " + table + " WHERE " + whereCondition;
   console.log(sql);
   connection.query(sql,function(err, results, fields){
+    if (err) throw err;
+    callback(results);
+  });
+}
+
+exports.Query = function Query(sql,callback){
+  console.log(sql);
+  connection.query(sql,function(err,results,fields){
     if (err) throw err;
     callback(results);
   });

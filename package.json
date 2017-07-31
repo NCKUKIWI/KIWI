@@ -5,12 +5,13 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./node_modules/nodemon/bin/nodemon app.js"
+    "start": "NODE_ENV=production node ./node_modules/nodemon/bin/nodemon app.js"
   },
   "author": "KIWI",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.15.2",
+    "compression": "^1.6.2",
     "cookie-parser": "^1.4.3",
     "ejs": "^2.4.2",
     "ejs-locals": "^1.0.2",
@@ -18,10 +19,9 @@
     "express-flash": "0.0.2",
     "express-session": "^1.14.0",
     "express-validator": "^2.20.8",
+    "fbgraph": "^1.4.1",
     "mysql": "^2.11.1",
     "nodemon": "^1.9.2",
-    "passport": "^0.3.2",
-    "passport-facebook": "^2.1.1",
     "request": "^2.79.0",
     "universal-analytics": "^0.4.8"
   }

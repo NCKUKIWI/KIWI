@@ -16,7 +16,6 @@ router.post('/create', function(req, res) {
   }
   else{
     var userid = parseInt(req.user.id);
-    var courseid = parseInt(req.body.course_id.replace(/\'|\#|\/\*/g,""));
     console.log('User_id: '+req.user.id+' User_name: '+req.user.name);
     req.checkBody('course_name', '課程名稱不可為空').notEmpty();
     req.checkBody('comment', '修課心得不可為空').notEmpty();
@@ -35,7 +34,6 @@ router.post('/create', function(req, res) {
         comment:req.body.comment.replace(/\n/g,"<br>").replace(/\'|\#|\/\*/g,""),
         report_hw:req.body.report_hw.replace(/\'|\#|\/\*/g,""),
         course_style:req.body.course_style.replace(/\'|\#|\/\*/g,""),
-        course_id:courseid,
         user_id: userid
       }
       db.Insert('post',post,function(err,results){
@@ -47,7 +45,8 @@ router.post('/create', function(req, res) {
           recommand:parseInt(req.body.recommand.replace(/\'|\#|\/\*/g,"")),
           give:parseInt(req.body.give.replace(/\'|\#|\/\*/g,"")),
           got:parseInt(req.body.got.replace(/\'|\#|\/\*/g,"")),
-          course_id:courseid,
+          course_name:req.body.course_name.replace(/\'|\#|\/\*/g,""),
+          teacher:req.body.teacher.replace(/\'|\#|\/\*/g,""),
           user_id: userid,
           post_id: results.insertId
         }
@@ -64,7 +63,8 @@ router.post('/create', function(req, res) {
 router.get('/new', function(req, res) {
   console.log('\n'+'GET /post/new');
   var colmuns = ['id','課程名稱','老師','系所名稱'];
-  db.GetColumn('course_105_2 group by 課程名稱',colmuns,{'column':'id','order':'DESC'},function(course){
+  //只取出上一學期的課程
+  db.FindbyColumn('course_all',colmuns,{'semester':'105-2'},function(course){
     res.render('post/new',{
       'course': course,
       'user': req.user
@@ -100,11 +100,6 @@ router.get('/:id', function(req, res) {
       });
     });
   }
-});
-
-/* edit */
-router.get('/edit', function(req, res) {
-
 });
 
 /* update */

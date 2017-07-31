@@ -35,63 +35,64 @@ router.get('/webhook/', function(req, res) {
   }
   res.send('Error, wrong token')
 });
-/*
+
 router.post('/webhook/', function(req, res) {
   var messaging_events = req.body.entry[0].messaging
   for (i = 0; i < messaging_events.length; i++) {
     var event = req.body.entry[0].messaging[i]
-    var sender = event.sender.id
+    var sender = event.sender.id  //使用者messenger id
     if (event.message && event.message.text) {
       console.log("sender: "+sender);
       console.log("content: "+event.message.text);
       console.log("---------------");
-      var text = event.message.text
+      var text = event.message.text     //用戶傳送的訊息
       var keyword8 = text.match(/(小幫手)/i);
       if (text === "小幫手" || keyword8 != null) {
         sendHelloMessage(sender);
         continue;
       }
       else{
-        var hint = text.match(/^[a-zA-Z][0-9]{4}/i);
+        var hint = text.match(/^[a-zA-Z][0-9]{4}/i); //檢查是否忘記加@或#
         if(hint){
           sendTextMessage(sender,"請記得開頭要加上＠或＃喔！");
           continue;
         }else{
-          var teacher = text.match(/[\%|\uff05][\u4e00-\u9fa5]{1,}/i);
-          var dpt = text.match(/[\$|\uff04][\u4e00-\u9fa5]{1,}/i);
-          if(dpt) dpt=dpt[0].replace(/[\$|\uff04|\s]/g,"");
+          var teacher = text.match(/[\%|\uff05][\u4e00-\u9fa5]{1,}/i); //檢查 %老師名稱
+          var dpt = text.match(/[\$|\uff04][\u4e00-\u9fa5]{1,}/i);   //檢查 $系所名稱
+          if(dpt) dpt=dpt[0].replace(/[\$|\uff04|\s]/g,"");          //過濾掉不該有的內容
           if(teacher) teacher=teacher[0].replace(/[\%|\uff05|\s]/g,"");
-          var keyword = text.match(/^[\uff20|@][\u4e00-\u9fa5]{1,}/i);
+          var keyword = text.match(/^[\uff20|@][\u4e00-\u9fa5]{1,}/i);  //檢查 @課程名稱
           if(keyword){
             keyword=keyword[0].replace(/[\uff20|@|\s]/g,"");
-            sendCoursePlaceByName(sender,keyword,dpt,teacher);
+            sendCoursePlaceByName(sender,keyword,dpt,teacher);         //透過課程名稱搜尋並傳送課程地點
             continue;
           }
-          var keyword2 = text.match(/^[\uff20|@][a-zA-Z0-9]{5}/i);
+          var keyword2 = text.match(/^[\uff20|@][a-zA-Z0-9]{5}/i);   //檢查 @選課序號
           if(keyword2){
             keyword2=keyword2[0].replace(/[\uff20|@|\s]/g,"");
-            sendCoursePlaceById(sender,keyword2);
+            sendCoursePlaceById(sender,keyword2);                 //透過課程序號搜尋並傳送課程地點
             continue;
           }
-          var keyword3 = text.match(/^[#|\uff03][\u4e00-\u9fa5]{1,}/i);
+          var keyword3 = text.match(/^[#|\uff03][\u4e00-\u9fa5]{1,}/i);      //檢查 #課程名稱
           if(keyword3){
             keyword3=keyword3[0].replace(/[#|\uff03|\s]/g,"");
-            sendFollowCourseByName(sender,keyword3,dpt,teacher);
+            sendFollowCourseByName(sender,keyword3,dpt,teacher);            //透過課程名稱搜尋並傳送追蹤課程按鈕
             continue;
           }
-          var keyword4 = text.match(/^[#|\uff03][a-zA-Z0-9]{5}/i);
+          var keyword4 = text.match(/^[#|\uff03][a-zA-Z0-9]{5}/i);       //檢查 #選課序號
           if(keyword4){
             keyword4=keyword4[0].replace(/[#|\uff03|\s]/g,"");
-            sendFollowCourseById(sender,keyword4);
+            sendFollowCourseById(sender,keyword4);               //透過選課序號搜尋並傳送追蹤課程按鈕
             continue;
           }
         }
       }
     }
+    //檢查使用者是否按下訊息中的按鈕
     if (event.postback) {
-      var keyword5 = event.postback.payload.match(/^![0-9]{1,}/i);
-      var keyword6 = event.postback.payload.match(/^&[0-9]{1,}/i);
-      var keyword7 = event.postback.payload.match(/^@[0-9]{1,}/i);
+      var keyword5 = event.postback.payload.match(/^![0-9]{1,}/i);  //抓payload中的 course_id 用來追蹤課程
+      var keyword6 = event.postback.payload.match(/^&[0-9]{1,}/i);  //抓payload中的 course_id 用來取消追蹤課程
+      var keyword7 = event.postback.payload.match(/^@[0-9]{1,}/i);  //抓payload中的 course_id 用來傳送單一課程詳細資訊
       if(keyword5){
         keyword5=keyword5[0].replace(/!|\s/g,"");
         addFollowCourse(sender,keyword5);
@@ -121,8 +122,8 @@ router.post('/webhook/', function(req, res) {
     }
   }
   res.sendStatus(200);
-})
-*/
+});
+
 
 function sendTextMessage(sender, text) {
   messageData = {
@@ -198,7 +199,7 @@ function sendHelloMessage(sender) {
 
 function sendCoursePlaceByName(sender,keyword,dpt,teacher) {
   var db = new dbsystem();
-  db.select().field(["id","系所名稱","課程名稱","時間","教室"]).from("course_105_2").where("課程名稱 LIKE '%" + keyword + "%'").whereCheck("系所名稱 LIKE '%" + dpt + "%'",dpt).whereCheck("老師 LIKE '%" + teacher + "%'",teacher).run(function(course){
+  db.select().field(["id","系所名稱","課程名稱","時間","教室"]).from("course_new").where("課程名稱 LIKE '%" + keyword + "%'").whereCheck("系所名稱 LIKE '%" + dpt + "%'",dpt).whereCheck("老師 LIKE '%" + teacher + "%'",teacher).run(function(course){
     db=null;
     delete db;
     if(course.length>0){
@@ -266,7 +267,7 @@ function sendCoursePlaceByName(sender,keyword,dpt,teacher) {
 function sendCoursePlaceById(sender,keyword) {
   keyword=keyword.toUpperCase();
   var db = new dbsystem();
-  db.select().field(["id"]).from("course_105_2").where("選課序號=",keyword).run(function(course){
+  db.select().field(["id"]).from("course_new").where("選課序號=",keyword).run(function(course){
     db=null;
     delete db;
     if(course.length > 0){
@@ -281,7 +282,7 @@ function sendCoursePlaceById(sender,keyword) {
 
 function sendCourseInfo(sender,course_id) {
   var db = new dbsystem();
-  db.select().field(["系所名稱","課程名稱","時間","教室","老師"]).from("course_105_2").where("id=",course_id).run(function(course){
+  db.select().field(["系所名稱","課程名稱","時間","教室","老師"]).from("course_new").where("id=",course_id).run(function(course){
     db=null;
     delete db;
     var text = "你選擇的課程是：\n\n"+course[0].系所名稱.replace(/[A-Z0-9]/g,"")+"／"+course[0].課程名稱.replace(/[（|）|\s]/g,"")+"／"+course[0].老師.replace(/\s/g,"")+"／"+course[0].時間+"\n\n上課地點在「"+course[0].教室.replace(/\s/g,"")+"」唷！";
@@ -292,7 +293,7 @@ function sendCourseInfo(sender,course_id) {
 
 function sendFollowCourseByName(sender,keyword,dpt,teacher) {
   var db = new dbsystem();
-  db.select().field(["id","系所名稱","課程名稱","時間"]).from("course_105_2").where("課程名稱 LIKE '%" + keyword + "%'").whereCheck("系所名稱 LIKE '%" + dpt + "%'",dpt).whereCheck("老師 LIKE '%" + teacher + "%'",teacher).run(function(course){
+  db.select().field(["id","系所名稱","課程名稱","時間"]).from("course_new").where("課程名稱 LIKE '%" + keyword + "%'").whereCheck("系所名稱 LIKE '%" + dpt + "%'",dpt).whereCheck("老師 LIKE '%" + teacher + "%'",teacher).run(function(course){
     db=null;
     delete db;
     if(course.length>0){
@@ -360,7 +361,7 @@ function sendFollowCourseByName(sender,keyword,dpt,teacher) {
 function sendFollowCourseById(sender,keyword) {
   keyword=keyword.toUpperCase();
   var db = new dbsystem();
-  db.select().field(["id"]).from("course_105_2").where("選課序號=",keyword).run(function(course){
+  db.select().field(["id"]).from("course_new").where("選課序號=",keyword).run(function(course){
     if(course.length > 0){
       addFollowCourse(sender,course[0].id);
     }else{
@@ -373,7 +374,7 @@ function sendFollowCourseById(sender,keyword) {
 
 function addFollowCourse(sender,course_id){
   var db = new dbsystem();
-  db.select().field(["系所名稱","課程名稱","時間","餘額","選課序號","老師"]).from("course_105_2").where("id=",course_id).run(function(course){
+  db.select().field(["系所名稱","課程名稱","時間","餘額","選課序號","老師"]).from("course_new").where("id=",course_id).run(function(course){
     if(course[0].餘額 =="額滿"){
       db.select().field("*").from("follow").where("course_id=",course_id).where("fb_id=",sender).run(function(follow){
         if(follow.length < 1){
@@ -562,7 +563,7 @@ function sendGoodbye(sender){
 
 function checkCoureseCredit(){
   var db = new dbsystem();
-  db.select().field(["f.*","c.餘額","c.系號"]).from("follow f").join("course_105_2 c").where("c.id=f.course_id").where("c.系號!=","A9").run(function(follow){
+  db.select().field(["f.*","c.餘額","c.系號"]).from("follow f").join("course_new c").where("c.id=f.course_id").where("c.系號!=","A9").run(function(follow){
     for(var i in follow){
       if(follow[i].餘額!="額滿" && follow[i].count == 0 ){
         sendCreditNotify(follow[i]);
@@ -586,17 +587,6 @@ function sendCreditNotify(course){
     });
   });
 }
-
-/*
-function broadcast(){
-  var db = new dbsystem();
-  db.select().field("distinct fb_id").from("follow_copy").run(function(users){
-    users.forEach(function(user){
-      var msg ="嗨同學們：）\n\nNCKU HUB 正在進行使用者意見搜集，如果我們曾經幫到你過，希望你願意為我們填寫回饋。如果我們沒幫上忙，也希望你可以給我們改進的建議（或批鬥？！）讓我們好好檢討一番。相當感謝！\n讓我們一起改善成大環境：\nhttps://goo.gl/70fSO1";
-      sendTextMessage(user.fb_id,msg);
-    });
-  });
-}*/
 
 /*
 setInterval(function(){

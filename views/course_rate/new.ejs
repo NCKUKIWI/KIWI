@@ -47,12 +47,14 @@
   <input type="hidden" name="recommand" value="1">
   <input type="hidden" name="hard" value="1">
   <input type="hidden" name="sweet" value="1">
-  <input type="hidden" name="course_id" value="<%= courseid %>">
+  <input type="hidden" name="course_name" value="<%= course_name %>">
+  <input type="hidden" name="teacher" value="<%= teacher %>">
   <div class="ui button tiny" id="courserateform-submit">送出</div>
   <div class="ui button tiny closecourserate">關閉</div>
 </form>
 
 <script type="text/javascript">
+  var courseid = <%= courseid %>;
   $(document).ready(function(){
     $('.closecourserate').on('click',function(){
       $('.courseratepart').empty();
@@ -81,7 +83,6 @@
     })
 
     $('#courserateform-submit').on('click', function() {
-      var courseid=$('input[name=course_id]').val();
       var data = $("#courserateform").serialize();
       $.ajax({
         url: '/course_rate/create',
@@ -90,7 +91,6 @@
         success: function(response) {
           $('#course-modal .sr-only').click();
           $('#course-'+courseid).click();
-          //$('.course_name[data-id='+courseid+']').click();
         }
       });
     });

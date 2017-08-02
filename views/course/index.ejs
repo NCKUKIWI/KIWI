@@ -180,12 +180,36 @@
        }
        last = e.keyCode;
     });
-    $('.course').on('click', function(){
-      $('.chooseCourse .ui.inverted.button.mini').removeClass('active');
-      $('.chooseCourse').modal('show');
+
+    // 設定如果沒有選擇篩選條件的話，關閉時預設全選
+    $('.chooseCourse').modal({
+      onHide: function(){
+        if($('.chooseCourse .ui.inverted.button.mini.active').length == 0){
+          $('.chooseCourse .ui.inverted.button.mini').addClass('active');
+          startQuery();
+        }
+      }
     });
+
+    // 設定如果沒有選擇篩選條件的話，關閉時預設全選
+    $('.timeTable').modal({
+      onHide: function(){
+        if($('.timeTable .mini.button.active').length == 0){
+          $('.timeTable .mini.button').addClass('active');
+          startQuery();
+        }
+      }
+    });
+
+    // 開啟篩選系所課程的浮動視窗
+    $('.course').on('click', function(){
+      $('.chooseCourse .ui.inverted.button.mini').removeClass('active'); // 一開始點進去都先把active弄消失（但是選擇狀態不變，方便她們篩選下一次的）
+      $('.chooseCourse').modal('show'); 
+    });
+
+    // 開啟篩選時間的浮動視窗
     $('.tables').on('click', function(){
-      $('.timeTable .ui.inverted.button.mini').removeClass('active');
+      $('.timeTable .ui.inverted.button.mini').removeClass('active');  // 一開始點進去都先把active弄消失（但是選擇狀態不變，方便她們篩選下一次的）
       $('.timeTable').modal('show');
     });
     $('.ui.inverted.button.mini').on('click', function(){
@@ -227,6 +251,8 @@
     $('#sendTable').on('click', function(){
       $('.timeTable').modal('hide');
     });
+
+    // 按鈕綁定
     $('.timeTable p, .chooseCourse p').on('click', function(){
       if(this.parentNode.getElementsByClassName('button active').length == 0){
         $(this.parentNode.getElementsByClassName('button')).addClass('active');

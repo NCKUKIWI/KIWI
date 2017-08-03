@@ -185,8 +185,7 @@
     $('.chooseCourse').modal({
       onHide: function(){
         if($('.chooseCourse .ui.inverted.button.mini.active').length == 0){
-          $('.chooseCourse .ui.inverted.button.mini').addClass('active');
-          startQuery();
+          $($('.hotKeyAll')[0]).trigger('click'); // 點選左邊快捷全部課程
         }
       }
     });
@@ -195,8 +194,7 @@
     $('.timeTable').modal({
       onHide: function(){
         if($('.timeTable .mini.button.active').length == 0){
-          $('.timeTable .mini.button').addClass('active');
-          startQuery();
+          $($('.hotKeyAll')[0]).trigger('click'); // 點選左邊快捷全部課程
         }
       }
     });

@@ -290,6 +290,8 @@
       $('.hotKeyAll').css('background', '#dadada');
       startQuery();
     });
+
+    // 綁定左方快捷鍵按鈕
     $('.hotKeyAll').on('click', function(){
       $('.hotKey').removeClass('active');
       $('.hotKey').css('background', '#dadada');
@@ -298,6 +300,10 @@
       $(this).css('background', 'rgba(0,0,0,0.3)');
       startQuery();
     });
+
+    // 先預設他們看通識中心
+    $($('.hotKey')[0]).trigger('click');
+
     // 為了讓每次點擊背後的課程自動篩選
     $('.chooseCourse .ui.inverted.button.mini').on('click', function(){
       $('.hotKey').removeClass('active');

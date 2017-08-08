@@ -184,7 +184,7 @@ router.post('/create', function(req, res) {
 /* new */
 router.get('/new', function(req, res) {
   console.log('\n'+'GET /post/new');
-  var colmuns = ['id','課程名稱','老師','系所名稱'];
+  var colmuns = ['DISTINCT 課程名稱','id','老師','系所名稱'];
   //只取出上一學期的課程
   db.FindbyColumn('course_all',colmuns,{'semester':'105-2'},function(course){
     res.render('post/new',{

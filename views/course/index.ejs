@@ -194,6 +194,7 @@
     $('.timeTable').modal({
       onHide: function(){
         if($('.timeTable .mini.button.active').length == 0){
+          $('.timeTable .ui.inverted.button.mini').addClass('active')
           $($('.hotKeyAll')[0]).trigger('click'); // 點選左邊快捷全部課程
         }
       }

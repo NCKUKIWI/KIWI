@@ -180,12 +180,43 @@
        }
        last = e.keyCode;
     });
-    $('.course').on('click', function(){
-      $('.chooseCourse .ui.inverted.button.mini').removeClass('active');
-      $('.chooseCourse').modal('show');
+
+    // 設定如果沒有選擇篩選條件的話，關閉時預設全選
+    $('.chooseCourse').modal({
+      onHide: function(){
+        if($('.chooseCourse .ui.inverted.button.mini.active').length == 0){
+          $($('.hotKeyAll')[0]).trigger('click'); // 點選左邊快捷全部課程
+        }
+      }
     });
+
+    // 設定如果沒有選擇篩選條件的話，關閉時預設全選
+    $('.timeTable').modal({
+      onHide: function(){
+        if($('.timeTable .mini.button.active').length == 0){
+          $('#tableSelect').trigger('click');
+          // $($('.hotKeyAll')[0]).trigger('click'); // 點選左邊快捷全部課程
+        }
+      }
+    });
+
+    // 開啟篩選系所課程的浮動視窗
+    $('.course').on('click', function(){
+      toastr.info('可按各院來快速選擇', {"timeout": 1000});
+      if($('.chooseCourse .ui.inverted.button.mini.active').length == 143){
+        $('.chooseCourse .ui.inverted.button.mini').removeClass('active'); 
+        // 全選的話，一開始點進去都先把active弄消失（但是選擇狀態不變，方便她們篩選下一次的）
+      }
+      $('.chooseCourse').modal('show'); 
+    });
+
+    // 開啟篩選時間的浮動視窗
     $('.tables').on('click', function(){
-      $('.timeTable .ui.inverted.button.mini').removeClass('active');
+      toastr.info('可按星期一～星期五來快速選擇', {"timeout": 1000});
+      if($('.timeTable .mini.button.active').length == 55){
+        $('.timeTable .ui.inverted.button.mini').removeClass('active');  
+        // 全選的話，一開始點進去都先把active弄消失（但是選擇狀態不變，方便她們篩選下一次的）
+      }
       $('.timeTable').modal('show');
     });
     $('.ui.inverted.button.mini').on('click', function(){
@@ -227,6 +258,8 @@
     $('#sendTable').on('click', function(){
       $('.timeTable').modal('hide');
     });
+
+    // 按鈕綁定
     $('.timeTable p, .chooseCourse p').on('click', function(){
       if(this.parentNode.getElementsByClassName('button active').length == 0){
         $(this.parentNode.getElementsByClassName('button')).addClass('active');
@@ -264,6 +297,8 @@
       $('.hotKeyAll').css('background', '#dadada');
       startQuery();
     });
+
+    // 綁定左方快捷鍵按鈕
     $('.hotKeyAll').on('click', function(){
       $('.hotKey').removeClass('active');
       $('.hotKey').css('background', '#dadada');
@@ -272,6 +307,10 @@
       $(this).css('background', 'rgba(0,0,0,0.3)');
       startQuery();
     });
+
+    // 先預設他們看通識中心
+    $($('.hotKey')[0]).trigger('click');
+
     // 為了讓每次點擊背後的課程自動篩選
     $('.chooseCourse .ui.inverted.button.mini').on('click', function(){
       $('.hotKey').removeClass('active');
@@ -321,7 +360,9 @@
     for(var i = 0; i < nowCourse.length; i++){
       time = nowCourse[i].時間;
       if(time == "未定"){ // 待討論，是否每次都要過濾未定，因為全選也包含未定
-        continue;
+        if(nowCourse[i].系號 == "A6"){ // 服務學習時間有些是未定，還是得挑出來
+          time = "";
+        }else continue;
       }
       time = time.split("[");
       time.shift();

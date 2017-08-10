@@ -82,7 +82,7 @@
       <% if(courseInfo.course_style == 0){%>
         <br>
         <h1 style="text-align: center">尚無內容</h1>
-        <button class="courseaddpost ui button">提供心得</button>
+        <div class="courseaddpost ui button">提供心得</div>
       <%}else { for(var i = 0; i < courseInfo.course_style; i++){ %>
         <div class="ui vertical segment">
           <p>[<%- comment[i].semester %>]</p>
@@ -101,7 +101,7 @@
       <% if(courseInfo.report_hw == 0){%>
         <br>
         <h1 style="text-align: center">尚無內容</h1>
-        <button class="courseaddpost ui button">提供心得</button>
+        <div class="courseaddpost ui button">提供心得</div>
       <%}else { for(var i = 0; i < courseInfo.report_hw; i++){ %>
         <div class="ui vertical segment">
           <p>[<%- comment[i].semester %>]</p>
@@ -120,7 +120,7 @@
       <% if(courseInfo.score_style == 0){%>
         <br>
         <h1 style="text-align: center">尚無內容</h1>
-        <button class="courseaddpost ui button">提供心得</button>
+        <div class="courseaddpost ui button">提供心得</div>
       <%} else { for(var i = 0; i < courseInfo.score_style; i++){ %>
         <div class="ui vertical segment">
           <p>[<%- comment[i].semester %>]</p>
@@ -141,6 +141,8 @@
 <script type="text/javascript">
 $(document).ready(function(){
   $('.courseaddpost').on('click',function(){
+    window.location.href = "/post/new";
+    /*
     var cname = "<%= courseInfo.課程名稱 %>";
     var cteacher = "<%- courseInfo.老師 %>";
     var ccatalog = "<%- courseInfo.系所名稱 %>";
@@ -151,7 +153,7 @@ $(document).ready(function(){
       $('input[name=catalog]').val(ccatalog);
       $('input[name=course_name]').val(cname);
       $('input[name=teacher]').val(cteacher);
-    },2000);
+    },2000);*/
   });
   // 將mobile的滑動效果裝上
   var content1 = document.getElementById('content1');

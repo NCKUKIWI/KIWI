@@ -117,7 +117,7 @@ db.DeleteById(table,id,callbak);
 
 `db.DeleteById('table_name','2',function(err){...});`
 
-###Get all data from table order by column
+### Get all data from table order by column
 
 db.GetAll(table,order,callback);
 
@@ -145,7 +145,7 @@ db.FindbyID(table,id,callback);
 
 `db.FindbyID('table_name','2',function(data){...});`
 
-###Find datas by Condition (one or more datas)
+### Find datas by Condition (one or more datas)
 
 db.FindbyColumn(table,conditions,callback);
 

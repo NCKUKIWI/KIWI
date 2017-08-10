@@ -64,10 +64,11 @@
         <br>
         <h1 style="text-align: center">尚無內容</h1>
         <div class="courseaddpost ui button">提供心得</div>
-      <%}else { for(var i = 0; i < courseInfo.comment; i++){ %>
+      <%}else { for(var i = 0; i < courseInfo.comment_num; i++){ %>
+        <% if(typeof comment[i].comment !== 'undefined'){%>
         <div class="ui vertical segment">
           <p>[<%- comment[i].semester %>]</p>
-          <p><%- comment[i].comment %></p>
+          <p><%- comment[i].comment.replace(/\r\n/g, '<br>') %></p>
           <br>
           <div class="ui red dropdown button">檢舉文章
             <div class="menu">
@@ -76,17 +77,18 @@
             </div>
           </div>
         </div>
-      <% } }%>
+      <%} } }%>
     </div>
     <div id="content2" style="display: none;">
       <% if(courseInfo.course_style == 0){%>
         <br>
         <h1 style="text-align: center">尚無內容</h1>
         <div class="courseaddpost ui button">提供心得</div>
-      <%}else { for(var i = 0; i < courseInfo.course_style; i++){ %>
+      <%}else { for(var i = 0; i < courseInfo.comment_num; i++){ %>
+        <% if(typeof comment[i].course_style !== 'undefined'){%>
         <div class="ui vertical segment">
           <p>[<%- comment[i].semester %>]</p>
-          <p><%- comment[i].course_style %></p>
+          <p><%- comment[i].course_style.replace(/\r\n/g, '<br>') %></p>
           <br>
           <div class="ui red dropdown button">檢舉文章
             <div class="menu">
@@ -95,17 +97,18 @@
             </div>
           </div>
         </div>
-      <% } }%>
+      <%} } }%>
     </div>
     <div id="content3" style="display: none;">
       <% if(courseInfo.report_hw == 0){%>
         <br>
         <h1 style="text-align: center">尚無內容</h1>
         <div class="courseaddpost ui button">提供心得</div>
-      <%}else { for(var i = 0; i < courseInfo.report_hw; i++){ %>
+      <%}else { for(var i = 0; i < courseInfo.comment_num; i++){ %>
+        <% if(typeof comment[i].report_hw !== 'undefined'){%>
         <div class="ui vertical segment">
           <p>[<%- comment[i].semester %>]</p>
-          <p><%- comment[i].report_hw %></p>
+          <p><%- comment[i].report_hw.replace(/\r\n/g, '<br>') %></p>
           <br>
           <div class="ui red dropdown button">檢舉文章
             <div class="menu">
@@ -114,17 +117,18 @@
             </div>
           </div>
         </div>
-      <% } }%>
+      <%} } }%>
     </div>
     <div id="content4" style="display: none;">
       <% if(courseInfo.score_style == 0){%>
         <br>
         <h1 style="text-align: center">尚無內容</h1>
         <div class="courseaddpost ui button">提供心得</div>
-      <%} else { for(var i = 0; i < courseInfo.score_style; i++){ %>
+      <%} else { for(var i = 0; i < courseInfo.comment_num; i++){ %>
+        <% if(typeof comment[i].score_style !== 'undefined'){%>
         <div class="ui vertical segment">
           <p>[<%- comment[i].semester %>]</p>
-          <p><%- comment[i].score_style %></p>
+          <p><%- comment[i].score_style.replace(/\r\n/g, '<br>') %></p>
           <br>
           <div class="ui red dropdown button">檢舉文章
             <div class="menu">
@@ -133,7 +137,7 @@
             </div>
           </div>
         </div>
-      <% } }%>
+      <%} } }%>
     </div>
   </div>
 </div>

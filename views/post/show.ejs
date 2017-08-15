@@ -2,18 +2,18 @@
   <button type="button" class="close" data-dismiss="modal">
     <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
   </button>
-  <h1 class="modal-title"><%- post.course_name %></h1>
+  <h1 class="modal-title"><%= post.course_name %></h1>
 </div>
 <div class="modal-body">
   <div class="partA">
     <p><span class="post_title">類別:</span>
-      <%- post.catalog %>
+      <%= post.catalog %>
     </p>
     <p><span class="post_title">學期:</span>
-      <%- post.semester %>
+      <%= post.semester %>
     </p>
     <p><span class="post_title">授課老師:</span>
-      <%- post.teacher %>
+      <%= post.teacher %>
     </p>
   </div>
   <div class="partB">

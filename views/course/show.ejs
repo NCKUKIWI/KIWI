@@ -67,7 +67,7 @@
       <%}else { for(var i = 0; i < courseInfo.comment_num; i++){ %>
         <% if(typeof comment[i].comment !== 'undefined'){%>
         <div class="ui vertical segment">
-          <p>[<%- comment[i].semester %>]</p>
+          <p>[<%= comment[i].semester %>]</p>
           <p><%- comment[i].comment.replace(/\r\n/g, '<br>') %></p>
           <br>
           <div class="ui red dropdown button">檢舉文章
@@ -87,8 +87,12 @@
       <%}else { for(var i = 0; i < courseInfo.comment_num; i++){ %>
         <% if(typeof comment[i].course_style !== 'undefined'){%>
         <div class="ui vertical segment">
-          <p>[<%- comment[i].semester %>]</p>
-          <p><%- comment[i].course_style.replace(/\r\n/g, '<br>') %></p>
+          <p>[<%= comment[i].semester %>]</p>
+          <p>
+            <%  if(comment[i].course_style){ %>
+              <%- comment[i].course_style.replace(/\r\n/g, '<br>') %>
+            <% } %>
+          </p>
           <br>
           <div class="ui red dropdown button">檢舉文章
             <div class="menu">
@@ -107,8 +111,10 @@
       <%}else { for(var i = 0; i < courseInfo.comment_num; i++){ %>
         <% if(typeof comment[i].report_hw !== 'undefined'){%>
         <div class="ui vertical segment">
-          <p>[<%- comment[i].semester %>]</p>
-          <p><%- comment[i].report_hw.replace(/\r\n/g, '<br>') %></p>
+          <p>[<%= comment[i].semester %>]</p>
+          <%  if(comment[i].report_hw){ %>
+            <%- comment[i].report_hw.replace(/\r\n/g, '<br>') %>
+          <% } %>
           <br>
           <div class="ui red dropdown button">檢舉文章
             <div class="menu">
@@ -127,8 +133,10 @@
       <%} else { for(var i = 0; i < courseInfo.comment_num; i++){ %>
         <% if(typeof comment[i].score_style !== 'undefined'){%>
         <div class="ui vertical segment">
-          <p>[<%- comment[i].semester %>]</p>
-          <p><%- comment[i].score_style.replace(/\r\n/g, '<br>') %></p>
+          <p>[<%= comment[i].semester %>]</p>
+          <%  if(comment[i].course_style){ %>
+            <%- comment[i].course_style.replace(/\r\n/g, '<br>') %>
+          <% } %>
           <br>
           <div class="ui red dropdown button">檢舉文章
             <div class="menu">

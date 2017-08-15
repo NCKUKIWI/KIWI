@@ -68,7 +68,7 @@
         <% if(typeof comment[i].comment !== 'undefined'){%>
         <div class="ui vertical segment">
           <p>[<%= comment[i].semester %>]</p>
-          <p><%- comment[i].comment.replace(/\r\n/g, '<br>') %></p>
+          <p><%- comment[i].comment %></p>
           <br>
           <div class="ui red dropdown button">檢舉文章
             <div class="menu">
@@ -89,9 +89,7 @@
         <div class="ui vertical segment">
           <p>[<%= comment[i].semester %>]</p>
           <p>
-            <%  if(comment[i].course_style){ %>
-              <%- comment[i].course_style.replace(/\r\n/g, '<br>') %>
-            <% } %>
+            <%- comment[i].course_style %>
           </p>
           <br>
           <div class="ui red dropdown button">檢舉文章
@@ -112,9 +110,7 @@
         <% if(typeof comment[i].report_hw !== 'undefined'){%>
         <div class="ui vertical segment">
           <p>[<%= comment[i].semester %>]</p>
-          <%  if(comment[i].report_hw){ %>
-            <%- comment[i].report_hw.replace(/\r\n/g, '<br>') %>
-          <% } %>
+          <p><%- comment[i].report_hw %></p>
           <br>
           <div class="ui red dropdown button">檢舉文章
             <div class="menu">
@@ -134,9 +130,7 @@
         <% if(typeof comment[i].score_style !== 'undefined'){%>
         <div class="ui vertical segment">
           <p>[<%= comment[i].semester %>]</p>
-          <%  if(comment[i].course_style){ %>
-            <%- comment[i].course_style.replace(/\r\n/g, '<br>') %>
-          <% } %>
+          <%- comment[i].score_style %>
           <br>
           <div class="ui red dropdown button">檢舉文章
             <div class="menu">

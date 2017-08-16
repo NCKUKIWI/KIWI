@@ -324,7 +324,12 @@
     });
 
     addCourseEventlistener(); // 最後綁定課程事件
+
+    $('#filter_haspost').trigger('click'); // 一開始進來首頁先點擊『顯示心得課程』
   });
+
+  
+
   /* query的整體流程 */
   function startQuery(){
       queryCourseDepartment(); // query出使用者目前想要搜集的系所

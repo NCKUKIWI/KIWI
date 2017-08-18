@@ -565,11 +565,11 @@ function checkCoureseCredit(){
   var db = new dbsystem();
   db.select().field(["f.*","c.餘額","c.系號"]).from("follow f").join("course_new c").where("c.id=f.course_id").where("c.系號!=","A9").run(function(follow){
     for(var i in follow){
-      if(follow[i].餘額!="額滿" && follow[i].count == 0 ){
+      if(follow[i].餘額!="額滿" && follow[i].hadNotify == 0 ){
         sendCreditNotify(follow[i]);
       }
-      else if(follow[i].餘額=="額滿" && follow[i].count !=0 ){
-        db.update().table("follow").set({count:0}).where("id=",follow[i].id).run(function(result){});
+      else if(follow[i].餘額=="額滿" && follow[i].hadNotify !=0 ){
+        db.update().table("follow").set({hadNotify:0}).where("id=",follow[i].id).run(function(result){});
       }
     }
   });
@@ -579,7 +579,7 @@ function sendCreditNotify(course){
   var text = "餘額通知（"+course.serial+"）！\n\n"+course.content+"／"+course.teacher+"／"+course.time+"\n\n這門課有 "+course.餘額+" 個餘額了！趕快去選吧 🏄🏄\n\n成大選課連結：https://goo.gl/o8zPZH";
   sendTextMessage(course.fb_id,text);
   var db = new dbsystem();
-  db.update().table("follow").set({count:1,hadNotify:1}).where("id=",course.id).run(function(result){
+  db.update().table("follow").set({hadNotify:1}).where("id=",course.id).run(function(result){
     //for record
     db.update().table("follow_copy").set({hadNotify:1}).where("id=",course.id).run(function(result){
       db=null;

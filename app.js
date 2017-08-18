@@ -54,13 +54,13 @@ app.use(expressValidator());
 app.use(compression());
 
 //Route
-app.use("/", index);                              // get "/"時交給routes index處理
+app.use("/course",course);                              // get "/"時交給routes course
 app.use("/post", post);                          // get "/post"時交給routes post處理
 app.use("/user",user);                          // get "/user"時交給routes user處理
 app.use("/schedule",schedule);                 // get "/schedule"時交給routes schedule
-app.use("/course",course);                     // get "/course"時交給routes course
 app.use("/course_rate",course_rate);          // get "/course_rate"時交給routes course_rate
 app.use("/bot",bot);
+app.use("/*",course);                              
 
 app.listen( process.env.PORT || 3000);                             //監聽3000port
 console.log("running on port 3000");

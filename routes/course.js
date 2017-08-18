@@ -5,6 +5,9 @@ var db = require('../model/db');
 
 /* index */
 router.get('/',function(req, res) {
+  console.log("\n========================================");
+  var dt = new Date();
+  console.log(dt);
   console.log('\n'+'GET /course');
   /*  設定要的欄位 */
   var columns = ['id','課程名稱','系號', '課程碼','分班碼', '系所名稱','老師','時間','comment_num'];

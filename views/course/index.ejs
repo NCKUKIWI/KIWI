@@ -657,6 +657,9 @@
         nowCourse = response;
         changeCourse();
         addCourseEventlistener();
+        if($('#filter_haspost').hasClass('checked')){
+          $('#filter_haspost').trigger('click');
+        } // 避免用關鍵字搜尋後，因為一開始選擇“僅顯示有心得課程”所造成沒看到自己搜尋的課程
       }
     });
   }

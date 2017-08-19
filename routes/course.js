@@ -205,11 +205,12 @@ router.get('/:id', function(req, res) {
   var id = req.params.id;
   console.log('\n'+'GET /course/'+id);
   if(id.match(/\D/g)){
-    res.redirect('/course');
+    res.redirect('/');
   }
   else{
     /* 尋找課程的資訊 */
     db.query_post2(id, function(courseInfo, comment){
+      db.UpdatePlusone("course_new","viewcount",id,function(result){})
       courseInfo = courseInfo[0];
       courseInfo.comment = 0;
       courseInfo.course_style = 0;

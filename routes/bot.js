@@ -40,14 +40,14 @@ router.post('/webhook/', function(req, res) {
   var messaging_events = req.body.entry[0].messaging
   for (i = 0; i < messaging_events.length; i++) {
     var event = req.body.entry[0].messaging[i]
+    console.log(event);
     var sender = event.sender.id  //使用者messenger id
     if (event.message && event.message.text) {
       console.log("sender: "+sender);
       console.log("content: "+event.message.text);
-      console.log("---------------");
+      console.log("---------------\n");
       var text = event.message.text     //用戶傳送的訊息
-      var keyword8 = text.match(/(小幫手)/i);
-      if (text === "小幫手" || keyword8 != null) {
+      if (text.indexOf("小幫手")!=-1 || (event.postback && event.postback.payload.indexOf("小幫手")!=-1)) {
         sendHelloMessage(sender);
         continue;
       }

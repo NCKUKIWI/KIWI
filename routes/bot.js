@@ -46,7 +46,7 @@ router.post('/webhook/', function(req, res) {
       console.log("content: "+event.message.text);
       console.log("---------------\n");
       var text = event.message.text     //用戶傳送的訊息
-      if (text.indexOf("小幫手")!=-1 || (event.postback && event.postback.payload.indexOf("小幫手")!=-1)) {
+      if (text.indexOf("小幫手")!=-1) {
         sendHelloMessage(sender);
         continue;
       }

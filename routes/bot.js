@@ -603,7 +603,7 @@ function sendCreditNotify(course){
 
 function searchCourseByName(sender,keyword){
   var db = new dbsystem();
-  db.select().field(["id","系所名稱","課程名稱","時間","教室"]).from("course_new").where("課程名稱=",keyword).run(function(course){
+  db.select().field(["id","系所名稱","課程名稱","時間","選課序號"]).from("course_new").where("課程名稱=",keyword).run(function(course){
     db=null;
     delete db;
     if(course.length>0){

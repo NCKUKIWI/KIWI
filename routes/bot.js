@@ -5,6 +5,18 @@ var router = express.Router();
 var dbsystem = require('../model/dba');
 var token = config.msgtoken;
 
+var db = new dbsystem();
+var courseNameList = [];
+var courseIdList = [];
+db.select().field(["課程名稱","選課序號"]).from("course_new").run(function(data,err){
+  for(var i in data){
+    courseNameList.push(data[i].課程名稱);
+    courseSerialList.push(data[i].選課序號);
+  }
+  db=null;
+  delete db;
+});
+
 router.get('/sendmsg/', function(req, res) {
   res.render('sendmsg');
 });
@@ -42,47 +54,43 @@ router.post('/webhook/', function(req, res) {
     var event = req.body.entry[0].messaging[i]
     var sender = event.sender.id  //使用者messenger id
     if (event.message && event.message.text) {
-      console.log("sender: "+sender);
-      console.log("content: "+event.message.text);
-      console.log("---------------\n");
       var text = event.message.text     //用戶傳送的訊息
-      if (text.indexOf("小幫手")!=-1) {
+      if (text.indexOf("小幫手")!=-1){
         sendHelloMessage(sender);
-        continue;
       }
       else{
-        var hint = text.match(/^[a-zA-Z][0-9]{4}/i); //檢查是否忘記加@或#
-        if(hint){
-          sendTextMessage(sender,"請記得開頭要加上＠或＃喔！");
-          continue;
+        var serial = text.replace(/\s/g,"").match(/^[a-zA-Z][0-9]{4}/i);
+        if(serial && courseSerialList.indexOf(serial.toUpperCase())!==-1){
+          askPlaceOrFollow(sender,serial);
         }else{
-          var teacher = text.match(/[\%|\uff05][\u4e00-\u9fa5]{1,}/i); //檢查 %老師名稱
-          var dpt = text.match(/[\$|\uff04][\u4e00-\u9fa5]{1,}/i);   //檢查 $系所名稱
-          if(dpt) dpt=dpt[0].replace(/[\$|\uff04|\s]/g,"");          //過濾掉不該有的內容
-          if(teacher) teacher=teacher[0].replace(/[\%|\uff05|\s]/g,"");
-          var keyword = text.match(/^[\uff20|@][\u4e00-\u9fa5]{1,}/i);  //檢查 @課程名稱
-          if(keyword){
-            keyword=keyword[0].replace(/[\uff20|@|\s]/g,"");
-            sendCoursePlaceByName(sender,keyword,dpt,teacher);         //透過課程名稱搜尋並傳送課程地點
-            continue;
+          if(courseNameList.indexOf(text)!==-1){
+            searchCourseByName(sender,text);
           }
-          var keyword2 = text.match(/^[\uff20|@][a-zA-Z0-9]{5}/i);   //檢查 @選課序號
-          if(keyword2){
-            keyword2=keyword2[0].replace(/[\uff20|@|\s]/g,"");
-            sendCoursePlaceById(sender,keyword2);                 //透過課程序號搜尋並傳送課程地點
-            continue;
-          }
-          var keyword3 = text.match(/^[#|\uff03][\u4e00-\u9fa5]{1,}/i);      //檢查 #課程名稱
-          if(keyword3){
-            keyword3=keyword3[0].replace(/[#|\uff03|\s]/g,"");
-            sendFollowCourseByName(sender,keyword3,dpt,teacher);            //透過課程名稱搜尋並傳送追蹤課程按鈕
-            continue;
-          }
-          var keyword4 = text.match(/^[#|\uff03][a-zA-Z0-9]{5}/i);       //檢查 #選課序號
-          if(keyword4){
-            keyword4=keyword4[0].replace(/[#|\uff03|\s]/g,"");
-            sendFollowCourseById(sender,keyword4);               //透過選課序號搜尋並傳送追蹤課程按鈕
-            continue;
+          else{
+            var teacher = text.match(/[\%|\uff05][\u4e00-\u9fa5]{1,}/i); //檢查 %老師名稱
+            var dpt = text.match(/[\$|\uff04][\u4e00-\u9fa5]{1,}/i);   //檢查 $系所名稱
+            if(dpt) dpt=dpt[0].replace(/[\$|\uff04|\s]/g,"");          //過濾掉不該有的內容
+            if(teacher) teacher=teacher[0].replace(/[\%|\uff05|\s]/g,"");
+            var keyword = text.match(/^[\uff20|@][\u4e00-\u9fa5]{1,}/i);  //檢查 @課程名稱
+            if(keyword){
+              keyword=keyword[0].replace(/[\uff20|@|\s]/g,"");
+              sendCoursePlaceByName(sender,keyword,dpt,teacher);         //透過課程名稱搜尋並傳送課程地點
+            }
+            var keyword2 = text.match(/^[\uff20|@][a-zA-Z0-9]{5}/i);   //檢查 @選課序號
+            if(keyword2){
+              keyword2=keyword2[0].replace(/[\uff20|@|\s]/g,"");
+              sendCoursePlaceById(sender,keyword2);                 //透過課程序號搜尋並傳送課程地點
+            }
+            var keyword3 = text.match(/^[#|\uff03][\u4e00-\u9fa5]{1,}/i);      //檢查 #課程名稱
+            if(keyword3){
+              keyword3=keyword3[0].replace(/[#|\uff03|\s]/g,"");
+              sendFollowCourseByName(sender,keyword3,dpt,teacher);            //透過課程名稱搜尋並傳送追蹤課程按鈕
+            }
+            var keyword4 = text.match(/^[#|\uff03][a-zA-Z0-9]{5}/i);       //檢查 #選課序號
+            if(keyword4){
+              keyword4=keyword4[0].replace(/[#|\uff03|\s]/g,"");
+              sendFollowCourseById(sender,keyword4);               //透過選課序號搜尋並傳送追蹤課程按鈕
+            }
           }
         }
       }
@@ -114,6 +122,9 @@ router.post('/webhook/', function(req, res) {
         else if(event.postback.payload=="cancelall"){
           cancelAllFollowCourse(sender);
         }
+        else if(event.postback.payload.indexOf("ask") !== -1 ){
+          askPlaceOrFollow(sender,event.postback.payload.replace("ask",""));
+        }
         else{
           sendTextMessage(sender,event.postback.payload);
         }
@@ -122,7 +133,6 @@ router.post('/webhook/', function(req, res) {
   }
   res.sendStatus(200);
 });
-
 
 function sendTextMessage(sender, text) {
   messageData = {
@@ -584,6 +594,128 @@ function sendCreditNotify(course){
       db=null;
       delete db;
     });
+  });
+}
+
+function searchCourseByName(sender,keyword){
+  var db = new dbsystem();
+  db.select().field(["id","系所名稱","課程名稱","時間","教室"]).from("course_new").where("課程名稱=",keyword).run(function(course){
+    db=null;
+    delete db;
+    if(course.length>0){
+      if(course.length>30){
+        var subtitle = "以下是找到的前 30 筆結果。若要精準搜尋，請輸入 @課程名稱 $系所 %老師名 或 #課程名稱 $系所 %老師名 或 ";
+      }else{
+        var subtitle = "哎呀！我找到了這些，請問哪門是你要的呢 😇😇😇";
+      }
+      messageData = {
+        "attachment":{
+          "type": "template",
+          "payload": {
+            "template_type":"generic",
+            "elements": []
+          }
+        }
+      }
+      for(var i in course){
+        if(i==30) break;
+        if(i%3==0){
+          var card = {
+            "title": "NCKUHUB",
+            "subtitle":subtitle,
+            "buttons": [],
+          }
+        }
+        var data = {
+          "type": "postback",
+          "title": course[i].系所名稱.replace(/[A-Z0-9]/g,"")+" "+course[i].課程名稱.replace(/[（|）|\s]/g,"")+" "+course[i].時間,
+          "payload":"ask"+course[i].選課序號,
+        }
+        card["buttons"].push(data);
+        if(i%3==2 || i == course.length-1){
+          messageData["attachment"]["payload"]["elements"].push(card);
+        }
+      }
+      request({
+        url: 'https://graph.facebook.com/v2.6/me/messages',
+        qs: {
+          access_token:token
+        },
+        method: 'POST',
+        json: {
+          recipient: {
+            id:sender
+          },
+          message: messageData,
+        }
+      }, function(error, response, body) {
+        if (error) {
+          console.log('Error sending messages: ', error)
+        } else if (response.body.error) {
+          console.log('Error: ', response.body.error)
+        }
+      });
+    }
+    else{
+      var text = "查無課程唷 😱😱 會不會是這學期沒開課，或是關鍵字有打錯呢？";
+      sendTextMessage(sender,text);
+      sendGoodbye(sender);
+    }
+  });
+}
+
+function askPlaceOrFollow(sender,serial){
+  var serial = serial.toUpperCase();
+  var db = new dbsystem();
+  db.select().field(["id","系所名稱","課程名稱","時間"]).from("course_new").where("選課序號=",serial).run(function(course){
+    db=null;
+    delete db;
+    if(course.length > 0){
+      messageData = {
+        "attachment": {
+          "type": "template",
+          "payload": {
+            "template_type":"generic",
+            "elements": [{
+              "title": "NCKUHUB",
+              "subtitle": "你選擇的課程是：\n\n"+course[0].系所名稱.replace(/[A-Z0-9]/g,"")+"／"+course[0].課程名稱.replace(/[（|）|\s]/g,"")+"／"+course[0].老師.replace(/\s/g,"")+"／"+course[0].時間+"\n\n",
+              "buttons": [{
+                "type": "postback",
+                "title": "尋找上課地點",
+                "payload":"@"+course[0].id,
+              },{
+                "type": "postback",
+                "title": "追蹤課程餘額",
+                "payload":"#"+course[0].id,
+              }],
+            }]
+          }
+        }
+      }
+      request({
+        url: 'https://graph.facebook.com/v2.6/me/messages',
+        qs: {
+          access_token:token
+        },
+        method: 'POST',
+        json: {
+          recipient: {
+            id:sender
+          },
+          message: messageData,
+        }
+      }, function(error, response, body) {
+        if (error) {
+          console.log('Error sending messages: ', error)
+        } else if (response.body.error) {
+          console.log('Error: ', response.body.error)
+        }
+      });
+    }else{
+      var text = "查無課程唷 😱😱 會不會是這學期沒開課，或是關鍵字有打錯呢？";
+      sendTextMessage(sender,text);
+      sendGoodbye(sender);
+    }
   });
 }
 

@@ -55,6 +55,7 @@ router.post('/webhook/', function(req, res) {
     var sender = event.sender.id  //使用者messenger id
     if (event.message && event.message.text) {
       var text = event.message.text     //用戶傳送的訊息
+      console.log("text:"+text);
       if (text.indexOf("小幫手")!=-1){
         console.log("hello");
         sendHelloMessage(sender);
@@ -62,8 +63,7 @@ router.post('/webhook/', function(req, res) {
       else{
         var serial = text.replace(/\s/g,"").match(/^[a-zA-Z][0-9]{4}/i);
         if(serial){
-          console.log(serial);
-          if(courseSerialList.indexOf(serial.toUpperCase())!==-1){
+          if(courseSerialList.indexOf(serial[0].toUpperCase())!==-1){
             askPlaceOrFollow(sender,serial);
           }
         }else{

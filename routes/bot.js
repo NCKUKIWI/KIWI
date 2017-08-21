@@ -671,7 +671,7 @@ function searchCourseByName(sender,keyword){
 function askPlaceOrFollow(sender,serial){
   var serial = serial.toUpperCase();
   var db = new dbsystem();
-  db.select().field(["id","系所名稱","課程名稱","時間"]).from("course_new").where("選課序號=",serial).run(function(course){
+  db.select().field(["id","系所名稱","課程名稱","老師","時間"]).from("course_new").where("選課序號=",serial).run(function(course){
     db=null;
     delete db;
     if(course.length > 0){

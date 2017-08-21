@@ -7,7 +7,7 @@ var token = config.msgtoken;
 
 var db = new dbsystem();
 var courseNameList = [];
-var courseIdList = [];
+var courseSerialList = [];
 db.select().field(["課程名稱","選課序號"]).from("course_new").run(function(data,err){
   for(var i in data){
     courseNameList.push(data[i].課程名稱);

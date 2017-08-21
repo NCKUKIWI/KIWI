@@ -562,7 +562,7 @@ function sendGoodbye(sender){
 
 function checkCoureseCredit(){
   var db = new dbsystem();
-  db.select().field(["f.*","c.餘額","c.系號"]).from("follow f").join("course_new c").where("c.id=f.course_id").where("c.系號!=","A9").run(function(follow){
+  db.select().field(["f.*","c.餘額","c.系號"]).from("follow f").join("course_new c").where("c.id=f.course_id").run(function(follow){
     for(var i in follow){
       if(follow[i].餘額!="額滿" && follow[i].hadNotify == 0 ){
         sendCreditNotify(follow[i]);

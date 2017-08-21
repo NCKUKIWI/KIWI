@@ -8,7 +8,7 @@ var token = config.msgtoken;
 var db = new dbsystem();
 var courseNameList = [];
 var courseSerialList = [];
-db.select().field(["課程名稱","選課序號"]).from("course_new").run(function(data,err){
+db.select().field(["課程名稱","選課序號"]).from("course_new").where("選課序號!=","").run(function(data,err){
   for(var i in data){
     courseNameList.push(data[i].課程名稱);
     courseSerialList.push(data[i].選課序號);
@@ -57,7 +57,6 @@ router.post('/webhook/', function(req, res) {
       var text = event.message.text     //用戶傳送的訊息
       console.log("text:"+text);
       if (text.indexOf("小幫手")!=-1){
-        console.log("hello");
         sendHelloMessage(sender);
       }
       else{
@@ -603,7 +602,7 @@ function sendCreditNotify(course){
 
 function searchCourseByName(sender,keyword){
   var db = new dbsystem();
-  db.select().field(["id","系所名稱","課程名稱","時間","選課序號"]).from("course_new").where("課程名稱=",keyword).run(function(course){
+  db.select().field(["id","系所名稱","課程名稱","時間","選課序號"]).from("course_new").where("課程名稱=",keyword).where("選課序號!=","").run(function(course){
     db=null;
     delete db;
     if(course.length>0){
@@ -690,7 +689,7 @@ function askPlaceOrFollow(sender,serial){
               },{
                 "type": "postback",
                 "title": "追蹤課程餘額",
-                "payload":"#"+course[0].id,
+                "payload":"!"+course[0].id,
               }],
             }]
           }

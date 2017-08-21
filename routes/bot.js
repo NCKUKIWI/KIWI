@@ -56,16 +56,18 @@ router.post('/webhook/', function(req, res) {
     if (event.message && event.message.text) {
       var text = event.message.text     //用戶傳送的訊息
       if (text.indexOf("小幫手")!=-1){
+        console.log("hello");
         sendHelloMessage(sender);
       }
       else{
         var serial = text.replace(/\s/g,"").match(/^[a-zA-Z][0-9]{4}/i);
         if(serial){
+          console.log(serial);
           if(courseSerialList.indexOf(serial.toUpperCase())!==-1){
             askPlaceOrFollow(sender,serial);
           }
         }else{
-          if(courseNameList.indexOf(text)!==-1){
+          if(courseNameList.indexOf(text)!=-1){
             searchCourseByName(sender,text);
           }
           else{

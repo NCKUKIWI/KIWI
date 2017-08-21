@@ -64,7 +64,7 @@ router.post('/webhook/', function(req, res) {
         var serial = text.replace(/\s/g,"").match(/^[a-zA-Z][0-9]{4}/i);
         if(serial){
           if(courseSerialList.indexOf(serial[0].toUpperCase())!==-1){
-            askPlaceOrFollow(sender,serial);
+            askPlaceOrFollow(sender,serial[0]);
           }
         }else{
           if(courseNameList.indexOf(text)!=-1){

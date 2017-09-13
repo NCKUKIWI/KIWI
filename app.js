@@ -25,7 +25,7 @@ app.set("view engine","ejs");                   //使用ejs作為template
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
-
+app.use(require('express-status-monitor')());
 app.use("/assets",express.static("assets",{ maxAge: 30*60*1000 }));
 
 //Handle sessions and cookie
@@ -60,7 +60,7 @@ app.use("/user",user);                          // get "/user"時交給routes us
 app.use("/schedule",schedule);                 // get "/schedule"時交給routes schedule
 app.use("/course_rate",course_rate);          // get "/course_rate"時交給routes course_rate
 app.use("/bot",bot);
-app.use("/*",course);                              
+app.use("/*",course);
 
 app.listen( process.env.PORT || 3000);                             //監聽3000port
 console.log("running on port 3000");

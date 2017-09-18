@@ -722,8 +722,8 @@ function askPlaceOrFollow(sender,serial){
   });
 }
 
-setInterval(function(){
-  checkCoureseCredit();
-},1000 * 10);
+// setInterval(function(){
+//   checkCoureseCredit();
+// },1000 * 10);
 
 module.exports = router;

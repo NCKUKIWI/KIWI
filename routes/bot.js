@@ -297,7 +297,7 @@ function sendCourseInfo(sender,course_id) {
   db.select().field(["系號","系所名稱","課程名稱","時間","教室","老師"]).from("course_new").where("id=",course_id).run(function(course){
     db=null;
     delete db;
-    var course[0].教室 = course[0].教室.replace(/\s/g,"");
+    course[0].教室 = course[0].教室.replace(/\s/g,"");
     if(course[0].教室==''){
         var text = "你選擇的課程是：\n\n"+course[0].系所名稱.replace(/[A-Z0-9]/g,"")+"／"+course[0].課程名稱.replace(/[（|）|\s]/g,"")+"／"+course[0].老師.replace(/\s/g,"")+"／"+course[0].時間+"\n\n上課地點請查看 http://course-query.acad.ncku.edu.tw/qry/qry001.php?dept_no="+course[0].系號;
     }else{

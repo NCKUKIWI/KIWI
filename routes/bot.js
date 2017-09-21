@@ -22,11 +22,13 @@ var checkcourse;
 var checkcourseStatus = false;
 
 router.get('/sendmsg/', function(req, res) {
-  res.render('sendmsg');
+  res.render('sendmsg',{
+    botswitch:checkcourseStatus
+  });
 });
 
 router.post('/sendmsg/', function(req, res) {
-  if(req.body.pw !="nckuhubmsg"){
+  if(req.body.pw !="nckuhubsetting"){
     res.send("fail");
   }else{
     if(req.body.type == "test"){
@@ -47,9 +49,8 @@ router.post('/sendmsg/', function(req, res) {
 
 router.post('/openbot', function(req, res) {
     checkcourse = setInterval(function(){
-        console.log('Test');
-       //checkCoureseCredit();
-    },3000 * 10);
+       checkCoureseCredit();
+    },1000*10);
     checkcourseStatus = true;
     res.send('ok');
 });

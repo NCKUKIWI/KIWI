@@ -21,18 +21,24 @@
       </div>
       <div class="field">
         <label>Password</label>
-        <input type="password" name="pw">
+        <input type="password" name="pw" id="pw">
       </div>
       <div class="field">
         <label>Text</label>
         <textarea name="msg" placeholder="msg"></textarea>
       </div>
-      <div class="ui button" id="sendmsg">Send</div>
+      <div class="ui button" id="sendmsg">Send</div><br><br><br>
+      <div>目前小幫手通知狀態:<span id="botstatus"><%= (botswitch)?'開':'關' %></span></div>
+      <% if(botswitch){ %>
+          <div class="ui button" id="botswitch">關</div>
+      <% } else { %>
+          <div class="ui button" id="botswitch">開</div>
+      <% } %>
     </form>
   </div>
 </div>
 <script>
-  $(document).ready(function(){
+ $(document).ready(function(){
     $("#sendmsg").on("click",function(){
       $.ajax({
         url: "/bot/sendmsg",
@@ -42,8 +48,32 @@
           console.log(response);
         }
       });
-    })
   });
+  $("#botswitch").on("click",function(){
+      if($("#pw").val()==="nckuhubsetting"){
+        if($(this).text()=="開"){
+            $.ajax({
+              url: "/bot/openbot",
+              type: "POST",
+              success: function(response) {
+                $("#botswitch").text("關");
+                $("#botstatus").text("開");
+              }
+            });
+        }
+        else{
+            $.ajax({
+              url: "/bot/closebot",
+              type: "POST",
+              success: function(response) {
+                $("#botswitch").text("開");
+                $("#botstatus").text("關");
+              }
+            });
+        }
+      }
+  });
+});
 </script>
 
 </body>

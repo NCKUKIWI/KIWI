@@ -5,6 +5,7 @@ var router = express.Router();
 var dbsystem = require('../model/dba');
 var token = config.msgtoken;
 
+//取得所有課程資料
 var db = new dbsystem();
 var courseNameList = [];
 var courseSerialList = [];
@@ -16,6 +17,9 @@ db.select().field(["課程名稱","選課序號"]).from("course_new").where("選
   db=null;
   delete db;
 });
+//定時通知餘額
+var checkcourse;
+var checkcourseStatus = false;
 
 router.get('/sendmsg/', function(req, res) {
   res.render('sendmsg');
@@ -39,6 +43,21 @@ router.post('/sendmsg/', function(req, res) {
     }
     res.send('ok');
   }
+});
+
+router.post('/openbot', function(req, res) {
+    checkcourse = setInterval(function(){
+        console.log('Test');
+       //checkCoureseCredit();
+    },3000 * 10);
+    checkcourseStatus = true;
+    res.send('ok');
+});
+
+router.post('/closebot', function(req, res) {
+    clearInterval(checkcourse);
+    checkcourseStatus = false;
+    res.send('ok');
 });
 
 router.get('/webhook/', function(req, res) {
@@ -726,9 +745,5 @@ function askPlaceOrFollow(sender,serial){
     }
   });
 }
-
-// setInterval(function(){
-//   checkCoureseCredit();
-// },1000 * 10);
 
 module.exports = router;

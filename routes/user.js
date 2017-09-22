@@ -20,15 +20,15 @@ router.get("/fbcheck",helper.checkLogin(1),function(req,res) {
       graph.get(`/me?fields=id,name,email,gender&access_token=${result.access_token}`,function(err,fb){
         db.FindbyColumn('user',['id','fb_id'],{'fb_id':fb.id},function(user){
           if(user.length>0){
-            res.cookie("isLogin",1,{maxAge: 60 * 60 * 1000});
-            res.cookie("id",user[0].id,{maxAge: 60 * 60 * 1000});
+            req.session.isLogin = 1;
+            req.session.userid = user[0].id;
             res.redirect("/");
           }
           else{
             db.Insert('user',{'name':fb.name,'fb_id':fb.id,'role':0,'department':'無','grade':'無'},function (err,result) {
               if (err) console.log(err);
-              res.cookie("isLogin",1,{maxAge: 60 * 60 * 1000});
-              res.cookie("id",result.insertId,{maxAge: 60 * 60 * 1000});
+              req.session.isLogin = 1;
+              req.session.userid = result.insertId;
               res.redirect("/");
             })
           }

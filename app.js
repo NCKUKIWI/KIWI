@@ -27,15 +27,14 @@ app.use("/assets",express.static("assets",{ maxAge: 24*60*60 }));
 app.use(cookieParser("secretString"));
 //Handle sessions and cookie
 app.use(session({
-  cookie: { maxAge: 1000 * 60 * 60 * 24 * 30 },
+  cookie: { maxAge: 1000 * 60 * 60 * 12 },
   secret:"secret",
-  resave: true,
-  saveUninitialized: true,
+  saveUninitialized:true
 }));
 
 app.use(function(req, res, next) {
-  if(req.cookies.isLogin){
-    db.FindbyID("user",req.cookies.id,function(user){
+  if(req.session.isLogin){
+    db.FindbyID("user",req.session.userid,function(user){
       req.user = user;
       next();
     });

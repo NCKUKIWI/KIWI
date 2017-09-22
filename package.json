@@ -17,7 +17,7 @@
     "ejs-locals": "^1.0.2",
     "express": "^4.14.0",
     "express-flash": "0.0.2",
-    "express-session": "^1.14.0",
+    "express-session": "^1.15.5",
     "express-status-monitor": "^1.0.0",
     "express-validator": "^2.20.8",
     "fbgraph": "^1.4.1",

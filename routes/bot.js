@@ -21,8 +21,8 @@ db.select().field(["課程名稱","選課序號"]).from("course_new").where("選
 var checkcourse;
 var checkcourseStatus = false;
 
-router.get('/sendmsg/', function(req, res) {
-  res.render('sendmsg',{
+router.get('/setting/', function(req, res) {
+  res.render('setting',{
     botswitch:checkcourseStatus
   });
 });

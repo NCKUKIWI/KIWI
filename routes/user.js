@@ -42,9 +42,9 @@ router.get("/fbcheck",helper.checkLogin(1),function(req,res) {
 });
 
 router.get('/logout',function(req, res){
-  res.clearCookie("isLogin");
-  res.clearCookie("id");
-  res.redirect('/');
+    req.session.destroy(function(err) {
+        res.redirect('/');
+    });
 });
 
 router.get('/edit',helper.checkLogin(),function(req, res){

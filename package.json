@@ -21,9 +21,9 @@
     "express-status-monitor": "^1.0.0",
     "express-validator": "^2.20.8",
     "fbgraph": "^1.4.1",
+    "helmet": "^3.8.1",
     "mysql": "^2.11.1",
     "nodemon": "^1.9.2",
-    "request": "^2.79.0",
-    "universal-analytics": "^0.4.8"
+    "request": "^2.79.0"
   }
 }

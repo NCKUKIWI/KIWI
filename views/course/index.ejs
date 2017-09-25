@@ -94,7 +94,8 @@
               break; // 大於query課程數就不在新增
             }
             // $('#course-table').append(nowCourseDom[i]);
-            $('#course-table').append(courseTransforToDom(nowCourse[now_index]));
+            if (nowCourse[now_index])
+              $('#course-table').append(courseTransforToDom(nowCourse[now_index]));
           }
           /* 將先加入的課程中用戶已選過的課符號變為減號 */
           if(carts != null ){

@@ -55,6 +55,7 @@ router.post('/openbot', function(req, res) {
     checkcourse = setInterval(function(){
        checkCoureseCredit();
     },1000*10);
+    var db = new dbsystem();
     db.update().table("setting").set({status: 1}).where("id=",1).run(function(result) {});
     checkcourseStatus = 1;
     res.send('ok');
@@ -62,6 +63,7 @@ router.post('/openbot', function(req, res) {
 
 router.post('/closebot', function(req, res) {
     clearInterval(checkcourse);
+    var db = new dbsystem();
     db.update().table("setting").set({status: 0}).where("id=",1).run(function(result) {});
     checkcourseStatus = 0;
     res.send('ok');

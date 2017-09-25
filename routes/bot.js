@@ -11,7 +11,7 @@ var courseNameList = [];
 var courseSerialList = [];
 //定時通知餘額
 var checkcourse;
-var checkcourseStatus = false;
+var checkcourseStatus = 0;
 
 db.select().field(["課程名稱","選課序號"]).from("course_new").where("選課序號!=","").run(function(data,err){
     for(var i in data){
@@ -20,6 +20,11 @@ db.select().field(["課程名稱","選課序號"]).from("course_new").where("選
     }
     db.select().field("*").from("setting").where("id=",1).run(function(data,err){
         checkcourseStatus = data[0].status;
+        if(checkcourseStatus==1){
+            checkcourse = setInterval(function(){
+                checkCoureseCredit();
+            },1000*10);
+        }
         db=null;
         delete db;
     });

@@ -14,15 +14,15 @@ var checkcourse;
 var checkcourseStatus = false;
 
 db.select().field(["課程名稱","選課序號"]).from("course_new").where("選課序號!=","").run(function(data,err){
-  for(var i in data){
-    courseNameList.push(data[i].課程名稱);
-    courseSerialList.push(data[i].選課序號);
-  }
-  db.select().field("*").from("setting").where("id=",1).run(function(data,err){
-    checkcourseStatus = data[0].status;
-    db=null;
-    delete db;
-  }
+    for(var i in data){
+      courseNameList.push(data[i].課程名稱);
+        courseSerialList.push(data[i].選課序號);
+    }
+    db.select().field("*").from("setting").where("id=",1).run(function(data,err){
+        checkcourseStatus = data[0].status;
+        db=null;
+        delete db;
+    });
 });
 
 router.get('/setting/', function(req, res) {
@@ -55,12 +55,14 @@ router.post('/openbot', function(req, res) {
     checkcourse = setInterval(function(){
        checkCoureseCredit();
     },1000*10);
+    db.update().table("setting").set({status: 1}).where("id=",1).run(function(result) {});
     checkcourseStatus = 1;
     res.send('ok');
 });
 
 router.post('/closebot', function(req, res) {
     clearInterval(checkcourse);
+    db.update().table("setting").set({status: 0}).where("id=",1).run(function(result) {});
     checkcourseStatus = 0;
     res.send('ok');
 });

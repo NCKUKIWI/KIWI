@@ -9,17 +9,21 @@ var token = config.msgtoken;
 var db = new dbsystem();
 var courseNameList = [];
 var courseSerialList = [];
+//定時通知餘額
+var checkcourse;
+var checkcourseStatus = false;
+
 db.select().field(["課程名稱","選課序號"]).from("course_new").where("選課序號!=","").run(function(data,err){
   for(var i in data){
     courseNameList.push(data[i].課程名稱);
     courseSerialList.push(data[i].選課序號);
   }
-  db=null;
-  delete db;
+  db.select().field("*").from("setting").where("id=",1).run(function(data,err){
+    checkcourseStatus = data[0].status;
+    db=null;
+    delete db;
+  }
 });
-//定時通知餘額
-var checkcourse;
-var checkcourseStatus = false;
 
 router.get('/setting/', function(req, res) {
   res.render('setting',{
@@ -51,13 +55,13 @@ router.post('/openbot', function(req, res) {
     checkcourse = setInterval(function(){
        checkCoureseCredit();
     },1000*10);
-    checkcourseStatus = true;
+    checkcourseStatus = 1;
     res.send('ok');
 });
 
 router.post('/closebot', function(req, res) {
     clearInterval(checkcourse);
-    checkcourseStatus = false;
+    checkcourseStatus = 0;
     res.send('ok');
 });
 

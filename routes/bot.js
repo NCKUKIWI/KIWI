@@ -140,7 +140,7 @@ router.post('/webhook/', function(req, res) {
 			var courseIdCancel = event.postback.payload.match(/^&[0-9]{1,}/i); //抓payload中的 course_id 用來取消追蹤課程
 			var courseIdInfo = event.postback.payload.match(/^@[0-9]{1,}/i); //抓payload中的 course_id 用來傳送單一課程詳細資訊
 			if (courseIdFollow) {
-				courseIdFollow = keyword5[0].replace(/!|\s/g, "");
+				courseIdFollow = courseIdFollow[0].replace(/!|\s/g, "");
 				addFollowCourse(sender, courseIdFollow);
 			} else if (courseIdCancel) {
 				courseIdCancel = courseIdCancel[0].replace(/&|\s/g, "");
@@ -238,9 +238,9 @@ function sendHelloMessage(sender) {
 	})
 }
 
-function sendCoursePlaceByName(sender, keyword, dpt, teacher) {
+function sendCoursePlaceByName(sender, name, dpt, teacher) {
 	var db = new dbsystem();
-	db.select().field(["id", "系所名稱", "課程名稱", "時間", "教室"]).from("course_new").where("課程名稱 LIKE '%" + keyword + "%'").whereCheck("系所名稱 LIKE '%" + dpt + "%'", dpt).whereCheck("老師 LIKE '%" + teacher + "%'", teacher).run(function(course) {
+	db.select().field(["id", "系所名稱", "課程名稱", "時間", "教室"]).from("course_new").where("課程名稱 LIKE '%" + name + "%'").whereCheck("系所名稱 LIKE '%" + dpt + "%'", dpt).whereCheck("老師 LIKE '%" + teacher + "%'", teacher).run(function(course) {
 		db = null;
 		delete db;
 		if (course.length > 0) {
@@ -304,10 +304,10 @@ function sendCoursePlaceByName(sender, keyword, dpt, teacher) {
 	});
 }
 
-function sendCoursePlaceById(sender, keyword) {
-	keyword = keyword.toUpperCase();
+function sendCoursePlaceById(sender, serial) {
+	serial = serial.toUpperCase();
 	var db = new dbsystem();
-	db.select().field(["id"]).from("course_new").where("選課序號=", keyword).run(function(course) {
+	db.select().field(["id"]).from("course_new").where("選課序號=", serial).run(function(course) {
 		db = null;
 		delete db;
 		if (course.length > 0) {
@@ -336,9 +336,9 @@ function sendCourseInfo(sender, course_id) {
 	});
 }
 
-function sendFollowCourseByName(sender, keyword, dpt, teacher) {
+function sendFollowCourseByName(sender, name, dpt, teacher) {
 	var db = new dbsystem();
-	db.select().field(["id", "系所名稱", "課程名稱", "時間"]).from("course_new").where("課程名稱 LIKE '%" + keyword + "%'").whereCheck("系所名稱 LIKE '%" + dpt + "%'", dpt).whereCheck("老師 LIKE '%" + teacher + "%'", teacher).run(function(course) {
+	db.select().field(["id", "系所名稱", "課程名稱", "時間"]).from("course_new").where("課程名稱 LIKE '%" + name + "%'").whereCheck("系所名稱 LIKE '%" + dpt + "%'", dpt).whereCheck("老師 LIKE '%" + teacher + "%'", teacher).run(function(course) {
 		db = null;
 		delete db;
 		if (course.length > 0) {
@@ -402,10 +402,10 @@ function sendFollowCourseByName(sender, keyword, dpt, teacher) {
 	});
 }
 
-function sendFollowCourseById(sender, keyword) {
-	keyword = keyword.toUpperCase();
+function sendFollowCourseById(sender, serial) {
+	serial = serial.toUpperCase();
 	var db = new dbsystem();
-	db.select().field(["id"]).from("course_new").where("選課序號=", keyword).run(function(course) {
+	db.select().field(["id"]).from("course_new").where("選課序號=", serial).run(function(course) {
 		if (course.length > 0) {
 			addFollowCourse(sender, course[0].id);
 		} else {
@@ -626,9 +626,9 @@ function sendCreditNotify(course) {
 	});
 }
 
-function searchCourseByName(sender, keyword) {
+function searchCourseByName(sender, name) {
 	var db = new dbsystem();
-	db.select().field(["id", "系所名稱", "課程名稱", "時間", "選課序號"]).from("course_new").where("課程名稱=", keyword).where("選課序號!=", "").run(function(course) {
+	db.select().field(["id", "系所名稱", "課程名稱", "時間", "選課序號"]).from("course_new").where("課程名稱=", name).where("選課序號!=", "").run(function(course) {
 		db = null;
 		delete db;
 		if (course.length > 0) {

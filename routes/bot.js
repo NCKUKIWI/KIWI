@@ -107,7 +107,7 @@ router.post('/webhook/', function(req, res) {
 						if (dpt) dpt = dpt[0].replace(/[\$|\uff04|\s]/g, ""); //過濾掉不該有的內容
 						if (teacher) teacher = teacher[0].replace(/[\%|\uff05|\s]/g, "");
 						if (text.indexOf('%') == 0) {
-							searchCourseByTeacher(sender, text);
+							searchCourseByTeacher(sender,teacher);
 						} else {
 							var courseNamePlace = text.match(/^[\uff20|@][\u4e00-\u9fa5]{1,}/i); //檢查 @課程名稱
 							if (courseNamePlace) {

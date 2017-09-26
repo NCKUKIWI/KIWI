@@ -694,7 +694,7 @@ function searchCourseByName(sender, keyword) {
 
 function searchCourseByTeacher(sender, teacher) {
 	var db = new dbsystem();
-	db.select().field(["id", "系所名稱", "課程名稱", "時間", "選課序號"]).from("course_new").where("老師名稱=", teacher).where("選課序號!=", "").run(function(course) {
+	db.select().field(["id", "系所名稱", "課程名稱", "時間", "選課序號"]).from("course_new").where("老師=", teacher).where("選課序號!=", "").run(function(course) {
 		db = null;
 		delete db;
 		if (course.length > 0) {

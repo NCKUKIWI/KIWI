@@ -29,7 +29,8 @@ app.use(cookieParser("secretString"));
 app.use(session({
   cookie: { maxAge: 1000 * 60 * 60 * 12 },
   secret:"secret",
-  saveUninitialized:true
+  saveUninitialized:true,
+  resave: true
 }));
 
 app.use(function(req, res, next) {

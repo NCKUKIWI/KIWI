@@ -61,7 +61,7 @@ router.post('/sendmsg/', function(req, res) {
                     	sendTextMessage(user.fb_id, req.body.msg);
 					}
 					if(req.body.linktitle && req.body.linkurl){
-						sendLink(user.fb_id,{url:req.body.linkurl,title:req.body.linktitle,subtitle:req.body.linksubtitle})
+						sendLink(user.fb_id,{url:req.body.linkurl,title:req.body.linktitle,description:req.body.linkdescription})
 					}
                 });
             });

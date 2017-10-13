@@ -46,12 +46,16 @@ router.post('/sendmsg/', function(req, res) {
 				sendTextMessage("1346773338719764", req.body.msg);
 				sendTextMessage("1169375359801678", req.body.msg);
 				sendTextMessage("1364925580245632", req.body.msg);
+                sendTextMessage("1194641423974664", req.body.msg);
+                sendTextMessage("1318673478198233", req.body.msg);
 			}
 			if(req.body.linktitle && req.body.linkurl){
 				sendLink("1346773338719764",{url:req.body.linkurl,title:req.body.linktitle,description:req.body.linkdescription});
 				sendLink("1169375359801678",{url:req.body.linkurl,title:req.body.linktitle,description:req.body.linkdescription});
 				sendLink("1364925580245632",{url:req.body.linkurl,title:req.body.linktitle,description:req.body.linkdescription});
-			}
+                sendLink("1194641423974664",{url:req.body.linkurl,title:req.body.linktitle,description:req.body.linkdescription});
+                sendLink("1318673478198233",{url:req.body.linkurl,title:req.body.linktitle,description:req.body.linkdescription});
+            }
         }
         else if (req.body.type == "broadcast") {
             var db = new dbsystem();

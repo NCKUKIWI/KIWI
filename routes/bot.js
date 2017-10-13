@@ -48,9 +48,9 @@ router.post('/sendmsg/', function(req, res) {
 				sendTextMessage("1364925580245632", req.body.msg);
 			}
 			if(req.body.linktitle && req.body.linkurl){
-				sendLink("1346773338719764",{url:req.body.linkurl,title:req.body.linktitle,subtitle:req.body.linksubtitle});
-				sendLink("1169375359801678",{url:req.body.linkurl,title:req.body.linktitle,subtitle:req.body.linksubtitle});
-				sendLink("1364925580245632",{url:req.body.linkurl,title:req.body.linktitle,subtitle:req.body.linksubtitle});
+				sendLink("1346773338719764",{url:req.body.linkurl,title:req.body.linktitle,description:req.body.linkdescription});
+				sendLink("1169375359801678",{url:req.body.linkurl,title:req.body.linktitle,description:req.body.linkdescription});
+				sendLink("1364925580245632",{url:req.body.linkurl,title:req.body.linktitle,description:req.body.linkdescription});
 			}
         }
         else if (req.body.type == "broadcast") {
@@ -879,16 +879,13 @@ function sendLink(sender,link) {
         "attachment": {
             "type": "template",
             "payload": {
-                "template_type": "generic",
-                "elements": [{
-                    "title": "NCKUHUB",
-					"subtitle":link.subtitle,
-                    "buttons": [{
-                        "type": "web_url",
-                        "url": link.url,
-                        "title":link.title,
-                        "webview_height_ratio": "compact"
-                    }],
+                "template_type": "button",
+				"text":link.description,
+                "buttons": [{
+                    "type": "web_url",
+                    "url": link.url,
+                    "title":link.title,
+                    "webview_height_ratio": "compact"
                 }]
             }
         }

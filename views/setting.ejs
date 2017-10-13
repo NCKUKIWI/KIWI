@@ -2,79 +2,85 @@
 <html>
 
 <head>
-  <title>NCKU HUB</title>
-  <meta charset="UTF-8">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-  <link rel="stylesheet" type="text/css" href="../assets/css/semantic.css">
+    <title>NCKU HUB</title>
+    <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../assets/css/semantic.css">
 </head>
+
 <body>
-<div class="ui centered grid" style="padding-top:50px;">
-  <div class="ten wide tablet six wide computer column">
-    <h1>FB MSG</h1>
-    <form class="ui form" id="msgform">
-      <div class="field">
-        <label>Type</label>
-        <select class="ui fluid dropdown" name="type">
-          <option value="test">測試</option>
-          <option value="broadcast">Broadcast</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>Password</label>
-        <input type="password" name="pw" id="pw">
-      </div>
-      <div class="field">
-        <label>Text</label>
-        <textarea name="msg" placeholder="msg"></textarea>
-      </div>
-      <div class="ui button" id="sendmsg">Send</div><br><br><br>
-      <div>目前小幫手通知狀態:<span id="botstatus"><%= (botswitch)?'開':'關' %></span></div>
-      <% if(botswitch){ %>
-          <div class="ui button" id="botswitch">關</div>
-      <% } else { %>
-          <div class="ui button" id="botswitch">開</div>
-      <% } %>
-    </form>
-  </div>
-</div>
-<script>
- $(document).ready(function(){
-    $("#sendmsg").on("click",function(){
-      $.ajax({
-        url: "/bot/sendmsg",
-        type: "POST",
-        data: $("#msgform").serialize(),
-        success: function(response) {
-          console.log(response);
-        }
-      });
-  });
-  $("#botswitch").on("click",function(){
-      if($("#pw").val()==="nckuhubsetting"){
-        if($(this).text()=="開"){
-            $.ajax({
-              url: "/bot/openbot",
-              type: "POST",
-              success: function(response) {
-                $("#botswitch").text("關");
-                $("#botstatus").text("開");
-              }
+    <div class="ui centered grid" style="padding-top:50px;">
+        <div class="ten wide tablet six wide computer column">
+            <h1>FB MSG</h1>
+            <form class="ui form" id="msgform">
+                <div class="field">
+                    <label>Type</label>
+                    <select class="ui fluid dropdown" name="type">
+                        <option value="test">測試</option>
+                        <option value="broadcast">Broadcast</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label>Password</label>
+                    <input type="password" name="pw" id="pw">
+                </div>
+                <div class="field">
+                    <label>Text</label>
+                    <textarea name="msg" placeholder="msg"></textarea>
+                </div>
+                <div class="field">
+                    <label>Link</label>
+                    <input type="text" name="linktitle" placeholder="url">
+                    <input type="text" name="linkurl" placeholder="url">
+                </div>
+                <div class="ui button" id="sendmsg">Send Msg</div><br><br><br>
+            </form>
+            <div>目前小幫手通知狀態:<span id="botstatus"><%= (botswitch)?'開':'關' %></span></div>
+            <% if(botswitch){ %>
+                <div class="ui button" id="botswitch">關</div>
+            <% } else { %>
+                <div class="ui button" id="botswitch">開</div>
+            <% } %>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function() {
+            $("#sendmsg").on("click", function() {
+                $.ajax({
+                    url: "/bot/sendmsg",
+                    type: "POST",
+                    data: $("#msgform").serialize(),
+                    success: function(response) {
+                        console.log(response);
+                    }
+                });
             });
-        }
-        else{
-            $.ajax({
-              url: "/bot/closebot",
-              type: "POST",
-              success: function(response) {
-                $("#botswitch").text("開");
-                $("#botstatus").text("關");
-              }
+            $("#botswitch").on("click", function() {
+                if ($("#pw").val() === "nckuhubsetting") {
+                    if ($(this).text() == "開") {
+                        $.ajax({
+                            url: "/bot/openbot",
+                            type: "POST",
+                            success: function(response) {
+                                $("#botswitch").text("關");
+                                $("#botstatus").text("開");
+                            }
+                        });
+                    } else {
+                        $.ajax({
+                            url: "/bot/closebot",
+                            type: "POST",
+                            success: function(response) {
+                                $("#botswitch").text("開");
+                                $("#botstatus").text("關");
+                            }
+                        });
+                    }
+                }
             });
-        }
-      }
-  });
-});
-</script>
+        });
+    </script>
 
 </body>
+
 </html>

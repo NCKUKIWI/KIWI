@@ -882,7 +882,7 @@ function sendLink(sender,link) {
                 "template_type": "generic",
                 "elements": [{
                     "title": "NCKUHUB",
-					"subtitle":link.subtitle
+					"subtitle":link.subtitle,
                     "buttons": [{
                         "type": "web_url",
                         "url": link.url,

@@ -36,7 +36,7 @@ router.get('/setting/', function(req, res) {
     });
 });
 
-router.post('/sendmsg/', function(req, res) {
+router.post('/sendmsg', function(req, res) {
     if (req.body.pw != "nckuhubsetting") {
         res.send("fail");
     }
@@ -49,6 +49,27 @@ router.post('/sendmsg/', function(req, res) {
                 sendTextMessage("1194641423974664", req.body.msg);
                 sendTextMessage("1318673478198233", req.body.msg);
 			}
+        }
+        else if (req.body.type == "broadcast") {
+            var db = new dbsystem();
+            db.select().field("distinct fb_id").from("follow_copy").run(function(users) {
+                users.forEach(function(user) {
+					if(req.body.msg){
+                    	sendTextMessage(user.fb_id, req.body.msg);
+					}
+                });
+            });
+        }
+        res.send('ok');
+    }
+});
+
+router.post('/sendlink', function(req, res) {
+    if (req.body.pw != "nckuhubsetting") {
+        res.send("fail");
+    }
+    else {
+        if (req.body.type == "test") {
 			if(req.body.linktitle && req.body.linkurl){
 				sendLink("1346773338719764",{url:req.body.linkurl,title:req.body.linktitle,description:req.body.linkdescription});
 				sendLink("1169375359801678",{url:req.body.linkurl,title:req.body.linktitle,description:req.body.linkdescription});
@@ -61,9 +82,6 @@ router.post('/sendmsg/', function(req, res) {
             var db = new dbsystem();
             db.select().field("distinct fb_id").from("follow_copy").run(function(users) {
                 users.forEach(function(user) {
-					if(req.body.msg){
-                    	sendTextMessage(user.fb_id, req.body.msg);
-					}
 					if(req.body.linktitle && req.body.linkurl){
 						sendLink(user.fb_id,{url:req.body.linkurl,title:req.body.linktitle,description:req.body.linkdescription})
 					}

@@ -28,13 +28,27 @@
                     <label>Text</label>
                     <textarea name="msg" placeholder="msg"></textarea>
                 </div>
+                <div class="ui button" id="sendmsg">Send Msg</div><br><br><br>
+            </form>
+            <form class="ui form" id="linkform">
+                <div class="field">
+                    <label>Type</label>
+                    <select class="ui fluid dropdown" name="type">
+                        <option value="test">測試</option>
+                        <option value="broadcast">Broadcast</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label>Password</label>
+                    <input type="password" name="pw" id="pw">
+                </div>
                 <div class="field">
                     <label>Link</label>
                     <input type="text" name="linktitle" placeholder="link title">
                     <input type="text" name="linkurl" placeholder="link url">
                     <textarea name="linkdescription" placeholder="description"></textarea>
                 </div>
-                <div class="ui button" id="sendmsg">Send Msg</div><br><br><br>
+                <div class="ui button" id="sendlink">Send Link</div><br><br><br>
             </form>
             <div>目前小幫手通知狀態:<span id="botstatus"><%= (botswitch)?'開':'關' %></span></div>
             <% if(botswitch){ %>
@@ -51,6 +65,16 @@
                     url: "/bot/sendmsg",
                     type: "POST",
                     data: $("#msgform").serialize(),
+                    success: function(response) {
+                        console.log(response);
+                    }
+                });
+            });
+            $("#sendlink").on("click", function() {
+                $.ajax({
+                    url: "/bot/sendlink",
+                    type: "POST",
+                    data: $("#linkform").serialize(),
                     success: function(response) {
                         console.log(response);
                     }

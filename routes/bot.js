@@ -48,16 +48,21 @@ router.post('/sendmsg/', function(req, res) {
 				sendTextMessage("1364925580245632", req.body.msg);
 			}
 			if(req.body.linktitle && req.body.linkurl){
-				sendLink("1346773338719764",{url:req.body.linkurl,title:req.body.linktitle});
-				sendLink("1169375359801678",{url:req.body.linkurl,title:req.body.linktitle});
-				sendLink("1364925580245632",{url:req.body.linkurl,title:req.body.linktitle});
+				sendLink("1346773338719764",{url:req.body.linkurl,title:req.body.linktitle,subtitle:req.body.linksubtitle});
+				sendLink("1169375359801678",{url:req.body.linkurl,title:req.body.linktitle,subtitle:req.body.linksubtitle});
+				sendLink("1364925580245632",{url:req.body.linkurl,title:req.body.linktitle,subtitle:req.body.linksubtitle});
 			}
         }
         else if (req.body.type == "broadcast") {
             var db = new dbsystem();
             db.select().field("distinct fb_id").from("follow_copy").run(function(users) {
                 users.forEach(function(user) {
-                    sendTextMessage(user.fb_id, req.body.msg);
+					if(req.body.msg){
+                    	sendTextMessage(user.fb_id, req.body.msg);
+					}
+					if(req.body.linktitle && req.body.linkurl){
+						sendLink(user.fb_id,{url:req.body.linkurl,title:req.body.linktitle,subtitle:req.body.linksubtitle})
+					}
                 });
             });
         }
@@ -877,6 +882,7 @@ function sendLink(sender,link) {
                 "template_type": "generic",
                 "elements": [{
                     "title": "NCKUHUB",
+					"subtitle":link.subtitle
                     "buttons": [{
                         "type": "web_url",
                         "url": link.url,

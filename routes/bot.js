@@ -42,21 +42,35 @@ router.post('/sendmsg', function(req, res) {
     }
     else {
         if (req.body.type == "test") {
-			if(req.body.msg){
-				sendTextMessage("1346773338719764", req.body.msg);
-				sendTextMessage("1169375359801678", req.body.msg);
-				sendTextMessage("1364925580245632", req.body.msg);
-                sendTextMessage("1194641423974664", req.body.msg);
-                sendTextMessage("1318673478198233", req.body.msg);
-			}
+            if (req.body.msg) {
+                if(req.body.msg == 'cancelMsg'){
+                    sendCancelMsg("1346773338719764");
+                    sendCancelMsg("1169375359801678");
+                    sendCancelMsg("1364925580245632");
+                    sendCancelMsg("1194641423974664");
+                    sendCancelMsg("1318673478198233");
+                }
+                else{
+                    sendTextMessage("1346773338719764", req.body.msg);
+                    sendTextMessage("1169375359801678", req.body.msg);
+                    sendTextMessage("1364925580245632", req.body.msg);
+                    sendTextMessage("1194641423974664", req.body.msg);
+                    sendTextMessage("1318673478198233", req.body.msg);
+                }
+            }
         }
         else if (req.body.type == "broadcast") {
             var db = new dbsystem();
-            db.select().field("distinct fb_id").from("follow_copy").run(function(users) {
+            db.select().field("distinct fb_id").from("follow_copy").where("getMsg != 0").run(function(users) {
                 users.forEach(function(user) {
-					if(req.body.msg){
-                    	sendTextMessage(user.fb_id, req.body.msg);
-					}
+                    if (req.body.msg) {
+                        if(req.body.msg == 'cancelMsg'){
+                            sendCancelMsg(user.fb_id);
+                        }
+                        else{
+                            sendTextMessage(user.fb_id, req.body.msg);
+                        }
+                    }
                 });
             });
         }
@@ -70,21 +84,45 @@ router.post('/sendlink', function(req, res) {
     }
     else {
         if (req.body.type == "test") {
-			if(req.body.linktitle && req.body.linkurl){
-				sendLink("1346773338719764",{url:req.body.linkurl,title:req.body.linktitle,description:req.body.linkdescription});
-				sendLink("1169375359801678",{url:req.body.linkurl,title:req.body.linktitle,description:req.body.linkdescription});
-				sendLink("1364925580245632",{url:req.body.linkurl,title:req.body.linktitle,description:req.body.linkdescription});
-                sendLink("1194641423974664",{url:req.body.linkurl,title:req.body.linktitle,description:req.body.linkdescription});
-                sendLink("1318673478198233",{url:req.body.linkurl,title:req.body.linktitle,description:req.body.linkdescription});
+            if (req.body.linktitle && req.body.linkurl) {
+                sendLink("1346773338719764", {
+                    url: req.body.linkurl,
+                    title: req.body.linktitle,
+                    description: req.body.linkdescription
+                });
+                sendLink("1169375359801678", {
+                    url: req.body.linkurl,
+                    title: req.body.linktitle,
+                    description: req.body.linkdescription
+                });
+                sendLink("1364925580245632", {
+                    url: req.body.linkurl,
+                    title: req.body.linktitle,
+                    description: req.body.linkdescription
+                });
+                sendLink("1194641423974664", {
+                    url: req.body.linkurl,
+                    title: req.body.linktitle,
+                    description: req.body.linkdescription
+                });
+                sendLink("1318673478198233", {
+                    url: req.body.linkurl,
+                    title: req.body.linktitle,
+                    description: req.body.linkdescription
+                });
             }
         }
         else if (req.body.type == "broadcast") {
             var db = new dbsystem();
-            db.select().field("distinct fb_id").from("follow_copy").run(function(users) {
+            db.select().field("distinct fb_id").from("follow_copy").where("getMsg != 0").run(function(users) {
                 users.forEach(function(user) {
-					if(req.body.linktitle && req.body.linkurl){
-						sendLink(user.fb_id,{url:req.body.linkurl,title:req.body.linktitle,description:req.body.linkdescription})
-					}
+                    if (req.body.linktitle && req.body.linkurl) {
+                        sendLink(user.fb_id, {
+                            url: req.body.linkurl,
+                            title: req.body.linktitle,
+                            description: req.body.linkdescription
+                        })
+                    }
                 });
             });
         }
@@ -203,6 +241,9 @@ router.post('/webhook/', function(req, res) {
                 }
                 else if (event.postback.payload == "cancelall") {
                     cancelAllFollowCourse(sender);
+                }
+                else if(event.postback.payload == "cancelmsg"){
+                    cancelMsg(sender);
                 }
                 else if (event.postback.payload.indexOf("ask") !== -1) {
                     askPlaceOrFollow(sender, event.postback.payload.replace("ask", ""));
@@ -896,18 +937,64 @@ function askPlaceOrFollow(sender, serial) {
     });
 }
 
-function sendLink(sender,link) {
+function sendLink(sender, link) {
     var messageData = {
         "attachment": {
             "type": "template",
             "payload": {
                 "template_type": "button",
-				"text":link.description,
+                "text": link.description,
                 "buttons": [{
                     "type": "web_url",
                     "url": link.url,
-                    "title":link.title,
+                    "title": link.title,
                     "webview_height_ratio": "compact"
+                }]
+            }
+        }
+    }
+    request({
+        url: 'https://graph.facebook.com/v2.6/me/messages',
+        qs: {
+            access_token: token
+        },
+        method: 'POST',
+        json: {
+            recipient: {
+                id: sender
+            },
+            message: messageData,
+        }
+    }, function(error, response, body) {
+        if (error) {
+            console.log('Error sending messages: ', error)
+        }
+        else if (response.body.error) {
+            console.log('Error: ', response.body.error)
+        }
+    });
+}
+
+function cancelMsg(sender){
+    var db = new dbsystem();
+    db.update().table("follow_copy").set({getMsg: 0}).where("fb_id=",sender).run(function(result) {
+        db = null;
+        delete db;
+        sendTextMessage(sender,"成功!你以後將不會再收到NCKUHUB的廣播訊息!");
+    });
+}
+
+function sendCancelMsg(sender) {
+    var messageData = {
+        "attachment": {
+            "type": "template",
+            "payload": {
+                "template_type": "button",
+                "text": "若你不想再收到NCKUHUB的廣播訊息請按下面按鈕",
+                "buttons": [{
+                    "type":"postback",
+                    "title":"取消收到訊息",
+                    "payload":"cancelmsg"
                 }]
             }
         }

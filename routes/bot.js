@@ -45,12 +45,12 @@ router.post('/sendmsg/', function(req, res) {
 			if(req.body.msg){
 				sendTextMessage("1346773338719764", req.body.msg);
 				sendTextMessage("1169375359801678", req.body.msg);
-				sendTextMessage("1364925580245632", req.body.msg);	
+				sendTextMessage("1364925580245632", req.body.msg);
 			}
 			if(req.body.linktitle && req.body.linkurl){
-				sendLink("1346773338719764",{url:linkurl,title:linktitle});
-				sendLink("1169375359801678",{url:linkurl,title:linktitle});
-				sendLink("1364925580245632",{url:linkurl,title:linktitle});
+				sendLink("1346773338719764",{url:req.body.linkurl,title:req.body.linktitle});
+				sendLink("1169375359801678",{url:req.body.linkurl,title:req.body.linktitle});
+				sendLink("1364925580245632",{url:req.body.linkurl,title:req.body.linktitle});
 			}
         }
         else if (req.body.type == "broadcast") {

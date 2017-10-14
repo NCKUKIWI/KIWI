@@ -1,5 +1,5 @@
-#Use nodev6.11.3
-FROM node:boron
+#Use alpine-node v6.11.4
+FROM mhart/alpine-node:6
 
 # Defined app directory
 WORKDIR /usr/src/app

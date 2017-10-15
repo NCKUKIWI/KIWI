@@ -1,9 +1,10 @@
 {
   "db":{
-    "host":"nckuhub.c7tqxpr6jdks.ap-northeast-1.rds.amazonaws.com",
+    "host":"localhost",
+    "port":"32768",
     "user":"root",
-    "password":"0911283373",
-    "database":"nckucourse"
+    "password":"831122",
+    "database":"dev"
   },
   "fb":{
     "appid":"1657996517856244",

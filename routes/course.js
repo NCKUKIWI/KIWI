@@ -210,7 +210,6 @@ router.get('/:id', function(req, res) {
   else{
     /* 尋找課程的資訊 */
     db.query_post2(id, function(courseInfo, comment){
-      db.UpdatePlusone("course_new","viewcount",id,function(result){})
       courseInfo = courseInfo[0];
       courseInfo.comment = 0;
       courseInfo.course_style = 0;

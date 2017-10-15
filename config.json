@@ -1,0 +1,14 @@
+{
+  "db":{
+    "host":"nckuhub.c7tqxpr6jdks.ap-northeast-1.rds.amazonaws.com",
+    "user":"root",
+    "password":"0911283373",
+    "database":"nckucourse"
+  },
+  "fb":{
+    "appid":"1409972182658680",
+    "secret":"8b59f0da375dbaeec9e16f1e00990288",
+    "token":"EAAUCXLsXLngBAEoDltDrnnU6wGt9P68FbXGDExyuyWdp4HI4eXNUGOZBvZBRwywy5sc4zR6ZCS5ohv9ZBCUsOQNbZBcWowwR3nmuU4sOihEkh7n3cQ9mw91ZBv0Kv85Ge9dd8pjJLGMlh5LM7Qnmb22v3pvmyv22ZCC1yYZBhmwBiAZDZD"
+  },
+  "website":"http://nckuhub.com"
+}

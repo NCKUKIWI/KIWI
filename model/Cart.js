@@ -1,5 +1,7 @@
 var db = require("./db");
 var Sequelize = require("sequelize");
+var User = require('./User');
+var CourseNew = require('./CourseNew');
 
 var cartSchema = {
 	id: {
@@ -17,7 +19,7 @@ var cartSchema = {
 	course_id: {
     type: Sequelize.INTEGER,
     references:{
-      model:Course,
+      model:CourseNew,
       key:'id'
     }
 	},

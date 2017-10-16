@@ -10,10 +10,10 @@ var followSchema = {
 	},
 	course_id: {
 		type: Sequelize.INTEGER,
-		references:{
-			model:CourseNew,
-			key:'id'
-		}
+    references:{
+      model:CourseNew,
+      key:'id'
+    }
 	},
 	fb_id: {
 		type: Sequelize.INTEGER
@@ -40,8 +40,8 @@ var followSchema = {
 	}
 }
 
-var Follow = db.define('follow', followSchema,{
+var FollowCopy = db.define('follow_copy', followSchema,{
   timestamps: false
 });
 
-module.exports = Follow;
+module.exports = FollowCopy;

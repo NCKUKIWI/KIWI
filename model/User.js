@@ -1,5 +1,8 @@
 var db = require("./db");
 var Sequelize = require("sequelize");
+var Post = require('./Post');
+var ReportPost = require('./ReportPost');
+var CourseRate = require('./CourseRate');
 
 var userSchema = {
 	id: {
@@ -32,5 +35,9 @@ var userSchema = {
 var User = db.define('user', userSchema,{
   timestamps: false
 });
+
+User.hasMany(Post,{onDelete:"CASCADE",foreignKey:"user_id"});
+User.hasMany(ReportPost,{onDelete:"CASCADE",foreignKey:"user_id"});
+User.hasMany(CourseRate,{onDelete:"CASCADE",foreignKey:"user_id"});
 
 module.exports = User;

@@ -1,10 +1,9 @@
 {
   "db":{
-    "host":"localhost",
-    "port":"32768",
+    "host":"nckuhub.c7tqxpr6jdks.ap-northeast-1.rds.amazonaws.com",
     "user":"root",
-    "password":"831122",
-    "database":"dev"
+    "password":"0911283373",
+    "database":"nckuhub"
   },
   "fb":{
     "appid":"1657996517856244",

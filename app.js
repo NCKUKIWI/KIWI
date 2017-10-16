@@ -5,11 +5,11 @@ var path = require("path");
 var bodyParser = require("body-parser");
 var expressValidator = require("express-validator");
 var session = require("express-session");
-var db = require("./model/db");
 var flash = require("express-flash");
 var compression = require("compression");
 var cookieParser = require("cookie-parser");
 var helmet = require("helmet");
+var User = require("./model/User");
 
 app.engine("ejs", engine);
 app.set("views", path.join(__dirname, "views")); //view的路徑位在資料夾views中
@@ -22,33 +22,34 @@ app.use(compression());
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
-    extended: false
+  extended: false
 }));
 app.use(require('express-status-monitor')());
 app.use("/assets", express.static("assets", {
-    maxAge: 24 * 60 * 60
+  maxAge: 24 * 60 * 60
 }));
-app.use(cookieParser("secretString"));
 //Handle sessions and cookie
+app.use(cookieParser("secretString"));
 app.use(session({
-    cookie: {
-        maxAge: 1000 * 60 * 60 * 12
-    },
-    secret: "secret",
-    saveUninitialized: true,
-    resave: true
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 12
+  },
+  secret: "secret",
+  saveUninitialized: true,
+  resave: true
 }));
 
 app.use(function(req, res, next) {
-    if (req.cookies.isLogin) {
-        db.FindbyID("user", req.cookies.id, function(user) {
-            req.user = user;
-            next();
-        });
-    }
-    else {
-        next();
-    }
+  if (req.cookies.isLogin) {
+    User.findById(req.cookies.id).then(function(user){
+      req.user = user;
+      next();
+    }).catch(function(err){
+      if(err) console.log(err);
+    });
+  } else {
+    next();
+  }
 });
 
 //Route

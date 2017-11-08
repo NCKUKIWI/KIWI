@@ -149,6 +149,9 @@ $(document).ready(function(){
   ga('send', 'pageview','/course/<%= courseInfo.id %>');
   ga('send', 'event', '<%= courseInfo.課程名稱 %>','<%= courseInfo.老師 %>');
   $('.courseaddpost').on('click',function(){
+    localStorage.setItem('coursename','<%= courseInfo.課程名稱 %>');
+    localStorage.setItem('courseid','<%= courseInfo.id %>');
+    localStorage.setItem('courseteacher','<%= courseInfo.老師 %>');
     window.location.href = "/post/new";
   });
   // 將mobile的滑動效果裝上

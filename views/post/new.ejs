@@ -139,6 +139,15 @@
 </div>
 <script>
 $(document).ready(function(){
+  if(localStorage.getItem("coursename") && localStorage.getItem("courseid") && localStorage.getItem("courseteacher")){
+    $("input[name=course]").val(localStorage.getItem("coursename"));
+    $("input[name=course_name]").val(localStorage.getItem("coursename"));
+    $("input[name=course_id]").val(localStorage.getItem("courseid"));
+    $("input[name=teacher]").val(localStorage.getItem("courseteacher"));
+    localStorage.removeItem("coursename");
+    localStorage.removeItem("courseid");
+    localStorage.removeItem("courseteacher");
+  }
   var course = [
     <% for(var i in course){ %>
       {

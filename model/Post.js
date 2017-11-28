@@ -59,6 +59,10 @@ var postSchema = {
 
 var Post = db.define('post', postSchema,{
   timestamps: false
+},{
+	name: {
+  	plural:'post'
+	}
 });
 
 Post.hasMany(CourseRate,{onDelete:"CASCADE",foreignKey:"post_id"});

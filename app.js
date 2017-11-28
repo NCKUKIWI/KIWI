@@ -10,6 +10,7 @@ var compression = require("compression");
 var cookieParser = require("cookie-parser");
 var helmet = require("helmet");
 var User = require("./model/User");
+var graphqlHTTP = require('express-graphql');
 
 app.engine("ejs", engine);
 app.set("views", path.join(__dirname, "views")); //view的路徑位在資料夾views中
@@ -19,16 +20,10 @@ app.use(helmet());
 app.use(flash());
 app.use(expressValidator());
 app.use(compression());
-
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-  extended: false
-}));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(require('express-status-monitor')());
-app.use("/assets", express.static("assets", {
-  maxAge: 24 * 60 * 60
-}));
-//Handle sessions and cookie
+app.use("/assets", express.static("assets", { maxAge: 24 * 60 * 60 }));
 app.use(cookieParser("secretString"));
 app.use(session({
   cookie: {
@@ -51,6 +46,14 @@ app.use(function(req, res, next) {
     next();
   }
 });
+
+app.use('/graphql', graphqlHTTP(function(req){
+  return {
+    schema: require('./schema'),
+    rootValue: { cookie: req.cookies },
+    graphiql: true
+  }
+}));
 
 //Route
 app.use("/course", require("./routes/course")); // get "/"時交給routes course

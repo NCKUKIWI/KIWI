@@ -227,7 +227,7 @@ router.get('/:id', function(req, res) {
           courseInfo[j]++;
         }
       }
-      db.FindbyColumn('course_rate',["*"],{course_name:courseInfo.課程名稱,teacher:courseInfo.老師},function(rates){
+      db.FindbyColumn('rate',["*"],{course_name:courseInfo.課程名稱,teacher:courseInfo.老師},function(rates){
         var sweet=0;
         var hard=0;
         var recommand=0;

@@ -31,7 +31,8 @@ var cartSchema = {
 }
 
 var Cart = db.define('cart', cartSchema,{
-  timestamps: false
+  timestamps: false,
+	freezeTableName: true
 });
 
 module.exports = Cart;

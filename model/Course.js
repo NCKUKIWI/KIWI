@@ -1,93 +1,94 @@
 var db = require("./db");
 var Sequelize = require("sequelize");
 
-var courseNewSchema = {
+var courseSchema = {
   id: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
     primaryKey: true
   },
-  '系所名稱': {
+  dep_name: {
     type: Sequelize.STRING
   },
-  '系號': {
+  dep_no: {
     type: Sequelize.STRING
   },
-  '選課序號': {
+  serial: {
     type: Sequelize.STRING
   },
-  '課程碼': {
+  course_name: {
     type: Sequelize.STRING
   },
-  '分班碼': {
+  class_no: {
     type: Sequelize.STRING
   },
-  '班別': {
+  class: {
     type: Sequelize.STRING
   },
-  '年級': {
+  grade: {
     type: Sequelize.STRING
   },
-  '類別': {
+  type: {
     type: Sequelize.STRING
   },
-  '英語授課': {
+  english: {
     type: Sequelize.STRING
   },
-  '課程名稱': {
+  course_name: {
     type: Sequelize.STRING
   },
-  '選必修': {
+  required: {
     type: Sequelize.STRING
   },
-  '學分': {
+  credit: {
     type: Sequelize.INTEGER
   },
-  '老師': {
+  teacher: {
     type: Sequelize.STRING
   },
-  '已選課人數': {
+  choose: {
     type: Sequelize.INTEGER
   },
-  '餘額': {
+  remaining: {
     type: Sequelize.INTEGER
   },
-  '時間': {
+  time: {
     type: Sequelize.STRING
   },
-  '教室': {
+  classroom: {
     type: Sequelize.STRING
   },
-  '備註': {
+  note: {
     type: Sequelize.STRING
   },
-  '限選條件': {
+  limit: {
     type: Sequelize.STRING
   },
-  '業界參與': {
+  industry: {
     type: Sequelize.STRING
   },
-  '屬性碼': {
+  attribute: {
     type: Sequelize.STRING
   },
-  '跨領域學分學程': {
+  edu_program: {
     type: Sequelize.STRING
   },
-  'Moocs': {
+  moocs: {
     type: Sequelize.STRING
   },
-  'updateTime': {
+  update_at: {
     type: 'TIMESTAMP',
     defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
     allowNull: false
   },
-  'comment_num': {
+  comment_num: {
     type: Sequelize.INTEGER
   }
 }
 
-var CourseNew = db.define('course_new', courseNewSchema, {
-  timestamps: false
+var Course = db.define('course', courseSchema, {
+  timestamps: false,
+  freezeTableName: true
 });
 
-module.exports = CourseNew;
+module.exports = Course;

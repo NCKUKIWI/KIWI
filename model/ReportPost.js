@@ -34,7 +34,8 @@ var reportPostSchema = {
 }
 
 var ReportPost = db.define('report_post', reportPostSchema,{
-  timestamps: false
+  timestamps: false,
+	freezeTableName: true
 });
 
 module.exports = ReportPost;

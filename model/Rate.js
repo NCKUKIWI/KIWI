@@ -3,7 +3,7 @@ var Sequelize = require("sequelize");
 var User = require('./User');
 var Post = require('./Post');
 
-var courseRateSchema = {
+var rateSchema = {
 	id: {
 		type: Sequelize.INTEGER,
 		autoIncrement: true,
@@ -40,16 +40,12 @@ var courseRateSchema = {
 			model:Post,
 			key:'id'
 		}
-  },
-	created_at: {
-		type: 'TIMESTAMP',
-		defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
-		allowNull: false
-	}
+  }
 }
 
-var CourseRate = db.define('course_rate', courseRateSchema,{
-  timestamps: false
+var Rate = db.define('rate', rateSchema,{
+  timestamps: false,
+	freezeTableName: true
 });
 
-module.exports = CourseRate;
+module.exports = Rate;

@@ -172,7 +172,7 @@ router.post('/create', function(req, res) {
           user_id: userid,
           post_id: results.insertId
         }
-        db.Insert('course_rate',rate,function(err,results){
+        db.Insert('rate',rate,function(err,results){
           if(err) throw err;
           res.send("success");
         });
@@ -204,7 +204,7 @@ router.get('/:id', function(req, res) {
   else{
     console.log('\n'+'GET /post/'+id);
     db.FindbyID('post',id,function(post){
-      db.FindbyColumn('course_rate',['give','got'],{"post_id":post.id} ,function(rate){
+      db.FindbyColumn('rate',['give','got'],{"post_id":post.id} ,function(rate){
         if(rate.length > 0){
           res.render('post/show',{
             'post':post,

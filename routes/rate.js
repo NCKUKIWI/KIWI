@@ -2,15 +2,15 @@ var express = require('express');
 var router = express.Router();
 var db = require('../model/db');
 
-/* course_rate form */
+/* rate form */
 router.get('/new/:id', function(req, res) {
-  console.log('\n'+'GET /course_rate/new/'+req.params.id);
+  console.log('\n'+'GET /rate/new/'+req.params.id);
   if(req.user == undefined){
     console.log('No login');
     res.send('No login');
   }
   else{
-    res.render('course_rate/new',{
+    res.render('rate/new',{
       'courseid':req.params.id,
       'course_name':req.query.course_name.replace(/\'|\#|\/\*/g,""),
       'teacher':req.query.teacher.replace(/\'|\#|\/\*/g,"")
@@ -19,7 +19,7 @@ router.get('/new/:id', function(req, res) {
 });
 
 router.post('/create', function(req, res) {
-  console.log('\n'+'POST /course_rate/create');
+  console.log('\n'+'POST /rate/create');
   if(req.user == undefined){
     res.redirect('../');
   }
@@ -33,7 +33,7 @@ router.post('/create', function(req, res) {
       teacher:req.body.teacher.replace(/\'|\#|\/\*/g,""),
       user_id: userid
     }
-    db.Insert('course_rate',rate,function(err,results){
+    db.Insert('rate',rate,function(err,results){
       if(err) throw err;
       res.send("success");
     });
@@ -41,9 +41,9 @@ router.post('/create', function(req, res) {
 });
 
 router.delete('/:id', function(req, res) {
-  console.log('\n'+'DELETE /course_rate/'+req.params.id);
+  console.log('\n'+'DELETE /rate/'+req.params.id);
   var id = req.params.id;
-  db.DeleteById('course_rate',id,function(err){
+  db.DeleteById('rate',id,function(err){
     res.send('Success');
   });
 });

@@ -60,7 +60,7 @@ app.use("/course", require("./routes/course")); // get "/"時交給routes course
 app.use("/post", require("./routes/post")); // get "/post"時交給routes post處理
 app.use("/user", require("./routes/user")); // get "/user"時交給routes user處理
 app.use("/schedule", require("./routes/schedule")); // get "/schedule"時交給routes schedule
-app.use("/course_rate", require("./routes/course_rate")); // get "/course_rate"時交給routes course_rate
+app.use("/rate", require("./routes/rate")); // get "/rate"時交給routes rate
 app.use("/bot", require("./routes/bot"));
 app.use("/*", require("./routes/course"));
 

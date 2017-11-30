@@ -85,7 +85,7 @@
     $('#courserateform-submit').on('click', function() {
       var data = $("#courserateform").serialize();
       $.ajax({
-        url: '/course_rate/create',
+        url: '/rate/create',
         type: 'POST',
         data: data,
         success: function(response) {

@@ -209,7 +209,7 @@ $(document).ready(function(){
     var courseid = this.getAttribute("data-id");
     var btn = $(this);
     $.ajax({
-      url: '/course_rate/new/'+courseid+"?course_name=<%= courseInfo.課程名稱 %>&teacher=<%= courseInfo.老師 %>",
+      url: '/rate/new/'+courseid+"?course_name=<%= courseInfo.課程名稱 %>&teacher=<%= courseInfo.老師 %>",
       type: 'GET',
       success: function(response) {
         if(response=="No login"){
@@ -227,7 +227,7 @@ $(document).ready(function(){
     var courserateid = this.getAttribute("data-rateid");
     var courseid = this.getAttribute("data-id");
     $.ajax({
-      url: '/course_rate/'+courserateid,
+      url: '/rate/'+courserateid,
       type: 'DELETE',
       success: function(response) {
         if(response=="Success"){

@@ -1,6 +1,6 @@
 var db = require("./db");
 var Sequelize = require("sequelize");
-var CourseNew = require('./CourseNew');
+var Course = require('./Course');
 
 var followSchema = {
 	id: {
@@ -11,7 +11,7 @@ var followSchema = {
 	course_id: {
 		type: Sequelize.INTEGER,
 		references:{
-			model:CourseNew,
+			model:Course,
 			key:'id'
 		}
 	},
@@ -30,7 +30,7 @@ var followSchema = {
   teacher: {
     type: Sequelize.STRING
   },
-  hadNotify: {
+  had_notify: {
     type: Sequelize.INTEGER
   },
 	created_at: {
@@ -41,7 +41,8 @@ var followSchema = {
 }
 
 var Follow = db.define('follow', followSchema,{
-  timestamps: false
+  timestamps: false,
+	freezeTableName: true
 });
 
 module.exports = Follow;

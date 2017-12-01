@@ -1,7 +1,7 @@
 var db = require("./db");
 var Sequelize = require("sequelize");
 var User = require('./User');
-var CourseNew = require('./CourseNew');
+var Course = require('./Course');
 
 var cartSchema = {
 	id: {
@@ -19,14 +19,9 @@ var cartSchema = {
 	course_id: {
     type: Sequelize.INTEGER,
     references:{
-      model:CourseNew,
+      model:Course,
       key:'id'
     }
-	},
-	created_at: {
-		type: 'TIMESTAMP',
-		defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
-		allowNull: false
 	}
 }
 

@@ -9,6 +9,8 @@ var {
 
 var Post = require('../model/Post');
 var postType = require('./Post');
+var Cart = require('../model/Cart');
+var cartType = require('./Cart');
 
 var userType = new GraphQLObjectType({
   name: "User",
@@ -38,7 +40,15 @@ var userType = new GraphQLObjectType({
     posts: {
       type: new GraphQLList(postType),
       resolve(user) {
-        return Post.findAll({ where: { user_id:user.id } }).then(function(result) {
+        return Post.findAll({ where: { user_id: user.id } }).then(function(result) {
+          return result;
+        });
+      }
+    },
+    carts: {
+      type: new GraphQLList(cartType),
+      resolve(user) {
+        return Cart.findAll({ where: { user_id: user.id } }).then(function(result) {
           return result;
         });
       }

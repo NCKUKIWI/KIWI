@@ -3,7 +3,6 @@ var app = express();
 var engine = require("ejs-locals"); //讓express支援layout
 var path = require("path");
 var bodyParser = require("body-parser");
-var expressValidator = require("express-validator");
 var session = require("express-session");
 var flash = require("express-flash");
 var compression = require("compression");

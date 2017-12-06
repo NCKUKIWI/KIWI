@@ -17,8 +17,6 @@ app.set("views", path.join(__dirname, "views")); //view的路徑位在資料夾v
 app.set("view engine", "ejs"); //使用ejs作為template
 
 app.use(helmet());
-app.use(flash());
-app.use(expressValidator());
 app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -38,6 +36,7 @@ app.use(function(req, res, next) {
   if (req.cookies.isLogin) {
     User.findById(req.cookies.id).then(function(user){
       req.user = user;
+      res.locals.user = user;
       next();
     }).catch(function(err){
       if(err) console.log(err);

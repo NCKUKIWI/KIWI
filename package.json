@@ -20,7 +20,6 @@
     "express-graphql": "^0.6.11",
     "express-session": "^1.15.5",
     "express-status-monitor": "^1.0.0",
-    "express-validator": "^2.20.8",
     "fbgraph": "^1.4.1",
     "graphql": "^0.11.7",
     "helmet": "^3.8.1",

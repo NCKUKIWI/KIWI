@@ -34,7 +34,7 @@ app.use(session({
 
 app.use(function(req, res, next) {
   if (req.cookies.isLogin) {
-    User.findById(req.cookies.id).then(function(user){
+    User.findOne(req.cookies.id).then(function(user){
       req.user = user;
       res.locals.user = user;
       next();
@@ -43,6 +43,7 @@ app.use(function(req, res, next) {
       next();
     });
   } else {
+    res.locals.user = null;
     next();
   }
 });
@@ -64,9 +65,10 @@ app.use('/rate', require('./routes/rate'));
 app.use('/bot', require('./routes/bot'));
 app.use('/', require('./routes/course'));
 
+/*
 app.use(function(err, req, res, next) {
 	res.status(500).send(err);
-});
+});*/
 
 app.get('*', function(req, res, next) {
 	res.status(404).send('Page not found');

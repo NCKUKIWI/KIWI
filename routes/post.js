@@ -110,12 +110,12 @@ router.post('/report/:id', function(req, res) {
         'reason': reason
       }
     }).spread(function(report, created) {
-        if(created) {
-          Post.update({
-              report_count: sequelize.literal('report_count +1')
-            },
-            where: { id: req.params.id }
-          }).then(function() {
+      if(created) {
+        Post.update({
+          report_count: sequelize.literal('report_count +1')
+        }, {
+          where: { id: req.params.id }
+        }).then(function() {
           res.send('ok');
         }).catch(function(err) {
           res.send(err);
@@ -124,9 +124,9 @@ router.post('/report/:id', function(req, res) {
         res.send('exist');
       }
     });
-} else {
-  res.send('notLogin');
-}
+  } else {
+    res.send('notLogin');
+  }
 });
 
 /* del */

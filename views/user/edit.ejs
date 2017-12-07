@@ -36,7 +36,7 @@
         type: 'post',
         data: data,
         success: function(response) {
-          if (response == "success") {
+          if (response == "ok") {
             alert('更新成功');
           }
         }
@@ -44,9 +44,6 @@
     });
     var grade = '<%= user.grade %>';
     switch (grade) {
-      case '無':
-        document.getElementById("none").selected = true;
-        break;
       case '一年級':
         document.getElementById("first").selected = true;
         break;

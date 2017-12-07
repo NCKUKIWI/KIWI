@@ -192,10 +192,10 @@ $(document).ready(function(){
       url: '/post/report/'+postid+"?type="+type,
       type: 'POST',
       success: function(response) {
-        if(response=="Success"){
+        if(response=="ok"){
           toastr.success('檢舉成功!');
         }
-        else if(response=="Already report"){
+        else if(response=="exist"){
           toastr.success('已經檢舉過囉!');
         }
         else{
@@ -212,7 +212,7 @@ $(document).ready(function(){
       url: '/rate/new/'+courseid+"?course_name=<%= courseInfo.課程名稱 %>&teacher=<%= courseInfo.老師 %>",
       type: 'GET',
       success: function(response) {
-        if(response=="No login"){
+        if(response=="notLogin"){
           toastr.warning('<a href="/user/auth/facebook">請先登入</a>');
         }
         else{

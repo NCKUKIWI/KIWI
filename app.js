@@ -3,7 +3,6 @@ var app = express();
 var path = require('path');
 var engine = require('ejs-locals');
 var session = require('express-session');
-var flash = require('express-flash');
 var compression = require('compression');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
@@ -13,8 +12,8 @@ var graphql = require('express-graphql');
 var User = require('./model/User');
 
 app.engine('ejs', engine);
-app.set('views', path.join(__dirname, 'views')); //view的路徑位在資料夾views中
-app.set('view engine', 'ejs'); //使用ejs作為template
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
 
 app.use(helmet());
 app.use(compression());
@@ -57,18 +56,17 @@ app.use('/graphql', graphql(function(req){
 }));
 
 app.use('/assets', express.static('assets', { maxAge: 24 * 60 * 60 }));
-app.use('/course', require('./routes/course')); 
-app.use('/post', require('./routes/post')); 
-app.use('/user', require('./routes/user')); 
-app.use('/schedule', require('./routes/schedule')); 
-app.use('/rate', require('./routes/rate')); 
-app.use('/bot', require('./routes/bot'));
+app.use('/course', require('./routes/course'));
+app.use('/post', require('./routes/post'));
+app.use('/user', require('./routes/user'));
+app.use('/schedule', require('./routes/schedule'));
+app.use('/rate', require('./routes/rate'));
+//app.use('/bot', require('./routes/bot'));
 app.use('/', require('./routes/course'));
 
-/*
 app.use(function(err, req, res, next) {
 	res.status(500).send(err);
-});*/
+});
 
 app.get('*', function(req, res, next) {
 	res.status(404).send('Page not found');

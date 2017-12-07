@@ -1,12 +1,7 @@
-var Cart = require('../model/Cart');
-var CourseAll = require('../model/CourseAll');
-var Course = require('../model/Course');
 var sequelize = require('sequelize');
-var Op = sequelize.Op;
-
-Course.findOne({
-  attributes: ['id', 'course_name', 'time'],
-  where: { 'serial': 'A61' }
-}).then(function(course) {
-  console.log(course);
-});
+var Op = require('sequelize').Op;
+var Cart = require('../model/Cart');
+var Post = require('../model/Post');
+var User = require('../model/User');
+var Course = require('../model/Course');
+var CourseAll = require('../model/CourseAll');

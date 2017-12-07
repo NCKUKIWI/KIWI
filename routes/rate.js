@@ -17,18 +17,26 @@ router.get('/new/:id', function(req, res) {
 
 router.post('/create', function(req, res) {
   if(req.user) {
-    var rate = {
-      sweet: parseInt(req.body.sweet.replace(/\'|\#|\/\*/g, "")),
-      hard: parseInt(req.body.hard.replace(/\'|\#|\/\*/g, "")),
-      recommand: parseInt(req.body.recommand.replace(/\'|\#|\/\*/g, "")),
-      course_name: req.body.course_name.replace(/\'|\#|\/\*/g, ""),
-      teacher: req.body.teacher.replace(/\'|\#|\/\*/g, ""),
-      user_id: parseInt(req.user.id)
-    }
-    Rate.create(rate).then(function(result) {
-      res.send('ok');
-    }).catch(function(err) {
-      res.send(err);
+    Rate.findOrCreate({
+      where: {
+        course_name: req.body.course_name.replace(/\'|\#|\/\*/g, ""),
+        teacher: req.body.teacher.replace(/\'|\#|\/\*/g, ""),
+        user_id: parseInt(req.user.id)
+      },
+      defaults: {
+        sweet: parseInt(req.body.sweet.replace(/\'|\#|\/\*/g, "")),
+        hard: parseInt(req.body.hard.replace(/\'|\#|\/\*/g, "")),
+        recommand: parseInt(req.body.recommand.replace(/\'|\#|\/\*/g, "")),
+        course_name: req.body.course_name.replace(/\'|\#|\/\*/g, ""),
+        teacher: req.body.teacher.replace(/\'|\#|\/\*/g, ""),
+        user_id: parseInt(req.user.id)
+      }
+    }).spread(function(rate, created) {
+      if(created) {
+        res.send('ok');
+      } else {
+        res.send('exist');
+      }
     });
   } else {
     res.send('notLogin');

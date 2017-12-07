@@ -2,40 +2,41 @@ var express = require('express');
 var router = express.Router();
 var helper = require('../helper');
 var User = require('../model/User');
-var graph = require("fbgraph");
-var config = require('../config');
+var graph = require('fbgraph');
+var config = require('../config.dev');
 
-router.get("/fblogin", helper.checkLogin(1), function(req, res) {
-  res.redirect(`https://www.facebook.com/v2.8/dialog/oauth?client_id=${config.fbappid}&scope=email,public_profile&response_type=code&redirect_uri=${config.website}/user/fbcheck`);
+router.get('/fblogin', helper.checkLogin(1), function(req, res) {
+  res.redirect(`https://www.facebook.com/v2.8/dialog/oauth?client_id=${config.fb.appid}&scope=email,public_profile&response_type=code&redirect_uri=${config.website}/user/fbcheck`);
 });
 
-router.get("/fbcheck", helper.checkLogin(1), function(req, res) {
+router.get('/fbcheck', helper.checkLogin(1), function(req, res) {
   if(req.query.code) {
     graph.authorize({
-      "client_id": config.fbappid,
-      "redirect_uri": config.website + "/user/fbcheck",
-      "client_secret": config.fbsecret,
-      "code": req.query.code
+      'client_id': config.fb.appid,
+      'redirect_uri': config.website + '/user/fbcheck',
+      'client_secret': config.fb.secret,
+      'code': req.query.code
     }, function(err, result) {
       graph.get(`/me?fields=id,name,email,gender&access_token=${result.access_token}`, function(err, fb) {
         User.findOrCreate({
           where: { fb_id: fb.id },
           defaults: { 'name': fb.name, 'role': 0, 'department': '無', 'grade': '無' }
         }).spread(function(user, created) {
-          res.cookie("isLogin", 1, { maxAge: 60 * 60 * 1000 });
-          res.cookie("id", user[0].id, { maxAge: 60 * 60 * 1000 });
-          res.redirect("/");
+          user = JSON.parse(JSON.stringify(user));
+          res.cookie('isLogin', 1, { maxAge: 60 * 60 * 1000 });
+          res.cookie('id', user.id, { maxAge: 60 * 60 * 1000 });
+          res.redirect('/');
         });
       });
     });
   } else {
-    res.redirect("/");
+    res.redirect('/');
   }
 });
 
 router.get('/logout', function(req, res) {
-  res.clearCookie("isLogin");
-  res.clearCookie("id");
+  res.clearCookie('isLogin');
+  res.clearCookie('id');
   res.redirect('/');
 });
 
@@ -50,8 +51,8 @@ router.post('/update', helper.checkLogin(), function(req, res) {
     department: req.body.department,
     grade: req.body.grade
   }
-  User.update(newUser,{ 
-    where: { id: req.user.id } 
+  User.update(newUser,{
+    where: { id: req.user.id }
   }).then(function(result){
     res.send('ok');
   }).catch(function(err){

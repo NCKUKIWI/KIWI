@@ -175,7 +175,7 @@ router.post('/inputaddcourse/:serial', function(req, res) {
   /* 透過輸入的選課序號 查找課程 */
   Course.findOne({
     attributes: ['id', 'course_name', 'time'],
-    where: { 'serial': req.query.serial }
+    where: { 'serial': serial }
   }).then(function(course) {
     if(course) {
       if(req.user) {
@@ -238,7 +238,6 @@ router.get('/:id', function(req, res) {
           var sweet = 0;
           var hard = 0;
           var recommand = 0;
-          var rate_count = 0;
           if(rates.length > 0) {
             for(var i in rates) {
               sweet += rates[i].sweet;
@@ -248,13 +247,12 @@ router.get('/:id', function(req, res) {
             sweet /= rates.length;
             hard /= rates.length;
             recommand /= rates.length;
-            rate_count = rates.length;
           }
           if(req.user) {
             var hasRate = false;
             if(rates.length > 0) {
               for(var i in rates) {
-                if(rates[i].user_id == userid) {
+                if(rates[i].user_id == req.user.id) {
                   hasRate = true;
                 }
               }
@@ -268,7 +266,7 @@ router.get('/:id', function(req, res) {
                 'recommand': recommand,
                 'hard': hard,
                 'sweet': sweet,
-                'rate_count': rate_count,
+                'rate_count': rates.length,
                 'course': course,
                 'comment': comment,
                 'hasRate': hasRate,
@@ -280,12 +278,12 @@ router.get('/:id', function(req, res) {
               'recommand': recommand,
               'hard': hard,
               'sweet': sweet,
-              'rate_count': rate_count,
+              'rate_count': rates.length,
               'course': course,
               'comment': comment,
               'hasRate': false,
               'cart': []
-            })
+            });
           }
         });
       });

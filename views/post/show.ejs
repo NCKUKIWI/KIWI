@@ -90,10 +90,10 @@
         url: '/post/report/'+postid+"?type="+type,
         type: 'POST',
         success: function(response) {
-          if(response=="Success"){
+          if(response=="ok"){
             toastr.success('檢舉成功!');
           }
-          else if(response=="Already report"){
+          else if(response=="exist"){
             toastr.success('已經檢舉過囉!');
           }
           else{

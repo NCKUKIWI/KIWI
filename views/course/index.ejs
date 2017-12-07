@@ -61,7 +61,7 @@
       nowCourse_hasComment.push(nowCourse[i]);
     }
   }
-  
+
   // var max_index = nowCourse.length;
   var showempty = 0;
   $(document).ready(function(){
@@ -204,17 +204,17 @@
     $('.course').on('click', function(){
       toastr.info('可按各院來快速選擇', {"timeout": 1000});
       if($('.chooseCourse .ui.inverted.button.mini.active').length == 143){
-        $('.chooseCourse .ui.inverted.button.mini').removeClass('active'); 
+        $('.chooseCourse .ui.inverted.button.mini').removeClass('active');
         // 全選的話，一開始點進去都先把active弄消失（但是選擇狀態不變，方便她們篩選下一次的）
       }
-      $('.chooseCourse').modal('show'); 
+      $('.chooseCourse').modal('show');
     });
 
     // 開啟篩選time的浮動視窗
     $('.tables').on('click', function(){
       toastr.info('可按星期一～星期五來快速選擇', {"timeout": 1000});
       if($('.timeTable .mini.button.active').length == 55){
-        $('.timeTable .ui.inverted.button.mini').removeClass('active');  
+        $('.timeTable .ui.inverted.button.mini').removeClass('active');
         // 全選的話，一開始點進去都先把active弄消失（但是選擇狀態不變，方便她們篩選下一次的）
       }
       $('.timeTable').modal('show');
@@ -328,7 +328,7 @@
     // $('#filter_haspost').trigger('click'); // 一開始進來首頁先點擊『顯示心得課程』
   });
 
-  
+
 
   /* query的整體流程 */
   function startQuery(){
@@ -469,10 +469,10 @@
       url:ajaxurl,
       type: 'POST',
       success: function(response) {
-        if(response=='No login'){
+        if(response=='notLogin'){
           toastr.warning('<a href="/user/auth/facebook">請先登入</a>');
         }
-        else if(response=='Already choose'){
+        else if(response=='exist'){
           toastr.warning('已經選過囉!');
         }
         else{
@@ -541,10 +541,10 @@
             url:ajaxurl,
             type: 'POST',
             success: function(response) {
-              if(response=='No login'){
+              if(response=='notLogin'){
                 toastr.warning('<a href="/user/auth/facebook">請先登入</a>');
               }
-              else if(response=='Already choose'){
+              else if(response=='exist'){
                 toastr.warning('已經選過囉!');
               }
               else{
@@ -615,7 +615,7 @@
           });
         },2000);
     });
-    
+
     /* modal 關閉時清空 modal 內容 */
     $('#course-modal').on('hidden.bs.modal', function () {
       $('#course-modal .modal-content').empty();

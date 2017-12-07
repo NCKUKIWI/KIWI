@@ -41,9 +41,7 @@ router.get('/logout', function(req, res) {
 
 router.get('/edit', helper.checkLogin(), function(req, res) {
   console.log('\n' + 'GET /user/edit');
-  res.render('user/edit', {
-    'user': req.user
-  });
+  res.render('user/edit');
 });
 
 router.post('/update', helper.checkLogin(), function(req, res) {
@@ -54,7 +52,7 @@ router.post('/update', helper.checkLogin(), function(req, res) {
     grade: req.body.grade
   }
   User.update(user,{ 
-    where: { id: parseInt(req.user.id) } 
+    where: { id: req.user.id } 
   }).then(function(result){
     res.send('ok');
   }).catch(function(err){

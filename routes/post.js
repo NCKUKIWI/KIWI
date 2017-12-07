@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var db = require('../model/db');
+var Post = require('../model/Post');
 
 /* index  */
 router.get('/', function(req, res) {
@@ -13,62 +13,55 @@ router.get('/', function(req, res) {
   if(req.user !== undefined) console.log("使用者：" + req.user.name);
 
   /* 設定 Order 欄位 */
-  if(req.query.order){
+  if(req.query.order) {
     var order = req.query.order;
-  }
-  else{
+  } else {
     var order = 'course_name';
   }
   /*  設定要的欄位 */
-  var colmuns = ['id','course_name','catalog','teacher','semester','user_id'];
-  db.GetColumn('post',colmuns,{'column':order,'order':'DESC'},function(posts){
-    if(req.query.hasOwnProperty("queryw")){
-      db.query_post(posts, req.query.queryw,"query",function(posts,teachers,course_name){
-        if(req.query.order){
+  var colmuns = ['id', 'course_name', 'catalog', 'teacher', 'semester', 'user_id'];
+  db.GetColumn('post', colmuns, { 'column': order, 'order': 'DESC' }, function(posts) {
+    if(req.query.hasOwnProperty("queryw")) {
+      db.query_post(posts, req.query.queryw, "query", function(posts, teachers, course_name) {
+        if(req.query.order) {
           res.send(posts);
-        }
-        else{
-          res.render('post/index',{
-            'posts':posts,
+        } else {
+          res.render('post/index', {
+            'posts': posts,
             'teachers': teachers,
             'course_name': course_name,
             'user': req.user
           });
         }
       });
-    }
-    else if(req.query.hasOwnProperty("teacher")){
-      db.query_post(posts, req.query.teacher, "teacher",function(posts,teachers,course_name){
-        if(req.query.order){
+    } else if(req.query.hasOwnProperty("teacher")) {
+      db.query_post(posts, req.query.teacher, "teacher", function(posts, teachers, course_name) {
+        if(req.query.order) {
           res.send(posts);
-        }
-        else{
-          res.render('post/index',{
-            'posts':posts,
+        } else {
+          res.render('post/index', {
+            'posts': posts,
             'teachers': teachers,
             'course_name': course_name,
             'user': req.user
           });
         }
       });
-    }
-    else if(req.query.hasOwnProperty("course_name")){
-      db.query_post(posts, req.query.course_name, "course_name",function(posts,teachers,course_name){
-        if(req.query.order){
+    } else if(req.query.hasOwnProperty("course_name")) {
+      db.query_post(posts, req.query.course_name, "course_name", function(posts, teachers, course_name) {
+        if(req.query.order) {
           res.send(posts);
-        }
-        else{
-          res.render('post/index',{
-            'posts':posts,
+        } else {
+          res.render('post/index', {
+            'posts': posts,
             'teachers': teachers,
             'course_name': course_name,
             'user': req.user
           });
         }
       });
-    }
-    else if(req.query.hasOwnProperty("catalog")){
-      switch(req.query.catalog){
+    } else if(req.query.hasOwnProperty("catalog")) {
+      switch(req.query.catalog) {
         case "A9":
           req.query.catalog = "通識";
           break;
@@ -93,33 +86,30 @@ router.get('/', function(req, res) {
         case "C":
           req.query.catalog = "選修";
           break;
-        default :
+        default:
           req.query.catalog = "";
           break;
       }
-      db.query_post(posts, req.query.catalog,"catalog",function(posts,teachers,course_name){
-        if(req.query.order){
+      db.query_post(posts, req.query.catalog, "catalog", function(posts, teachers, course_name) {
+        if(req.query.order) {
           res.send(posts);
-        }
-        else{
-          res.render('post/index',{
-            'posts':posts,
+        } else {
+          res.render('post/index', {
+            'posts': posts,
             'teachers': teachers,
             'course_name': course_name,
             'user': req.user
           });
         }
       });
-    }
-    else{
+    } else {
       var teacher = db.search_item(posts, "teacher");
       var courseName = db.search_item(posts, "course_name");
-      if(req.query.order){
+      if(req.query.order) {
         res.send(posts);
-      }
-      else{
-        res.render('post/index',{
-          'posts':posts,
+      } else {
+        res.render('post/index', {
+          'posts': posts,
           'teachers': teacher,
           'course_name': courseName,
           'user': req.user
@@ -131,48 +121,46 @@ router.get('/', function(req, res) {
 
 /* create */
 router.post('/create', function(req, res) {
-  console.log('\n'+'POST /post/create');
-  if(req.user == undefined){
+  console.log('\n' + 'POST /post/create');
+  if(req.user == undefined) {
     console.log("Not login");
-    res.send([{msg:"請重新登入!"}]);
-  }
-  else{
+    res.send([{ msg: "請重新登入!" }]);
+  } else {
     var userid = parseInt(req.user.id);
-    console.log('User_id: '+req.user.id+' User_name: '+req.user.name);
+    console.log('User_id: ' + req.user.id + ' User_name: ' + req.user.name);
     req.checkBody('course_name', '課程名稱不可為空').notEmpty();
     req.checkBody('comment', '修課心得不可為空').notEmpty();
     var errors = req.validationErrors();
-    if (errors) {
-      console.log("Error "+errors);
+    if(errors) {
+      console.log("Error " + errors);
       res.send(errors);
-    }
-    else{
+    } else {
       console.log(req.body.course_name);
       var post = {
-        course_name:req.body.course_name.replace(/\'|\#|\/\*/g,""),
-        teacher:req.body.teacher.replace(/\'|\#|\/\*/g,""),
-        semester:req.body.semester.replace(/\'|\#|\/\*/g,""),
-        catalog:req.body.catalog.replace(/\'|\#|\/\*/g,""),
-        comment:req.body.comment.replace(/\n/g,"<br>").replace(/\'|\#|\/\*/g,"").replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,""),
-        report_hw:req.body.report_hw.replace(/\'|\#|\/\*/g,""),
-        course_style:req.body.course_style.replace(/\'|\#|\/\*/g,""),
+        course_name: req.body.course_name.replace(/\'|\#|\/\*/g, ""),
+        teacher: req.body.teacher.replace(/\'|\#|\/\*/g, ""),
+        semester: req.body.semester.replace(/\'|\#|\/\*/g, ""),
+        catalog: req.body.catalog.replace(/\'|\#|\/\*/g, ""),
+        comment: req.body.comment.replace(/\n/g, "<br>").replace(/\'|\#|\/\*/g, "").replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, ""),
+        report_hw: req.body.report_hw.replace(/\'|\#|\/\*/g, ""),
+        course_style: req.body.course_style.replace(/\'|\#|\/\*/g, ""),
         user_id: userid
       }
-      db.Insert('post',post,function(err,results){
+      db.Insert('post', post, function(err, results) {
         if(err) throw err;
         console.log(results);
         var rate = {
-          sweet:parseInt(req.body.sweet.replace(/\'|\#|\/\*/g,"")),
-          hard:parseInt(req.body.hard.replace(/\'|\#|\/\*/g,"")),
-          recommand:parseInt(req.body.recommand.replace(/\'|\#|\/\*/g,"")),
-          give:parseInt(req.body.give.replace(/\'|\#|\/\*/g,"")),
-          got:parseInt(req.body.got.replace(/\'|\#|\/\*/g,"")),
-          course_name:req.body.course_name.replace(/\'|\#|\/\*/g,""),
-          teacher:req.body.teacher.replace(/\'|\#|\/\*/g,""),
+          sweet: parseInt(req.body.sweet.replace(/\'|\#|\/\*/g, "")),
+          hard: parseInt(req.body.hard.replace(/\'|\#|\/\*/g, "")),
+          recommand: parseInt(req.body.recommand.replace(/\'|\#|\/\*/g, "")),
+          give: parseInt(req.body.give.replace(/\'|\#|\/\*/g, "")),
+          got: parseInt(req.body.got.replace(/\'|\#|\/\*/g, "")),
+          course_name: req.body.course_name.replace(/\'|\#|\/\*/g, ""),
+          teacher: req.body.teacher.replace(/\'|\#|\/\*/g, ""),
           user_id: userid,
           post_id: results.insertId
         }
-        db.Insert('rate',rate,function(err,results){
+        db.Insert('rate', rate, function(err, results) {
           if(err) throw err;
           res.send("success");
         });
@@ -183,11 +171,11 @@ router.post('/create', function(req, res) {
 
 /* new */
 router.get('/new', function(req, res) {
-  console.log('\n'+'GET /post/new');
-  var colmuns = ['DISTINCT 課程名稱','id','老師','系所名稱'];
+  console.log('\n' + 'GET /post/new');
+  var colmuns = ['DISTINCT 課程名稱', 'id', '老師', '系所名稱'];
   //只取出上一學期的課程
-  db.FindbyColumn('course_all',colmuns,{'semester':'105-2'},function(course){
-    res.render('post/new',{
+  db.FindbyColumn('course_all', colmuns, { 'semester': '105-2' }, function(course) {
+    res.render('post/new', {
       'course': course,
       'user': req.user
     });
@@ -197,26 +185,24 @@ router.get('/new', function(req, res) {
 /* show */
 router.get('/:id', function(req, res) {
   var id = req.params.id;
-  if(id.match(/\D/g)){
-    console.log('\n'+'GET /post/'+id);
+  if(id.match(/\D/g)) {
+    console.log('\n' + 'GET /post/' + id);
     res.redirect('/');
-  }
-  else{
-    console.log('\n'+'GET /post/'+id);
-    db.FindbyID('post',id,function(post){
-      db.FindbyColumn('rate',['give','got'],{"post_id":post.id} ,function(rate){
-        if(rate.length > 0){
-          res.render('post/show',{
-            'post':post,
+  } else {
+    console.log('\n' + 'GET /post/' + id);
+    db.FindbyID('post', id, function(post) {
+      db.FindbyColumn('rate', ['give', 'got'], { "post_id": post.id }, function(rate) {
+        if(rate.length > 0) {
+          res.render('post/show', {
+            'post': post,
             'user': req.user,
-            'rate':rate[0]
+            'rate': rate[0]
           });
-        }
-        else{
-          res.render('post/show',{
-            'post':post,
+        } else {
+          res.render('post/show', {
+            'post': post,
             'user': req.user,
-            'rate':null
+            'rate': null
           });
         }
       });
@@ -230,26 +216,25 @@ router.post('/update', function(req, res) {
 });
 
 /*report post */
-router.post('/report/:id', function(req,res) {
+router.post('/report/:id', function(req, res) {
   /* 要檢舉的文章id*/
   var postid = parseInt(req.params.id);
-  console.log('\n'+'POST /post/report/'+postid);
+  console.log('\n' + 'POST /post/report/' + postid);
   /* 檢查用戶是否登入 */
-  if(req.user !== undefined){
+  if(req.user !== undefined) {
     var name = req.user.name;
     var userid = parseInt(req.user.id);
-    console.log('檢舉者：'+ name)
+    console.log('檢舉者：' + name)
     /* 檢查是否檢舉過 依照user_id及post_id去尋找 */
-    db.FindbyColumn('report_post',["id"],{'post_id':postid,'user_id':userid},function(reports){
-      if(reports.length > 0 ){
+    db.FindbyColumn('report_post', ["id"], { 'post_id': postid, 'user_id': userid }, function(reports) {
+      if(reports.length > 0) {
         console.log('Already report');
         res.send('Already report');
-      }
-      else{
+      } else {
         /* 區分檢舉原因 */
         var type = req.query.type;
-        var reason="";
-        switch(type){
+        var reason = "";
+        switch(type) {
           case 'A':
             reason = "不實內容";
             break;
@@ -260,37 +245,49 @@ router.post('/report/:id', function(req,res) {
             reason = "無";
             break;
         }
-        console.log("檢舉原因:"+reason);
+        console.log("檢舉原因:" + reason);
         /* 新增檢舉紀錄 */
-        var report_post ={
-          user_id:userid,
-          post_id:postid,
-          reason:reason
+        var report_post = {
+          user_id: userid,
+          post_id: postid,
+          reason: reason
         }
-        db.Insert('report_post',report_post,function(err,results){
+        db.Insert('report_post', report_post, function(err, results) {
           if(err) throw err;
           console.log('Report post ' + postid + ' success');
           /* 依照post_id將文章的檢舉次數+1 */
-          db.UpdatePlusone('post','report_count',postid,function(results){
+          db.UpdatePlusone('post', 'report_count', postid, function(results) {
             res.send('Success');
           });
         });
       }
     });
-  }
-  else{
+  } else {
     console.log('Not login');
     res.send('Not Login');
   }
 });
 
 /* del */
-router.delete('/:id', function(req,res) {
-  var id = req.params.id;
-  console.log('\n'+'DELETE post/'+id);
-  db.DeleteById('post',id,function(err){
-    res.send('Success');
-  });
+router.delete('/:id', function(req, res) {
+  if(req.user) {
+    Post.destory({
+      where: {
+        id: req.params.id,
+        user_id: req.user.id
+      }
+    }).then(function(result) {
+      if(result>0){
+        res.send('success');
+      }else{
+        res.send('noRecord');
+      }
+    }).catch(function(err) {
+      res.send(err);
+    });
+  } else {
+    res.send('notLogin');
+  }
 });
 
 module.exports = router;

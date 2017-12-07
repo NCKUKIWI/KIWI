@@ -10,13 +10,17 @@ router.get('/', function(req, res) {
       where: { user_id: req.user.id },
       include: [{
         model: Course,
-        attributes: ['id','course_name','time'],
-        where: { course_id: Sequelize.col('course.id') }
-      }]
+        required: true,
+        attributes: ['id', 'course_name']
+      }],
+      raw: false
     }).then(function(carts) {
+      carts = JSON.parse(JSON.stringify(carts));
       res.render('schedule/index', {
         'carts': carts
       });
+    }).catch(function(err) {
+      console.log(err);
     });
   } else {
     res.render('schedule/index', {

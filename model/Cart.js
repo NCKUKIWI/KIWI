@@ -30,4 +30,6 @@ var Cart = db.define('cart', cartSchema,{
 	freezeTableName: true
 });
 
+Cart.belongsTo(Course, {foreignKey: 'course_id'});
+
 module.exports = Cart;

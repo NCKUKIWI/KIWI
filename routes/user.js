@@ -45,13 +45,12 @@ router.get('/edit', helper.checkLogin(), function(req, res) {
 });
 
 router.post('/update', helper.checkLogin(), function(req, res) {
-  console.log('\n' + 'POST /user/update');
   var newUser = {
     name: req.body.name,
     department: req.body.department,
     grade: req.body.grade
   }
-  User.update(user,{ 
+  User.update(newUser,{ 
     where: { id: req.user.id } 
   }).then(function(result){
     res.send('ok');

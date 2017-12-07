@@ -26,7 +26,7 @@ router.post('/create', function(req, res) {
       user_id: parseInt(req.user.id)
     }
     Rate.create(rate).then(function(result) {
-      res.send("success");
+      res.send('ok');
     }).catch(function(err) {
       res.send(err);
     });
@@ -44,7 +44,7 @@ router.delete('/:id', function(req, res) {
       }
     }).then(function(result) {
       if(result > 0) {
-        res.send('success');
+        res.send('ok');
       } else {
         res.send('noRecord');
       }

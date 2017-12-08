@@ -12,7 +12,9 @@ router.get('/', function(req, res) {
   var allCourses = [];
   Course.findAll({
     attributes: ['id', 'course_name', 'dep_no', 'class_no', 'class', 'dep_name', 'teacher', 'time', 'comment_num'],
-    order: [['id', 'DESC']]
+    order: [
+      ['id', 'DESC']
+    ]
   }).then(function(courses) {
     allCourses = courses;
     if(req.query.hasOwnProperty("queryw")) {
@@ -64,7 +66,9 @@ router.get('/allCourse', function(req, res) {
 
   Course.findAll({
     attributes: ['id', 'course_name', 'dep_no', 'class_no', 'class', 'dep_name', 'teacher', 'time', 'comment_num'],
-    order: [['id', 'DESC']]
+    order: [
+      ['id', 'DESC']
+    ]
   }).then(function(courses) {
     var nowCourse = [];
     var nowCourse_hasComment = []; // 裝nowCourse的有comment的課程
@@ -91,7 +95,9 @@ router.get('/CourseByKeywords', function(req, res) {
 
   Course.findAll({
     attributes: ['id', 'course_name', 'dep_no', 'class_no', 'class', 'dep_name', 'teacher', 'time', 'comment_num'],
-    order: [['id', 'DESC']]
+    order: [
+      ['id', 'DESC']
+    ]
   }).then(function(courses) {
     if(req.query.hasOwnProperty("queryw")) {
       var Query = req.query.queryw.replace(/\'|\#|\/\*/g, "").split(" ");
@@ -156,7 +162,7 @@ router.post('/addcourse/:id', helper.apiAuth(), function(req, res) {
 });
 
 /* del course*/
-router.post('/delcourse/:id', function(req, res) {
+router.post('/delcourse/:id', helper.apiAuth(), function(req, res) {
   Cart.destory({
     where: {
       course_id: req.params.id,
@@ -214,7 +220,7 @@ router.get('/:id', function(req, res) {
     Course.findOne({
       where: { 'id': id }
     }).then(function(course) {
-      Post.findOne({
+      Post.findAll({
         attributes: ['id', 'comment', 'course_style', 'course_need', 'exam_style', 'semester', 'score_style', 'report_hw'],
         where: { 'course_name': course.course_name, 'teacher': course.teacher }
       }).then(function(post) {
@@ -240,6 +246,7 @@ router.get('/:id', function(req, res) {
           var recommand = 0;
           if(rates.length > 0) {
             for(var i in rates) {
+              console.log(rates[i]);
               sweet += rates[i].sweet;
               hard += rates[i].hard;
               recommand += rates[i].recommand;
@@ -249,11 +256,11 @@ router.get('/:id', function(req, res) {
             recommand /= rates.length;
           }
           if(req.user) {
-            var hasRate = false;
+            var hasRate = 0;
             if(rates.length > 0) {
               for(var i in rates) {
                 if(rates[i].user_id == req.user.id) {
-                  hasRate = true;
+                  hasRate = rates[i].id;
                 }
               }
             }
@@ -268,7 +275,7 @@ router.get('/:id', function(req, res) {
                 'sweet': sweet,
                 'rate_count': rates.length,
                 'course': course,
-                'comment': comment,
+                'comment': post,
                 'hasRate': hasRate,
                 'cart': cart
               });
@@ -280,8 +287,8 @@ router.get('/:id', function(req, res) {
               'sweet': sweet,
               'rate_count': rates.length,
               'course': course,
-              'comment': comment,
-              'hasRate': false,
+              'comment': post,
+              'hasRate': 0,
               'cart': []
             });
           }

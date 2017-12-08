@@ -2,7 +2,7 @@
   <button type="button" class="close" data-dismiss="modal">
     <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
   </button>
-  <h1 class="modal-title"><%= courseInfo.課程名稱 %> -- <%= courseInfo.老師 %></h1>
+  <h1 class="modal-title"><%= course.course_name %> -- <%= course.teacher %></h1>
 </div>
 <div class="modal-body">
   <div class="partA ui grid progressbarpart">
@@ -13,25 +13,25 @@
       <p>評分比數:<%= rate_count %></p>
     </div>
     <div class="eight wide column" style="text-align:right;">
-      <div class="ui label " style="margin-bottom:10px;"><%= courseInfo.系所名稱 %> - <%= courseInfo.選課序號 %></div><br>
-      <div class="ui label" style="margin-bottom:10px;"><%= courseInfo.學分 %> 學分</div><br>
-      <% if(courseInfo.系所名稱 == "通識中心GE"){%>
-        <div class="ui label" style="margin-bottom:10px;"><%= courseInfo.類別 %></div><br>
-      <% }else if (courseInfo.備註 != ""){%>
-        <div class="ui label" style="margin-bottom:10px;"><%= courseInfo.備註 %></div><br>
+      <div class="ui label " style="margin-bottom:10px;"><%= course.dep_name %> - <%= course.serial %></div><br>
+      <div class="ui label" style="margin-bottom:10px;"><%= course.credit %> 學分</div><br>
+      <% if(course.dep_name == "通識中心GE"){%>
+        <div class="ui label" style="margin-bottom:10px;"><%= course.type %></div><br>
+      <% }else if (course.note != ""){%>
+        <div class="ui label" style="margin-bottom:10px;"><%= course.note %></div><br>
       <% } %>
       <!--
-      <% if(check !=null && check.length != 0){ %>
-        <button class="ui grey button showdelcoursebtn" data-id="<%= courseInfo.id %>">移除課程</button><br>
+      <% if(cart.length != 0){ %>
+        <button class="ui grey button showdelcoursebtn" data-id="<%= course.id %>">移除課程</button><br>
       <% }else{ %>
-        <button class="ui grey button showaddcoursebtn" data-id="<%= courseInfo.id %>">加入課程</button><br>
+        <button class="ui grey button showaddcoursebtn" data-id="<%= course.id %>">加入課程</button><br>
       <% } %>
       -->
-      <button class="ui blue button" onclick="window.open('http://class-qry.acad.ncku.edu.tw/syllabus/online_display.php?syear=0106&sem=1&co_no=<%= courseInfo.課程碼 %>&class_code=<%= courseInfo.分班碼 %>')" config='height = N,width = N'>課程大綱</button><br>
-      <% if(courserate_id == 0){ %>
-        <button class="ui blue button showcourseratebtn" data-id="<%= courseInfo.id %>" data-name="<%= courseInfo.課程名稱 %>" data-teacher="<%= courseInfo.老師 %>">評分課程</button>
+      <button class="ui blue button" onclick="window.open('http://class-qry.acad.ncku.edu.tw/syllabus/online_display.php?syear=0106&sem=1&co_no=<%= course.course_no %>&class_code=<%= course.class_no %>')" config='height = N,width = N'>課程大綱</button><br>
+      <% if(hasRate == 0){ %>
+        <button class="ui blue button showcourseratebtn" data-id="<%= course.id %>" data-name="<%= course.course_name %>" data-teacher="<%= course.teacher %>">評分課程</button>
       <% }else{ %>
-        <button class="ui red button delcourseratebtn" data-id="<%= courseInfo.id %>" data-rateid="<%= courserate_id %>">刪除評分</button>
+        <button class="ui red button delcourseratebtn" data-id="<%= course.id %>" data-rateid="<%= hasRate %>">刪除評分</button>
       <% } %>
     </div>
   </div>
@@ -39,32 +39,32 @@
   <div class="partB">
     <div class="partB_button" style="margin-bottom:10px;">
       <button class="ui button content1" onclick="moveAnimate('content1')" style="padding:10px 8px;">修課心得
-        <% if(courseInfo.comment != 0){%>
-          &nbsp;&nbsp;<span class="badge"><%= courseInfo.comment %></span>
+        <% if(course.comment != 0){%>
+          &nbsp;&nbsp;<span class="badge"><%= course.comment %></span>
         <% }%>
       </button>
       <button class="ui button content2" onclick="moveAnimate('content2')" style="padding:10px 8px;">上課內容
-        <% if(courseInfo.course_style != 0){%>
-          &nbsp;&nbsp;<span class="badge"><%= courseInfo.course_style %></span>
+        <% if(course.course_style != 0){%>
+          &nbsp;&nbsp;<span class="badge"><%= course.course_style %></span>
         <% }%>
       </button>
       <button class="ui button content3" onclick="moveAnimate('content3')" style="padding:10px 8px;">作業考試
-        <% if(courseInfo.report_hw != 0){%>
-          &nbsp;&nbsp;<span class="badge"><%= courseInfo.report_hw %></span>
+        <% if(course.report_hw != 0){%>
+          &nbsp;&nbsp;<span class="badge"><%= course.report_hw %></span>
         <% }%>
       </button>
       <button class="ui button content4" onclick="moveAnimate('content4')" style="padding:10px 8px;">得分比重
-        <% if(courseInfo.score_style != 0){%>
-          &nbsp;&nbsp;<span class="badge"><%= courseInfo.score_style %></span>
+        <% if(course.score_style != 0){%>
+          &nbsp;&nbsp;<span class="badge"><%= course.score_style %></span>
         <% }%>
       </button>
     </div>
     <div id="content1" style="display:block;">
-      <% if(courseInfo.comment == 0){%>
+      <% if(course.comment == 0){%>
         <br>
         <h1 style="text-align: center">尚無內容</h1>
         <div class="courseaddpost ui button">提供心得</div>
-      <%}else { for(var i = 0; i < courseInfo.comment_num; i++){ %>
+      <%}else { for(var i = 0; i < course.comment_num; i++){ %>
         <% if(typeof comment[i].comment !== 'undefined'){%>
         <div class="ui vertical segment">
           <p>[<%= comment[i].semester %>]</p>
@@ -80,11 +80,11 @@
       <%} } }%>
     </div>
     <div id="content2" style="display: none;">
-      <% if(courseInfo.course_style == 0){%>
+      <% if(course.course_style == 0){%>
         <br>
         <h1 style="text-align: center">尚無內容</h1>
         <div class="courseaddpost ui button">提供心得</div>
-      <%}else { for(var i = 0; i < courseInfo.comment_num; i++){ %>
+      <%}else { for(var i = 0; i < course.comment_num; i++){ %>
         <% if(typeof comment[i].course_style !== 'undefined'){%>
         <div class="ui vertical segment">
           <p>[<%= comment[i].semester %>]</p>
@@ -102,11 +102,11 @@
       <%} } }%>
     </div>
     <div id="content3" style="display: none;">
-      <% if(courseInfo.report_hw == 0){%>
+      <% if(course.report_hw == 0){%>
         <br>
         <h1 style="text-align: center">尚無內容</h1>
         <div class="courseaddpost ui button">提供心得</div>
-      <%}else { for(var i = 0; i < courseInfo.comment_num; i++){ %>
+      <%}else { for(var i = 0; i < course.comment_num; i++){ %>
         <% if(typeof comment[i].report_hw !== 'undefined'){%>
         <div class="ui vertical segment">
           <p>[<%= comment[i].semester %>]</p>
@@ -122,11 +122,11 @@
       <%} } }%>
     </div>
     <div id="content4" style="display: none;">
-      <% if(courseInfo.score_style == 0){%>
+      <% if(course.score_style == 0){%>
         <br>
         <h1 style="text-align: center">尚無內容</h1>
         <div class="courseaddpost ui button">提供心得</div>
-      <%} else { for(var i = 0; i < courseInfo.comment_num; i++){ %>
+      <%} else { for(var i = 0; i < course.comment_num; i++){ %>
         <% if(typeof comment[i].score_style !== 'undefined'){%>
         <div class="ui vertical segment">
           <p>[<%= comment[i].semester %>]</p>
@@ -146,12 +146,12 @@
 <script src="/assets/js/hammer.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
-  ga('send', 'pageview','/course/<%= courseInfo.id %>');
-  ga('send', 'event', '<%= courseInfo.課程名稱 %>','<%= courseInfo.老師 %>');
+  ga('send', 'pageview','/course/<%= course.id %>');
+  ga('send', 'event', '<%= course.課程名稱 %>','<%= course.老師 %>');
   $('.courseaddpost').on('click',function(){
-    localStorage.setItem('coursename','<%= courseInfo.課程名稱 %>');
-    localStorage.setItem('courseid','<%= courseInfo.id %>');
-    localStorage.setItem('courseteacher','<%= courseInfo.老師 %>');
+    localStorage.setItem('coursename','<%= course.課程名稱 %>');
+    localStorage.setItem('courseid','<%= course.id %>');
+    localStorage.setItem('courseteacher','<%= course.老師 %>');
     window.location.href = "/post/new";
   });
   // 將mobile的滑動效果裝上
@@ -209,7 +209,7 @@ $(document).ready(function(){
     var courseid = this.getAttribute("data-id");
     var btn = $(this);
     $.ajax({
-      url: '/rate/new/'+courseid+"?course_name=<%= courseInfo.課程名稱 %>&teacher=<%= courseInfo.老師 %>",
+      url: '/rate/new/'+courseid+"?course_name=<%= course.course_name %>&teacher=<%= course.teacher %>",
       type: 'GET',
       success: function(response) {
         if(response=="notLogin"){

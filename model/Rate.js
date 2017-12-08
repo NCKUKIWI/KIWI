@@ -12,6 +12,9 @@ var rateSchema = {
 	hard: {
 		type: Sequelize.INTEGER
 	},
+	sweet: {
+		type: Sequelize.INTEGER
+	},
 	recommand: {
 		type: Sequelize.INTEGER
 	},

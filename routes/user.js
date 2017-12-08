@@ -45,7 +45,7 @@ router.get('/edit', helper.checkLogin(), function(req, res) {
   res.render('user/edit');
 });
 
-router.post('/update', helper.checkLogin(), function(req, res) {
+router.post('/update', helper.apiAuth(), function(req, res) {
   var newUser = {
     name: req.body.name,
     department: req.body.department,
@@ -58,6 +58,10 @@ router.post('/update', helper.checkLogin(), function(req, res) {
   }).catch(function(err){
     res.send(err);
   });
+});
+
+router.get('/me', helper.apiAuth(), function(req, res) {
+  res.send(req.user);
 });
 
 module.exports = router;

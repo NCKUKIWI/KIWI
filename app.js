@@ -65,7 +65,7 @@ app.use('/rate', require('./routes/rate'));
 app.use('/', require('./routes/course'));
 
 app.use(function(err, req, res, next) {
-	res.status(500).send(err);
+	res.status(500).send(err.toString());
 });
 
 app.get('*', function(req, res, next) {

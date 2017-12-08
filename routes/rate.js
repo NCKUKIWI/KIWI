@@ -7,25 +7,25 @@ var Rate = require('../model/Rate');
 router.get('/new/:id', helper.apiAuth(), function(req, res) {
   res.render('rate/new', {
     'courseid': req.params.id,
-    'course_name': req.query.course_name.replace(/\'|\#|\/\*/g, ""),
-    'teacher': req.query.teacher.replace(/\'|\#|\/\*/g, "")
+    'course_name': req.query.course_name,
+    'teacher': req.query.teacher
   });
 });
 
 router.post('/create', helper.apiAuth(), function(req, res) {
   Rate.findOrCreate({
     where: {
-      course_name: req.body.course_name.replace(/\'|\#|\/\*/g, ""),
-      teacher: req.body.teacher.replace(/\'|\#|\/\*/g, ""),
-      user_id: parseInt(req.user.id)
+      course_name: req.body.course_name,
+      teacher: req.body.teacher,
+      user_id: req.user.id
     },
     defaults: {
-      sweet: parseInt(req.body.sweet.replace(/\'|\#|\/\*/g, "")),
-      hard: parseInt(req.body.hard.replace(/\'|\#|\/\*/g, "")),
-      recommand: parseInt(req.body.recommand.replace(/\'|\#|\/\*/g, "")),
-      course_name: req.body.course_name.replace(/\'|\#|\/\*/g, ""),
-      teacher: req.body.teacher.replace(/\'|\#|\/\*/g, ""),
-      user_id: parseInt(req.user.id)
+      sweet: parseInt(req.body.sweet),
+      hard: parseInt(req.body.hard),
+      recommand: parseInt(req.body.recommand),
+      course_name: req.body.course_name,
+      teacher: req.body.teacher,
+      user_id: req.user.id
     }
   }).spread(function(rate, created) {
     if(created) {
@@ -37,7 +37,7 @@ router.post('/create', helper.apiAuth(), function(req, res) {
 });
 
 router.delete('/:id', helper.apiAuth(), function(req, res) {
-  Rate.destory({
+  Rate.destroy({
     where: {
       id: req.params.id,
       user_id: req.user.id

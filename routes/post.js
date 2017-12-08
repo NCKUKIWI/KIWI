@@ -1,4 +1,5 @@
 var express = require('express');
+var sequelize = require('sequelize');
 var router = express.Router();
 var helper = require('../helper');
 var Post = require('../model/Post');
@@ -16,17 +17,17 @@ router.post('/create', helper.apiAuth(), function(req, res) {
     comment: req.body.comment.replace(/\n/g, "<br>").replace(/\'|\#|\/\*/g, "").replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, ""),
     report_hw: req.body.report_hw.replace(/\'|\#|\/\*/g, ""),
     course_style: req.body.course_style.replace(/\'|\#|\/\*/g, ""),
-    user_id: parseInt(req.user.id)
+    user_id: req.user.id
   }
   Post.create(post).then(function(result) {
     var rate = {
-      sweet: parseInt(req.body.sweet.replace(/\'|\#|\/\*/g, "")),
-      hard: parseInt(req.body.hard.replace(/\'|\#|\/\*/g, "")),
-      recommand: parseInt(req.body.recommand.replace(/\'|\#|\/\*/g, "")),
-      give: parseInt(req.body.give.replace(/\'|\#|\/\*/g, "")),
-      got: parseInt(req.body.got.replace(/\'|\#|\/\*/g, "")),
-      course_name: req.body.course_name.replace(/\'|\#|\/\*/g, ""),
-      teacher: req.body.teacher.replace(/\'|\#|\/\*/g, ""),
+      sweet: parseInt(req.body.sweet),
+      hard: parseInt(req.body.hard),
+      recommand: parseInt(req.body.recommand),
+      give: parseInt(req.body.give),
+      got: parseInt(req.body.got),
+      course_name: req.body.course_name,
+      teacher: req.body.teacher,
       user_id: result.user_id,
       post_id: result.id
     }
@@ -77,6 +78,7 @@ router.get('/:id', function(req, res) {
       }],
       raw: false
     }).then(function(post) {
+      post = JSON.parse(JSON.stringify(post));
       res.render('post/show', {
         'post': post
       });
@@ -124,7 +126,7 @@ router.post('/report/:id', helper.apiAuth(), function(req, res) {
 
 /* del */
 router.delete('/:id', helper.apiAuth(), function(req, res) {
-  Post.destory({
+  Post.destroy({
     where: {
       id: req.params.id,
       user_id: req.user.id

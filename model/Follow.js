@@ -45,4 +45,6 @@ var Follow = db.define('follow', followSchema,{
 	freezeTableName: true
 });
 
+Follow.belongsTo(Course, {foreignKey: 'course_id'});
+
 module.exports = Follow;

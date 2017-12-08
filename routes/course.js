@@ -7,7 +7,6 @@ var Cart = require('../model/Cart');
 var Course = require('../model/Course');
 var Op = require('sequelize').Op;
 
-/* index */
 router.get('/', function(req, res) {
   var allCourses = [];
   Course.findAll({
@@ -163,7 +162,7 @@ router.post('/addcourse/:id', helper.apiAuth(), function(req, res) {
 
 /* del course*/
 router.post('/delcourse/:id', helper.apiAuth(), function(req, res) {
-  Cart.destory({
+  Cart.destroy({
     where: {
       course_id: req.params.id,
       user_id: req.user.id

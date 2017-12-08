@@ -61,7 +61,7 @@ app.use('/post', require('./routes/post'));
 app.use('/user', require('./routes/user'));
 app.use('/schedule', require('./routes/schedule'));
 app.use('/rate', require('./routes/rate'));
-//app.use('/bot', require('./routes/bot'));
+app.use('/bot', require('./routes/bot'));
 app.use('/', require('./routes/course'));
 
 app.use(function(err, req, res, next) {

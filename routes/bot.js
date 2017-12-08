@@ -3,6 +3,7 @@ var router = express.Router();
 var request = require('request');
 var config = require('../config.dev');
 var token = config.fb.msgtoken;
+var Op = require('sequelize').Op;
 var db = require('../model/db');
 var Course = require('../model/Course');
 var Follow = require('../model/Follow');

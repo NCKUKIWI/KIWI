@@ -9,8 +9,8 @@ Insert(table,data,callback);
 Example:
 
 var data = {
-  'col1': 'value1',
-  'col2': 'value2',
+	'col1': 'value1',
+	'col2': 'value2',
 };
 
 Insert('table_name',data,function(err,results){...});
@@ -88,11 +88,11 @@ Update(table,datas,conditions,callback);
 Example:
 
 var datas ={
-  name:'newname',
-  nickname:'newnickname'
+	name:'newname',
+	nickname:'newnickname'
 };
 var conditions ={
-  id:3
+	id:3
 };
 
 Update('user',datas,conditions,function(results){...});
@@ -110,347 +110,340 @@ var conditions = {'user.id':post.user_id};
 InnerJoin(tables,cols,conditions,function(results){...});
 */
 
-function conditionjoin(conditions){
-  var condition="";
-  var count = 0;
-  var size = Object.keys(conditions).length - 1;
-  for(var i in conditions){
-    if(typeof conditions[i] === "number"){
-      condition = condition + i + " = " + conditions[i];
+function conditionjoin(conditions) {
+    var condition = "";
+    var count = 0;
+    var size = Object.keys(conditions).length - 1;
+    for (var i in conditions) {
+        if (typeof conditions[i] === "number") {
+            condition = condition + i + " = " + conditions[i];
+        } else {
+            if (conditions[i].split(",").length != 1)
+                condition = condition + i + " in( \'" + conditions[i] + "\')";
+            else
+                condition = condition + i + " in( \'" + conditions[i].replace(/\'/g, "") + "\')";
+        }
+        if (count == size) {
+            return condition;
+        } else {
+            count++;
+            condition = condition + " AND ";
+        }
     }
-    else{
-      if(conditions[i].split(",").length != 1 )
-        condition = condition + i + " in(" + conditions[i] + ")";
-      else
-        condition = condition + i + " in( \'" + conditions[i].replace(/\'/g, "") + "\')";
-    }
-    if(count == size){
-      return condition;
-    }
-    else{
-      count++;
-      condition = condition + " AND ";
-    }
-  }
 }
 
-exports.Insert = function Insert(table,data,callback){
-  var sql = "INSERT INTO " + table + " SET ? ";
-  console.log(sql);
-  console.log("Data: {");
-  for(var i in data){
-    console.log(i+" : "+data[i]);
-  }
-  console.log("}");
-  connection.query(sql,data,function(err,results){
-    if (err) throw err;
-    console.log("Create Success!");
-    callback(err,results);
-  });
-}
-
-
-exports.DeleteById = function DeleteById(table,id,callback){
-  var sql = "DELETE FROM " + table + " WHERE id = " + id;
-  console.log(sql);
-  connection.query(sql,function(err,results){
-    if (err) throw err;
-    console.log("DELETE Success!");
-    callback(err);
-  });
-}
-
-exports.DeleteByColumn = function DeleteByColumn(table,conditions,callback){
-  var condition = conditionjoin(conditions);
-  var sql = "DELETE FROM " + table + " WHERE " + condition;
-  console.log(sql);
-  connection.query(sql,function(err,results){
-    if (err) throw err;
-    console.log("DELETE Success!");
-    callback(err);
-  });
-}
-
-exports.GetAll = function GetAll(table,order,callback){
-  var sql = "SELECT * FROM " + table + " ORDER BY " + order['column'] + " " + order['order'] ;
-  console.log(sql);
-  connection.query(sql,function(err, results, fields){
-    if (err) throw err;
-    callback(results);
-  });
-}
-
-exports.GetColumn = function GetColumn(table,cols,order,callback){
-  var columns = "";
-  for(var i in cols ){
-    columns+=cols[i];
-    if( i != cols.length-1 ){
-      columns+=",";
+exports.Insert = function Insert(table, data, callback) {
+    var sql = "INSERT INTO " + table + " SET ? ";
+    console.log(sql);
+    console.log("Data: {");
+    for (var i in data) {
+        console.log(i + " : " + data[i]);
     }
-  }
-  var sql = "SELECT " + columns + " FROM " + table + " ORDER BY " + order['column'] + " " + order['order'];
-  console.log(sql);
-  connection.query(sql,function(err, results, fields){
-    if (err) throw err;
-    callback(results);
-  });
-}
-
-exports.FindbyID = function FindbyID(table,id,callback){
-  var sql = "SELECT * FROM " + table +" WHERE id = "+ id;
-  console.log(sql);
-  connection.query(sql,function(err, results, fields){
-    if (err) throw err;
-    callback(results[0]);
-  });
-}
-
-exports.FindbyColumn = function FindbyColumn(table,cols,conditions,callback){
-  var columns = "";
-  for(var i in cols ){
-    columns+=cols[i];
-    if( i != cols.length-1 ){
-      columns+=",";
-    }
-  }
-  var condition = conditionjoin(conditions);
-  var sql = "SELECT " + columns + " FROM " + table + " WHERE " + condition;
-  console.log(sql);
-  connection.query(sql,function(err, results, fields){
-    if (err) throw err;
-    callback(results);
-  });
-}
-
-exports.FindbyColumnOrder = function FindbyColumnOrder(table,conditions,order,callback){
-  var condition = conditionjoin(conditions);
-  var sql = "SELECT * FROM " + table + " WHERE " + condition + " ORDER BY " + order['column'] + " " + order['order'];
-  console.log(sql);
-  connection.query(sql,function(err, results, fields){
-    if (err) throw err;
-    callback(results);
-  });
-}
-
-exports.Update = function Update(table,datas,conditions,callback){
-  var condition = conditionjoin(conditions);
-  var data="";
-  count = 0;
-  size = Object.keys(datas).length - 1;
-  for(var i in datas){
-    if(typeof datas[i] === "number"){
-      data = data + i + " = " + datas[i];
-    }
-    else{
-      data = data + i + " = \'" + datas[i] + "\'";
-    }
-    if(count == size){
-      break;
-    }
-    else{
-      count++;
-      data = data + ",";
-    }
-  }
-  var sql = "UPDATE " + table + " SET " + data + " WHERE " + condition;
-  console.log(sql);
-  console.log("Data: {");
-  for(var i in datas){
-    console.log(i+" : "+datas[i]);
-  }
-  console.log("}");
-  connection.query(sql,function(err,results){
-    if (err) throw err;
-    callback(results);
-  });
+    console.log("}");
+    connection.query(sql, data, function(err, results) {
+        if (err) throw err;
+        console.log("Create Success!");
+        callback(err, results);
+    });
 }
 
 
-exports.UpdatePlusone = function UpdatePlusone(table,col,id,callback){
-  var sql = "UPDATE " + table + " SET " + col +" = " + col + "+1 WHERE id = "+ id;
-  console.log(sql);
-  connection.query(sql,function(err, results){
-    if (err) throw err;
-    callback(results);
-  });
+exports.DeleteById = function DeleteById(table, id, callback) {
+    var sql = "DELETE FROM " + table + " WHERE id = " + id;
+    console.log(sql);
+    connection.query(sql, function(err, results) {
+        if (err) throw err;
+        console.log("DELETE Success!");
+        callback(err);
+    });
 }
 
-exports.InnerJoin = function InnerJoin(tables,cols,conditions,callback){
-  var condition="";
-  var count = 0;
-  var size = Object.keys(conditions).length - 1;
-  for(var i in conditions){
-    condition = condition + i + " = " + conditions[i];
-    if(count == size){
-      break;
+exports.DeleteByColumn = function DeleteByColumn(table, conditions, callback) {
+    var condition = conditionjoin(conditions);
+    var sql = "DELETE FROM " + table + " WHERE " + condition;
+    console.log(sql);
+    connection.query(sql, function(err, results) {
+        if (err) throw err;
+        console.log("DELETE Success!");
+        callback(err);
+    });
+}
+
+exports.GetAll = function GetAll(table, order, callback) {
+    var sql = "SELECT * FROM " + table + " ORDER BY " + order['column'] + " " + order['order'];
+    console.log(sql);
+    connection.query(sql, function(err, results, fields) {
+        if (err) throw err;
+        callback(results);
+    });
+}
+
+exports.GetColumn = function GetColumn(table, cols, order, callback) {
+    var columns = "";
+    for (var i in cols) {
+        columns += cols[i];
+        if (i != cols.length - 1) {
+            columns += ",";
+        }
     }
-    else{
-      count++;
-      condition = condition + " AND ";
+    var sql = "SELECT " + columns + " FROM " + table + " ORDER BY " + order['column'] + " " + order['order'];
+    console.log(sql);
+    connection.query(sql, function(err, results, fields) {
+        if (err) throw err;
+        callback(results);
+    });
+}
+
+exports.FindbyID = function FindbyID(table, id, callback) {
+    var sql = "SELECT * FROM " + table + " WHERE id = " + id;
+    console.log(sql);
+    connection.query(sql, function(err, results, fields) {
+        if (err) throw err;
+        callback(results[0]);
+    });
+}
+
+exports.FindbyColumn = function FindbyColumn(table, cols, conditions, callback) {
+    var columns = "";
+    for (var i in cols) {
+        columns += cols[i];
+        if (i != cols.length - 1) {
+            columns += ",";
+        }
     }
-  }
-  var columns = "";
-  for(var i in cols ){
-    columns+=cols[i];
-    if( i != cols.length-1 ){
-      columns+=",";
+    var condition = conditionjoin(conditions);
+    var sql = "SELECT " + columns + " FROM " + table + " WHERE " + condition;
+    console.log(sql);
+    connection.query(sql, function(err, results, fields) {
+        if (err) throw err;
+        callback(results);
+    });
+}
+
+exports.FindbyColumnOrder = function FindbyColumnOrder(table, conditions, order, callback) {
+    var condition = conditionjoin(conditions);
+    var sql = "SELECT * FROM " + table + " WHERE " + condition + " ORDER BY " + order['column'] + " " + order['order'];
+    console.log(sql);
+    connection.query(sql, function(err, results, fields) {
+        if (err) throw err;
+        callback(results);
+    });
+}
+
+exports.Update = function Update(table, datas, conditions, callback) {
+    var condition = conditionjoin(conditions);
+    var data = "";
+    count = 0;
+    size = Object.keys(datas).length - 1;
+    for (var i in datas) {
+        if (typeof datas[i] === "number") {
+            data = data + i + " = " + datas[i];
+        } else {
+            data = data + i + " = \'" + datas[i] + "\'";
+        }
+        if (count == size) {
+            break;
+        } else {
+            count++;
+            data = data + ",";
+        }
     }
-  }
-  var sql = "SELECT " + columns + " FROM " + tables['table'] + " INNER JOIN " + tables['jointable'] + " ON " + condition;
-  console.log(sql);
-  connection.query(sql,function(err, results){
-    if (err) throw err;
-    callback(results);
-  });
+    var sql = "UPDATE " + table + " SET " + data + " WHERE " + condition;
+    console.log(sql);
+    console.log("Data: {");
+    for (var i in datas) {
+        console.log(i + " : " + datas[i]);
+    }
+    console.log("}");
+    connection.query(sql, function(err, results) {
+        if (err) throw err;
+        callback(results);
+    });
 }
 
 
-function search_item(datas, item){
-  	var item_array = [];
-  	var data = datas[0]
-		item_array.push(data[item]);
+exports.UpdatePlusone = function UpdatePlusone(table, col, id, callback) {
+    var sql = "UPDATE " + table + " SET " + col + " = " + col + "+1 WHERE id = " + id;
+    console.log(sql);
+    connection.query(sql, function(err, results) {
+        if (err) throw err;
+        callback(results);
+    });
+}
 
-		for(var i in datas){
-			data = datas[i];
-			for(var j in item_array){
-				if(data[item] == null) continue;
-				var regex = data[item].replace(/\(/g, "\\(");
-				regex = regex.replace(/\)/g, "\\)");
-				regex = regex.replace(/\./g, "\\.");
+exports.InnerJoin = function InnerJoin(tables, cols, conditions, callback) {
+    var condition = "";
+    var count = 0;
+    var size = Object.keys(conditions).length - 1;
+    for (var i in conditions) {
+        condition = condition + i + " = " + conditions[i];
+        if (count == size) {
+            break;
+        } else {
+            count++;
+            condition = condition + " AND ";
+        }
+    }
+    var columns = "";
+    for (var i in cols) {
+        columns += cols[i];
+        if (i != cols.length - 1) {
+            columns += ",";
+        }
+    }
+    var sql = "SELECT " + columns + " FROM " + tables['table'] + " INNER JOIN " + tables['jointable'] + " ON " + condition;
+    console.log(sql);
+    connection.query(sql, function(err, results) {
+        if (err) throw err;
+        callback(results);
+    });
+}
 
-				if(item_array[j].match(regex) != null)
-					break;
-				else if (j == item_array.length - 1){
-					item_array.push(data[item]);
-				}
-			}
-		}
-		return item_array;
+
+function search_item(datas, item) {
+    var item_array = [];
+    var data = datas[0]
+    item_array.push(data[item]);
+
+    for (var i in datas) {
+        data = datas[i];
+        for (var j in item_array) {
+            if (data[item] == null) continue;
+            var regex = data[item].replace(/\(/g, "\\(");
+            regex = regex.replace(/\)/g, "\\)");
+            regex = regex.replace(/\./g, "\\.");
+
+            if (item_array[j].match(regex) != null)
+                break;
+            else if (j == item_array.length - 1) {
+                item_array.push(data[item]);
+            }
+        }
+    }
+    return item_array;
 }
 
 exports.search_item = search_item;
 
-exports.query_post = function query_post(datas, req, item,callback){
-	var teacher = search_item(datas, "teacher");
-  var courseName = search_item(datas, "course_name");
+exports.query_post = function query_post(datas, req, item, callback) {
+    var teacher = search_item(datas, "teacher");
+    var courseName = search_item(datas, "course_name");
 
-  try {
-    	var regex = req.replace(/\(/g, "\\(");
-    	regex = regex.replace(/\)/g, "\\)");
-    	regex = regex.replace(/\./g, "\\.");
+    try {
+        var regex = req.replace(/\(/g, "\\(");
+        regex = regex.replace(/\)/g, "\\)");
+        regex = regex.replace(/\./g, "\\.");
 
-      new RegExp(regex);
-  } catch(e) {
-      console.log(e);
-      regex = "";
-  }
-  var query_data = [];
-  if(item=="query"){
-    for(var i in datas){
-  		var data = datas[i]
-  		if(data['teacher'].match(regex)){
-  			query_data.push(datas[i]);
-  		}
-      if(data['course_name'].match(regex)){
-        query_data.push(datas[i]);
-      }
-  	}
-  }
-  else{
-  	for(var i in datas){
-  		var data = datas[i]
-  		if(data[item].match(regex)){
-  			query_data.push(datas[i]);
-  		}
-  	}
-  }
+        new RegExp(regex);
+    } catch (e) {
+        console.log(e);
+        regex = "";
+    }
+    var query_data = [];
+    if (item == "query") {
+        for (var i in datas) {
+            var data = datas[i]
+            if (data['teacher'].match(regex)) {
+                query_data.push(datas[i]);
+            }
+            if (data['course_name'].match(regex)) {
+                query_data.push(datas[i]);
+            }
+        }
+    } else {
+        for (var i in datas) {
+            var data = datas[i]
+            if (data[item].match(regex)) {
+                query_data.push(datas[i]);
+            }
+        }
+    }
 
-  callback(query_data,teacher,courseName);
+    callback(query_data, teacher, courseName);
 }
 
 
 // =======================
 // for course
 // 這邊是指定course_new為搜尋的table，不知這樣做是否好，可能要再修
-exports.query_post2 = function query_post2(id, callback){
+exports.query_post2 = function query_post2(id, callback) {
 
-  var sql_1 = "SELECT * FROM course_new WHERE id = " + id;
-  connection.query(sql_1,function(err, courseInfo){
-    if (err) throw err;
+    var sql_1 = "SELECT * FROM course_new WHERE id = " + id;
+    connection.query(sql_1, function(err, courseInfo) {
+        if (err) throw err;
 
-    var sql_2 = "SELECT id,comment, course_style, course_need, exam_style, semester, score_style, report_hw ";
-    sql_2 += "FROM post WHERE teacher = " + "\'" + courseInfo[0]["老師"] + "\' ";
-    sql_2 += "AND course_name = " + "\'" + courseInfo[0]["課程名稱"] + "\'" + " ORDER BY semester DESC";
+        var sql_2 = "SELECT id,comment, course_style, course_need, exam_style, semester, score_style, report_hw ";
+        sql_2 += "FROM post WHERE teacher = " + "\'" + courseInfo[0]["老師"] + "\' ";
+        sql_2 += "AND course_name = " + "\'" + courseInfo[0]["課程名稱"] + "\'" + " ORDER BY semester DESC";
 
-    connection.query(sql_2,function(err, comment){
-      if (err) throw err;
-      callback(courseInfo, comment);
+        connection.query(sql_2, function(err, comment) {
+            if (err) throw err;
+            callback(courseInfo, comment);
+        });
+
     });
-
-  });
 }
 
-exports.query_course = function query_course(datas, req, item,callback){
-  try {
-      var regex = req.replace(/\(/g, "\\(");
-      regex = regex.replace(/\)/g, "\\)");
-      regex = regex.replace(/\./g, "\\.");
+exports.query_course = function query_course(datas, req, item, callback) {
+    try {
+        var regex = req.replace(/\(/g, "\\(");
+        regex = regex.replace(/\)/g, "\\)");
+        regex = regex.replace(/\./g, "\\.");
 
-      new RegExp(regex);
-  } catch(e) {
-      console.log(e);
-      regex = "";
-  }
-  var query_data = [];
-  if(item=="query"){
-    for(var i in datas){
-      var data = datas[i]
-      if(data['teacher'].match(regex)){
-        query_data.push(datas[i]);
-      }
-      if(data['course_name'].match(regex)){
-        query_data.push(datas[i]);
-      }
+        new RegExp(regex);
+    } catch (e) {
+        console.log(e);
+        regex = "";
     }
-  }
-  else{
-    for(var i in datas){
-      var data = datas[i]
-      if(data[item].match(regex)){
-        query_data.push(datas[i]);
-      }
+    var query_data = [];
+    if (item == "query") {
+        for (var i in datas) {
+            var data = datas[i]
+            if (data['teacher'].match(regex)) {
+                query_data.push(datas[i]);
+            }
+            if (data['course_name'].match(regex)) {
+                query_data.push(datas[i]);
+            }
+        }
+    } else {
+        for (var i in datas) {
+            var data = datas[i]
+            if (data[item].match(regex)) {
+                query_data.push(datas[i]);
+            }
+        }
     }
-  }
 
-  callback(query_data,teacher,courseName);
+    callback(query_data, teacher, courseName);
 }
 
-exports.FindbyColumnFuzzy = function FindbyColumn(table,cols,conditions,callback){
-  var columns = "";
-  for(var i in cols ){
-    columns+=cols[i];
-    if( i != cols.length-1 ){
-      columns+=",";
+exports.FindbyColumnFuzzy = function FindbyColumn(table, cols, conditions, callback) {
+    var columns = "";
+    for (var i in cols) {
+        columns += cols[i];
+        if (i != cols.length - 1) {
+            columns += ",";
+        }
     }
-  }
-  // var condition = conditionjoin(conditions);
-  var whereCondition = "課程名稱 like ";
-  for(var i in conditions){
-    whereCondition += "\'" + "%" + conditions[i] + "%" + "\'";
-    if(i != conditions.length - 1) whereCondition += " or 課程名稱 like ";
-  }
-  var sql = "SELECT " + columns + " FROM " + table + " WHERE " + whereCondition;
-  console.log(sql);
-  connection.query(sql,function(err, results, fields){
-    if (err) throw err;
-    callback(results);
-  });
+    // var condition = conditionjoin(conditions);
+    var whereCondition = "課程名稱 like ";
+    for (var i in conditions) {
+        whereCondition += "\'" + "%" + conditions[i] + "%" + "\'";
+        if (i != conditions.length - 1) whereCondition += " or 課程名稱 like ";
+    }
+    var sql = "SELECT " + columns + " FROM " + table + " WHERE " + whereCondition;
+    console.log(sql);
+    connection.query(sql, function(err, results, fields) {
+        if (err) throw err;
+        callback(results);
+    });
 }
 
-exports.Query = function Query(sql,callback){
-  console.log(sql);
-  connection.query(sql,function(err,results,fields){
-    if (err) throw err;
-    callback(results);
-  });
+exports.Query = function Query(sql, callback) {
+    console.log(sql);
+    connection.query(sql, function(err, results, fields) {
+        if (err) throw err;
+        callback(results);
+    });
 }

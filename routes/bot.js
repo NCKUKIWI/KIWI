@@ -155,7 +155,7 @@ router.get('/webhook/', function(req, res) {
 
 router.post('/webhook/', function(req, res) {
     var messaging_events = req.body.entry[0].messaging
-    if (!messaging_events.length) console.log('/n!!!/n[ERR] messaging_events.length undefined/n!!!/n')
+    if (!messaging_events) console.log('/n!!!/n[ERR] messaging_events undefined/nreq.body = ' + req.body + '/n!!!/n')
     else
         for (i = 0; i < messaging_events.length; i++) {
             var event = req.body.entry[0].messaging[i]

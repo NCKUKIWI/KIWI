@@ -171,14 +171,12 @@ router.post('/create', function(req, res) {
 
 /* new */
 router.get('/new', function(req, res) {
-    console.log('\n' + 'GET /post/new');
-    var colmuns = ['DISTINCT 課程名稱', 'id', '老師', '系所名稱'];
-    //只取出上一學期的課程
-    db.FindbyColumn('course_all', colmuns, { 'semester': '106-1' }, function(course) {
-        res.render('post/new', {
-            'course': course,
-            'user': req.user
-        });
+    var sql = 'SELECT id,課程名稱,老師,系所名稱 FROM course_all WHERE semester ="104-2" OR semester ="105-1" OR semester ="105-2" OR semester ="106-1" GROUP BY 課程名稱,老師';
+    db.Query(sql,function(course){
+      res.render('post/new', {
+        'course': course,
+        'user': req.user
+      });
     });
 });
 

@@ -521,7 +521,7 @@ function sendFollowCourseById(sender, serial) {
 function addFollowCourse(sender, course_id) {
     var db = new dbsystem();
     db.select().field(["系所名稱", "課程名稱", "時間", "餘額", "選課序號", "老師"]).from("course_new").where("id=", course_id).run(function(course) {
-        if (course[0].餘額 == "額滿") {
+        if (course[0].餘額 == 0) {
             db.select().field("*").from("follow").where("course_id=", course_id).where("fb_id=", sender).run(function(follow) {
                 if (follow.length < 1) {
                     var text = "你選擇的課程是：\n\n" + course[0].系所名稱.replace(/[A-Z0-9]/g, "") + "／" + course[0].課程名稱.replace(/[（|）|\s]/g, "") + "／" + course[0].老師.replace(/\s/g, "") + "／" + course[0].時間 + "\n\n這堂課目前無餘額，已為你設定追蹤 👌 有餘額的時候會私訊你唷！請抱著既期待又怕受傷害的心情等候 🙌🙌";
@@ -713,10 +713,10 @@ function checkCoureseCredit() {
     var db = new dbsystem();
     db.select().field(["f.*", "c.餘額", "c.系號"]).from("follow f").join("course_new c").where("c.id=f.course_id").run(function(follow) {
         for (var i in follow) {
-            if (follow[i].餘額 != "額滿" && follow[i].hadNotify == 0) {
+            if (follow[i].餘額 != 0 && follow[i].hadNotify == 0) {
                 sendCreditNotify(follow[i]);
             }
-            else if (follow[i].餘額 == "額滿" && follow[i].hadNotify != 0) {
+            else if (follow[i].餘額 == 0 && follow[i].hadNotify != 0) {
                 db.update().table("follow").set({
                     hadNotify: 0
                 }).where("id=", follow[i].id).run(function(result) {});

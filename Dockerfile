@@ -10,8 +10,11 @@ COPY . .
 # Install package
 RUN npm install
 
+RUN npm install -g pm2
+
+
 # Open 3000 Port
 EXPOSE 3000
 
 # Run npm start when container start
-CMD [ "npm", "start" ]
+CMD [ "pm2", "start","app.js","--no-daemon" ]

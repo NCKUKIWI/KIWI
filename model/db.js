@@ -118,7 +118,7 @@ function conditionjoin(conditions) {
     if (typeof conditions[i] === "number") {
       condition = condition + i + " = " + conditions[i];
     } else {
-      if (conditions[i].indexOf(",") != 1){
+      if (conditions[i].indexOf(",") != -1){
         condition = condition + i + " in( ";
         var query = conditions[i].split(",");
         for(var j in query){

@@ -24,7 +24,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: false
 }));
-app.use(require('express-status-monitor')());
 app.use("/assets", express.static("assets", {
     maxAge: 24 * 60 * 60
 }));

@@ -496,7 +496,7 @@ function sendFollowCourseById(sender, serial) {
 
 function addFollowCourse(sender, course_id) {
     var db = new dbsystem();
-    db.select().field(["系所名稱", "課程名稱", "時間", "餘額", "選課序號", "老師"]).from("course_new").where("id=", course_id).run(function (course) {
+    db.select().field(["系所名稱","系號","課程名稱", "時間", "餘額", "選課序號", "老師"]).from("course_new").where("id=", course_id).run(function (course) {
         if (disable.indexOf(course[0]['系號']) == -1) {
             if (course[0].餘額 == 0) {
                 db.select().field("*").from("follow").where("course_id=", course_id).where("fb_id=", sender).run(function (follow) {

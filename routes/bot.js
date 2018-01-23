@@ -1,14 +1,14 @@
 var express = require('express');
 var router = express.Router();
 var request = require('request');
-var config = require('../config.dev');
+var config = require('../config');
 var token = config.fb.msgtoken;
+var disable = config.bot.disable;
 var Op = require('sequelize').Op;
 var db = require('../model/db');
 var Course = require('../model/Course');
 var Follow = require('../model/Follow');
 var FollowCopy = require('../model/FollowCopy');
-
 
 //取得所有課程資料
 var courseNameList = [];
@@ -24,34 +24,36 @@ Course.findAll({
       [Op.ne]: ''
     }
   }
-}).then(function(courses) {
-  for(var i in courses) {
+}).then(function (courses) {
+  for (var i in courses) {
     courseNameList.push(courses[i].course_name);
     courseSerialList.push(courses[i].serial);
   }
-  return db.query('SELECT * FROM `setting` WHERE `id` = 1', { type: db.QueryTypes.SELECT });
-}).then(function(setting) {
+  return db.query('SELECT * FROM `setting` WHERE `id` = 1', {
+    type: db.QueryTypes.SELECT
+  });
+}).then(function (setting) {
   checkCourseStatus = setting[0].status;
-  if(checkCourseStatus == 1) {
-    checkCourse = setInterval(function() {
-      checkCoureseCredit();
+  if (checkCourseStatus == 1) {
+    checkCourse = setInterval(function () {
+      checkCourseRemain();
     }, 1000 * 10);
   }
 });
 
-router.get('/setting/', function(req, res) {
+router.get('/setting/', function (req, res) {
   res.render('setting', {
     botswitch: checkCourseStatus
   });
 });
 
-router.post('/sendmsg', function(req, res) {
-  if(req.body.pw != "nckuhubsetting") {
+router.post('/sendmsg', function (req, res) {
+  if (req.body.pw != "nckuhubsetting") {
     res.send("fail");
   } else {
-    if(req.body.type == "test") {
-      if(req.body.msg) {
-        if(req.body.msg == 'cancelMsg') {
+    if (req.body.type == "test") {
+      if (req.body.msg) {
+        if (req.body.msg == 'cancelMsg') {
           sendCancelMsg("1346773338719764");
           sendCancelMsg("1169375359801678");
           sendCancelMsg("1364925580245632");
@@ -65,7 +67,7 @@ router.post('/sendmsg', function(req, res) {
           sendTextMessage("1318673478198233", req.body.msg);
         }
       }
-    } else if(req.body.type == "broadcast") {
+    } else if (req.body.type == "broadcast") {
       FollowCopy.findAll({
         attributes: [
           [sequelize.fn('DISTINCT', sequelize.col('fb_id'))]
@@ -75,10 +77,10 @@ router.post('/sendmsg', function(req, res) {
             [Op.ne]: 0
           }
         }
-      }).then(function(users) {
-        users.forEach(function(user) {
-          if(req.body.msg) {
-            if(req.body.msg == 'cancelMsg') {
+      }).then(function (users) {
+        users.forEach(function (user) {
+          if (req.body.msg) {
+            if (req.body.msg == 'cancelMsg') {
               sendCancelMsg(user.fb_id);
             } else {
               sendTextMessage(user.fb_id, req.body.msg);
@@ -91,12 +93,12 @@ router.post('/sendmsg', function(req, res) {
   }
 });
 
-router.post('/sendlink', function(req, res) {
-  if(req.body.pw != "nckuhubsetting") {
+router.post('/sendlink', function (req, res) {
+  if (req.body.pw != "nckuhubsetting") {
     res.send("fail");
   } else {
-    if(req.body.type == "test") {
-      if(req.body.linktitle && req.body.linkurl) {
+    if (req.body.type == "test") {
+      if (req.body.linktitle && req.body.linkurl) {
         sendLink("1346773338719764", {
           url: req.body.linkurl,
           title: req.body.linktitle,
@@ -123,7 +125,7 @@ router.post('/sendlink', function(req, res) {
           description: req.body.linkdescription
         });
       }
-    } else if(req.body.type == "broadcast") {
+    } else if (req.body.type == "broadcast") {
       FollowCopy.findAll({
         attributes: [
           [sequelize.fn('DISTINCT', sequelize.col('fb_id'))]
@@ -133,9 +135,9 @@ router.post('/sendlink', function(req, res) {
             [Op.ne]: 0
           }
         }
-      }).then(function(users) {
-        users.forEach(function(user) {
-          if(req.body.linktitle && req.body.linkurl) {
+      }).then(function (users) {
+        users.forEach(function (user) {
+          if (req.body.linktitle && req.body.linkurl) {
             sendLink(user.fb_id, {
               url: req.body.linkurl,
               title: req.body.linktitle,
@@ -149,75 +151,79 @@ router.post('/sendlink', function(req, res) {
   }
 });
 
-router.post('/openbot', function(req, res) {
-  checkCourse = setInterval(function() {
-    checkCoureseCredit();
+router.post('/openbot', function (req, res) {
+  checkCourse = setInterval(function () {
+    checkCourseRemain();
   }, 1000 * 10);
-  db.query('UPDATE `setting` SET `status` = 1 WHERE `id` = 1', { type: db.QueryTypes.UPDATE }).then(function() {
+  db.query('UPDATE `setting` SET `status` = 1 WHERE `id` = 1', {
+    type: db.QueryTypes.UPDATE
+  }).then(function () {
     checkCourseStatus = 1;
     res.send('ok');
   });
 });
 
-router.post('/closebot', function(req, res) {
+router.post('/closebot', function (req, res) {
   clearInterval(checkCourse);
-  db.query('UPDATE `setting` SET `status` = 0 WHERE `id` = 1', { type: db.QueryTypes.UPDATE }).then(function() {
+  db.query('UPDATE `setting` SET `status` = 0 WHERE `id` = 1', {
+    type: db.QueryTypes.UPDATE
+  }).then(function () {
     checkCourseStatus = 0;
     res.send('ok');
   });
 });
 
-router.get('/webhook/', function(req, res) {
-  if(req.query['hub.verify_token'] === 'nckuhubbver49') {
+router.get('/webhook/', function (req, res) {
+  if (req.query['hub.verify_token'] === 'nckuhubbver49') {
     res.send(req.query['hub.challenge'])
   }
   res.send('Error, wrong token')
 });
 
-router.post('/webhook/', function(req, res) {
+router.post('/webhook/', function (req, res) {
   var messaging_events = req.body.entry[0].messaging
-  for(i = 0; i < messaging_events.length; i++) {
+  for (i = 0; i < messaging_events.length; i++) {
     var event = req.body.entry[0].messaging[i]
     var sender = event.sender.id //使用者messenger id
-    if(event.message && event.message.text) {
+    if (event.message && event.message.text) {
       var text = event.message.text //用戶傳送的訊息
       console.log("text:" + text);
-      if(text.indexOf("小幫手") != -1) {
+      if (text.indexOf("小幫手") != -1) {
         sendHelloMessage(sender);
       } else {
         var serial = text.replace(/[\s|\-]/g, "").match(/^[a-zA-Z][0-9]{4}/i);
-        if(serial) {
-          if(courseSerialList.indexOf(serial[0].toUpperCase()) !== -1) {
+        if (serial) {
+          if (courseSerialList.indexOf(serial[0].toUpperCase()) !== -1) {
             askPlaceOrFollow(sender, serial[0]);
           }
         } else {
-          if(courseNameList.indexOf(text) != -1) {
+          if (courseNameList.indexOf(text) != -1) {
             searchCourseByName(sender, text);
           } else {
             var teacher = text.match(/[\%|\uff05][\u4e00-\u9fa5]{1,}/i); //檢查 %老師名稱
             var dpt = text.match(/[\$|\uff04][\u4e00-\u9fa5]{1,}/i); //檢查 $系所名稱
-            if(dpt) dpt = dpt[0].replace(/[\$|\uff04|\s]/g, ""); //過濾掉不該有的內容
-            if(teacher) teacher = teacher[0].replace(/[\%|\uff05|\s]/g, "");
-            if(text.indexOf('%') == 0) {
+            if (dpt) dpt = dpt[0].replace(/[\$|\uff04|\s]/g, ""); //過濾掉不該有的內容
+            if (teacher) teacher = teacher[0].replace(/[\%|\uff05|\s]/g, "");
+            if (text.indexOf('%') == 0) {
               searchCourseByTeacher(sender, teacher);
             } else {
               var courseNamePlace = text.match(/^[\uff20|@][\u4e00-\u9fa5]{1,}/i); //檢查 @課程名稱
-              if(courseNamePlace) {
+              if (courseNamePlace) {
                 courseNamePlace = courseNamePlace[0].replace(/[\uff20|@|\s]/g, "");
                 sendCoursePlaceByName(sender, courseNamePlace, dpt, teacher); //透過課程名稱搜尋並傳送課程地點
               }
               var courseSerialPlace = text.match(/^[\uff20|@][a-zA-Z0-9]{5}/i); //檢查 @選課序號
-              if(courseSerialPlace) {
+              if (courseSerialPlace) {
                 courseSerialPlace = courseSerialPlace[0].replace(/[\uff20|@|\s]/g, "");
                 sendCoursePlaceById(sender, courseSerialPlace); //透過課程序號搜尋並傳送課程地點
               }
               var courseNameFollow = text.match(/^[#|\uff03][\u4e00-\u9fa5]{1,}/i); //檢查 #課程名稱
-              if(courseNameFollow) {
+              if (courseNameFollow) {
                 courseNameFollow = courseNameFollow[0].replace(/[#|\uff03|\s]/g, "");
                 sendFollowCourseByName(sender, courseNameFollow, dpt, teacher); //透過課程名稱搜尋並傳送追蹤課程按鈕
               }
               var courseSerialFollow = text.match(/^[#|\uff03][a-zA-Z0-9]{5}/i); //檢查 #選課序號
-              if(courseSerialFollow) {
+              if (courseSerialFollow) {
                 courseSerialFollow = courseSerialFollow[0].replace(/[#|\uff03|\s]/g, "");
                 sendFollowCourseById(sender, courseSerialFollow); //透過選課序號搜尋並傳送追蹤課程按鈕
               }
@@ -227,29 +233,29 @@ router.post('/webhook/', function(req, res) {
       }
     }
     //檢查使用者是否按下訊息中的按鈕
-    if(event.postback) {
+    if (event.postback) {
       var courseIdFollow = event.postback.payload.match(/^![0-9]{1,}/i); //抓payload中的 course_id 用來追蹤課程
       var courseIdCancel = event.postback.payload.match(/^&[0-9]{1,}/i); //抓payload中的 course_id 用來取消追蹤課程
       var courseIdInfo = event.postback.payload.match(/^@[0-9]{1,}/i); //抓payload中的 course_id 用來傳送單一課程詳細資訊
-      if(courseIdFollow) {
+      if (courseIdFollow) {
         courseIdFollow = courseIdFollow[0].replace(/!|\s/g, "");
         addFollowCourse(sender, courseIdFollow);
-      } else if(courseIdCancel) {
+      } else if (courseIdCancel) {
         courseIdCancel = courseIdCancel[0].replace(/&|\s/g, "");
         cancelFollowCourse(sender, courseIdCancel);
-      } else if(courseIdInfo) {
+      } else if (courseIdInfo) {
         courseIdInfo = courseIdInfo[0].replace(/@|\s/g, "");
         sendCourseInfo(sender, courseIdInfo);
       } else {
-        if(event.postback.payload == "cancelfollow") {
+        if (event.postback.payload == "cancelfollow") {
           sendFollowCourseList(sender);
-        } else if(event.postback.payload == "callagain") {
+        } else if (event.postback.payload == "callagain") {
           sendHelloMessage(sender);
-        } else if(event.postback.payload == "cancelall") {
+        } else if (event.postback.payload == "cancelall") {
           cancelAllFollowCourse(sender);
-        } else if(event.postback.payload == "cancelmsg") {
+        } else if (event.postback.payload == "cancelmsg") {
           cancelMsg(sender);
-        } else if(event.postback.payload.indexOf("ask") !== -1) {
+        } else if (event.postback.payload.indexOf("ask") !== -1) {
           askPlaceOrFollow(sender, event.postback.payload.replace("ask", ""));
         } else {
           sendTextMessage(sender, event.postback.payload);
@@ -276,10 +282,10 @@ function sendTextMessage(sender, text) {
       },
       message: messageData,
     }
-  }, function(error, response, body) {
-    if(error) {
+  }, function (error, response, body) {
+    if (error) {
       console.log('Error sending messages: ', error)
-    } else if(response.body.error) {
+    } else if (response.body.error) {
       console.log('Error: ', response.body.error)
     }
   })
@@ -323,10 +329,10 @@ function sendHelloMessage(sender) {
       },
       message: messageData,
     }
-  }, function(error, response, body) {
-    if(error) {
+  }, function (error, response, body) {
+    if (error) {
       console.log('Error sending messages: ', error)
-    } else if(response.body.error) {
+    } else if (response.body.error) {
       console.log('Error: ', response.body.error)
     }
   })
@@ -334,18 +340,21 @@ function sendHelloMessage(sender) {
 
 function sendCoursePlaceByName(sender, name, dpt, teacher) {
   var Query = {}
-  if(name) Query.course_name = {
-    [Op.like]: `%${name}%` }
-  if(dpt) Query.dep_name = {
-    [Op.like]: `%${dpt}%` }
-  if(teacher) Query.teacher = {
-    [Op.like]: `%${teacher}%` }
+  if (name) Query.course_name = {
+    [Op.like]: `%${name}%`
+  }
+  if (dpt) Query.dep_name = {
+    [Op.like]: `%${dpt}%`
+  }
+  if (teacher) Query.teacher = {
+    [Op.like]: `%${teacher}%`
+  }
   Course.findAll({
     attributes: ['id', 'dep_name', 'time', 'course_name', 'classroom', 'teacher'],
     where: Query
-  }).then(function(courses) {
-    if(courses.length > 0) {
-      if(courses.length > 30) {
+  }).then(function (courses) {
+    if (courses.length > 0) {
+      if (courses.length > 30) {
         var subtitle = "以下是找到的前 30 筆結果。若要精準搜尋，請輸入 @課程名稱 $系所 %老師名";
       } else {
         var subtitle = "哎呀！我找到了這些，請問哪門是你要的呢 😇😇😇";
@@ -359,9 +368,9 @@ function sendCoursePlaceByName(sender, name, dpt, teacher) {
           }
         }
       }
-      for(var i in courses) {
-        if(i == 30) break;
-        if(i % 3 == 0) {
+      for (var i in courses) {
+        if (i == 30) break;
+        if (i % 3 == 0) {
           var card = {
             "title": "NCKUHUB",
             "subtitle": subtitle,
@@ -374,7 +383,7 @@ function sendCoursePlaceByName(sender, name, dpt, teacher) {
           "payload": "@" + courses[i].id,
         }
         card["buttons"].push(data);
-        if(i % 3 == 2 || i == courses.length - 1) {
+        if (i % 3 == 2 || i == courses.length - 1) {
           messageData["attachment"]["payload"]["elements"].push(card);
         }
       }
@@ -390,10 +399,10 @@ function sendCoursePlaceByName(sender, name, dpt, teacher) {
           },
           message: messageData,
         }
-      }, function(error, response, body) {
-        if(error) {
+      }, function (error, response, body) {
+        if (error) {
           console.log('Error sending messages: ', error)
-        } else if(response.body.error) {
+        } else if (response.body.error) {
           console.log('Error: ', response.body.error)
         }
       });
@@ -412,8 +421,8 @@ function sendCoursePlaceById(sender, serial) {
     where: {
       serial: serial
     }
-  }).then(function(course) {
-    if(course) {
+  }).then(function (course) {
+    if (course) {
       sendCourseInfo(sender, course.id);
     } else {
       var text = "查無課程唷 😱😱 會不會是這學期沒開課，或是關鍵字有打錯呢？";
@@ -429,9 +438,9 @@ function sendCourseInfo(sender, course_id) {
     where: {
       id: course_id
     }
-  }).then(function(course) {
+  }).then(function (course) {
     course.classroom = course.classroom.replace(/\s/g, "");
-    if(course.classroom == '') {
+    if (course.classroom == '') {
       var text = "你選擇的課程是：\n\n" + course[0].dep_name.replace(/[A-Z0-9]/g, "") + "／" + course[0].course_name.replace(/[（|）|\s]/g, "") + "／" + course[0].teacher.replace(/\s/g, "") + "／" + course[0].time + "\n\n上課地點請查看 http://course-query.acad.ncku.edu.tw/qry/qry001.php?dept_no=" + course[0].dep_no;
     } else {
       var text = "你選擇的課程是：\n\n" + course[0].dep_name.replace(/[A-Z0-9]/g, "") + "／" + course[0].course_name.replace(/[（|）|\s]/g, "") + "／" + course[0].teacher.replace(/\s/g, "") + "／" + course[0].time + "\n\n上課地點在「" + course[0].classroom.replace(/\s/g, "") + "」唷！";
@@ -443,18 +452,21 @@ function sendCourseInfo(sender, course_id) {
 
 function sendFollowCourseByName(sender, name, dpt, teacher) {
   var Query = {}
-  if(name) Query.course_name = {
-    [Op.like]: `%${name}%` }
-  if(dpt) Query.dep_name = {
-    [Op.like]: `%${dpt}%` }
-  if(teacher) Query.teacher = {
-    [Op.like]: `%${teacher}%` }
+  if (name) Query.course_name = {
+    [Op.like]: `%${name}%`
+  }
+  if (dpt) Query.dep_name = {
+    [Op.like]: `%${dpt}%`
+  }
+  if (teacher) Query.teacher = {
+    [Op.like]: `%${teacher}%`
+  }
   Course.findAll({
     attributes: ['id', 'dep_name', 'time', 'course_name', 'classroom', 'teacher'],
     where: Query
-  }).then(function(courses) {
-    if(courses.length > 0) {
-      if(courses.length > 30) {
+  }).then(function (courses) {
+    if (courses.length > 0) {
+      if (courses.length > 30) {
         var subtitle = "以下是找到的前 30 筆結果。若要精準搜尋，請輸入 #課程名稱 $系所 %老師名";
       } else {
         var subtitle = "哎呀！我找到了這些，請問哪門是你要的呢 😇😇😇";
@@ -468,9 +480,9 @@ function sendFollowCourseByName(sender, name, dpt, teacher) {
           }
         }
       }
-      for(var i in courses) {
-        if(i == 30) break;
-        if(i % 3 == 0) {
+      for (var i in courses) {
+        if (i == 30) break;
+        if (i % 3 == 0) {
           var card = {
             "title": "NCKUHUB",
             "subtitle": subtitle,
@@ -483,7 +495,7 @@ function sendFollowCourseByName(sender, name, dpt, teacher) {
           "payload": "!" + courses[i].id
         }
         card["buttons"].push(data);
-        if(i % 3 == 2 || i == courses.length - 1) {
+        if (i % 3 == 2 || i == courses.length - 1) {
           messageData["attachment"]["payload"]["elements"].push(card);
         }
       }
@@ -499,10 +511,10 @@ function sendFollowCourseByName(sender, name, dpt, teacher) {
           },
           message: messageData,
         }
-      }, function(error, response, body) {
-        if(error) {
+      }, function (error, response, body) {
+        if (error) {
           console.log('Error sending messages: ', error)
-        } else if(response.body.error) {
+        } else if (response.body.error) {
           console.log('Error: ', response.body.error)
         }
       });
@@ -521,8 +533,8 @@ function sendFollowCourseById(sender, serial) {
     where: {
       serial: serial
     }
-  }).then(function(course) {
-    if(course) {
+  }).then(function (course) {
+    if (course) {
       addFollowCourse(sender, course.id);
     } else {
       var text = "查無課程唷 😱😱 會不會是這學期沒開課，或是關鍵字有打錯呢？";
@@ -538,41 +550,45 @@ function addFollowCourse(sender, course_id) {
     where: {
       id: course_id
     }
-  }).then(function(course) {
-    if(course.remaining == "額滿") {
-      Follow.findOne({
-        where: {
-          course_id: course_id,
-          fb_id: sender
-        }
-      }).then(function(follow) {
-        if(follow) {
-          var text = "你選擇的課程是：\n\n" + course.dep_name.replace(/[A-Z0-9]/g, "") + "／" + course.course_name.replace(/[（|）|\s]/g, "") + "／" + course.teacher.replace(/\s/g, "") + "／" + course.time + "\n\n這堂課目前無餘額，已為你設定追蹤 👌 有餘額的時候會私訊你唷！請抱著既期待又怕受傷害的心情等候 🙌🙌";
-          sendTextMessage(sender, text);
-          sendGoodbye(sender);
-          var data = {
+  }).then(function (course) {
+    if (disable.indexOf(course.dep_no) == -1) {
+      if (course.remaining == "額滿") {
+        Follow.findOne({
+          where: {
             course_id: course_id,
-            fb_id: sender,
-            content: course.dep_name.replace(/[A-Z0-9]/g, "") + "／" + course.course_name.replace(/[（|）|\s]/g, ""),
-            time: course.time,
-            serial: (course.serial) ? course.serial : "",
-            teacher: course.teacher
+            fb_id: sender
           }
-          Follow.create(data).then(function(result) {
-            return FollowCopy.create(data);
-          }).then(function(result) {}).catch(function(err) {
-            console.log(err);
-          });
-        } else {
-          var text = "你選擇的課程是：\n\n" + course.dep_name.replace(/[A-Z0-9]/g, "") + "／" + course.course_name.replace(/[（|）|\s]/g, "") + "／" + course.teacher.replace(/\s/g, "") + "／" + course.time + "\n\n這堂課目前無餘額，已經為你設定過追蹤囉！";
-          sendTextMessage(sender, text);
-          sendGoodbye(sender);
-        }
-      });
+        }).then(function (follow) {
+          if (follow) {
+            var text = "你選擇的課程是：\n\n" + course.dep_name.replace(/[A-Z0-9]/g, "") + "／" + course.course_name.replace(/[（|）|\s]/g, "") + "／" + course.teacher.replace(/\s/g, "") + "／" + course.time + "\n\n這堂課目前無餘額，已為你設定追蹤 👌 有餘額的時候會私訊你唷！請抱著既期待又怕受傷害的心情等候 🙌🙌";
+            sendTextMessage(sender, text);
+            sendGoodbye(sender);
+            var data = {
+              course_id: course_id,
+              fb_id: sender,
+              content: course.dep_name.replace(/[A-Z0-9]/g, "") + "／" + course.course_name.replace(/[（|）|\s]/g, ""),
+              time: course.time,
+              serial: (course.serial) ? course.serial : "",
+              teacher: course.teacher
+            }
+            Follow.create(data).then(function (result) {
+              return FollowCopy.create(data);
+            }).then(function (result) {}).catch(function (err) {
+              console.log(err);
+            });
+          } else {
+            var text = "你選擇的課程是：\n\n" + course.dep_name.replace(/[A-Z0-9]/g, "") + "／" + course.course_name.replace(/[（|）|\s]/g, "") + "／" + course.teacher.replace(/\s/g, "") + "／" + course.time + "\n\n這堂課目前無餘額，已經為你設定過追蹤囉！";
+            sendTextMessage(sender, text);
+            sendGoodbye(sender);
+          }
+        });
+      } else {
+        var text = "你選擇的課程是：\n\n" + course.serial + "／" + course.dep_name.replace(/[A-Z0-9]/g, "") + "／" + course.course_name.replace(/[（|）|\s]/g, "") + "／" + course.teacher.replace(/\s/g, "") + "／" + course.time + "\n\n這門課還有 " + course.remaining + " 個餘額！趕快去選吧 🏄🏄\n\n成大選課連結：https://goo.gl/o8zPZH";
+        sendTextMessage(sender, text);
+        sendGoodbye(sender);
+      }
     } else {
-      var text = "你選擇的課程是：\n\n" + course.serial + "／" + course.dep_name.replace(/[A-Z0-9]/g, "") + "／" + course.course_name.replace(/[（|）|\s]/g, "") + "／" + course.teacher.replace(/\s/g, "") + "／" + course.time + "\n\n這門課還有 " + course.remaining + " 個餘額！趕快去選吧 🏄🏄\n\n成大選課連結：https://goo.gl/o8zPZH";
-      sendTextMessage(sender, text);
-      sendGoodbye(sender);
+      sendDisableMsg(sender, course.dep_no);
     }
   });
 }
@@ -582,8 +598,8 @@ function sendFollowCourseList(sender) {
     where: {
       fb_id: sender
     }
-  }).then(function(follow) {
-    if(follow.length > 0) {
+  }).then(function (follow) {
+    if (follow.length > 0) {
       messageData = {
         "attachment": {
           "type": "template",
@@ -593,9 +609,9 @@ function sendFollowCourseList(sender) {
           }
         }
       }
-      for(var i in follow) {
-        if(i == 30) break;
-        if(i % 3 == 0) {
+      for (var i in follow) {
+        if (i == 30) break;
+        if (i % 3 == 0) {
           var card = {
             "title": "NCKUHUB",
             "subtitle": "以下是你目前追蹤的課程，請問要取消追蹤哪一個呢？",
@@ -608,11 +624,11 @@ function sendFollowCourseList(sender) {
           "payload": "&" + follow[i].id,
         }
         card["buttons"].push(data);
-        if(i % 3 == 2 || i == follow.length - 1) {
+        if (i % 3 == 2 || i == follow.length - 1) {
           messageData["attachment"]["payload"]["elements"].push(card);
         }
       }
-      if(follow.length % 3 == 0) {
+      if (follow.length % 3 == 0) {
         var card = {
           "title": "NCKUHUB",
           "subtitle": "以下是你目前追蹤的課程，請問要取消追蹤哪一個呢？",
@@ -643,10 +659,10 @@ function sendFollowCourseList(sender) {
           },
           message: messageData,
         }
-      }, function(error, response, body) {
-        if(error) {
+      }, function (error, response, body) {
+        if (error) {
           console.log('Error sending messages: ', error)
-        } else if(response.body.error) {
+        } else if (response.body.error) {
           console.log('Error: ', response.body.error)
         }
       });
@@ -664,12 +680,16 @@ function cancelFollowCourse(sender, follow_id) {
     where: {
       id: follow_id
     }
-  }).then(function(follow) {
-    if(follow) {
+  }).then(function (follow) {
+    if (follow) {
       var text = "你選擇的課程是：\n\n" + follow.content + "／" + follow.teacher + "／" + follow.time + "\n\n已經為你取消追蹤囉 🙂🙂";
       sendTextMessage(sender, text);
       sendGoodbye(sender);
-      Follow.destroy({ where: { id: follow_id } });
+      Follow.destroy({
+        where: {
+          id: follow_id
+        }
+      });
     } else {
       var text = "已經為你取消追蹤囉 🙂🙂";
       sendTextMessage(sender, text);
@@ -682,7 +702,11 @@ function cancelAllFollowCourse(sender) {
   var text = "沒問題，已經為你取消追蹤囉！";
   sendTextMessage(sender, text);
   sendGoodbye(sender);
-  Follow.destroy({ where: { fb_id: sender } });
+  Follow.destroy({
+    where: {
+      fb_id: sender
+    }
+  });
 }
 
 function sendGoodbye(sender) {
@@ -707,7 +731,7 @@ function sendGoodbye(sender) {
       }
     }
   }
-  setTimeout(function() {
+  setTimeout(function () {
     request({
       url: 'https://graph.facebook.com/v2.6/me/messages',
       qs: {
@@ -720,68 +744,79 @@ function sendGoodbye(sender) {
         },
         message: messageData,
       }
-    }, function(error, response, body) {
-      if(error) {
+    }, function (error, response, body) {
+      if (error) {
         console.log('Error sending messages: ', error)
-      } else if(response.body.error) {
+      } else if (response.body.error) {
         console.log('Error: ', response.body.error)
       }
     })
   }, 3000);
 }
 
-function checkCoureseCredit() {
+function checkCourseRemain() {
   Follow.findAll({
-    where: { id: id },
+    where: {
+      id: id,
+      dep_no:{
+        [Op.notIn]: disable 
+      }
+    },
     include: [{
       model: Course,
       required: true,
       attributes: ['remaining', 'dep_no']
     }],
     raw: false
-  }).then(function(follow) {
+  }).then(function (follow) {
     follow = JSON.parse(JSON.stringify(follow));
-    for(var i in follow) {
-      if(follow[i].remaining != "額滿" && follow[i].hadNotify == 0) {
-        sendCreditNotify(follow[i]);
-      } else if(follow[i].remaining == "額滿" && follow[i].hadNotify != 0) {
+    for (var i in follow) {
+      if (follow[i].remaining != "額滿" && follow[i].hadNotify == 0) {
+        sendRemainNotify(follow[i]);
+      } else if (follow[i].remaining == "額滿" && follow[i].hadNotify != 0) {
         Follow.update({
           hadNotify: 0
         }, {
-          where: { id: follow[i].id }
+          where: {
+            id: follow[i].id
+          }
         });
       }
     }
   });
 }
 
-function sendCreditNotify(course) {
+function sendRemainNotify(course) {
   var text = "餘額通知（" + course.serial + "）！\n\n" + course.content + "／" + course.teacher + "／" + course.time + "\n\n這門課有 " + course.remaining + " 個餘額了！趕快去選吧 🏄🏄\n\n成大選課連結：https://goo.gl/o8zPZH";
   sendTextMessage(course.fb_id, text);
   Follow.update({
     hadNotify: 1
   }, {
-    where: { id: course.id }
+    where: {
+      id: course.id
+    }
   });
   FollowCopy.update({
     hadNotify: 1
   }, {
-    where: { id: course.id }
+    where: {
+      id: course.id
+    }
   });
 }
 
 function searchCourseByName(sender, name) {
   Course.findAll({
-    attributes:['id','dep_name','course_name','time', 'serial'],
-    where:{
-      course_name : name,
-      serial : {
-        [Op.ne]:''
+    attributes: ['id', 'dep_name', 'course_name', 'time', 'serial'],
+    where: {
+      course_name: name,
+      serial: {
+        [Op.ne]: ''
       }
     }
-  }).then(function(courses){
-    if(courses.length > 0) {
-      if(courses.length > 30) {
+  }).then(function (courses) {
+    if (courses.length > 0) {
+      if (courses.length > 30) {
         var subtitle = "以下是找到的前 30 筆結果。若要精準搜尋，請輸入 @課程名稱 $系所 %老師名 或 #課程名稱 $系所 %老師名 或 ";
       } else {
         var subtitle = "哎呀！我找到了這些，請問哪門是你要的呢 😇😇😇";
@@ -795,9 +830,9 @@ function searchCourseByName(sender, name) {
           }
         }
       }
-      for(var i in courses) {
-        if(i == 30) break;
-        if(i % 3 == 0) {
+      for (var i in courses) {
+        if (i == 30) break;
+        if (i % 3 == 0) {
           var card = {
             "title": "NCKUHUB",
             "subtitle": subtitle,
@@ -810,7 +845,7 @@ function searchCourseByName(sender, name) {
           "payload": "ask" + courses[i].serial,
         }
         card["buttons"].push(data);
-        if(i % 3 == 2 || i == courses.length - 1) {
+        if (i % 3 == 2 || i == courses.length - 1) {
           messageData["attachment"]["payload"]["elements"].push(card);
         }
       }
@@ -826,10 +861,10 @@ function searchCourseByName(sender, name) {
           },
           message: messageData,
         }
-      }, function(error, response, body) {
-        if(error) {
+      }, function (error, response, body) {
+        if (error) {
           console.log('Error sending messages: ', error)
-        } else if(response.body.error) {
+        } else if (response.body.error) {
           console.log('Error: ', response.body.error)
         }
       });
@@ -843,16 +878,16 @@ function searchCourseByName(sender, name) {
 
 function searchCourseByTeacher(sender, teacher) {
   Course.findAll({
-    attributes:['id','dep_name','course_name','time', 'serial'],
-    where:{
-      teacher : teacher,
-      serial : {
-        [Op.ne]:''
+    attributes: ['id', 'dep_name', 'course_name', 'time', 'serial'],
+    where: {
+      teacher: teacher,
+      serial: {
+        [Op.ne]: ''
       }
     }
-  }).then(function(courses){
-    if(courses.length > 0) {
-      if(courses.length > 30) {
+  }).then(function (courses) {
+    if (courses.length > 0) {
+      if (courses.length > 30) {
         var subtitle = "以下是找到的前 30 筆結果。若要精準搜尋，請輸入 @課程名稱 $系所 %老師名 或 #課程名稱 $系所 %老師名 或 ";
       } else {
         var subtitle = "哎呀！我找到了這些，請問哪門是你要的呢 😇😇😇";
@@ -866,9 +901,9 @@ function searchCourseByTeacher(sender, teacher) {
           }
         }
       }
-      for(var i in courses) {
-        if(i == 30) break;
-        if(i % 3 == 0) {
+      for (var i in courses) {
+        if (i == 30) break;
+        if (i % 3 == 0) {
           var card = {
             "title": "NCKUHUB",
             "subtitle": subtitle,
@@ -881,7 +916,7 @@ function searchCourseByTeacher(sender, teacher) {
           "payload": "ask" + courses[i].serial,
         }
         card["buttons"].push(data);
-        if(i % 3 == 2 || i == courses.length - 1) {
+        if (i % 3 == 2 || i == courses.length - 1) {
           messageData["attachment"]["payload"]["elements"].push(card);
         }
       }
@@ -897,10 +932,10 @@ function searchCourseByTeacher(sender, teacher) {
           },
           message: messageData,
         }
-      }, function(error, response, body) {
-        if(error) {
+      }, function (error, response, body) {
+        if (error) {
           console.log('Error sending messages: ', error)
-        } else if(response.body.error) {
+        } else if (response.body.error) {
           console.log('Error: ', response.body.error)
         }
       });
@@ -915,12 +950,12 @@ function searchCourseByTeacher(sender, teacher) {
 function askPlaceOrFollow(sender, serial) {
   var serial = serial.toUpperCase();
   Course.findAll({
-    attributes:['id','dep_name','course_name','teacher', 'time'],
-    where:{
-      serial : serial
+    attributes: ['id', 'dep_name', 'course_name', 'teacher', 'time'],
+    where: {
+      serial: serial
     }
-  }).then(function(courses){
-    if(courses.length > 0) {
+  }).then(function (courses) {
+    if (courses.length > 0) {
       messageData = {
         "attachment": {
           "type": "template",
@@ -954,10 +989,10 @@ function askPlaceOrFollow(sender, serial) {
           },
           message: messageData,
         }
-      }, function(error, response, body) {
-        if(error) {
+      }, function (error, response, body) {
+        if (error) {
           console.log('Error sending messages: ', error)
-        } else if(response.body.error) {
+        } else if (response.body.error) {
           console.log('Error: ', response.body.error)
         }
       });
@@ -997,10 +1032,10 @@ function sendLink(sender, link) {
       },
       message: messageData,
     }
-  }, function(error, response, body) {
-    if(error) {
+  }, function (error, response, body) {
+    if (error) {
       console.log('Error sending messages: ', error)
-    } else if(response.body.error) {
+    } else if (response.body.error) {
       console.log('Error: ', response.body.error)
     }
   });
@@ -1010,8 +1045,10 @@ function cancelMsg(sender) {
   FollowCopy.update({
     getMsg: 0
   }, {
-    where: { fb_id: sender }
-  }).then(function(){
+    where: {
+      fb_id: sender
+    }
+  }).then(function () {
     sendTextMessage(sender, "成功!你以後將不會再收到NCKUHUB的廣播訊息!");
   });
 }
@@ -1043,13 +1080,17 @@ function sendCancelMsg(sender) {
       },
       message: messageData,
     }
-  }, function(error, response, body) {
-    if(error) {
+  }, function (error, response, body) {
+    if (error) {
       console.log('Error sending messages: ', error)
-    } else if(response.body.error) {
+    } else if (response.body.error) {
       console.log('Error: ', response.body.error)
     }
   });
+}
+
+function sendDisableMsg(sender, dept_no) {
+  sendTextMessage(sender, "很抱歉! 此階段 " + dept_no + " 課程未開放追蹤餘額!");
 }
 
 module.exports = router;

@@ -1,7 +1,7 @@
 var Sequelize = require('sequelize');
 var config = require('../config.json');
 
-var db = new Sequelize(config.db.database, config.db.user, config.db.password, {
+var db = new Sequelize(config.db.database, config.db.user, config.db.pw, {
   host: config.db.host,
   port: config.db.port,
   dialect: 'mysql',

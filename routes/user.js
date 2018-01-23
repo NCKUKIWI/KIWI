@@ -3,7 +3,7 @@ var router = express.Router();
 var helper = require('../helper');
 var User = require('../model/User');
 var graph = require('fbgraph');
-var config = require('../config.dev');
+var config = require('../config');
 
 router.get('/fblogin', helper.checkLogin(1), function(req, res) {
   res.redirect(`https://www.facebook.com/v2.8/dialog/oauth?client_id=${config.fb.appid}&scope=email,public_profile&response_type=code&redirect_uri=${config.website}/user/fbcheck`);

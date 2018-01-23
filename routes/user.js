@@ -6,15 +6,15 @@ var graph = require("fbgraph");
 var config = require('../config');
 
 router.get("/fblogin", helper.checkLogin(1), function(req, res) {
-    res.redirect(`https://www.facebook.com/v2.8/dialog/oauth?client_id=${config.fbappid}&scope=email,public_profile&response_type=code&redirect_uri=${config.website}/user/fbcheck`);
+    res.redirect(`https://www.facebook.com/v2.8/dialog/oauth?client_id=${config.fb.appid}&scope=email,public_profile&response_type=code&redirect_uri=${config.website}/user/fbcheck`);
 });
 
 router.get("/fbcheck", helper.checkLogin(1), function(req, res) {
     if (req.query.code) {
         graph.authorize({
-            "client_id": config.fbappid,
+            "client_id": config.fb.appid,
             "redirect_uri": config.website + "/user/fbcheck",
-            "client_secret": config.fbsecret,
+            "client_secret": config.fb.secret,
             "code": req.query.code
         }, function(err, result) {
             graph.get(`/me?fields=id,name,email,gender&access_token=${result.access_token}`, function(err, fb) {

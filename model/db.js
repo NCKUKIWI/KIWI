@@ -1,4 +1,4 @@
-var connection = require('../config');
+var connection = require('./mysql.js');
 connection = connection.connection;
 
 /*

@@ -3,7 +3,9 @@ var request = require('request');
 var config = require('../config');
 var router = express.Router();
 var dbsystem = require('../model/dba');
-var token = config.msgtoken;
+var token = config.fb.msgtoken;
+var disable = config.bot.disable;
+var disableSQL = '';
 
 //取得所有課程資料
 var db = new dbsystem();
@@ -13,16 +15,25 @@ var courseSerialList = [];
 var checkCourse;
 var checkCourseStatus = 0;
 
-db.select().field(["課程名稱", "選課序號"]).from("course_new").where("選課序號!=", "").run(function(data, err) {
+if (disable.length > 0) {
+    disableSQL += '系號 NOT IN(';
+    for (var i in disable) {
+        disableSQL += "\'" + disable[i] + "\'";
+        if (i != disable.length - 1) disableSQL += ',';
+    }
+    disableSQL += ')';
+}
+
+db.select().field(["課程名稱", "選課序號"]).from("course_new").where("選課序號!=", "").run(function (data, err) {
     for (var i in data) {
         courseNameList.push(data[i].課程名稱);
         courseSerialList.push(data[i].選課序號);
     }
-    db.select().field("*").from("setting").where("id=", 1).run(function(data, err) {
+    db.select().field("*").from("setting").where("id=", 1).run(function (data, err) {
         checkCourseStatus = data[0].status;
         if (checkCourseStatus == 1) {
-            checkCourse = setInterval(function() {
-                checkCoureseCredit();
+            checkCourse = setInterval(function () {
+                checkCoureseRemain();
             }, 1000 * 10);
         }
         db = null;
@@ -30,36 +41,28 @@ db.select().field(["課程名稱", "選課序號"]).from("course_new").where("�
     });
 });
 
-router.get('/setting/', function(req, res) {
+router.get('/setting/', function (req, res) {
     res.render('setting', {
         botswitch: checkCourseStatus
     });
 });
 
-router.post('/sendmsg', function(req, res) {
+router.post('/sendmsg', function (req, res) {
     if (req.body.pw != "nckuhubsetting") {
         res.send("fail");
     } else {
         if (req.body.type == "test") {
             if (req.body.msg) {
-                if (req.body.msg == 'cancelMsg') {
-                    sendCancelMsg("1346773338719764");
-                    sendCancelMsg("1169375359801678");
-                    sendCancelMsg("1364925580245632");
-                    sendCancelMsg("1194641423974664");
-                    sendCancelMsg("1318673478198233");
-                } else {
-                    sendTextMessage("1346773338719764", req.body.msg);
-                    sendTextMessage("1169375359801678", req.body.msg);
-                    sendTextMessage("1364925580245632", req.body.msg);
-                    sendTextMessage("1194641423974664", req.body.msg);
-                    sendTextMessage("1318673478198233", req.body.msg);
-                }
+                sendTextMessage("1346773338719764", req.body.msg);
+                sendTextMessage("1169375359801678", req.body.msg);
+                sendTextMessage("1364925580245632", req.body.msg);
+                sendTextMessage("1194641423974664", req.body.msg);
+                sendTextMessage("1318673478198233", req.body.msg);
             }
         } else if (req.body.type == "broadcast") {
             var db = new dbsystem();
-            db.select().field("distinct fb_id").from("follow_copy").where("getMsg != 0").run(function(users) {
-                users.forEach(function(user) {
+            db.select().field("distinct fb_id").from("follow_copy").where("getMsg != 0").run(function (users) {
+                users.forEach(function (user) {
                     if (req.body.msg) {
                         if (req.body.msg == 'cancelMsg') {
                             sendCancelMsg(user.fb_id);
@@ -74,7 +77,7 @@ router.post('/sendmsg', function(req, res) {
     }
 });
 
-router.post('/sendlink', function(req, res) {
+router.post('/sendlink', function (req, res) {
     if (req.body.pw != "nckuhubsetting") {
         res.send("fail");
     } else {
@@ -108,8 +111,8 @@ router.post('/sendlink', function(req, res) {
             }
         } else if (req.body.type == "broadcast") {
             var db = new dbsystem();
-            db.select().field("distinct fb_id").from("follow_copy").where("getMsg != 0").run(function(users) {
-                users.forEach(function(user) {
+            db.select().field("distinct fb_id").from("follow_copy").where("getMsg != 0").run(function (users) {
+                users.forEach(function (user) {
                     if (req.body.linktitle && req.body.linkurl) {
                         sendLink(user.fb_id, {
                             url: req.body.linkurl,
@@ -124,36 +127,36 @@ router.post('/sendlink', function(req, res) {
     }
 });
 
-router.post('/openbot', function(req, res) {
-    checkCourse = setInterval(function() {
-        checkCoureseCredit();
+router.post('/openbot', function (req, res) {
+    checkCourse = setInterval(function () {
+        checkCoureseRemain();
     }, 1000 * 10);
     var db = new dbsystem();
     db.update().table("setting").set({
         status: 1
-    }).where("id=", 1).run(function(result) {});
+    }).where("id=", 1).run(function (result) {});
     checkCourseStatus = 1;
     res.send('ok');
 });
 
-router.post('/closebot', function(req, res) {
+router.post('/closebot', function (req, res) {
     clearInterval(checkCourse);
     var db = new dbsystem();
     db.update().table("setting").set({
         status: 0
-    }).where("id=", 1).run(function(result) {});
+    }).where("id=", 1).run(function (result) {});
     checkCourseStatus = 0;
     res.send('ok');
 });
 
-router.get('/webhook/', function(req, res) {
+router.get('/webhook/', function (req, res) {
     if (req.query['hub.verify_token'] === 'nckuhubbver49') {
         res.send(req.query['hub.challenge'])
     }
     res.send('Error, wrong token')
 });
 
-router.post('/webhook/', function(req, res) {
+router.post('/webhook/', function (req, res) {
     var messaging_events = req.body.entry[0].messaging
     if (!messaging_events) console.log('\n!!!\n[ERR] messaging_events undefined\nreq.body = ' + JSON.stringify(req.body) + '\n!!!\n')
     else
@@ -257,7 +260,7 @@ function sendTextMessage(sender, text) {
             },
             message: messageData,
         }
-    }, function(error, response, body) {
+    }, function (error, response, body) {
         if (error) {
             console.log('Error sending messages: ', error)
         } else if (response.body.error) {
@@ -304,7 +307,7 @@ function sendHelloMessage(sender) {
             },
             message: messageData,
         }
-    }, function(error, response, body) {
+    }, function (error, response, body) {
         if (error) {
             console.log('Error sending messages: ', error)
         } else if (response.body.error) {
@@ -315,7 +318,7 @@ function sendHelloMessage(sender) {
 
 function sendCoursePlaceByName(sender, name, dpt, teacher) {
     var db = new dbsystem();
-    db.select().field(["id", "系所名稱", "課程名稱", "時間", "教室"]).from("course_new").where("課程名稱 LIKE '%" + name + "%'").whereCheck("系所名稱 LIKE '%" + dpt + "%'", dpt).whereCheck("老師 LIKE '%" + teacher + "%'", teacher).run(function(course) {
+    db.select().field(["id", "系所名稱", "課程名稱", "時間", "教室"]).from("course_new").where("課程名稱 LIKE '%" + name + "%'").whereCheck("系所名稱 LIKE '%" + dpt + "%'", dpt).whereCheck("老師 LIKE '%" + teacher + "%'", teacher).run(function (course) {
         db = null;
         delete db;
         if (course.length > 0) {
@@ -364,7 +367,7 @@ function sendCoursePlaceByName(sender, name, dpt, teacher) {
                     },
                     message: messageData,
                 }
-            }, function(error, response, body) {
+            }, function (error, response, body) {
                 if (error) {
                     console.log('Error sending messages: ', error)
                 } else if (response.body.error) {
@@ -382,7 +385,7 @@ function sendCoursePlaceByName(sender, name, dpt, teacher) {
 function sendCoursePlaceById(sender, serial) {
     serial = serial.toUpperCase();
     var db = new dbsystem();
-    db.select().field(["id"]).from("course_new").where("選課序號=", serial).run(function(course) {
+    db.select().field(["id"]).from("course_new").where("選課序號=", serial).run(function (course) {
         db = null;
         delete db;
         if (course.length > 0) {
@@ -397,7 +400,7 @@ function sendCoursePlaceById(sender, serial) {
 
 function sendCourseInfo(sender, course_id) {
     var db = new dbsystem();
-    db.select().field(["系號", "系所名稱", "課程名稱", "時間", "教室", "老師"]).from("course_new").where("id=", course_id).run(function(course) {
+    db.select().field(["系號", "系所名稱", "課程名稱", "時間", "教室", "老師"]).from("course_new").where("id=", course_id).run(function (course) {
         db = null;
         delete db;
         course[0].教室 = course[0].教室.replace(/\s/g, "");
@@ -413,7 +416,7 @@ function sendCourseInfo(sender, course_id) {
 
 function sendFollowCourseByName(sender, name, dpt, teacher) {
     var db = new dbsystem();
-    db.select().field(["id", "系所名稱", "課程名稱", "時間"]).from("course_new").where("課程名稱 LIKE '%" + name + "%'").whereCheck("系所名稱 LIKE '%" + dpt + "%'", dpt).whereCheck("老師 LIKE '%" + teacher + "%'", teacher).run(function(course) {
+    db.select().field(["id", "系所名稱", "課程名稱", "時間"]).from("course_new").where("課程名稱 LIKE '%" + name + "%'").whereCheck("系所名稱 LIKE '%" + dpt + "%'", dpt).whereCheck("老師 LIKE '%" + teacher + "%'", teacher).run(function (course) {
         db = null;
         delete db;
         if (course.length > 0) {
@@ -462,7 +465,7 @@ function sendFollowCourseByName(sender, name, dpt, teacher) {
                     },
                     message: messageData,
                 }
-            }, function(error, response, body) {
+            }, function (error, response, body) {
                 if (error) {
                     console.log('Error sending messages: ', error)
                 } else if (response.body.error) {
@@ -480,7 +483,7 @@ function sendFollowCourseByName(sender, name, dpt, teacher) {
 function sendFollowCourseById(sender, serial) {
     serial = serial.toUpperCase();
     var db = new dbsystem();
-    db.select().field(["id"]).from("course_new").where("選課序號=", serial).run(function(course) {
+    db.select().field(["id"]).from("course_new").where("選課序號=", serial).run(function (course) {
         if (course.length > 0) {
             addFollowCourse(sender, course[0].id);
         } else {
@@ -493,42 +496,46 @@ function sendFollowCourseById(sender, serial) {
 
 function addFollowCourse(sender, course_id) {
     var db = new dbsystem();
-    db.select().field(["系所名稱", "課程名稱", "時間", "餘額", "選課序號", "老師"]).from("course_new").where("id=", course_id).run(function(course) {
-        if (course[0].餘額 == 0) {
-            db.select().field("*").from("follow").where("course_id=", course_id).where("fb_id=", sender).run(function(follow) {
-                if (follow.length < 1) {
-                    var text = "你選擇的課程是：\n\n" + course[0].系所名稱.replace(/[A-Z0-9]/g, "") + "／" + course[0].課程名稱.replace(/[（|）|\s]/g, "") + "／" + course[0].老師.replace(/\s/g, "") + "／" + course[0].時間 + "\n\n這堂課目前無餘額，已為你設定追蹤 👌 有餘額的時候會私訊你唷！請抱著既期待又怕受傷害的心情等候 🙌🙌";
-                    sendTextMessage(sender, text);
-                    sendGoodbye(sender);
-                    var data = {
-                        course_id: course_id,
-                        fb_id: sender,
-                        content: course[0].系所名稱.replace(/[A-Z0-9]/g, "") + "／" + course[0].課程名稱.replace(/[（|）|\s]/g, ""),
-                        time: course[0].時間,
-                        serial: (course[0].選課序號) ? course[0].選課序號 : "",
-                        teacher: course[0].老師
+    db.select().field(["系所名稱", "課程名稱", "時間", "餘額", "選課序號", "老師"]).from("course_new").where("id=", course_id).run(function (course) {
+        if (disable.indexOf(course[0]['系號']) == -1) {
+            if (course[0].餘額 == 0) {
+                db.select().field("*").from("follow").where("course_id=", course_id).where("fb_id=", sender).run(function (follow) {
+                    if (follow.length < 1) {
+                        var text = "你選擇的課程是：\n\n" + course[0].系所名稱.replace(/[A-Z0-9]/g, "") + "／" + course[0].課程名稱.replace(/[（|）|\s]/g, "") + "／" + course[0].老師.replace(/\s/g, "") + "／" + course[0].時間 + "\n\n這堂課目前無餘額，已為你設定追蹤 👌 有餘額的時候會私訊你唷！請抱著既期待又怕受傷害的心情等候 🙌🙌";
+                        sendTextMessage(sender, text);
+                        sendGoodbye(sender);
+                        var data = {
+                            course_id: course_id,
+                            fb_id: sender,
+                            content: course[0].系所名稱.replace(/[A-Z0-9]/g, "") + "／" + course[0].課程名稱.replace(/[（|）|\s]/g, ""),
+                            time: course[0].時間,
+                            serial: (course[0].選課序號) ? course[0].選課序號 : "",
+                            teacher: course[0].老師
+                        }
+                        db.insert().into("follow").set(data).run(function (result) {
+                            //for record
+                            db.insert().into("follow_copy").set(data).run(function (result) {});
+                        });
+                    } else {
+                        var text = "你選擇的課程是：\n\n" + course[0].系所名稱.replace(/[A-Z0-9]/g, "") + "／" + course[0].課程名稱.replace(/[（|）|\s]/g, "") + "／" + course[0].老師.replace(/\s/g, "") + "／" + course[0].時間 + "\n\n這堂課目前無餘額，已經為你設定過追蹤囉！";
+                        sendTextMessage(sender, text);
+                        sendGoodbye(sender);
                     }
-                    db.insert().into("follow").set(data).run(function(result) {
-                        //for record
-                        db.insert().into("follow_copy").set(data).run(function(result) {});
-                    });
-                } else {
-                    var text = "你選擇的課程是：\n\n" + course[0].系所名稱.replace(/[A-Z0-9]/g, "") + "／" + course[0].課程名稱.replace(/[（|）|\s]/g, "") + "／" + course[0].老師.replace(/\s/g, "") + "／" + course[0].時間 + "\n\n這堂課目前無餘額，已經為你設定過追蹤囉！";
-                    sendTextMessage(sender, text);
-                    sendGoodbye(sender);
-                }
-            });
+                });
+            } else {
+                var text = "你選擇的課程是：\n\n" + course[0].選課序號 + "／" + course[0].系所名稱.replace(/[A-Z0-9]/g, "") + "／" + course[0].課程名稱.replace(/[（|）|\s]/g, "") + "／" + course[0].老師.replace(/\s/g, "") + "／" + course[0].時間 + "\n\n這門課還有 " + course[0].餘額 + " 個餘額！趕快去選吧 🏄🏄\n\n成大選課連結：https://goo.gl/o8zPZH";
+                sendTextMessage(sender, text);
+                sendGoodbye(sender);
+            }
         } else {
-            var text = "你選擇的課程是：\n\n" + course[0].選課序號 + "／" + course[0].系所名稱.replace(/[A-Z0-9]/g, "") + "／" + course[0].課程名稱.replace(/[（|）|\s]/g, "") + "／" + course[0].老師.replace(/\s/g, "") + "／" + course[0].時間 + "\n\n這門課還有 " + course[0].餘額 + " 個餘額！趕快去選吧 🏄🏄\n\n成大選課連結：https://goo.gl/o8zPZH";
-            sendTextMessage(sender, text);
-            sendGoodbye(sender);
+            sendDisableMsg(sender, course[0]['系號']);
         }
     });
 }
 
 function sendFollowCourseList(sender) {
     var db = new dbsystem();
-    db.select().field(["*"]).from("follow").where("fb_id=", sender).run(function(follow) {
+    db.select().field(["*"]).from("follow").where("fb_id=", sender).run(function (follow) {
         db = null;
         delete db;
         if (follow.length > 0) {
@@ -591,7 +598,7 @@ function sendFollowCourseList(sender) {
                     },
                     message: messageData,
                 }
-            }, function(error, response, body) {
+            }, function (error, response, body) {
                 if (error) {
                     console.log('Error sending messages: ', error)
                 } else if (response.body.error) {
@@ -608,12 +615,12 @@ function sendFollowCourseList(sender) {
 
 function cancelFollowCourse(sender, follow_id) {
     var db = new dbsystem();
-    db.select().field(["content", "teacher", "time"]).from("follow").where("id=", follow_id).run(function(follow) {
+    db.select().field(["content", "teacher", "time"]).from("follow").where("id=", follow_id).run(function (follow) {
         if (follow.length > 0) {
             var text = "你選擇的課程是：\n\n" + follow[0].content + "／" + follow[0].teacher + "／" + follow[0].time + "\n\n已經為你取消追蹤囉 🙂🙂";
             sendTextMessage(sender, text);
             sendGoodbye(sender);
-            db.delete().from("follow").where("id=", follow_id).run(function(result) {});
+            db.delete().from("follow").where("id=", follow_id).run(function (result) {});
         } else {
             var text = "已經為你取消追蹤囉 🙂🙂";
             sendTextMessage(sender, text);
@@ -627,7 +634,7 @@ function cancelAllFollowCourse(sender) {
     sendTextMessage(sender, text);
     sendGoodbye(sender);
     var db = new dbsystem();
-    db.delete().from("follow").where("fb_id=", sender).run(function(result) {});
+    db.delete().from("follow").where("fb_id=", sender).run(function (result) {});
 }
 
 function sendGoodbye(sender) {
@@ -652,7 +659,7 @@ function sendGoodbye(sender) {
             }
         }
     }
-    setTimeout(function() {
+    setTimeout(function () {
         request({
             url: 'https://graph.facebook.com/v2.6/me/messages',
             qs: {
@@ -665,7 +672,7 @@ function sendGoodbye(sender) {
                 },
                 message: messageData,
             }
-        }, function(error, response, body) {
+        }, function (error, response, body) {
             if (error) {
                 console.log('Error sending messages: ', error)
             } else if (response.body.error) {
@@ -675,32 +682,32 @@ function sendGoodbye(sender) {
     }, 3000);
 }
 
-function checkCoureseCredit() {
+function checkCoureseRemain() {
     var db = new dbsystem();
-    db.select().field(["f.*", "c.餘額", "c.系號"]).from("follow f").join("course_new c").where("c.id=f.course_id").run(function(follow) {
+    db.select().field(["f.*", "c.餘額", "c.系號"]).from("follow f").join("course_new c").where("c.id=f.course_id").where(disableSQL).run(function (follow) {
         for (var i in follow) {
             if (follow[i].餘額 != 0 && follow[i].hadNotify == 0) {
-                sendCreditNotify(follow[i]);
+                sendNotify(follow[i]);
             } else if (follow[i].餘額 == 0 && follow[i].hadNotify != 0) {
                 db.update().table("follow").set({
                     hadNotify: 0
-                }).where("id=", follow[i].id).run(function(result) {});
+                }).where("id=", follow[i].id).run(function (result) {});
             }
         }
     });
 }
 
-function sendCreditNotify(course) {
+function sendNotify(course) {
     var text = "餘額通知（" + course.serial + "）！\n\n" + course.content + "／" + course.teacher + "／" + course.time + "\n\n這門課有 " + course.餘額 + " 個餘額了！趕快去選吧 🏄🏄\n\n成大選課連結：https://goo.gl/o8zPZH";
     sendTextMessage(course.fb_id, text);
     var db = new dbsystem();
     db.update().table("follow").set({
         hadNotify: 1
-    }).where("id=", course.id).run(function(result) {
+    }).where("id=", course.id).run(function (result) {
         //for record
         db.update().table("follow_copy").set({
             hadNotify: 1
-        }).where("id=", course.id).run(function(result) {
+        }).where("id=", course.id).run(function (result) {
             db = null;
             delete db;
         });
@@ -709,7 +716,7 @@ function sendCreditNotify(course) {
 
 function searchCourseByName(sender, name) {
     var db = new dbsystem();
-    db.select().field(["id", "系所名稱", "課程名稱", "時間", "選課序號"]).from("course_new").where("課程名稱=", name).where("選課序號!=", "").run(function(course) {
+    db.select().field(["id", "系所名稱", "課程名稱", "時間", "選課序號"]).from("course_new").where("課程名稱=", name).where("選課序號!=", "").run(function (course) {
         db = null;
         delete db;
         if (course.length > 0) {
@@ -758,7 +765,7 @@ function searchCourseByName(sender, name) {
                     },
                     message: messageData,
                 }
-            }, function(error, response, body) {
+            }, function (error, response, body) {
                 if (error) {
                     console.log('Error sending messages: ', error)
                 } else if (response.body.error) {
@@ -775,7 +782,7 @@ function searchCourseByName(sender, name) {
 
 function searchCourseByTeacher(sender, teacher) {
     var db = new dbsystem();
-    db.select().field(["id", "系所名稱", "課程名稱", "時間", "選課序號"]).from("course_new").where("老師=", teacher).where("選課序號!=", "").run(function(course) {
+    db.select().field(["id", "系所名稱", "課程名稱", "時間", "選課序號"]).from("course_new").where("老師=", teacher).where("選課序號!=", "").run(function (course) {
         db = null;
         delete db;
         if (course.length > 0) {
@@ -824,7 +831,7 @@ function searchCourseByTeacher(sender, teacher) {
                     },
                     message: messageData,
                 }
-            }, function(error, response, body) {
+            }, function (error, response, body) {
                 if (error) {
                     console.log('Error sending messages: ', error)
                 } else if (response.body.error) {
@@ -842,7 +849,7 @@ function searchCourseByTeacher(sender, teacher) {
 function askPlaceOrFollow(sender, serial) {
     var serial = serial.toUpperCase();
     var db = new dbsystem();
-    db.select().field(["id", "系所名稱", "課程名稱", "老師", "時間"]).from("course_new").where("選課序號=", serial).run(function(course) {
+    db.select().field(["id", "系所名稱", "課程名稱", "老師", "時間"]).from("course_new").where("選課序號=", serial).run(function (course) {
         db = null;
         delete db;
         if (course.length > 0) {
@@ -879,7 +886,7 @@ function askPlaceOrFollow(sender, serial) {
                     },
                     message: messageData,
                 }
-            }, function(error, response, body) {
+            }, function (error, response, body) {
                 if (error) {
                     console.log('Error sending messages: ', error)
                 } else if (response.body.error) {
@@ -922,21 +929,12 @@ function sendLink(sender, link) {
             },
             message: messageData,
         }
-    }, function(error, response, body) {
+    }, function (error, response, body) {
         if (error) {
             console.log('Error sending messages: ', error)
         } else if (response.body.error) {
             console.log('Error: ', response.body.error)
         }
-    });
-}
-
-function cancelMsg(sender) {
-    var db = new dbsystem();
-    db.update().table("follow_copy").set({ getMsg: 0 }).where("fb_id=", sender).run(function(result) {
-        db = null;
-        delete db;
-        sendTextMessage(sender, "成功!你以後將不會再收到NCKUHUB的廣播訊息!");
     });
 }
 
@@ -967,13 +965,28 @@ function sendCancelMsg(sender) {
             },
             message: messageData,
         }
-    }, function(error, response, body) {
+    }, function (error, response, body) {
         if (error) {
             console.log('Error sending messages: ', error)
         } else if (response.body.error) {
             console.log('Error: ', response.body.error)
         }
     });
+}
+
+function cancelMsg(sender) {
+    var db = new dbsystem();
+    db.update().table("follow_copy").set({
+        getMsg: 0
+    }).where("fb_id=", sender).run(function (result) {
+        db = null;
+        delete db;
+        sendTextMessage(sender, "成功!你以後將不會再收到NCKUHUB的廣播訊息!");
+    });
+}
+
+function sendDisableMsg(sender, dept_no) {
+    sendTextMessage(sender, "很抱歉! 此階段 " + dept_no + " 課程未開放追蹤餘額!");
 }
 
 module.exports = router;

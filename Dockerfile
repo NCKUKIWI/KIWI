@@ -12,7 +12,6 @@ RUN npm install
 
 RUN npm install -g pm2
 
-
 # Open 3000 Port
 EXPOSE 3000
 

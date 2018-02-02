@@ -16,7 +16,7 @@ var checkCourseStatus = 0;
 
 var updateCommentNum = setInterval(function () {
 	var db = new dbsystem();
-	db.sql('UPDATE course_new SET comment_num = (SELECT COUNT(id) FROM post_new WHERE post_new.course_name = course_new.課程名稱 AND post_new.teacher = course_new.老師 )', function (result) {
+	db.sql('UPDATE course_new SET comment_num = (SELECT COUNT(id) FROM post WHERE post.course_name = course_new.課程名稱 AND post.teacher = course_new.老師 )', function (result) {
 		console.log(result);
 	});
 }, 1000 * 60 * 60 * 24);

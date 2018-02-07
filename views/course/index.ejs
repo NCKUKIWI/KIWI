@@ -149,9 +149,8 @@
           maxResults  : 'Results must be an array to use maxResults setting',
           method      : 'The method you called is not defined.'
       },
-      maxResults: 20,// 一次顯示10筆
+      maxResults: 20,// 一次顯示20筆
       onSelect: function(result, response){
-        console.log(result);
         getCourseByKeywords('course_name', result["課程名稱"]);
       },
       searchFields:['課程名稱', '老師'],
@@ -284,10 +283,18 @@
       if($(this).hasClass('active')){
         $(this).removeClass('active');
         $(this).css('background', '#dadada');
+
+        // 如果都沒有按快捷鍵，則按全選
+        if($('.hotKey').length == 0){
+        	$('.hotKeyAll').click();
+        }
       }
       else {
         $(this).addClass('active');
         $(this).css('background', 'rgba(0,0,0,0.3)');
+
+        // 把全選的按下的樣式取消
+        $('.hotKeyAll').css('background', '#dadada');
       }
       // 找出目前被選的
       var catagoryArr = $('.hotKey.active');
@@ -295,7 +302,7 @@
         var department_id = catagoryArr[i].text[0] + catagoryArr[i].text[1];
         $("div[departId = " + department_id + "]").addClass('active')
       }
-      $('.hotKeyAll').css('background', '#dadada');
+      
       startQuery();
     });
 
@@ -634,6 +641,12 @@
       var btn = $(this);
       delcourse(courseid,btn);
     });
+
+    // 如果課程只有一筆，直接顯示出來 (第0是column)
+    if($('#course-table > tbody > tr').length == 2){
+    	$('#course-table > tbody > tr')[1].click(); 
+    }
+      
   }
 
   /* Ajax to get All course */

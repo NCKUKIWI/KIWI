@@ -438,6 +438,7 @@ exports.FindbyColumnFuzzy = function FindbyColumn(table, cols, conditions, callb
   var whereCondition = "課程名稱 like ";
   for (var i in conditions) {
     whereCondition += "\'" + "%" + conditions[i] + "%" + "\'";
+    whereCondition += " or 老師 like " + "\'" + "%" + conditions[i] + "%" + "\'";
     if (i != conditions.length - 1) whereCondition += " or 課程名稱 like ";
   }
   var sql = "SELECT " + columns + " FROM " + table + " WHERE " + whereCondition;

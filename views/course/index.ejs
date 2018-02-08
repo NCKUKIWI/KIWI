@@ -6,8 +6,8 @@
     <div class="twelve wide column">
       <div id="content">
         <div class="ui toggle checkbox" id="filter_haspost" style="margin-bottom: 10px">
-            <input type="checkbox">
-            <label >僅顯示有心得之課程</label>
+          <input type="checkbox">
+          <label >僅顯示有心得之課程</label>
         </div>
         <table class="table" id="course-table">
           <tr>
@@ -63,6 +63,30 @@
     }
   }
   
+  
+  /* 前端Cookie */
+  function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    var expires = "expires="+ d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+  }
+  function getCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+  }
+
   // var max_index = nowCourse.length;
   var showempty = 0;
   $(document).ready(function(){
@@ -117,6 +141,7 @@
           $('#course-table').append(courseTransforToDom(nowCourse_hasComment[i]));
         }
         now_index = nowCourse.length;
+        setCookie("check_filter_haspost", "true", 30);
         // showempty = 1;
         // $('.course-row').hide();
         // for(var i in nowCourse){
@@ -132,6 +157,7 @@
           $('#course-table').append(courseTransforToDom(nowCourse[i]));
         }
         now_index = nowCourse.length > 50 ? 50 : nowCourse.length;
+        setCookie("check_filter_haspost", "false", 30);
         // $('.course-row').show();
         // $('.notempty').remove();
         // showempty=0;
@@ -333,10 +359,9 @@
 
     addCourseEventlistener(); // 最後綁定課程事件
 
-    $('#filter_haspost').trigger('click'); // 一開始進來首頁先點擊『顯示心得課程』
+    if (getCookie("check_filter_haspost")==="true" || getCookie("check_filter_haspost")==="")
+      $('#filter_haspost').trigger('click'); // 一開始進來首頁先取消『顯示心得課程』
   });
-
-  
 
   /* query的整體流程 */
   function startQuery(){

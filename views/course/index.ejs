@@ -328,8 +328,9 @@
         var department_id = catagoryArr[i].text[0] + catagoryArr[i].text[1];
         $("div[departId = " + department_id + "]").addClass('active')
       }
-      
+      $("input.prompt.query").val('');
       startQuery();
+      checkHaspostFilter();
     });
 
     // 綁定左方快捷鍵按鈕
@@ -339,7 +340,9 @@
       $('.chooseCourse .ui.inverted.button.mini').removeClass('active');
       $('#courseSelect').click();
       $(this).css('background', 'rgba(0,0,0,0.3)');
+      $("input.prompt.query").val('');
       startQuery();
+      checkHaspostFilter();
     });
 
     // 先預設他們看通識中心
@@ -358,9 +361,7 @@
     });
 
     addCourseEventlistener(); // 最後綁定課程事件
-
-    if (getCookie("check_filter_haspost")==="true" || getCookie("check_filter_haspost")==="")
-      $('#filter_haspost').trigger('click'); // 一開始進來首頁先取消『顯示心得課程』
+    checkHaspostFilter();
   });
 
   /* query的整體流程 */
@@ -698,9 +699,21 @@
         addCourseEventlistener();
         if($('#filter_haspost').hasClass('checked')){
           $('#filter_haspost').trigger('click');
+          setCookie("resume_filter_haspost", "true", 30);
         } // 避免用關鍵字搜尋後，因為一開始選擇“僅顯示有心得課程”所造成沒看到自己搜尋的課程
+        if(keyword === "")
+          checkHaspostFilter()
       }
     });
   }
 
+  function checkHaspostFilter(){
+    if (getCookie("check_filter_haspost")==="" || getCookie("resume_filter_haspost")==="true"){
+      setCookie("resume_filter_haspost","false",30)
+      $('#filter_haspost').trigger('click'); // 一開始進來首頁先取消『顯示心得課程』
+    } else if ((getCookie("check_filter_haspost")==="false" && $('#filter_haspost').hasClass('checked')) ||
+      getCookie("check_filter_haspost")==="true" && !$('#filter_haspost').hasClass('checked')){
+      $('#filter_haspost').trigger('click'); // 一開始進來首頁先取消『顯示心得課程』
+    }
+  }
 </script>

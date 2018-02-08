@@ -65,7 +65,7 @@
         <h1 style="text-align: center">尚無內容</h1>
         <div class="courseaddpost ui button">提供心得</div>
       <%}else { for(var i = 0; i < courseInfo.comment; i++){ %>
-        <% if(typeof comment[i].comment !== 'undefined'){%>
+        <% if(typeof comment[i].comment !== 'undefined' && comment[i].comment !== '無' ){%>
         <div class="ui vertical segment">
           <p>[<%= comment[i].semester %>]</p>
           <p><%- comment[i].comment %></p>
@@ -85,7 +85,7 @@
         <h1 style="text-align: center">尚無內容</h1>
         <div class="courseaddpost ui button">提供心得</div>
       <%}else { for(var i = 0; i < courseInfo.course_style; i++){ %>
-        <% if(typeof comment[i].course_style !== 'undefined'){%>
+        <% if(typeof comment[i].course_style !== 'undefined' && comment[i].comment !== '無'){%>
         <div class="ui vertical segment">
           <p>[<%= comment[i].semester %>]</p>
           <p>
@@ -107,7 +107,7 @@
         <h1 style="text-align: center">尚無內容</h1>
         <div class="courseaddpost ui button">提供心得</div>
       <%}else { for(var i = 0; i < courseInfo.report_hw; i++){ %>
-        <% if(typeof comment[i].report_hw !== 'undefined'){%>
+        <% if(typeof comment[i].report_hw !== 'undefined' && comment[i].comment !== '無'){%>
         <div class="ui vertical segment">
           <p>[<%= comment[i].semester %>]</p>
           <p><%- comment[i].report_hw %></p>
@@ -127,7 +127,7 @@
         <h1 style="text-align: center">尚無內容</h1>
         <div class="courseaddpost ui button">提供心得</div>
       <%} else { for(var i = 0; i < courseInfo.score_style; i++){ %>
-        <% if(typeof comment[i].score_style !== 'undefined'){%>
+        <% if(typeof comment[i].score_style !== 'undefined' && comment[i].comment !== '無'){%>
         <div class="ui vertical segment">
           <p>[<%= comment[i].semester %>]</p>
           <%- comment[i].score_style %>

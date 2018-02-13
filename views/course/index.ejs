@@ -62,30 +62,6 @@
       nowCourse_hasComment.push(nowCourse[i]);
     }
   }
-  
-  
-  /* 前端Cookie */
-  function setCookie(cname, cvalue, exdays) {
-    var d = new Date();
-    d.setTime(d.getTime() + (exdays*24*60*60*1000));
-    var expires = "expires="+ d.toUTCString();
-    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-  }
-  function getCookie(cname) {
-    var name = cname + "=";
-    var decodedCookie = decodeURIComponent(document.cookie);
-    var ca = decodedCookie.split(';');
-    for(var i = 0; i <ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0) == ' ') {
-            c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
-        }
-    }
-    return "";
-  }
 
   // var max_index = nowCourse.length;
   var showempty = 0;
@@ -141,7 +117,7 @@
           $('#course-table').append(courseTransforToDom(nowCourse_hasComment[i]));
         }
         now_index = nowCourse.length;
-        setCookie("check_filter_haspost", "true", 30);
+        localStorage.setItem("check_filter_haspost", true);
         // showempty = 1;
         // $('.course-row').hide();
         // for(var i in nowCourse){
@@ -157,7 +133,7 @@
           $('#course-table').append(courseTransforToDom(nowCourse[i]));
         }
         now_index = nowCourse.length > 50 ? 50 : nowCourse.length;
-        setCookie("check_filter_haspost", "false", 30);
+        localStorage.setItem("check_filter_haspost", false);
         // $('.course-row').show();
         // $('.notempty').remove();
         // showempty=0;
@@ -699,7 +675,7 @@
         addCourseEventlistener();
         if($('#filter_haspost').hasClass('checked')){
           $('#filter_haspost').trigger('click');
-          setCookie("resume_filter_haspost", "true", 30);
+          localStorage.setItem("resume_filter_haspost", true);
         } // 避免用關鍵字搜尋後，因為一開始選擇“僅顯示有心得課程”所造成沒看到自己搜尋的課程
         if(keyword === "")
           checkHaspostFilter()
@@ -708,11 +684,11 @@
   }
 
   function checkHaspostFilter(){
-    if (getCookie("check_filter_haspost")==="" || getCookie("resume_filter_haspost")==="true"){
-      setCookie("resume_filter_haspost","false",30)
-      $('#filter_haspost').trigger('click'); // 一開始進來首頁先取消『顯示心得課程』
-    } else if ((getCookie("check_filter_haspost")==="false" && $('#filter_haspost').hasClass('checked')) ||
-      getCookie("check_filter_haspost")==="true" && !$('#filter_haspost').hasClass('checked')){
+    if (localStorage.getItem("check_filter_haspost")===null || localStorage.getItem("resume_filter_haspost")==="true"){
+      localStorage.setItem("resume_filter_haspost",false);
+      $('#filter_haspost').trigger('click'); // 一開始進來首頁先選取『顯示心得課程』
+    } else if ((localStorage.getItem("check_filter_haspost")==="false" && $('#filter_haspost').hasClass('checked')) ||
+      localStorage.getItem("check_filter_haspost")==="true" && !$('#filter_haspost').hasClass('checked')){
       $('#filter_haspost').trigger('click'); // 一開始進來首頁先取消『顯示心得課程』
     }
   }

@@ -414,7 +414,7 @@ function sendCourseInfo(sender, course_id) {
 		if (course[0].教室 == '') {
 			var text = "你選擇的課程是：\n\n" + course[0].系所名稱.replace(/[A-Z0-9]/g, "") + "／" + course[0].課程名稱.replace(/[（|）|\s]/g, "") + "／" + course[0].老師.replace(/\s/g, "") + "／" + course[0].時間 + "\n\n上課地點請查看 http://course-query.acad.ncku.edu.tw/qry/qry001.php?dept_no=" + course[0].系號;
 		} else {
-			var text = "你選擇的課程是：\n\n" + course[0].系所名稱.replace(/[A-Z0-9]/g, "") + "／" + course[0].課程名稱.replace(/[（|）|\s]/g, "") + "／" + course[0].老師.replace(/\s/g, "") + "／" + course[0].時間 + "\n\n上課地點在「" + course[0].教室.replace(/\s/g, "") + "」唷！";
+			var text = "你選擇的課程是：\n\n" + course[0].系所名稱.replace(/[A-Z0-9]/g, "") + "／" + course[0].課程名稱.replace(/[（|）|\s]/g, "") + "／" + course[0].老師.replace(/\s/g, "") + "／" + course[0].時間 + "\n\n上課地點在「" + course[0].教室.replace(/\s/g, "") + "」唷！\n系館地圖：https://goo.gl/2nnKFj。";
 		}
 		sendTextMessage(sender, text);
 		sendGoodbye(sender);

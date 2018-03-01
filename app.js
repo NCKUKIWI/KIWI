@@ -44,8 +44,7 @@ app.use(function(req, res, next) {
             req.user = user;
             next();
         });
-    }
-    else {
+    } else {
         next();
     }
 });

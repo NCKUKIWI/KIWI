@@ -87,16 +87,8 @@ router.get('/CourseByKeywords', function(req, res) {
         db.FindbyColumnFuzzy('course_new', columns, QueryArray, function(custom_courses) {
             res.send(custom_courses);
         });
-    } else if (req.query.hasOwnProperty("teacher")) {
-        db.FindbyColumn('course_new', columns, { "老師": req.query.teacher }, function(custom_courses) {
-            res.send(custom_courses);
-        });
-    } else if (req.query.hasOwnProperty("course_name")) {
-        db.FindbyColumn('course_new', columns, { "課程名稱": req.query.course_name }, function(custom_courses) {
-            res.send(custom_courses);
-        });
-    } else if (req.query.hasOwnProperty("catalog")) {
-        db.FindbyColumn('course_new', columns, { "系號": req.query.catalog }, function(custom_courses) {
+    } else if (req.query.hasOwnProperty("course_id")) {
+        db.FindbyColumn('course_new', columns, { "id": req.query.course_id }, function(custom_courses) {
             res.send(custom_courses);
         });
     }

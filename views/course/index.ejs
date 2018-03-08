@@ -151,9 +151,9 @@
           maxResults  : 'Results must be an array to use maxResults setting',
           method      : 'The method you called is not defined.'
       },
-      maxResults: 20,// 一次顯示20筆
+      maxResults: 100,// 最多一次顯示100筆
       onSelect: function(result, response){
-        getCourseByKeywords('course_name', result["課程名稱"]);
+        getCourseByKeywords('course_id', result["id"]);
       },
       searchFields:['課程名稱', '老師'],
       fields: {

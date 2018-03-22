@@ -945,7 +945,7 @@ function sendCancelMsg(sender) {
 			"type": "template",
 			"payload": {
 				"template_type": "button",
-				"text": "若你不想再收到NCKUHUB的廣播訊息請按下面按鈕",
+				"text": "不想再收到 NCKU HUB 的訊息，請按以下按鈕：「取消訂閱」",
 				"buttons": [{
 					"type": "postback",
 					"title": "取消收到訊息",

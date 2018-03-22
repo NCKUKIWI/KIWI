@@ -60,11 +60,19 @@ router.post('/sendmsg', function (req, res) {
 	} else {
 		if (req.body.type == "test") {
 			if (req.body.msg) {
-				sendTextMessage("1346773338719764", req.body.msg);
-				sendTextMessage("1169375359801678", req.body.msg);
-				sendTextMessage("1364925580245632", req.body.msg);
-				sendTextMessage("1194641423974664", req.body.msg);
-				sendTextMessage("1318673478198233", req.body.msg);
+				if (req.body.msg == 'cancelMsg') {
+					sendCancelMsg("1346773338719764");
+					sendCancelMsg("1169375359801678");
+					sendCancelMsg("1364925580245632");
+					sendCancelMsg("1194641423974664");
+					sendCancelMsg("1318673478198233");
+				} else{
+					sendTextMessage("1346773338719764", req.body.msg);
+					sendTextMessage("1169375359801678", req.body.msg);
+					sendTextMessage("1364925580245632", req.body.msg);
+					sendTextMessage("1194641423974664", req.body.msg);
+					sendTextMessage("1318673478198233", req.body.msg);
+				}
 			}
 		} else if (req.body.type == "broadcast") {
 			var db = new dbsystem();
@@ -945,10 +953,10 @@ function sendCancelMsg(sender) {
 			"type": "template",
 			"payload": {
 				"template_type": "button",
-				"text": "不想再收到 NCKU HUB 的訊息，請按以下按鈕：「取消訂閱」",
+				"text": "不想再收到 NCKU HUB 的訊息，請按以下按鈕：",
 				"buttons": [{
 					"type": "postback",
-					"title": "取消收到訊息",
+					"title": "取消訂閱",
 					"payload": "cancelmsg"
 				}]
 			}

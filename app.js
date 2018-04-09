@@ -17,11 +17,16 @@ app.set('view engine', 'ejs');
 
 app.use(helmet());
 app.use(compression());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(require('express-status-monitor')());
 app.use(logger('tiny'));
-app.use(cookieParser('secretString'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+    extended: false
+}));
+app.use("/assets", express.static("assets", {
+    maxAge: 24 * 60 * 60
+}));
+app.use(cookieParser("secretString"));
+//Handle sessions and cookie
 app.use(session({
   cookie: {
     maxAge: 1000 * 60 * 60 * 12

@@ -759,7 +759,7 @@ function checkCourseRemain() {
     where: {
       id: id,
       dep_no:{
-        [Op.notIn]: disable 
+        [Op.notIn]: disable
       }
     },
     include: [{

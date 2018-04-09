@@ -6,8 +6,8 @@
     <div class="twelve wide column">
       <div id="content">
         <div class="ui toggle checkbox" id="filter_haspost" style="margin-bottom: 10px">
-            <input type="checkbox">
-            <label >僅顯示有心得之課程</label>
+          <input type="checkbox">
+          <label >僅顯示有心得之課程</label>
         </div>
         <table class="table" id="course-table">
           <tr>
@@ -116,6 +116,7 @@
           $('#course-table').append(courseTransforToDom(nowCourse_hasComment[i]));
         }
         now_index = nowCourse.length;
+        localStorage.setItem("check_filter_haspost", true);
         // showempty = 1;
         // $('.course-row').hide();
         // for(var i in nowCourse){
@@ -131,6 +132,7 @@
           $('#course-table').append(courseTransforToDom(nowCourse[i]));
         }
         now_index = nowCourse.length > 50 ? 50 : nowCourse.length;
+        localStorage.setItem("check_filter_haspost", false);
         // $('.course-row').show();
         // $('.notempty').remove();
         // showempty=0;
@@ -148,10 +150,9 @@
           maxResults  : 'Results must be an array to use maxResults setting',
           method      : 'The method you called is not defined.'
       },
-      maxResults: 20,// 一次顯示10筆
+      maxResults: 100,// 最多一次顯示100筆
       onSelect: function(result, response){
-        console.log(result);
-        getCourseByKeywords('course_name', result["課程名稱"]);
+        getCourseByKeywords('course_id', result["id"]);
       },
       searchFields:['課程名稱', '老師'],
       fields: {
@@ -283,10 +284,18 @@
       if($(this).hasClass('active')){
         $(this).removeClass('active');
         $(this).css('background', '#dadada');
+
+        // 如果都沒有按快捷鍵，則按全選
+        if($('.hotKey.active').length == 0){
+        	$('.hotKeyAll').click();
+        }
       }
       else {
         $(this).addClass('active');
         $(this).css('background', 'rgba(0,0,0,0.3)');
+
+        // 把全選的按下的樣式取消
+        $('.hotKeyAll').css('background', '#dadada');
       }
       // 找出目前被選的
       var catagoryArr = $('.hotKey.active');
@@ -294,8 +303,9 @@
         var department_id = catagoryArr[i].text[0] + catagoryArr[i].text[1];
         $("div[departId = " + department_id + "]").addClass('active')
       }
-      $('.hotKeyAll').css('background', '#dadada');
+      $("input.prompt.query").val('');
       startQuery();
+      checkHaspostFilter();
     });
 
     // 綁定左方快捷鍵按鈕
@@ -305,7 +315,9 @@
       $('.chooseCourse .ui.inverted.button.mini').removeClass('active');
       $('#courseSelect').click();
       $(this).css('background', 'rgba(0,0,0,0.3)');
+      $("input.prompt.query").val('');
       startQuery();
+      checkHaspostFilter();
     });
 
     // 先預設他們看通識中心
@@ -324,8 +336,7 @@
     });
 
     addCourseEventlistener(); // 最後綁定課程事件
-
-    // $('#filter_haspost').trigger('click'); // 一開始進來首頁先點擊『顯示心得課程』
+    checkHaspostFilter();
   });
 
 
@@ -633,6 +644,12 @@
       var btn = $(this);
       delcourse(courseid,btn);
     });
+
+    // 如果課程只有一筆，直接顯示出來 (第0是column)
+    if($('#course-table > tbody > tr').length == 2){
+    	$('#course-table > tbody > tr')[1].click(); 
+    }
+      
   }
 
   /* Ajax to get All course */
@@ -659,9 +676,21 @@
         addCourseEventlistener();
         if($('#filter_haspost').hasClass('checked')){
           $('#filter_haspost').trigger('click');
+          localStorage.setItem("resume_filter_haspost", true);
         } // 避免用關鍵字搜尋後，因為一開始選擇“僅顯示有心得課程”所造成沒看到自己搜尋的課程
+        if(keyword === "")
+          checkHaspostFilter()
       }
     });
   }
 
+  function checkHaspostFilter(){
+    if (localStorage.getItem("check_filter_haspost")===null || localStorage.getItem("resume_filter_haspost")==="true"){
+      localStorage.setItem("resume_filter_haspost",false);
+      $('#filter_haspost').trigger('click'); // 一開始進來首頁先選取『顯示心得課程』
+    } else if ((localStorage.getItem("check_filter_haspost")==="false" && $('#filter_haspost').hasClass('checked')) ||
+      localStorage.getItem("check_filter_haspost")==="true" && !$('#filter_haspost').hasClass('checked')){
+      $('#filter_haspost').trigger('click'); // 一開始進來首頁先取消『顯示心得課程』
+    }
+  }
 </script>

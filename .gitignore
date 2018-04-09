@@ -1,6 +1,5 @@
 .DS_Store
 node_modules
-config.js
 config.*
 npm-debug.log
 *.log

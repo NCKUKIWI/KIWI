@@ -14,6 +14,11 @@
   npm start
 ```
 
+- For development
+```
+  npm run dev
+```
+
 ## Program structure
 
 ```

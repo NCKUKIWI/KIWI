@@ -87,7 +87,6 @@ router.get('/allCourse', function(req, res) {
       'nowCourse': nowCourse,
       'courses_Department': courses_Department,
     });
-  });
 });
 
 router.get('/CourseByKeywords', function(req, res) {
@@ -137,7 +136,6 @@ router.get('/CourseByKeywords', function(req, res) {
         res.send(customCourses);
       });
     }
-  });
 });
 
 /* add course */

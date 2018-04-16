@@ -56,12 +56,7 @@
       courses_Department[rawCourses[i].系號].push(rawCourses[i]);
     }
   }
-
-  for(var i in nowCourse){
-    if(nowCourse[i].comment_num != 0){
-      nowCourse_hasComment.push(nowCourse[i]);
-    }
-  }
+  refreshNowCourse_hasComment();
 
   // var max_index = nowCourse.length;
   var showempty = 0;
@@ -412,13 +407,7 @@
     }
     nowCourse = filterCourse;
 
-    // 重新製作有心得的nowCourse_hasComment
-    nowCourse_hasComment.length = 0;
-    for(var i in nowCourse){
-      if(nowCourse[i].comment_num != 0){
-        nowCourse_hasComment.push(nowCourse[i]);
-      }
-    }
+    refreshNowCourse_hasComment();
   }
   /* 將篩選完的課顯示於網頁上 */
   function changeCourse(){
@@ -663,6 +652,16 @@
     });
   }
 
+  /* 重新製作有心得的nowCourse_hasComment */
+  function refreshNowCourse_hasComment(){
+    nowCourse_hasComment.length = 0;
+    for(var i in nowCourse){
+      if(nowCourse[i].comment_num != 0){
+        nowCourse_hasComment.push(nowCourse[i]);
+      }
+    }
+  }
+
   /* Ajax to get course by Keyword */
   function getCourseByKeywords(catagory, keyword){
     var ajaxurl = '/course/CourseByKeywords?' + catagory + "=" + keyword;
@@ -670,7 +669,9 @@
       url:ajaxurl,
       type: 'GET',
       success: function(response) {
+        $($('.hotKeyAll')[0]).trigger('click');
         nowCourse = response;
+        refreshNowCourse_hasComment();
         changeCourse();
         addCourseEventlistener();
         if($('#filter_haspost').hasClass('checked')){

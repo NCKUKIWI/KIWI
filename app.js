@@ -6,6 +6,9 @@ var bodyParser = require("body-parser");
 var expressValidator = require("express-validator");
 var session = require("express-session");
 var db = require("./model/db");
+var cache = require("./helper/cache");
+var redis = cache.redis;
+var userCacheKey = cache.userCacheKey;
 var flash = require("express-flash");
 var compression = require("compression");
 var cookieParser = require("cookie-parser");
@@ -40,9 +43,17 @@ app.use(session({
 
 app.use(function(req, res, next) {
     if (req.cookies.isLogin) {
-        db.FindbyID("user", req.cookies.id, function(user) {
-            req.user = user;
-            next();
+        redis.get(userCacheKey(req.cookies.id), function(err, result){
+            if (result) {
+                req.user = JSON.parse(result);
+                next();
+            } else {
+                db.FindbyID("user", req.cookies.id, function(user) {
+                    redis.set(userCacheKey(req.cookies.id), JSON.stringify(user));
+                    req.user = user;
+                    next();
+                });
+            }
         });
     } else {
         next();

@@ -1,15 +1,17 @@
 var express = require('express');
 var router = express.Router();
-var helper = require('../helper');
+var cache = require('../helper/cache').cache;
+var userCacheKey = require('../helper/cache').userCacheKey;
+var middleware = require('../middleware');
 var db = require('../model/db');
 var graph = require("fbgraph");
 var config = require('../config');
 
-router.get("/fblogin", helper.checkLogin(1), function(req, res) {
+router.get("/fblogin", middleware.checkLogin(1), function(req, res) {
     res.redirect(`https://www.facebook.com/v2.8/dialog/oauth?client_id=${config.fb.appid}&scope=email,public_profile&response_type=code&redirect_uri=${config.website}/user/fbcheck`);
 });
 
-router.get("/fbcheck", helper.checkLogin(1), function(req, res) {
+router.get("/fbcheck", middleware.checkLogin(1), function(req, res) {
     if (req.query.code) {
         graph.authorize({
             "client_id": config.fb.appid,
@@ -40,19 +42,20 @@ router.get("/fbcheck", helper.checkLogin(1), function(req, res) {
 });
 
 router.get('/logout', function(req, res) {
+    cache.del(userCacheKey(req.user.id));
     res.clearCookie("isLogin");
     res.clearCookie("id");
     res.redirect('/');
 });
 
-router.get('/edit', helper.checkLogin(), function(req, res) {
+router.get('/edit', middleware.checkLogin(), function(req, res) {
     console.log('\n' + 'GET /user/edit');
     res.render('user/edit', {
         'user': req.user
     });
 });
 
-router.post('/update', helper.checkLogin(), function(req, res) {
+router.post('/update', middleware.checkLogin(), function(req, res) {
     console.log('\n' + 'POST /user/update');
     var userid = req.user.id;
     var user = {

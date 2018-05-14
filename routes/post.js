@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var redis = require('../helper/cache').redis;
 var db = require('../model/db');
 
 /* index  */
@@ -162,7 +163,9 @@ router.post('/create', function(req, res) {
                 }
                 db.Insert('course_rate', rate, function(err, results) {
                     if (err) throw err;
-                    res.send("success");
+                    redis.flushdb( function (err, result) {
+                        res.send("success");
+                    });
                 });
             });
         }
@@ -190,19 +193,11 @@ router.get('/:id', function(req, res) {
         console.log('\n' + 'GET /post/' + id);
         db.FindbyID('post', id, function(post) {
             db.FindbyColumn('course_rate', ['give', 'got'], { "post_id": post.id }, function(rate) {
-                if (rate.length > 0) {
-                    res.render('post/show', {
-                        'post': post,
-                        'user': req.user,
-                        'rate': rate[0]
-                    });
-                } else {
-                    res.render('post/show', {
-                        'post': post,
-                        'user': req.user,
-                        'rate': null
-                    });
-                }
+                res.render('post/show', {
+                    'post': post,
+                    'user': req.user,
+                    'rate': (rate.length > 0) ? rate[0] : null
+                });
             });
         });
     }

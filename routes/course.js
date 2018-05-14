@@ -1,6 +1,9 @@
 var express = require('express');
 var router = express.Router();
-var helper = require('../helper');
+var middleware = require('../middleware');
+var cache = require('../helper/cache');
+var redis = cache.redis;
+var courseCacheKey = cache.courseCacheKey;
 var db = require('../model/db');
 
 /* index */
@@ -95,7 +98,7 @@ router.get('/CourseByKeywords', function(req, res) {
 });
 
 /* add course */
-router.post('/addcourse/:id', helper.apiAuth(), function(req, res) {
+router.post('/addcourse/:id', middleware.apiAuth(), function(req, res) {
     var courseid = parseInt(req.params.id);
     console.log('\n' + 'POST /course/addcourse/' + courseid);
     var userid = parseInt(req.user.id);
@@ -148,10 +151,8 @@ router.post('/inputaddcourse/:courseid', function(req, res) {
         /* 有找到課程 則傳送課程資訊 */
         else {
             var courseid = course[0].id
-                /* 若用戶非登入 則直接傳送課程資訊 */
-            if (req.user == undefined) {
-                res.send(course);
-            } else {
+            /* 若用戶非登入 則直接傳送課程資訊 */
+            if (req.user) {
                 var userid = parseInt(req.user.id);
                 var name = req.user.name;
                 console.log("選課者: " + name);
@@ -172,6 +173,8 @@ router.post('/inputaddcourse/:courseid', function(req, res) {
                         });
                     }
                 });
+            } else {
+                res.send(course);
             }
         }
     });
@@ -184,92 +187,95 @@ router.get('/:id', function(req, res) {
     if (id.match(/\D/g)) {
         res.redirect('/');
     } else {
-        /* 尋找課程的資訊 */
-        db.query_post2(id, function(courseInfo, comment) {
-            courseInfo = courseInfo[0];
-            courseInfo.comment = 0;
-            courseInfo.course_style = 0;
-            courseInfo.report_hw = 0;
-            courseInfo.score_style = 0;
-
-            for (var i in comment) {
-                var buf = comment[i];
-                for (var j in comment[i]) {
-                    // console.log(buf[j])
-                    if (buf[j] == "無" || buf[j] == "" || !buf[j]) {
-                        delete buf[j];
-                        continue;
-                    }
-                    courseInfo[j]++;
-                }
-            }
-            db.FindbyColumn('course_rate', ["*"], { course_name: courseInfo.課程名稱, teacher: courseInfo.老師 }, function(rates) {
-                var sweet = 0;
-                var hard = 0;
-                var recommand = 0;
-                var rate_count = 0;
-                if (rates.length > 0) {
-                    for (var i in rates) {
-                        sweet += rates[i].sweet;
-                        hard += rates[i].hard;
-                        recommand += rates[i].recommand;
-                    }
-                    sweet /= rates.length;
-                    hard /= rates.length;
-                    recommand /= rates.length;
-                    rate_count = rates.length;
-                }
-                if (req.user == undefined) {
-                    res.render('course/show', {
-                        'recommand': recommand,
-                        'hard': hard,
-                        'sweet': sweet,
-                        'rate_count': rate_count,
-                        'courseInfo': courseInfo,
-                        'comment': comment,
-                        'courserate_id': 0,
-                        'user': req.user,
-                        'check': null
-                    })
-                } else {
-                    var userid = parseInt(req.user.id);
-                    var courserate_id = 0;
+        redis.get(courseCacheKey(id), function(err, reply){
+            if (reply){
+                var data = JSON.parse(reply);
+                var rates = data.rates;
+                if (req.user) {
                     if (rates.length > 0) {
                         for (var i in rates) {
-                            if (rates[i].user_id == userid) {
-                                courserate_id = rates[i].id;
+                            if (rates[i].user_id == req.user.id) {
+                                data['courserate_id'] = rates[i].id;
                             }
                         }
+                    } else {
+                        data['courserate_id'] = 0;
                     }
-                    /* 有登入 抓取用戶的選課清單 */
-                    db.FindbyColumn('cart', ['id'], { 'user_id': req.user.id }, function(check) {
-                        res.render('course/show', {
+                } else {
+                    data['courserate_id'] = 0;
+                }
+                data['user'] = req.user;
+                res.render('course/show', data);
+            } else {
+                /* 尋找課程的資訊 */
+                db.query_post2(id, function(courseInfo, comment) {
+                    courseInfo = courseInfo[0];
+                    courseInfo.comment = 0;
+                    courseInfo.course_style = 0;
+                    courseInfo.report_hw = 0;
+                    courseInfo.score_style = 0;
+
+                    for (var i in comment) {
+                        var buf = comment[i];
+                        for (var j in comment[i]) {
+                            // console.log(buf[j])
+                            if (buf[j] == "無" || buf[j] == "" || !buf[j]) {
+                                delete buf[j];
+                                continue;
+                            }
+                            courseInfo[j]++;
+                        }
+                    }
+                    db.FindbyColumn('course_rate', ["*"], { course_name: courseInfo.課程名稱, teacher: courseInfo.老師 }, function(rates) {
+                        var sweet = 0;
+                        var hard = 0;
+                        var recommand = 0;
+                        var rate_count = 0;
+                        if (rates.length > 0) {
+                            for (var i in rates) {
+                                sweet += rates[i].sweet;
+                                hard += rates[i].hard;
+                                recommand += rates[i].recommand;
+                            }
+                            sweet /= rates.length;
+                            hard /= rates.length;
+                            recommand /= rates.length;
+                            rate_count = rates.length;
+                        }
+                        var data = {
                             'recommand': recommand,
                             'hard': hard,
                             'sweet': sweet,
                             'rate_count': rate_count,
                             'courseInfo': courseInfo,
                             'comment': comment,
-                            'courserate_id': courserate_id,
-                            'user': req.user,
-                            'check': check
-                        });
+                            'rates': rates
+                        }
+                        redis.set(courseCacheKey(id), JSON.stringify(data));
+                        if (req.user) {
+                            if (rates.length > 0) {
+                                for (var i in rates) {
+                                    if (rates[i].user_id == req.user.id) {
+                                        data['courserate_id'] = rates[i].id;
+                                    }
+                                }
+                            } else {
+                                data['courserate_id'] = 0;
+                            }
+                        } else {
+                            data['courserate_id'] = 0;
+                        }
+                        data['user'] = req.user;
+                        res.render('course/show', data);
                     });
-                }
-            });
+                });
+            }
         });
     }
 });
 
 function check_Login(req, res, all_courses, custom_courses) {
-    if (req.user == undefined) {
-        res.render('course/index', {
-            'courses': all_courses,
-            'custom_courses': custom_courses,
-            'user': req.user,
-            'carts': null //沒登入 選課清單為null
-        });
-    } else {
+    if (req.user) {
         var userid = parseInt(req.user.id);
         var colmuns = ['course_id'];
         /* 有登入 抓取用戶的選課清單 */
@@ -280,6 +286,13 @@ function check_Login(req, res, all_courses, custom_courses) {
                 'user': req.user,
                 'carts': carts
             });
+        });
+    } else {
+        res.render('course/index', {
+            'courses': all_courses,
+            'custom_courses': custom_courses,
+            'user': req.user,
+            'carts': null //沒登入 選課清單為null
         });
     }
 }

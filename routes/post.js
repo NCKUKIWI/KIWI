@@ -4,7 +4,7 @@ var redis = require('../helper/cache').redis;
 var db = require('../model/db');
 
 /* index  */
-router.get('/', function(req, res) {
+router.get('/', function (req, res) {
     // Log
     console.log("\n")
     console.log("========================================");
@@ -21,9 +21,9 @@ router.get('/', function(req, res) {
     }
     /*  設定要的欄位 */
     var colmuns = ['id', 'course_name', 'catalog', 'teacher', 'semester', 'user_id'];
-    db.GetColumn('post', colmuns, { 'column': order, 'order': 'DESC' }, function(posts) {
+    db.GetColumn('post', colmuns, { 'column': order, 'order': 'DESC' }, function (posts) {
         if (req.query.hasOwnProperty("queryw")) {
-            db.query_post(posts, req.query.queryw, "query", function(posts, teachers, course_name) {
+            db.query_post(posts, req.query.queryw, "query", function (posts, teachers, course_name) {
                 if (req.query.order) {
                     res.send(posts);
                 } else {
@@ -36,7 +36,7 @@ router.get('/', function(req, res) {
                 }
             });
         } else if (req.query.hasOwnProperty("teacher")) {
-            db.query_post(posts, req.query.teacher, "teacher", function(posts, teachers, course_name) {
+            db.query_post(posts, req.query.teacher, "teacher", function (posts, teachers, course_name) {
                 if (req.query.order) {
                     res.send(posts);
                 } else {
@@ -49,7 +49,7 @@ router.get('/', function(req, res) {
                 }
             });
         } else if (req.query.hasOwnProperty("course_name")) {
-            db.query_post(posts, req.query.course_name, "course_name", function(posts, teachers, course_name) {
+            db.query_post(posts, req.query.course_name, "course_name", function (posts, teachers, course_name) {
                 if (req.query.order) {
                     res.send(posts);
                 } else {
@@ -91,7 +91,7 @@ router.get('/', function(req, res) {
                     req.query.catalog = "";
                     break;
             }
-            db.query_post(posts, req.query.catalog, "catalog", function(posts, teachers, course_name) {
+            db.query_post(posts, req.query.catalog, "catalog", function (posts, teachers, course_name) {
                 if (req.query.order) {
                     res.send(posts);
                 } else {
@@ -121,7 +121,7 @@ router.get('/', function(req, res) {
 });
 
 /* create */
-router.post('/create', function(req, res) {
+router.post('/create', function (req, res) {
     console.log('\n' + 'POST /post/create');
     if (req.user == undefined) {
         console.log("Not login");
@@ -147,7 +147,7 @@ router.post('/create', function(req, res) {
                 course_style: req.body.course_style.replace(/\'|\#|\/\*/g, ""),
                 user_id: userid
             }
-            db.Insert('post', post, function(err, results) {
+            db.Insert('post', post, function (err, results) {
                 if (err) throw err;
                 console.log(results);
                 var rate = {
@@ -161,9 +161,9 @@ router.post('/create', function(req, res) {
                     user_id: userid,
                     post_id: results.insertId
                 }
-                db.Insert('course_rate', rate, function(err, results) {
+                db.Insert('course_rate', rate, function (err, results) {
                     if (err) throw err;
-                    redis.flushdb( function (err, result) {
+                    redis.flushdb(function (err, result) {
                         res.send("success");
                     });
                 });
@@ -173,26 +173,26 @@ router.post('/create', function(req, res) {
 });
 
 /* new */
-router.get('/new', function(req, res) {
-    var sql = 'SELECT id,課程名稱,老師,系所名稱 FROM course_all WHERE semester ="104-2" OR semester ="105-1" OR semester ="105-2" OR semester ="106-1" GROUP BY 課程名稱,老師';
-    db.Query(sql,function(course){
-      res.render('post/new', {
-        'course': course,
-        'user': req.user
-      });
+router.get('/new', function (req, res) {
+    var sql = 'SELECT id,課程名稱,時間,老師,系所名稱,semester FROM course_all WHERE semester ="104-2" OR semester ="105-1" OR semester ="105-2" OR semester ="106-1" GROUP BY 課程名稱,老師';
+    db.Query(sql, function (course) {
+        res.render('post/new', {
+            'course': course,
+            'user': req.user
+        });
     });
 });
 
 /* show */
-router.get('/:id', function(req, res) {
+router.get('/:id', function (req, res) {
     var id = req.params.id;
     if (id.match(/\D/g)) {
         console.log('\n' + 'GET /post/' + id);
         res.redirect('/');
     } else {
         console.log('\n' + 'GET /post/' + id);
-        db.FindbyID('post', id, function(post) {
-            db.FindbyColumn('course_rate', ['give', 'got'], { "post_id": post.id }, function(rate) {
+        db.FindbyID('post', id, function (post) {
+            db.FindbyColumn('course_rate', ['give', 'got'], { "post_id": post.id }, function (rate) {
                 res.render('post/show', {
                     'post': post,
                     'user': req.user,
@@ -204,12 +204,12 @@ router.get('/:id', function(req, res) {
 });
 
 /* update */
-router.post('/update', function(req, res) {
+router.post('/update', function (req, res) {
 
 });
 
 /*report post */
-router.post('/report/:id', function(req, res) {
+router.post('/report/:id', function (req, res) {
     /* 要檢舉的文章id*/
     var postid = parseInt(req.params.id);
     console.log('\n' + 'POST /post/report/' + postid);
@@ -218,8 +218,8 @@ router.post('/report/:id', function(req, res) {
         var name = req.user.name;
         var userid = parseInt(req.user.id);
         console.log('檢舉者：' + name)
-            /* 檢查是否檢舉過 依照user_id及post_id去尋找 */
-        db.FindbyColumn('report_post', ["id"], { 'post_id': postid, 'user_id': userid }, function(reports) {
+        /* 檢查是否檢舉過 依照user_id及post_id去尋找 */
+        db.FindbyColumn('report_post', ["id"], { 'post_id': postid, 'user_id': userid }, function (reports) {
             if (reports.length > 0) {
                 console.log('Already report');
                 res.send('Already report');
@@ -245,11 +245,11 @@ router.post('/report/:id', function(req, res) {
                     post_id: postid,
                     reason: reason
                 }
-                db.Insert('report_post', report_post, function(err, results) {
+                db.Insert('report_post', report_post, function (err, results) {
                     if (err) throw err;
                     console.log('Report post ' + postid + ' success');
                     /* 依照post_id將文章的檢舉次數+1 */
-                    db.UpdatePlusone('post', 'report_count', postid, function(results) {
+                    db.UpdatePlusone('post', 'report_count', postid, function (results) {
                         res.send('Success');
                     });
                 });
@@ -262,10 +262,10 @@ router.post('/report/:id', function(req, res) {
 });
 
 /* del */
-router.delete('/:id', function(req, res) {
+router.delete('/:id', function (req, res) {
     var id = req.params.id;
     console.log('\n' + 'DELETE post/' + id);
-    db.DeleteById('post', id, function(err) {
+    db.DeleteById('post', id, function (err) {
         res.send('Success');
     });
 });

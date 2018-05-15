@@ -17,7 +17,7 @@
             </div>
             <div class="three wide field">
               <label>學期:</label>
-              <select name="semester" form="createform" style="height: 42px;">
+              <select name="semester" form="createform" style="height: 42px;" id="semesterSelector">
                 <option value="106-1">106-1</option>
                 <option value="105-2">105-2</option>
                 <option value="105-1">105-1</option>
@@ -153,17 +153,30 @@ $(document).ready(function(){
         coursename:'<%- course[i].課程名稱 %>',
         teacher:'<%- course[i].老師 %>',
         category:'<%- course[i].系所名稱 %>',
+        semester:'<%- course[i].semester %>'
       },
     <% } %>
   ];
 
+  var categoryCourse = {
+    '106-1': course.filter(aCourse => aCourse.semester == '106-1'),
+    '105-2': course.filter(aCourse => aCourse.semester == '105-2'),
+    '105-1': course.filter(aCourse => aCourse.semester == '105-1'),
+    '104-2': course.filter(aCourse => aCourse.semester == '104-2'),
+    '104-1': course.filter(aCourse => aCourse.semester == '104-1'),
+  }
+
   $('#createform .ui.search').search({
-      source:course,
-      onSelect:function(result, response){
-        $('input[name=teacher]').val(result.teacher);
-        $('input[name=course_name]').val(result.coursename);
-        $('input[name=catalog]').val(result.category);
-      }
+    source:categoryCourse[$("#semesterSelector option:selected").text()],
+    onSelect:function(result, response){
+      $('input[name=teacher]').val(result.teacher);
+      $('input[name=course_name]').val(result.coursename);
+      $('input[name=catalog]').val(result.category);
+    }
+  });
+
+  $("#semesterSelector").on('change', function(){
+    $('#createform .ui.search').search('setting', 'source', categoryCourse[$("#semesterSelector option:selected").text()]);
   });
 
   $('#createform-submit').on('click', function() {

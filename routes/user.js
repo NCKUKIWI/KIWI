@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var cache = require('../helper/cache').cache;
+var cache = require('../helper/cache').redis;
 var userCacheKey = require('../helper/cache').userCacheKey;
 var middleware = require('../middleware');
 var db = require('../model/db');

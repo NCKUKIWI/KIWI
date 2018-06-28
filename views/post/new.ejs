@@ -174,7 +174,8 @@ $(document).ready(function(){
       $('input[name=teacher]').val(result.teacher);
       $('input[name=course_name]').val(result.coursename);
       $('input[name=catalog]').val(result.category);
-    }
+    },
+    maxResults: 100,// 最多一次顯示100筆
   });
 
   $("#semesterSelector").on('change', function(){

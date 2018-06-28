@@ -18,7 +18,7 @@
             <div class="three wide field">
               <label>學期:</label>
               <select name="semester" form="createform" style="height: 42px;" id="semesterSelector">
-              	<option value="106-1">106-2</option>
+              	<option value="106-2">106-2</option>
                 <option value="106-1">106-1</option>
                 <option value="105-2">105-2</option>
                 <option value="105-1">105-1</option>
@@ -160,6 +160,7 @@ $(document).ready(function(){
   ];
 
   var categoryCourse = {
+  	'106-2': course.filter(aCourse => aCourse.semester == '106-2'),
     '106-1': course.filter(aCourse => aCourse.semester == '106-1'),
     '105-2': course.filter(aCourse => aCourse.semester == '105-2'),
     '105-1': course.filter(aCourse => aCourse.semester == '105-1'),

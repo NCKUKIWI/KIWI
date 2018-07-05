@@ -146,33 +146,33 @@ $(document).ready(function(){
     localStorage.setItem('courseteacher','<%= courseInfo.老師 %>');
     window.location.href = "/post/new";
   });
-  // 將mobile的滑動效果裝上
-  var content1 = document.getElementById('content1');
-  var content2 = document.getElementById('content2');
-  var content3 = document.getElementById('content3');
-  var content4 = document.getElementById('content4');
-  var content1m = new Hammer(content1);
-  var content2m = new Hammer(content2);
-  var content3m = new Hammer(content3);
-  var content4m = new Hammer(content4);
-  content1m.on("panleft",function(){
-    moveAnimate("content2");
-  });
-  content2m.on("panright",function(){
-    moveAnimate("content1");
-  });
-  content2m.on("panleft",function(){
-    moveAnimate("content3");
-  });
-  content3m.on("panright",function(){
-    moveAnimate("content2");
-  });
-  content3m.on("panleft",function(){
-    moveAnimate("content4");
-  });
-  content4m.on("panright",function(){
-    moveAnimate("content3");
-  });
+  // 將mobile的滑動效果裝上（功能後來取消）
+  // var content1 = document.getElementById('content1');
+  // var content2 = document.getElementById('content2');
+  // var content3 = document.getElementById('content3');
+  // var content4 = document.getElementById('content4');
+  // var content1m = new Hammer(content1);
+  // var content2m = new Hammer(content2);
+  // var content3m = new Hammer(content3);
+  // var content4m = new Hammer(content4);
+  // content1m.on("panleft",function(){
+  //   moveAnimate("content2");
+  // });
+  // content2m.on("panright",function(){
+  //   moveAnimate("content1");
+  // });
+  // content2m.on("panleft",function(){
+  //   moveAnimate("content3");
+  // });
+  // content3m.on("panright",function(){
+  //   moveAnimate("content2");
+  // });
+  // content3m.on("panleft",function(){
+  //   moveAnimate("content4");
+  // });
+  // content4m.on("panright",function(){
+  //   moveAnimate("content3");
+  // });
 
   $('.dropdown').dropdown({direction: 'upward'});
 

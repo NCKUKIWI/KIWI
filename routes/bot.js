@@ -514,7 +514,7 @@ function addFollowCourse(sender, course_id) {
 	db.select().field(["系所名稱", "系號", "課程名稱", "時間", "餘額", "選課序號", "老師"]).from("course_new").where("id=", course_id).run(function (course) {
 		if (disable.indexOf(course[0]['系號']) == -1) {
 			if (course[0].餘額 > 0) {
-				var text = "你選擇的課程是：\n\n" + course[0].系所名稱.replace(/[A-Z0-9]/g, "") + "／" + course[0].課程名稱.replace(/[（|）|\s]/g, "") + "／" + course[0].老師.replace(/\s/g, "") + "／" + course[0].時間 + "\n\n這堂課目前為" + course[0].餘額 + "，趕快去選吧 🙌🙌";
+				var text = "你選擇的課程是：\n\n" + course[0].系所名稱.replace(/[A-Z0-9]/g, "") + "／" + course[0].課程名稱.replace(/[（|）|\s]/g, "") + "／" + course[0].老師.replace(/\s/g, "") + "／" + course[0].時間 + "\n\n這堂課目前有 " + course[0].餘額 + " 個餘額！趕快去選吧 🙌🙌\n\n成大選課連結：https://goo.gl/o8zPZH";
 				sendTextMessage(sender, text);
 				sendGoodbye(sender);
 			} else {

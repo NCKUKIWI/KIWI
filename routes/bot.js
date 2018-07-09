@@ -66,7 +66,7 @@ router.post('/sendmsg', function (req, res) {
 					sendCancelMsg("1364925580245632");
 					sendCancelMsg("1194641423974664");
 					sendCancelMsg("1318673478198233");
-				} else{
+				} else {
 					sendTextMessage("1346773338719764", req.body.msg);
 					sendTextMessage("1169375359801678", req.body.msg);
 					sendTextMessage("1364925580245632", req.body.msg);
@@ -510,36 +510,42 @@ function sendFollowCourseById(sender, serial) {
 }
 
 function addFollowCourse(sender, course_id) {
-  var db = new dbsystem();
-  db.select().field(["系所名稱", "系號", "課程名稱", "時間", "餘額", "選課序號", "老師"]).from("course_new").where("id=", course_id).run(function (course) {
-    if (disable.indexOf(course[0]['系號']) == -1) {
-      db.select().field("*").from("follow").where("course_id=", course_id).where("fb_id=", sender).run(function (follow) {
-        if (follow.length < 1) {
-          var text = "你選擇的課程是：\n\n" + course[0].系所名稱.replace(/[A-Z0-9]/g, "") + "／" + course[0].課程名稱.replace(/[（|）|\s]/g, "") + "／" + course[0].老師.replace(/\s/g, "") + "／" + course[0].時間 + "\n\n這堂課目前無餘額，已為你設定追蹤 👌 有餘額的時候會私訊你唷！請抱著既期待又怕受傷害的心情等候 🙌🙌";
-          sendTextMessage(sender, text);
-          sendGoodbye(sender);
-          var data = {
-            course_id: course_id,
-            fb_id: sender,
-            content: course[0].系所名稱.replace(/[A-Z0-9]/g, "") + "／" + course[0].課程名稱.replace(/[（|）|\s]/g, ""),
-            time: course[0].時間,
-            serial: (course[0].選課序號) ? course[0].選課序號 : "",
-            teacher: course[0].老師
-          }
-          db.insert().into("follow").set(data).run(function (result) {
-            //for record
-            db.insert().into("follow_copy").set(data).run(function (result) {});
-          });
-        } else {
-          var text = "你選擇的課程是：\n\n" + course[0].系所名稱.replace(/[A-Z0-9]/g, "") + "／" + course[0].課程名稱.replace(/[（|）|\s]/g, "") + "／" + course[0].老師.replace(/\s/g, "") + "／" + course[0].時間 + "\n\n這堂課目前無餘額，已經為你設定過追蹤囉！";
-          sendTextMessage(sender, text);
-          sendGoodbye(sender);
-        }
-      });
-    } else {
-      sendDisableMsg(sender, course[0]['系號']);
-    }
-  });
+	var db = new dbsystem();
+	db.select().field(["系所名稱", "系號", "課程名稱", "時間", "餘額", "選課序號", "老師"]).from("course_new").where("id=", course_id).run(function (course) {
+		if (disable.indexOf(course[0]['系號']) == -1) {
+			if (course[0].餘額 > 0) {
+				var text = "你選擇的課程是：\n\n" + course[0].系所名稱.replace(/[A-Z0-9]/g, "") + "／" + course[0].課程名稱.replace(/[（|）|\s]/g, "") + "／" + course[0].老師.replace(/\s/g, "") + "／" + course[0].時間 + "\n\n這堂課目前為" + course[0].餘額 + "，趕快去選吧 🙌🙌";
+				sendTextMessage(sender, text);
+				sendGoodbye(sender);
+			} else {
+				db.select().field("*").from("follow").where("course_id=", course_id).where("fb_id=", sender).run(function (follow) {
+					if (follow.length < 1) {
+						var text = "你選擇的課程是：\n\n" + course[0].系所名稱.replace(/[A-Z0-9]/g, "") + "／" + course[0].課程名稱.replace(/[（|）|\s]/g, "") + "／" + course[0].老師.replace(/\s/g, "") + "／" + course[0].時間 + "\n\n這堂課目前無餘額，已為你設定追蹤 👌 有餘額的時候會私訊你唷！請抱著既期待又怕受傷害的心情等候 🙌🙌";
+						sendTextMessage(sender, text);
+						sendGoodbye(sender);
+						var data = {
+							course_id: course_id,
+							fb_id: sender,
+							content: course[0].系所名稱.replace(/[A-Z0-9]/g, "") + "／" + course[0].課程名稱.replace(/[（|）|\s]/g, ""),
+							time: course[0].時間,
+							serial: (course[0].選課序號) ? course[0].選課序號 : "",
+							teacher: course[0].老師
+						};
+						db.insert().into("follow").set(data).run(function (result) {
+							//for record
+							db.insert().into("follow_copy").set(data).run(function (result) {});
+						});
+					} else {
+						var text = "你選擇的課程是：\n\n" + course[0].系所名稱.replace(/[A-Z0-9]/g, "") + "／" + course[0].課程名稱.replace(/[（|）|\s]/g, "") + "／" + course[0].老師.replace(/\s/g, "") + "／" + course[0].時間 + "\n\n這堂課目前無餘額，已經為你設定過追蹤囉！";
+						sendTextMessage(sender, text);
+						sendGoodbye(sender);
+					}
+				});
+			}
+		} else {
+			sendDisableMsg(sender, course[0]['系號']);
+		}
+	});
 }
 
 function sendFollowCourseList(sender) {
@@ -707,7 +713,7 @@ function checkCoureseRemain() {
 }
 
 function sendNotify(course) {
-	var text = "餘額通知（" + course.serial + "）！\n\n" + course.content + "／" + course.teacher + "／" + course.time + "\n\n這門課有餘額了！趕快去選吧 🏄🏄\n\n成大選課連結：https://goo.gl/o8zPZH";
+	var text = "餘額通知（" + course.serial + "）！\n\n" + course.content + "／" + course.teacher + "／" + course.time + "\n\n這門課有 " + course.餘額 + " 個餘額了！趕快去選吧 🏄🏄\n\n成大選課連結：https://goo.gl/o8zPZH";
 	sendTextMessage(course.fb_id, text);
 	var db = new dbsystem();
 	db.update().table("follow").set({

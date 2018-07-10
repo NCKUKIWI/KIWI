@@ -14,6 +14,7 @@ var flash = require("express-flash");
 var compression = require("compression");
 var cookieParser = require("cookie-parser");
 var helmet = require("helmet");
+var config = require("./config");
 
 app.engine("ejs", engine);
 app.set("views", path.join(__dirname, "views")); //view的路徑位在資料夾views中
@@ -23,7 +24,6 @@ app.use(helmet());
 app.use(flash());
 app.use(expressValidator());
 app.use(compression());
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: false
@@ -32,7 +32,6 @@ app.use("/assets", express.static("assets", {
     maxAge: 24 * 60 * 60
 }));
 app.use(cookieParser("secretString"));
-//Handle sessions and cookie
 app.use(session({
     cookie: {
         maxAge: 1000 * 60 * 60 * 12
@@ -77,7 +76,7 @@ app.use("/admin", function (req, res, next) {
     if (!user || !user.name || !user.pass) {
         return unauthorized(res);
     }
-    if (user.name === 'User' && user.pass === 'Password') {
+    if (user.name === config.basicAuth.username && user.pass === config.basicAuth.pw) {
         return next();
     } else {
         return unauthorized(res);

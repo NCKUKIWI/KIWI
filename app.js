@@ -5,6 +5,7 @@ var path = require("path");
 var bodyParser = require("body-parser");
 var expressValidator = require("express-validator");
 var session = require("express-session");
+var basicAuth = require('basic-auth');
 var db = require("./model/db");
 var cache = require("./helper/cache");
 var redis = cache.redis;
@@ -67,6 +68,21 @@ app.use("/user", require("./routes/user")); // get "/user"時交給routes user�
 app.use("/schedule", require("./routes/schedule")); // get "/schedule"時交給routes schedule
 app.use("/course_rate", require("./routes/course_rate")); // get "/course_rate"時交給routes course_rate
 app.use("/bot", require("./routes/bot"));
+app.use("/admin", function (req, res, next) {
+    function unauthorized(res) {
+        res.set('WWW-Authenticate', 'Basic realm=Input User&Password');
+        return res.sendStatus(401);
+    }
+    var user = basicAuth(req);
+    if (!user || !user.name || !user.pass) {
+        return unauthorized(res);
+    }
+    if (user.name === 'User' && user.pass === 'Password') {
+        return next();
+    } else {
+        return unauthorized(res);
+    }
+}, require("./routes/admin"));
 app.use("/*", require("./routes/course"));
 
 app.listen(process.env.PORT || 3000); //監聽3000port

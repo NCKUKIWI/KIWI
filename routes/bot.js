@@ -3,6 +3,7 @@ var request = require('request');
 var config = require('../config');
 var router = express.Router();
 var dbsystem = require('../model/dba');
+var FBAPI = "https://graph.facebook.com/v2.7/me/messages";
 var token = config.fb.msgtoken;
 var disable = config.bot.disable;
 var disableSQL = '';
@@ -13,13 +14,6 @@ var courseSerialList = [];
 //定時通知餘額
 var checkCourse;
 var checkCourseStatus = 0;
-
-var updateCommentNum = setInterval(function () {
-	var db = new dbsystem();
-	db.sql('UPDATE course_new SET comment_num = (SELECT COUNT(id) FROM post WHERE post.course_name = course_new.課程名稱 AND post.teacher = course_new.老師 )', function (result) {
-		console.log(result);
-	});
-}, 1000 * 60 * 60 * 24);
 
 if (disable.length > 0) {
 	disableSQL += '系號 NOT IN(';
@@ -45,12 +39,6 @@ db.select().field(["課程名稱", "選課序號"]).from("course_new").where("�
 		}
 		db = null;
 		delete db;
-	});
-});
-
-router.get('/setting/', function (req, res) {
-	res.render('setting', {
-		botswitch: checkCourseStatus
 	});
 });
 
@@ -264,7 +252,7 @@ function sendTextMessage(sender, text) {
 		text: text
 	}
 	request({
-		url: 'https://graph.facebook.com/v2.6/me/messages',
+		url: FBAPI,
 		qs: {
 			access_token: token
 		},
@@ -311,7 +299,7 @@ function sendHelloMessage(sender) {
 		}
 	}
 	request({
-		url: 'https://graph.facebook.com/v2.6/me/messages',
+		url: FBAPI,
 		qs: {
 			access_token: token
 		},
@@ -371,7 +359,7 @@ function sendCoursePlaceByName(sender, name, dpt, teacher) {
 				}
 			}
 			request({
-				url: 'https://graph.facebook.com/v2.6/me/messages',
+				url: FBAPI,
 				qs: {
 					access_token: token
 				},
@@ -469,7 +457,7 @@ function sendFollowCourseByName(sender, name, dpt, teacher) {
 				}
 			}
 			request({
-				url: 'https://graph.facebook.com/v2.6/me/messages',
+				url: FBAPI,
 				qs: {
 					access_token: token
 				},
@@ -602,7 +590,7 @@ function sendFollowCourseList(sender) {
 				messageData["attachment"]["payload"]["elements"][messageData["attachment"]["payload"]["elements"].length - 1]["buttons"].push(data);
 			}
 			request({
-				url: 'https://graph.facebook.com/v2.6/me/messages',
+				url: FBAPI,
 				qs: {
 					access_token: token
 				},
@@ -676,7 +664,7 @@ function sendGoodbye(sender) {
 	}
 	setTimeout(function () {
 		request({
-			url: 'https://graph.facebook.com/v2.6/me/messages',
+			url: FBAPI,
 			qs: {
 				access_token: token
 			},
@@ -769,7 +757,7 @@ function searchCourseByName(sender, name) {
 				}
 			}
 			request({
-				url: 'https://graph.facebook.com/v2.6/me/messages',
+				url: FBAPI,
 				qs: {
 					access_token: token
 				},
@@ -835,7 +823,7 @@ function searchCourseByTeacher(sender, teacher) {
 				}
 			}
 			request({
-				url: 'https://graph.facebook.com/v2.6/me/messages',
+				url: FBAPI,
 				qs: {
 					access_token: token
 				},
@@ -890,7 +878,7 @@ function askPlaceOrFollow(sender, serial) {
 				}
 			}
 			request({
-				url: 'https://graph.facebook.com/v2.6/me/messages',
+				url: FBAPI,
 				qs: {
 					access_token: token
 				},
@@ -933,7 +921,7 @@ function sendLink(sender, link) {
 		}
 	}
 	request({
-		url: 'https://graph.facebook.com/v2.6/me/messages',
+		url: FBAPI,
 		qs: {
 			access_token: token
 		},
@@ -969,7 +957,7 @@ function sendCancelMsg(sender) {
 		}
 	}
 	request({
-		url: 'https://graph.facebook.com/v2.6/me/messages',
+		url: FBAPI,
 		qs: {
 			access_token: token
 		},

@@ -22,7 +22,7 @@
                 </div>
                 <div class="field">
                     <label>Password</label>
-                    <input type="password" name="pw" id="pw">
+                    <input type="password" name="pw">
                 </div>
                 <div class="field">
                     <label>Text</label>
@@ -40,7 +40,7 @@
                 </div>
                 <div class="field">
                     <label>Password</label>
-                    <input type="password" name="pw" id="pw">
+                    <input type="password" name="pw">
                 </div>
                 <div class="field">
                     <label>Link</label>
@@ -81,26 +81,24 @@
                 });
             });
             $("#botswitch").on("click", function() {
-                if ($("#pw").val() === "nckuhubsetting") {
-                    if ($(this).text() == "開") {
-                        $.ajax({
-                            url: "/bot/openbot",
-                            type: "POST",
-                            success: function(response) {
-                                $("#botswitch").text("關");
-                                $("#botstatus").text("開");
-                            }
-                        });
-                    } else {
-                        $.ajax({
-                            url: "/bot/closebot",
-                            type: "POST",
-                            success: function(response) {
-                                $("#botswitch").text("開");
-                                $("#botstatus").text("關");
-                            }
-                        });
-                    }
+                if ($(this).text() == "開") {
+                    $.ajax({
+                        url: "/bot/openbot",
+                        type: "POST",
+                        success: function(response) {
+                            $("#botswitch").text("關");
+                            $("#botstatus").text("開");
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        url: "/bot/closebot",
+                        type: "POST",
+                        success: function(response) {
+                            $("#botswitch").text("開");
+                            $("#botstatus").text("關");
+                        }
+                    });
                 }
             });
         });

@@ -5,6 +5,7 @@ var router = express.Router();
 var dbsystem = require('../model/dba');
 var FBAPI = "https://graph.facebook.com/v2.7/me/messages";
 var token = config.fb.msgtoken;
+var token_auto_reply = config.fb.auto_reply;
 var disable = config.bot.disable;
 var disableSQL = '';
 
@@ -160,7 +161,7 @@ router.get('/webhook/', function (req, res) {
 });
 const msg_reply = ()=>{
     return{
-        "message":"感謝使用～我會永遠感謝你！"  
+        "message":"點開連結 https://goo.gl/vZxsrW 就可以看到成大最熱門追蹤的課程，NCKU HUB 祝你 / 妳選課順利！"  
     }
 }
 const cmt_reply = (text)=>{
@@ -170,21 +171,16 @@ const cmt_reply = (text)=>{
 }
 
 
-/*var random_reply = [
-    '已經私訊給你囉，祝選課順利、開學快樂！',
-    '已私訊，快去看訊息有沒有收到唷！',
-    '去檢查收件夾吧，我們把熱門排行都放在那裡了！'
-]*/
-
 var random_reply = [
-    "走咩走咩～",
-    "尼請我就去",
-    "小！編！在！減！肥！"
+    "已經私訊給你囉，祝選課順利、開學快樂！",
+    "已私訊，快去看訊息有沒有收到唷！",
+    "去檢查收件夾吧，我們把熱門排行都放在那裡了！"
 ]
+
 
 const callSendAPI = (response_cmt,response_msg,cid, cb = null)=>{
     request({
-        "uri": "https://graph.facebook.com/v3.0/" +cid + "/comments?access_token=" + "EAAUCXLsXLngBAEW8bUtC5ke8Rbz9GzKas1UG0mOSCQ95PcSTK4dDfN20H3q96d6RRaNKYKFipY7G30wFvZAzW3uiSb38A91XRsS1XSjTSyqEh7S64F0yu5RgFZCUqTPxgKkRrBq0e8kzZA0a3qXpfK33IlJZCOyURGUYUIedyHEFBq7T9WOt",
+        "uri": "https://graph.facebook.com/v3.0/" +cid + "/comments?access_token=" + token_auto_reply,
         "method": "POST",
         "json": response_cmt
     }, (err, res, body) => {
@@ -202,7 +198,7 @@ const callSendAPI = (response_cmt,response_msg,cid, cb = null)=>{
         }
     })
     request({
-        "uri": "https://graph.facebook.com/v3.0/" +cid + "/private_replies?access_token=" + "EAAUCXLsXLngBAEW8bUtC5ke8Rbz9GzKas1UG0mOSCQ95PcSTK4dDfN20H3q96d6RRaNKYKFipY7G30wFvZAzW3uiSb38A91XRsS1XSjTSyqEh7S64F0yu5RgFZCUqTPxgKkRrBq0e8kzZA0a3qXpfK33IlJZCOyURGUYUIedyHEFBq7T9WOt",
+        "uri": "https://graph.facebook.com/v3.0/" +cid + "/private_replies?access_token=" + token_auto_reply,
         
         "method": "POST",
         
@@ -224,7 +220,7 @@ const callSendAPI = (response_cmt,response_msg,cid, cb = null)=>{
     })
 }
 var forbid_page_name = 'NCKU HUB'
-var reg = /.*小.*編.*吃.*宵.*夜.*/
+var reg = /.*一.*起.*準.*備.*選.*課.*囉.*/
 router.post('/webhook/', function (req, res) {
 
 

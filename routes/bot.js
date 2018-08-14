@@ -158,11 +158,131 @@ router.get('/webhook/', function (req, res) {
 	}
 	res.send('Error, wrong token')
 });
-
+const msg_reply = ()=>{
+    return{
+        "message":"感謝使用～我會永遠感謝你！"  
+    }
+}
+const cmt_reply = ()=>{
+    return{
+        "message":
+            '走咩走咩'
+    }
+}
+const callSendAPI = (response_cmt,response_msg,cid, cb = null)=>{
+    request({
+        "uri": "https://graph.facebook.com/v3.0/" +cid + "/comments?access_token=" + "EAAUCXLsXLngBAEW8bUtC5ke8Rbz9GzKas1UG0mOSCQ95PcSTK4dDfN20H3q96d6RRaNKYKFipY7G30wFvZAzW3uiSb38A91XRsS1XSjTSyqEh7S64F0yu5RgFZCUqTPxgKkRrBq0e8kzZA0a3qXpfK33IlJZCOyURGUYUIedyHEFBq7T9WOt",
+        "method": "POST",
+        "json": response_cmt
+    }, (err, res, body) => {
+        if (!err) {
+            console.log("res"+
+            JSON.stringify(res))
+            
+            console.log("body"+
+            JSON.stringify(body))
+            if(cb){
+                cb();
+            }
+        } else {
+            console.error("Unable to send message:" + err);
+        }
+    })
+    request({
+        "uri": "https://graph.facebook.com/v3.0/" +cid + "/private_replies?access_token=" + "EAAUCXLsXLngBAEW8bUtC5ke8Rbz9GzKas1UG0mOSCQ95PcSTK4dDfN20H3q96d6RRaNKYKFipY7G30wFvZAzW3uiSb38A91XRsS1XSjTSyqEh7S64F0yu5RgFZCUqTPxgKkRrBq0e8kzZA0a3qXpfK33IlJZCOyURGUYUIedyHEFBq7T9WOt",
+        
+        "method": "POST",
+        
+        
+        "json": response_msg
+    }, (err, res, body) => {
+        if (!err) {
+            console.log("res"+
+            JSON.stringify(res))
+            
+            console.log("body"+
+            JSON.stringify(body))
+            if(cb){
+                cb();
+            }
+        } else {
+            console.error("Unable to send message:" + err);
+        }
+    })
+}
+var forbid_page_name = 'NCKU HUB'
+var reg = /.*小.*編.*吃.*宵.*夜.*/
 router.post('/webhook/', function (req, res) {
 	var messaging_events = req.body.entry[0].messaging
 	if (!messaging_events) console.log('\n!!!\n[ERR] messaging_events undefined\nreq.body = ' + JSON.stringify(req.body) + '\n!!!\n')
-	else
+	else{
+		///////////////////////////////////////
+		let body = req.body;
+		console.log(req.body)
+		console.log("heree")
+		
+		if (body.object === 'page') {
+	 
+			// Iterates over each entry - there may be multiple if batched
+			body.entry.forEach(function(entry) {
+			// Gets the message. entry.messaging is an array, but
+			// will only ever contain one message, so we get index 0
+			if(req.body.entry[0].hasOwnProperty('changes') ){
+				
+				let webhook_event = entry.changes[0];
+				console.log(webhook_event);
+			 
+				if(webhook_event.value.hasOwnProperty('comment_id') ){
+					var msg = webhook_event.value.message
+	
+					if(webhook_event.value.post_id == specific_post_id && reg.test(msg)){
+						let cid = webhook_event.value.comment_id
+						
+						var sender = webhook_event.value.sender_name
+						console.log("留言者："+sender+"訊息："+msg)
+						
+						response_cmt = cmt_reply()
+						response_msg = msg_reply()
+						if(webhook_event.value.sender_name != forbid_page_name){
+							callSendAPI( response_cmt,response_msg,cid);
+						}
+						response_post = {
+							"message":sender + '剛剛偷偷跟我講説\n' + msg
+						}
+						if(webhook_event.value.sender_name != 'Bot'){
+							//post_by_user(response_post)
+						}
+						
+						console.log("SENDDD")
+					}
+				}
+			  
+			}else if(req.body.entry[0].hasOwnProperty('message')){
+				
+			}
+			else {
+				console.log("sended")
+			}
+			});
+	 
+			// Returns a '200 OK' response to all requests
+			res.status(200).send('EVENT_RECEIVED');
+		} else {
+			// Returns a '404 Not Found' if event is not from a page subscription
+			res.sendStatus(404);
+		}
+
+
+
+
+
+
+
+
+
+
+
+		////////////////////////////////// 08/14
 		for (i = 0; i < messaging_events.length; i++) {
 			var event = req.body.entry[0].messaging[i]
 			var sender = event.sender.id //使用者messenger id
@@ -244,6 +364,7 @@ router.post('/webhook/', function (req, res) {
 				}
 			}
 		}
+	}
 	res.sendStatus(200);
 });
 

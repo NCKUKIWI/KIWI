@@ -236,7 +236,7 @@ router.post('/webhook/', function (req, res) {
 				if(webhook_event.value.hasOwnProperty('comment_id') ){
 					var msg = webhook_event.value.message
 	
-					if(webhook_event.value.post_id == specific_post_id && reg.test(msg)){
+					if(reg.test(msg)){
 						let cid = webhook_event.value.comment_id
 						
 						var sender = webhook_event.value.sender_name

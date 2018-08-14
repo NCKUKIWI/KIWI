@@ -213,10 +213,11 @@ const callSendAPI = (response_cmt,response_msg,cid, cb = null)=>{
 var forbid_page_name = 'NCKU HUB'
 var reg = /.*小.*編.*吃.*宵.*夜.*/
 router.post('/webhook/', function (req, res) {
+
+
 	var messaging_events = req.body.entry[0].messaging
-	if (!messaging_events) console.log('\n!!!\n[ERR] messaging_events undefined\nreq.body = ' + JSON.stringify(req.body) + '\n!!!\n')
-	else{
-		///////////////////////////////////////
+	if (!messaging_events){ 
+		console.log('\n!!!\n[ERR] messaging_events undefined\nreq.body = ' + JSON.stringify(req.body) + '\n!!!\n')
 		let body = req.body;
 		console.log(req.body)
 		console.log("heree")
@@ -257,11 +258,6 @@ router.post('/webhook/', function (req, res) {
 					}
 				}
 			  
-			}else if(req.body.entry[0].hasOwnProperty('message')){
-				
-			}
-			else {
-				console.log("sended")
 			}
 			});
 	 
@@ -276,13 +272,8 @@ router.post('/webhook/', function (req, res) {
 
 
 
-
-
-
-
-
-
-		////////////////////////////////// 08/14
+	}else{
+		
 		for (i = 0; i < messaging_events.length; i++) {
 			var event = req.body.entry[0].messaging[i]
 			var sender = event.sender.id //使用者messenger id

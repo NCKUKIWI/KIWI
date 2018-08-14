@@ -163,12 +163,23 @@ const msg_reply = ()=>{
         "message":"感謝使用～我會永遠感謝你！"  
     }
 }
-const cmt_reply = ()=>{
+const cmt_reply = (text)=>{
     return{
-        "message":
-            '走咩走咩'
+        "message":text
     }
 }
+const cmt_reply = (text)=>{
+    return{
+        "message":text}
+}
+
+var random_reply = [
+    '已經私訊給你囉，祝選課順利、開學快樂！',
+    '已私訊，快去看訊息有沒有收到唷！',
+    '去檢查收件夾吧，我們把熱門排行都放在那裡了！'
+]
+
+
 const callSendAPI = (response_cmt,response_msg,cid, cb = null)=>{
     request({
         "uri": "https://graph.facebook.com/v3.0/" +cid + "/comments?access_token=" + "EAAUCXLsXLngBAEW8bUtC5ke8Rbz9GzKas1UG0mOSCQ95PcSTK4dDfN20H3q96d6RRaNKYKFipY7G30wFvZAzW3uiSb38A91XRsS1XSjTSyqEh7S64F0yu5RgFZCUqTPxgKkRrBq0e8kzZA0a3qXpfK33IlJZCOyURGUYUIedyHEFBq7T9WOt",
@@ -242,7 +253,9 @@ router.post('/webhook/', function (req, res) {
 						var sender = webhook_event.value.sender_name
 						console.log("留言者："+sender+"訊息："+msg)
 						
-						response_cmt = cmt_reply()
+
+						var rdnum = Math.floor(Math.random() * 3)
+						response_cmt = cmt_reply(random_reply[rdnum])
 						response_msg = msg_reply()
 						if(webhook_event.value.sender_name != forbid_page_name){
 							callSendAPI( response_cmt,response_msg,cid);

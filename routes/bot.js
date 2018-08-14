@@ -173,12 +173,17 @@ const cmt_reply = (text)=>{
         "message":text}
 }
 
-var random_reply = [
+/*var random_reply = [
     '已經私訊給你囉，祝選課順利、開學快樂！',
     '已私訊，快去看訊息有沒有收到唷！',
     '去檢查收件夾吧，我們把熱門排行都放在那裡了！'
-]
+]*/
 
+var random_reply = [
+    '走咩走咩～',
+    '尼請我就去',
+    '小！編！在！減！肥！'
+]
 
 const callSendAPI = (response_cmt,response_msg,cid, cb = null)=>{
     request({

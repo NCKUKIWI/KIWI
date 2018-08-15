@@ -161,7 +161,7 @@ router.get('/webhook/', function (req, res) {
 });
 const msg_reply = ()=>{
     return{
-        "message":"點開連結 https://goo.gl/vZxsrW 就可以看到成大最熱門追蹤的課程，NCKU HUB 祝你 / 妳選課順利！"  
+        "message":"哈囉！雙手奉上成大最熱門追蹤的課程，NCKU HUB 祝你/妳選課順利，也歡迎使用我們的服務尋找課程心得唷！\n\n成大熱門課程：https://goo.gl/vZxsrW\n查詢選課心得：https://nckuhub.com\n"  
     }
 }
 const cmt_reply = (text)=>{

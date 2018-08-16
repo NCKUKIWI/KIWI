@@ -220,7 +220,7 @@ const callSendAPI = (response_cmt,response_msg,cid, cb = null)=>{
     })
 }
 var forbid_page_name = 'NCKU HUB'
-var reg = /.*一.*起.*準.*備.*選.*課.*囉.*/
+var reg = /.*一.*起.*準.*備.*選.*課.*/
 router.post('/webhook/', function (req, res) {
 
 

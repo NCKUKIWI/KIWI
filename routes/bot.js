@@ -169,7 +169,11 @@ const cmt_reply = (text)=>{
         "message":text
     }
 }
-
+const msg_reply_again = ()=>{
+    return{
+        "message":"你好，請再次輸入「小幫手」，以開啟 NCKU HUB 小幫手的功能唷！"  
+    }
+}
 
 var random_reply = [
     "已經私訊給你囉，祝選課順利、開學快樂！",
@@ -219,8 +223,33 @@ const callSendAPI = (response_cmt,response_msg,cid, cb = null)=>{
         }
     })
 }
+const AskMsgAgain = (response_msg,cid, cb = null)=>{
+    
+    request({
+        "uri": "https://graph.facebook.com/v3.0/" +cid + "/private_replies?access_token=" + token_auto_reply,
+        
+        "method": "POST",
+        
+        
+        "json": response_msg
+    }, (err, res, body) => {
+        if (!err) {
+            console.log("res"+
+            JSON.stringify(res))
+            
+            console.log("body"+
+            JSON.stringify(body))
+            if(cb){
+                cb();
+            }
+        } else {
+            console.error("Unable to send message:" + err);
+        }
+    })
+}
 var forbid_page_name = 'NCKU HUB'
 var reg = /.*一.*起.*準.*備.*選.*課.*/
+var helper = /.*小.*幫.*手.*/
 router.post('/webhook/', function (req, res) {
 
 
@@ -267,6 +296,30 @@ router.post('/webhook/', function (req, res) {
 						
 						console.log("SENDDD")
 					}
+					if(helper.test(msg)){
+						let cid = webhook_event.value.comment_id
+						
+						var sender = webhook_event.value.sender_name
+						console.log("留言者："+sender+"訊息："+msg)
+						
+
+						response_msg = msg_reply_again()
+						if(webhook_event.value.sender_name != forbid_page_name){
+							AskMsgAgain(response_msg,cid);
+						}
+						response_post = {
+							"message":sender + '剛剛偷偷跟我講説\n' + msg
+						}
+						if(webhook_event.value.sender_name != 'Bot'){
+							//post_by_user(response_post)
+						}
+						
+						console.log("SENDDD")
+					}
+
+
+
+
 				}
 			  
 			}

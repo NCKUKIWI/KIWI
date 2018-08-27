@@ -159,93 +159,89 @@ router.get('/webhook/', function (req, res) {
 	}
 	res.send('Error, wrong token')
 });
-const msg_reply = ()=>{
-    return{
-        "message":"哈囉！雙手奉上成大最熱門追蹤的課程，NCKU HUB 祝你/妳選課順利，也歡迎使用我們的服務尋找課程心得唷！\n\n🎈 成大熱門課程：https://goo.gl/vZxsrW\n🎈 查詢選課心得：https://nckuhub.com\n"  
-    }
+const msg_reply = () => {
+	return {
+		"message": "哈囉！雙手奉上成大最熱門追蹤的課程，NCKU HUB 祝你/妳選課順利，也歡迎使用我們的服務尋找課程心得唷！\n\n🎈 成大熱門課程：https://goo.gl/vZxsrW\n🎈 查詢選課心得：https://nckuhub.com\n"
+	}
 }
-const cmt_reply = (text)=>{
-    return{
-        "message":text
-    }
+const cmt_reply = (text) => {
+	return {
+		"message": text
+	}
 }
-const msg_reply_again = ()=>{
-    return{
-        "message":"你好，請再次輸入「小幫手」，以開啟 NCKU HUB 小幫手的功能唷！"  
-    }
+const msg_reply_again = () => {
+	return {
+		"message": "你好，請再次輸入「小幫手」，以開啟 NCKU HUB 小幫手的功能唷！"
+	}
 }
 
 var random_reply = [
-    "已經私訊給你囉，祝選課順利、開學快樂！",
-    "已私訊，快去看訊息有沒有收到唷！",
-    "去檢查收件夾吧，我們把熱門排行都放在那裡了！"
+	"已經私訊給你囉，祝選課順利、開學快樂！",
+	"已私訊，快去看訊息有沒有收到唷！",
+	"去檢查收件夾吧，我們把熱門排行都放在那裡了！"
 ]
 
 
-const callSendAPI = (response_cmt,response_msg,cid, cb = null)=>{
-    request({
-        "uri": "https://graph.facebook.com/v3.0/" +cid + "/comments?access_token=" + token_auto_reply,
-        "method": "POST",
-        "json": response_cmt
-    }, (err, res, body) => {
-        if (!err) {
-            console.log("res"+
-            JSON.stringify(res))
-            
-            console.log("body"+
-            JSON.stringify(body))
-            if(cb){
-                cb();
-            }
-        } else {
-            console.error("Unable to send message:" + err);
-        }
-    })
-    request({
-        "uri": "https://graph.facebook.com/v3.0/" +cid + "/private_replies?access_token=" + token_auto_reply,
-        
-        "method": "POST",
-        
-        
-        "json": response_msg
-    }, (err, res, body) => {
-        if (!err) {
-            console.log("res"+
-            JSON.stringify(res))
-            
-            console.log("body"+
-            JSON.stringify(body))
-            if(cb){
-                cb();
-            }
-        } else {
-            console.error("Unable to send message:" + err);
-        }
-    })
+const callSendAPI = (response_cmt, response_msg, cid, cb = null) => {
+	request({
+		"uri": "https://graph.facebook.com/v3.0/" + cid + "/comments?access_token=" + token_auto_reply,
+		"method": "POST",
+		"json": response_cmt
+	}, (err, res, body) => {
+		if (!err) {
+			console.log("res" +
+				JSON.stringify(res))
+
+			console.log("body" +
+				JSON.stringify(body))
+			if (cb) {
+				cb();
+			}
+		} else {
+			console.error("Unable to send message:" + err);
+		}
+	})
+	request({
+		"uri": "https://graph.facebook.com/v3.0/" + cid + "/private_replies?access_token=" + token_auto_reply,
+
+		"method": "POST",
+
+
+		"json": response_msg
+	}, (err, res, body) => {
+		if (!err) {
+			console.log("res" +
+				JSON.stringify(res))
+
+			console.log("body" +
+				JSON.stringify(body))
+			if (cb) {
+				cb();
+			}
+		} else {
+			console.error("Unable to send message:" + err);
+		}
+	})
 }
-const AskMsgAgain = (response_msg,cid, cb = null)=>{
-    
-    request({
-        "uri": "https://graph.facebook.com/v3.0/" +cid + "/private_replies?access_token=" + token_auto_reply,
-        
-        "method": "POST",
-        
-        
-        "json": response_msg
-    }, (err, res, body) => {
-        if (!err) {
-            console.log("res"+
-            JSON.stringify(res))
-            
-            console.log("body"+
-            JSON.stringify(body))
-            if(cb){
-                cb();
-            }
-        } else {
-            console.error("Unable to send message:" + err);
-        }
-    })
+const AskMsgAgain = (response_msg, cid, cb = null) => {
+	request({
+		"uri": "https://graph.facebook.com/v3.0/" + cid + "/private_replies?access_token=" + token_auto_reply,
+		"method": "POST",
+		"json": response_msg
+	}, (err, res, body) => {
+		if (!err) {
+			console.log("res" +
+				JSON.stringify(res));
+
+			console.log("body" +
+				JSON.stringify(body));
+			if (cb) {
+				cb();
+			}
+		} else {
+			console.error("Unable to send message:" + err);
+		}
+	})
 }
 var forbid_page_name = 'NCKU HUB'
 var reg = /.*一.*起.*準.*備.*選.*課.*/
@@ -254,95 +250,69 @@ router.post('/webhook/', function (req, res) {
 
 
 	var messaging_events = req.body.entry[0].messaging
-	if (!messaging_events){ 
+	if (!messaging_events) {
 		console.log('\n!!!\n[ERR] messaging_events undefined\nreq.body = ' + JSON.stringify(req.body) + '\n!!!\n')
 		let body = req.body;
-		console.log(req.body)
-		console.log("heree")
-		
+		console.log(req.body);
+		console.log("heree");
 		if (body.object === 'page') {
-	 
-			// Iterates over each entry - there may be multiple if batched
-			body.entry.forEach(function(entry) {
-			// Gets the message. entry.messaging is an array, but
-			// will only ever contain one message, so we get index 0
-			if(req.body.entry[0].hasOwnProperty('changes') ){
-				
-				let webhook_event = entry.changes[0];
-				console.log(webhook_event);
-			 
-				if(webhook_event.value.hasOwnProperty('comment_id') ){
-					var msg = webhook_event.value.message
-	
-					if(reg.test(msg)){
-						let cid = webhook_event.value.comment_id
-						
-						var sender = webhook_event.value.sender_name
-						console.log("留言者："+sender+"訊息："+msg)
-						
-
-						var rdnum = Math.floor(Math.random() * 3)
-						response_cmt = cmt_reply(random_reply[rdnum])
-						response_msg = msg_reply()
-						if(webhook_event.value.sender_name != forbid_page_name){
-							callSendAPI( response_cmt,response_msg,cid);
+			body.entry.forEach(function (entry) {
+				// Gets the message. entry.messaging is an array, but
+				// will only ever contain one message, so we get index 0
+				if (req.body.entry[0].hasOwnProperty('changes')) {
+					let webhook_event = entry.changes[0];
+					console.log(webhook_event);
+					if (webhook_event.value.hasOwnProperty('comment_id')) {
+						var msg = webhook_event.value.message;
+						if (reg.test(msg)) {
+							let cid = webhook_event.value.comment_id;
+							var sender = webhook_event.value.sender_name;
+							console.log("留言者：" + sender + "訊息：" + msg)
+							var rdnum = Math.floor(Math.random() * 3)
+							response_cmt = cmt_reply(random_reply[rdnum])
+							response_msg = msg_reply()
+							if (webhook_event.value.sender_name != forbid_page_name) {
+								callSendAPI(response_cmt, response_msg, cid);
+							}
+							response_post = {
+								"message": sender + '剛剛偷偷跟我講説\n' + msg
+							}
+							if (webhook_event.value.sender_name != 'Bot') {
+								//post_by_user(response_post)
+							}
+							console.log("SENDDD");
 						}
-						response_post = {
-							"message":sender + '剛剛偷偷跟我講説\n' + msg
+						if (helper.test(msg)) {
+							let cid = webhook_event.value.comment_id;
+							var sender = webhook_event.value.sender_name;
+							console.log("留言者：" + sender + "訊息：" + msg);
+							response_msg = msg_reply_again();
+							if (webhook_event.value.sender_name != forbid_page_name) {
+								AskMsgAgain(response_msg, cid);
+							}
+							response_post = {
+								"message": sender + '剛剛偷偷跟我講説\n' + msg
+							}
+							if (webhook_event.value.sender_name != 'Bot') {
+								//post_by_user(response_post)
+							}
+							console.log("SENDDD");
 						}
-						if(webhook_event.value.sender_name != 'Bot'){
-							//post_by_user(response_post)
-						}
-						
-						console.log("SENDDD")
 					}
-					if(helper.test(msg)){
-						let cid = webhook_event.value.comment_id
-						
-						var sender = webhook_event.value.sender_name
-						console.log("留言者："+sender+"訊息："+msg)
-						
-
-						response_msg = msg_reply_again()
-						if(webhook_event.value.sender_name != forbid_page_name){
-							AskMsgAgain(response_msg,cid);
-						}
-						response_post = {
-							"message":sender + '剛剛偷偷跟我講説\n' + msg
-						}
-						if(webhook_event.value.sender_name != 'Bot'){
-							//post_by_user(response_post)
-						}
-						
-						console.log("SENDDD")
-					}
-
-
-
-
 				}
-			  
-			}
 			});
-	 
 			// Returns a '200 OK' response to all requests
 			res.status(200).send('EVENT_RECEIVED');
 		} else {
 			// Returns a '404 Not Found' if event is not from a page subscription
 			res.sendStatus(404);
 		}
-
-
-
-
-
-	}else{
-		
+	} else {
 		for (i = 0; i < messaging_events.length; i++) {
-			var event = req.body.entry[0].messaging[i]
-			var sender = event.sender.id //使用者messenger id
+			var event = req.body.entry[0].messaging[i];
+			var sender = event.sender.id; //使用者messenger id
 			if (event.message && event.message.text) {
-				var text = event.message.text //用戶傳送的訊息
+				var text = event.message.text; //用戶傳送的訊息
 				console.log("text:" + text);
 				if (text.indexOf("小幫手") != -1) {
 					sendHelloMessage(sender);
@@ -677,35 +647,32 @@ function addFollowCourse(sender, course_id) {
 	var db = new dbsystem();
 	db.select().field(["系所名稱", "系號", "課程名稱", "時間", "餘額", "選課序號", "老師"]).from("course_new").where("id=", course_id).run(function (course) {
 		if (disable.indexOf(course[0]['系號']) == -1) {
-			if (course[0].餘額 > 0) {
-				var text = "你選擇的課程是：\n\n" + course[0].系所名稱.replace(/[A-Z0-9]/g, "") + "／" + course[0].課程名稱.replace(/[（|）|\s]/g, "") + "／" + course[0].老師.replace(/\s/g, "") + "／" + course[0].時間 + "\n\n這堂課目前還有餘額！趕快去選吧 🙌🙌\n\n成大選課連結：https://goo.gl/o8zPZH";
-				sendTextMessage(sender, text);
-				sendGoodbye(sender);
-			} else {
-				db.select().field("*").from("follow").where("course_id=", course_id).where("fb_id=", sender).run(function (follow) {
-					if (follow.length < 1) {
+			db.select().field("*").from("follow").where("course_id=", course_id).where("fb_id=", sender).run(function (follow) {
+				if (follow.length < 1) {
+					if (course[0].餘額 > 0)
+						var text = "你選擇的課程是：\n\n" + course[0].系所名稱.replace(/[A-Z0-9]/g, "") + "／" + course[0].課程名稱.replace(/[（|）|\s]/g, "") + "／" + course[0].老師.replace(/\s/g, "") + "／" + course[0].時間 + "\n\n已為你設定追蹤 👌 有餘額的時候會私訊你唷！請抱著既期待又怕受傷害的心情等候 🙌🙌";
+					else
 						var text = "你選擇的課程是：\n\n" + course[0].系所名稱.replace(/[A-Z0-9]/g, "") + "／" + course[0].課程名稱.replace(/[（|）|\s]/g, "") + "／" + course[0].老師.replace(/\s/g, "") + "／" + course[0].時間 + "\n\n這堂課目前無餘額，已為你設定追蹤 👌 有餘額的時候會私訊你唷！請抱著既期待又怕受傷害的心情等候 🙌🙌";
-						sendTextMessage(sender, text);
-						sendGoodbye(sender);
-						var data = {
-							course_id: course_id,
-							fb_id: sender,
-							content: course[0].系所名稱.replace(/[A-Z0-9]/g, "") + "／" + course[0].課程名稱.replace(/[（|）|\s]/g, ""),
-							time: course[0].時間,
-							serial: (course[0].選課序號) ? course[0].選課序號 : "",
-							teacher: course[0].老師
-						};
-						db.insert().into("follow").set(data).run(function (result) {
-							//for record
-							db.insert().into("follow_copy").set(data).run(function (result) {});
-						});
-					} else {
-						var text = "你選擇的課程是：\n\n" + course[0].系所名稱.replace(/[A-Z0-9]/g, "") + "／" + course[0].課程名稱.replace(/[（|）|\s]/g, "") + "／" + course[0].老師.replace(/\s/g, "") + "／" + course[0].時間 + "\n\n這堂課目前無餘額，已經為你設定過追蹤囉！";
-						sendTextMessage(sender, text);
-						sendGoodbye(sender);
-					}
-				});
-			}
+					sendTextMessage(sender, text);
+					sendGoodbye(sender);
+					var data = {
+						course_id: course_id,
+						fb_id: sender,
+						content: course[0].系所名稱.replace(/[A-Z0-9]/g, "") + "／" + course[0].課程名稱.replace(/[（|）|\s]/g, ""),
+						time: course[0].時間,
+						serial: (course[0].選課序號) ? course[0].選課序號 : "",
+						teacher: course[0].老師
+					};
+					db.insert().into("follow").set(data).run(function (result) {
+						//for record
+						db.insert().into("follow_copy").set(data).run(function (result) {});
+					});
+				} else {
+					var text = "你選擇的課程是：\n\n" + course[0].系所名稱.replace(/[A-Z0-9]/g, "") + "／" + course[0].課程名稱.replace(/[（|）|\s]/g, "") + "／" + course[0].老師.replace(/\s/g, "") + "／" + course[0].時間 + "\n\n這堂課目前無餘額，已經為你設定過追蹤囉！";
+					sendTextMessage(sender, text);
+					sendGoodbye(sender);
+				}
+			});
 		} else {
 			sendDisableMsg(sender, course[0]['系號']);
 		}

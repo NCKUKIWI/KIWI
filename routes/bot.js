@@ -385,6 +385,8 @@ router.post('/webhook/', function (req, res) {
 						cancelAllFollowCourse(sender);
 					} else if (event.postback.payload == "cancelmsg") {
 						cancelMsg(sender);
+					} else if (event.postback.payload == "dontFollow") {
+						sendGoodbye(sender);
 					} else if (event.postback.payload.indexOf("ask") !== -1) {
 						askPlaceOrFollow(sender, event.postback.payload.replace("ask", ""));
 					} else {
@@ -664,7 +666,6 @@ function addFollowCourse(sender, course_id, force = false) {
 					"payload": "dontFollow"
 				}]
 				sendButtonsMsg(sender, text, buttons);
-				sendGoodbye(sender);
 			} else {
 				const noExtra = (course[0].餘額 > 0 ? "" : "這堂課目前無餘額，");
 				db.select().field("*").from("follow").where("course_id=", course_id).where("fb_id=", sender).run(function (follow) {

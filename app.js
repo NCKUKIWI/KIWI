@@ -84,7 +84,7 @@ app.use("/admin", function (req, res, next) {
 }, require("./routes/admin"));
 app.use("/*", require("./routes/course"));
 
-setInterval(require("./script"), 1000 * 60 * 60 * 24); // 更新心得數
+setInterval(() => require("./script"), 1000 * 60 * 60 * 24); // 更新心得數
 
 app.listen(process.env.PORT || 3000); //監聽3000port
 console.log("running on port 3000");

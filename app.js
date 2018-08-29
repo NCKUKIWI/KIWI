@@ -41,14 +41,14 @@ app.use(session({
     resave: true
 }));
 
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
     if (req.cookies.isLogin) {
-        redis.get(userCacheKey(req.cookies.id), function(err, result){
+        redis.get(userCacheKey(req.cookies.id), function (err, result) {
             if (result) {
                 req.user = JSON.parse(result);
                 next();
             } else {
-                db.FindbyID("user", req.cookies.id, function(user) {
+                db.FindbyID("user", req.cookies.id, function (user) {
                     redis.set(userCacheKey(req.cookies.id), JSON.stringify(user));
                     req.user = user;
                     next();
@@ -83,6 +83,8 @@ app.use("/admin", function (req, res, next) {
     }
 }, require("./routes/admin"));
 app.use("/*", require("./routes/course"));
+
+setInterval(require("./script"), 1000 * 60 * 60 * 24); // 更新心得數
 
 app.listen(process.env.PORT || 3000); //監聽3000port
 console.log("running on port 3000");

@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var redis = require('../helper/cache').redis;
 var db = require('../model/db');
+var sanitizeHtml = require('sanitize-html');
 
 /* index  */
 router.get('/', function (req, res) {
@@ -21,7 +22,10 @@ router.get('/', function (req, res) {
     }
     /*  設定要的欄位 */
     var colmuns = ['id', 'course_name', 'catalog', 'teacher', 'semester', 'user_id'];
-    db.GetColumn('post', colmuns, { 'column': order, 'order': 'DESC' }, function (posts) {
+    db.GetColumn('post', colmuns, {
+        'column': order,
+        'order': 'DESC'
+    }, function (posts) {
         if (req.query.hasOwnProperty("queryw")) {
             db.query_post(posts, req.query.queryw, "query", function (posts, teachers, course_name) {
                 if (req.query.order) {
@@ -125,7 +129,9 @@ router.post('/create', function (req, res) {
     console.log('\n' + 'POST /post/create');
     if (req.user == undefined) {
         console.log("Not login");
-        res.send([{ msg: "請重新登入!" }]);
+        res.send([{
+            msg: "請重新登入!"
+        }]);
     } else {
         var userid = parseInt(req.user.id);
         console.log('User_id: ' + req.user.id + ' User_name: ' + req.user.name);
@@ -136,13 +142,23 @@ router.post('/create', function (req, res) {
             console.log("Error " + errors);
             res.send(errors);
         } else {
+            for (var aContent in req.body) {
+                sanitizeHtml(req.body[aContent], {
+                    allowedTags: [],
+                    selfClosing: ['a', 'img', 'br', 'hr', 'area', 'base', 'basefont', 'input', 'link', 'meta'],
+                    allowedSchemes: [],
+                    allowedSchemesByTag: {},
+                    allowedSchemesAppliedToAttributes: [],
+                    allowProtocolRelative: true
+                });
+            }
             console.log(req.body.course_name);
             var post = {
                 course_name: req.body.course_name.replace(/\'|\#|\/\*/g, ""),
                 teacher: req.body.teacher.replace(/\'|\#|\/\*/g, ""),
                 semester: req.body.semester.replace(/\'|\#|\/\*/g, ""),
                 catalog: req.body.catalog.replace(/\'|\#|\/\*/g, ""),
-                comment: req.body.comment.replace(/\n/g, "<br>").replace(/\'|\#|\/\*/g, "").replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, ""),
+                comment: req.body.comment.replace(/\'|\#|\/\*/g, ""),
                 report_hw: req.body.report_hw.replace(/\'|\#|\/\*/g, ""),
                 course_style: req.body.course_style.replace(/\'|\#|\/\*/g, ""),
                 user_id: userid
@@ -192,7 +208,9 @@ router.get('/:id', function (req, res) {
     } else {
         console.log('\n' + 'GET /post/' + id);
         db.FindbyID('post', id, function (post) {
-            db.FindbyColumn('course_rate', ['give', 'got'], { "post_id": post.id }, function (rate) {
+            db.FindbyColumn('course_rate', ['give', 'got'], {
+                "post_id": post.id
+            }, function (rate) {
                 res.render('post/show', {
                     'post': post,
                     'user': req.user,
@@ -219,7 +237,10 @@ router.post('/report/:id', function (req, res) {
         var userid = parseInt(req.user.id);
         console.log('檢舉者：' + name)
         /* 檢查是否檢舉過 依照user_id及post_id去尋找 */
-        db.FindbyColumn('report_post', ["id"], { 'post_id': postid, 'user_id': userid }, function (reports) {
+        db.FindbyColumn('report_post', ["id"], {
+            'post_id': postid,
+            'user_id': userid
+        }, function (reports) {
             if (reports.length > 0) {
                 console.log('Already report');
                 res.send('Already report');

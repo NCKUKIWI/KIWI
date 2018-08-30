@@ -191,7 +191,6 @@ const callSendAPI = (response_cmt, response_msg, cid, cb = null) => {
 		if (!err) {
 			console.log("res" +
 				JSON.stringify(res))
-
 			console.log("body" +
 				JSON.stringify(body))
 			if (cb) {
@@ -200,13 +199,10 @@ const callSendAPI = (response_cmt, response_msg, cid, cb = null) => {
 		} else {
 			console.error("Unable to send message:" + err);
 		}
-	})
+	});
 	request({
 		"uri": "https://graph.facebook.com/v3.0/" + cid + "/private_replies?access_token=" + token_auto_reply,
-
 		"method": "POST",
-
-
 		"json": response_msg
 	}, (err, res, body) => {
 		if (!err) {
@@ -221,8 +217,8 @@ const callSendAPI = (response_cmt, response_msg, cid, cb = null) => {
 		} else {
 			console.error("Unable to send message:" + err);
 		}
-	})
-}
+	});
+};
 const AskMsgAgain = (response_msg, cid, cb = null) => {
 	request({
 		"uri": "https://graph.facebook.com/v3.0/" + cid + "/private_replies?access_token=" + token_auto_reply,
@@ -241,15 +237,13 @@ const AskMsgAgain = (response_msg, cid, cb = null) => {
 		} else {
 			console.error("Unable to send message:" + err);
 		}
-	})
-}
-var forbid_page_name = 'NCKU HUB'
-var reg = /.*一.*起.*準.*備.*選.*課.*/
-var helper = /.*小.*幫.*手.*/
+	});
+};
+var forbid_page_name = 'NCKU HUB';
+var reg = /.*一.*起.*準.*備.*選.*課.*/;
+var helper = /.*小.*幫.*手.*/;
 router.post('/webhook/', function (req, res) {
-
-
-	var messaging_events = req.body.entry[0].messaging
+	var messaging_events = req.body.entry[0].messaging;
 	if (!messaging_events) {
 		console.log('\n!!!\n[ERR] messaging_events undefined\nreq.body = ' + JSON.stringify(req.body) + '\n!!!\n')
 		let body = req.body;
@@ -395,8 +389,8 @@ router.post('/webhook/', function (req, res) {
 				}
 			}
 		}
+		res.sendStatus(200);
 	}
-	res.sendStatus(200);
 });
 
 function sendTextMessage(sender, text) {

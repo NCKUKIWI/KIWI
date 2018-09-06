@@ -726,24 +726,16 @@ function sendFollowCourseList(sender) {
 					messageData["attachment"]["payload"]["elements"].push(card);
 				}
 			}
-			if (follow.length % 3 == 0) {
-				var card = {
-					"title": "NCKUHUB",
-					"subtitle": "以下是你目前追蹤的課程，請問要取消追蹤哪一個呢？",
-					"buttons": [{
-						"type": "postback",
-						"title": "全部取消追蹤",
-						"payload": "cancelall",
-					}],
-				}
-				messageData["attachment"]["payload"]["elements"].push(card);
+			var lastCardIndex = messageData["attachment"]["payload"]["elements"].length - 1;
+			var cancelAllButton = {
+				"type": "postback",
+				"title": "全部取消追蹤",
+				"payload": "cancelall",
+			};
+			if (messageData["attachment"]["payload"]["elements"][lastCardIndex]["buttons"].length === 3) {
+				messageData["attachment"]["payload"]["elements"][lastCardIndex]["buttons"][2] = cancelAllButton;
 			} else {
-				var data = {
-					"type": "postback",
-					"title": "全部取消追蹤",
-					"payload": "cancelall",
-				}
-				messageData["attachment"]["payload"]["elements"][messageData["attachment"]["payload"]["elements"].length - 1]["buttons"].push(data);
+				messageData["attachment"]["payload"]["elements"][lastCardIndex]["buttons"].push(cancelAllButton);
 			}
 			request({
 				url: FBAPI,

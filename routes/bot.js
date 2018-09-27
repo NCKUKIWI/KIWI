@@ -7,6 +7,7 @@ var FBAPI = "https://graph.facebook.com/v2.7/me/messages";
 var token = config.fb.msgtoken;
 var token_auto_reply = config.fb.auto_reply;
 var disable = config.bot.disable;
+var tester = config.bot.tester;
 var disableSQL = '';
 
 //取得所有課程資料
@@ -50,17 +51,9 @@ router.post('/sendmsg', function (req, res) {
 		if (req.body.type == "test") {
 			if (req.body.msg) {
 				if (req.body.msg == 'cancelMsg') {
-					sendCancelMsg("1346773338719764");
-					sendCancelMsg("1169375359801678");
-					sendCancelMsg("1364925580245632");
-					sendCancelMsg("1194641423974664");
-					sendCancelMsg("1318673478198233");
+					tester.forEach(aTester => sendCancelMsg(aTester));
 				} else {
-					sendTextMessage("1346773338719764", req.body.msg);
-					sendTextMessage("1169375359801678", req.body.msg);
-					sendTextMessage("1364925580245632", req.body.msg);
-					sendTextMessage("1194641423974664", req.body.msg);
-					sendTextMessage("1318673478198233", req.body.msg);
+					tester.forEach(aTester => sendTextMessage(aTester, req.body.msg));
 				}
 			}
 		} else if (req.body.type == "broadcast") {
@@ -87,31 +80,11 @@ router.post('/sendlink', function (req, res) {
 	} else {
 		if (req.body.type == "test") {
 			if (req.body.linktitle && req.body.linkurl) {
-				sendLink("1346773338719764", {
+				tester.forEach(aTester => sendTextMessage(aTester, {
 					url: req.body.linkurl,
 					title: req.body.linktitle,
 					description: req.body.linkdescription
-				});
-				sendLink("1169375359801678", {
-					url: req.body.linkurl,
-					title: req.body.linktitle,
-					description: req.body.linkdescription
-				});
-				sendLink("1364925580245632", {
-					url: req.body.linkurl,
-					title: req.body.linktitle,
-					description: req.body.linkdescription
-				});
-				sendLink("1194641423974664", {
-					url: req.body.linkurl,
-					title: req.body.linktitle,
-					description: req.body.linkdescription
-				});
-				sendLink("1318673478198233", {
-					url: req.body.linkurl,
-					title: req.body.linktitle,
-					description: req.body.linkdescription
-				});
+				}));
 			}
 		} else if (req.body.type == "broadcast") {
 			var db = new dbsystem();

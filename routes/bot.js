@@ -80,7 +80,7 @@ router.post('/sendlink', function (req, res) {
 	} else {
 		if (req.body.type == "test") {
 			if (req.body.linktitle && req.body.linkurl) {
-				tester.forEach(aTester => sendTextMessage(aTester, {
+				tester.forEach(aTester => sendLink(aTester, {
 					url: req.body.linkurl,
 					title: req.body.linktitle,
 					description: req.body.linkdescription

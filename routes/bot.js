@@ -3,7 +3,7 @@ var request = require('request');
 var config = require('../config');
 var router = express.Router();
 var dbsystem = require('../model/dba');
-var FBAPI = "https://graph.facebook.com/v2.7/me/messages";
+var FBAPI = "https://graph.facebook.com/v3.1/me/messages";
 var token = config.fb.msgtoken;
 var token_auto_reply = config.fb.auto_reply;
 var disable = config.bot.disable;
@@ -132,23 +132,17 @@ router.get('/webhook/', function (req, res) {
 	}
 	res.send('Error, wrong token')
 });
-const msg_reply = () => {
-	return {
-		"message": "哈囉！雙手奉上成大最熱門追蹤的課程，NCKU HUB 祝你/妳選課順利，也歡迎使用我們的服務尋找課程心得唷！\n\n🎈 成大熱門課程：https://goo.gl/vZxsrW\n🎈 查詢選課心得：https://nckuhub.com\n"
-	}
-}
-const cmt_reply = (text) => {
-	return {
-		"message": text
-	}
-}
-const msg_reply_again = () => {
-	return {
-		"message": "你好，請再次輸入「小幫手」，以開啟 NCKU HUB 小幫手的功能唷！"
-	}
-}
+const cmt_reply = text => ({
+	"message": text
+});
+const cmt_private_reply_hot_courses = () => ({
+	"message": "哈囉！雙手奉上成大最熱門追蹤的課程，NCKU HUB 祝你/妳選課順利，也歡迎使用我們的服務尋找課程心得唷！\n\n🎈 成大熱門課程：https://goo.gl/vZxsrW\n🎈 查詢選課心得：https://nckuhub.com\n"
+});
+const cmt_private_reply_again = () => ({
+	"message": "你好，請再次輸入「小幫手」，以開啟 NCKU HUB 小幫手的功能唷！"
+});
 
-var random_reply = [
+var cmt_random_reply = [
 	"已經私訊給你囉，祝選課順利、開學快樂！",
 	"已私訊，快去看訊息有沒有收到唷！",
 	"去檢查收件夾吧，我們把熱門排行都放在那裡了！"
@@ -162,10 +156,10 @@ const callSendAPI = (response_cmt, response_msg, cid, cb = null) => {
 		"json": response_cmt
 	}, (err, res, body) => {
 		if (!err) {
-			console.log("res" +
-				JSON.stringify(res))
-			console.log("body" +
-				JSON.stringify(body))
+			// console.log("res" +
+			// 	JSON.stringify(res))
+			// console.log("body" +
+			// 	JSON.stringify(body))
 			if (cb) {
 				cb();
 			}
@@ -179,11 +173,11 @@ const callSendAPI = (response_cmt, response_msg, cid, cb = null) => {
 		"json": response_msg
 	}, (err, res, body) => {
 		if (!err) {
-			console.log("res" +
-				JSON.stringify(res))
+			// console.log("res" +
+			// 	JSON.stringify(res))
 
-			console.log("body" +
-				JSON.stringify(body))
+			// console.log("body" +
+			// 	JSON.stringify(body))
 			if (cb) {
 				cb();
 			}
@@ -199,11 +193,11 @@ const AskMsgAgain = (response_msg, cid, cb = null) => {
 		"json": response_msg
 	}, (err, res, body) => {
 		if (!err) {
-			console.log("res" +
-				JSON.stringify(res));
+			// console.log("res" +
+			// 	JSON.stringify(res));
 
-			console.log("body" +
-				JSON.stringify(body));
+			// console.log("body" +
+			// 	JSON.stringify(body));
 			if (cb) {
 				cb();
 			}
@@ -212,38 +206,32 @@ const AskMsgAgain = (response_msg, cid, cb = null) => {
 		}
 	});
 };
-var forbid_page_name = 'NCKU HUB';
-var reg = /.*一.*起.*準.*備.*選.*課.*/;
-var helper = /小幫手/;
+var forbidden_sender_page_name = 'NCKU HUB';
+const cmt_keyword_course_selection = /.*一.*起.*準.*備.*選.*課.*/;
+const cmt_keyword_helper = /小幫手/;
 router.post('/webhook/', function (req, res) {
 	var messaging_events = req.body.entry[0].messaging;
 	if (!messaging_events) {
-		console.log('\n!!!\n[ERR] messaging_events undefined\nreq.body = ' + JSON.stringify(req.body) + '\n!!!\n')
+		// console.log('\n!!!\n[ERR] messaging_events undefined\nreq.body = ' + JSON.stringify(req.body) + '\n!!!\n')
 		let body = req.body;
 		if (body.object === 'page') {
 			body.entry.forEach(function (entry) {
-				// Gets the message. entry.messaging is an array, but
-				// will only ever contain one message, so we get index 0
 				if (req.body.entry[0].hasOwnProperty('changes')) {
 					let webhook_event = entry.changes[0];
-					console.log(webhook_event);
 					if (webhook_event.value.hasOwnProperty('comment_id')) { //If there are some user comment
-						var msg = webhook_event.value.message;
-						if (reg.test(msg)) { //留言 一起準備選課囉
-							let cid = webhook_event.value.comment_id;
-							var sender = webhook_event.value.sender_name;
-							var rdnum = Math.floor(Math.random() * 3)
-							response_cmt = cmt_reply(random_reply[rdnum])
-							response_msg = msg_reply()
-							if (webhook_event.value.sender_name != forbid_page_name) {
+						const msg = webhook_event.value.message;
+						const cid = webhook_event.value.comment_id;
+						const sender = webhook_event.value.from.name;
+						if (sender != forbidden_sender_page_name) {
+							console.log("留言者：" + sender + "訊息：" + msg);
+							if (cmt_keyword_course_selection.test(msg)) { //留言 一起準備選課囉
+								var rdnum = Math.floor(Math.random() * 3);
+								response_cmt = cmt_reply(cmt_random_reply[rdnum]);
+								response_msg = cmt_private_reply_hot_courses();
 								callSendAPI(response_cmt, response_msg, cid);
 							}
-						}
-						if (helper.test(msg)) { //留言 小幫手
-							let cid = webhook_event.value.comment_id;
-							var sender = webhook_event.value.sender_name;
-							response_msg = msg_reply_again();
-							if (webhook_event.value.sender_name != forbid_page_name) {
+							if (cmt_keyword_helper.test(msg)) { //留言 小幫手
+								response_msg = cmt_private_reply_again();
 								AskMsgAgain(response_msg, cid);
 							}
 						}

@@ -128,87 +128,57 @@ router.post('/closebot', function (req, res) {
 
 router.get('/webhook/', function (req, res) {
 	if (req.query['hub.verify_token'] === 'nckuhubbver49') {
-		res.send(req.query['hub.challenge'])
+		res.send(req.query['hub.challenge']);
 	}
-	res.send('Error, wrong token')
+	res.send('Error, wrong token');
 });
+
+/**
+ * 文章留言回復相關宣告 |START|
+ */
+
+const forbidden_sender_my_page_name = 'NCKU HUB';
+const cmt_keyword_helper = /小幫手/;
+const cmt_keyword_course_selection = /.*一.*起.*準.*備.*選.*課.*/;
+
 const cmt_reply = text => ({
 	"message": text
 });
 const cmt_private_reply_hot_courses = () => ({
 	"message": "哈囉！雙手奉上成大最熱門追蹤的課程，NCKU HUB 祝你/妳選課順利，也歡迎使用我們的服務尋找課程心得唷！\n\n🎈 成大熱門課程：https://goo.gl/vZxsrW\n🎈 查詢選課心得：https://nckuhub.com\n"
 });
-const cmt_private_reply_again = () => ({
+const cmt_private_reply_helper = () => ({
 	"message": "你好，請再次輸入「小幫手」，以開啟 NCKU HUB 小幫手的功能唷！"
 });
-
-var cmt_random_reply = [
+const cmt_random_reply = [
 	"已經私訊給你囉，祝選課順利、開學快樂！",
 	"已私訊，快去看訊息有沒有收到唷！",
 	"去檢查收件夾吧，我們把熱門排行都放在那裡了！"
-]
+];
 
+const get_cmt_reply_url = cid => `https://graph.facebook.com/v3.0/${cid}/comments`;
+const get_cmt_private_reply_url = cid => `https://graph.facebook.com/v3.0/${cid}/private_replies`;
 
-const callSendAPI = (response_cmt, response_msg, cid, cb = null) => {
-	request({
-		"uri": "https://graph.facebook.com/v3.0/" + cid + "/comments?access_token=" + token_auto_reply,
-		"method": "POST",
-		"json": response_cmt
-	}, (err, res, body) => {
-		if (!err) {
-			// console.log("res" +
-			// 	JSON.stringify(res))
-			// console.log("body" +
-			// 	JSON.stringify(body))
-			if (cb) {
-				cb();
-			}
-		} else {
-			console.error("Unable to send message:" + err);
-		}
+function cmtReply(response_cmt, cid) {
+	return sendPostRequest({
+		url: get_cmt_reply_url(cid),
+		access_token: token_auto_reply,
+		json: response_cmt
 	});
-	request({
-		"uri": "https://graph.facebook.com/v3.0/" + cid + "/private_replies?access_token=" + token_auto_reply,
-		"method": "POST",
-		"json": response_msg
-	}, (err, res, body) => {
-		if (!err) {
-			// console.log("res" +
-			// 	JSON.stringify(res))
+}
 
-			// console.log("body" +
-			// 	JSON.stringify(body))
-			if (cb) {
-				cb();
-			}
-		} else {
-			console.error("Unable to send message:" + err);
-		}
+function cmtPrivateReply(response_msg, cid) {
+	return sendPostRequest({
+		url: get_cmt_private_reply_url(cid),
+		access_token: token_auto_reply,
+		json: response_msg
 	});
-};
-const AskMsgAgain = (response_msg, cid, cb = null) => {
-	request({
-		"uri": "https://graph.facebook.com/v3.0/" + cid + "/private_replies?access_token=" + token_auto_reply,
-		"method": "POST",
-		"json": response_msg
-	}, (err, res, body) => {
-		if (!err) {
-			// console.log("res" +
-			// 	JSON.stringify(res));
+}
 
-			// console.log("body" +
-			// 	JSON.stringify(body));
-			if (cb) {
-				cb();
-			}
-		} else {
-			console.error("Unable to send message:" + err);
-		}
-	});
-};
-var forbidden_sender_page_name = 'NCKU HUB';
-const cmt_keyword_course_selection = /.*一.*起.*準.*備.*選.*課.*/;
-const cmt_keyword_helper = /小幫手/;
+/**
+ * 文章留言回復相關宣告 |END|
+ */
+
 router.post('/webhook/', function (req, res) {
 	var messaging_events = req.body.entry[0].messaging;
 	if (!messaging_events) {
@@ -222,17 +192,18 @@ router.post('/webhook/', function (req, res) {
 						const msg = webhook_event.value.message;
 						const cid = webhook_event.value.comment_id;
 						const sender = webhook_event.value.from.name;
-						if (sender != forbidden_sender_page_name) {
+						if (sender != forbidden_sender_my_page_name) {
 							console.log("留言者：" + sender + "訊息：" + msg);
 							if (cmt_keyword_course_selection.test(msg)) { //留言 一起準備選課囉
 								var rdnum = Math.floor(Math.random() * 3);
-								response_cmt = cmt_reply(cmt_random_reply[rdnum]);
-								response_msg = cmt_private_reply_hot_courses();
-								callSendAPI(response_cmt, response_msg, cid);
+								var response_cmt = cmt_reply(cmt_random_reply[rdnum]);
+								var response_msg = cmt_private_reply_hot_courses();
+								cmtReply(response_cmt, cid);
+								cmtPrivateReply(response_msg, cid);
 							}
 							if (cmt_keyword_helper.test(msg)) { //留言 小幫手
-								response_msg = cmt_private_reply_again();
-								AskMsgAgain(response_msg, cid);
+								var response_msg = cmt_private_reply_helper();
+								cmtPrivateReply(response_msg, cid);
 							}
 						}
 					}
@@ -1113,6 +1084,29 @@ function cancelMsg(sender) {
 
 function sendDisableMsg(sender, dept_no) {
 	sendTextMessage(sender, "很抱歉! 此階段 " + dept_no + " 課程未開放追蹤餘額!");
+}
+
+function sendPostRequest(option, cb) {
+	const url = option.url;
+	const access_token = option.access_token;
+	const json = option.json;
+	request({
+		url: url,
+		qs: {
+			access_token: access_token
+		},
+		method: "POST",
+		json: json
+	}, (error, response, body) => {
+		if (error) {
+			console.error('[Error | sending request]: ', error)
+		} else if (response.body.error) {
+			console.error('[Error | facebook reply]: ', response.body.error)
+		}
+		if (cb) {
+			cb();
+		}
+	});
 }
 
 module.exports = router;

@@ -95,7 +95,7 @@ router.post('/sendlink', function (req, res) {
 							url: req.body.linkurl,
 							title: req.body.linktitle,
 							description: req.body.linkdescription
-						})
+						});
 					}
 				});
 			});
@@ -134,7 +134,7 @@ router.get('/webhook/', function (req, res) {
 });
 
 /**
- * 文章留言回復相關宣告 |START|
+ * 文章留言回覆相關宣告 |START|
  */
 
 const forbidden_sender_my_page_name = 'NCKU HUB';
@@ -176,7 +176,7 @@ function cmtPrivateReply(response_msg, cid) {
 }
 
 /**
- * 文章留言回復相關宣告 |END|
+ * 文章留言回覆相關宣告 |END|
  */
 
 router.post('/webhook/', function (req, res) {
@@ -189,15 +189,15 @@ router.post('/webhook/', function (req, res) {
 					const cid = aChange.value.comment_id;
 					const sender = aChange.value.from.name;
 					if (sender != forbidden_sender_my_page_name) {
-						console.log("留言者：" + sender + "訊息：" + msg);
+						console.log("[粉專留言] 留言者：" + sender + "訊息：" + msg);
 						if (cmt_keyword_course_selection.test(msg)) { //留言 一起準備選課囉
-							var rdnum = Math.floor(Math.random() * 3);
-							var response_cmt = cmt_reply(cmt_random_reply[rdnum]);
-							var response_msg = cmt_private_reply_hot_courses();
+							let rdnum = Math.floor(Math.random() * 3);
+							let response_cmt = cmt_reply(cmt_random_reply[rdnum]);
+							let response_msg = cmt_private_reply_hot_courses();
 							cmtReply(response_cmt, cid);
 							cmtPrivateReply(response_msg, cid);
 						} else if (cmt_keyword_helper.test(msg)) { //留言 小幫手
-							var response_msg = cmt_private_reply_helper();
+							let response_msg = cmt_private_reply_helper();
 							cmtPrivateReply(response_msg, cid);
 						}
 					}
@@ -208,7 +208,7 @@ router.post('/webhook/', function (req, res) {
 				var sender = event.sender.id; //使用者messenger id
 				if (event.message && event.message.text) {
 					var text = event.message.text; //用戶傳送的訊息
-					console.log("text:" + text);
+					console.log("[粉專私訊] 訊息：" + text);
 					if (text.indexOf("小幫手") != -1) {
 						sendHelloMessage(sender);
 					} else {
@@ -367,10 +367,11 @@ function sendCourseInfo(sender, course_id) {
 		db = null;
 		delete db;
 		course[0].教室 = course[0].教室.replace(/\s/g, "");
+		var text;
 		if (course[0].教室 == '') {
-			var text = "你選擇的課程是：\n\n" + course[0].系所名稱.replace(/[A-Z0-9]/g, "") + "／" + course[0].課程名稱.replace(/[（|）|\s]/g, "") + "／" + course[0].老師.replace(/\s/g, "") + "／" + course[0].時間 + "\n\n上課地點請查看 http://course-query.acad.ncku.edu.tw/qry/qry001.php?dept_no=" + course[0].系號;
+			text = "你選擇的課程是：\n\n" + course[0].系所名稱.replace(/[A-Z0-9]/g, "") + "／" + course[0].課程名稱.replace(/[（|）|\s]/g, "") + "／" + course[0].老師.replace(/\s/g, "") + "／" + course[0].時間 + "\n\n上課地點請查看 http://course-query.acad.ncku.edu.tw/qry/qry001.php?dept_no=" + course[0].系號;
 		} else {
-			var text = "你選擇的課程是：\n\n" + course[0].系所名稱.replace(/[A-Z0-9]/g, "") + "／" + course[0].課程名稱.replace(/[（|）|\s]/g, "") + "／" + course[0].老師.replace(/\s/g, "") + "／" + course[0].時間 + "\n\n上課地點在「" + course[0].教室.replace(/\s/g, "") + "」唷！\n系館地圖：https://bit.ly/2p0XfBH。";
+			text = "你選擇的課程是：\n\n" + course[0].系所名稱.replace(/[A-Z0-9]/g, "") + "／" + course[0].課程名稱.replace(/[（|）|\s]/g, "") + "／" + course[0].老師.replace(/\s/g, "") + "／" + course[0].時間 + "\n\n上課地點在「" + course[0].教室.replace(/\s/g, "") + "」唷！\n系館地圖：https://bit.ly/2p0XfBH。";
 		}
 		sendTextMessage(sender, text);
 		sendGoodbye(sender);
@@ -781,19 +782,6 @@ function sendLink(sender, link) {
 	});
 }
 
-function sendButtonsMsg(sender, txt, buttons) {
-	return sendMessage(sender, {
-		"attachment": {
-			"type": "template",
-			"payload": {
-				"template_type": "button",
-				"text": txt,
-				"buttons": buttons
-			}
-		}
-	});
-}
-
 function sendHelloMessage(sender) {
 	return sendMessage(sender, {
 		"attachment": {
@@ -823,20 +811,11 @@ function sendHelloMessage(sender) {
 }
 
 function sendCancelMsg(sender) {
-	return sendMessage(sender, {
-		"attachment": {
-			"type": "template",
-			"payload": {
-				"template_type": "button",
-				"text": "不想再收到 NCKU HUB 的訊息，請按以下按鈕：",
-				"buttons": [{
-					"type": "postback",
-					"title": "取消訂閱",
-					"payload": "cancelmsg"
-				}]
-			}
-		}
-	});
+	return sendButtonsMsg(sender, "不想再收到 NCKU HUB 的訊息，請按以下按鈕：", [{
+		"type": "postback",
+		"title": "取消訂閱",
+		"payload": "cancelmsg"
+	}]);
 }
 
 function cancelMsg(sender) {
@@ -852,6 +831,19 @@ function cancelMsg(sender) {
 
 function sendDisableMsg(sender, dept_no) {
 	sendTextMessage(sender, "很抱歉! 此階段 " + dept_no + " 課程未開放追蹤餘額!");
+}
+
+function sendButtonsMsg(sender, txt, buttons) {
+	return sendMessage(sender, {
+		"attachment": {
+			"type": "template",
+			"payload": {
+				"template_type": "button",
+				"text": txt,
+				"buttons": buttons
+			}
+		}
+	});
 }
 
 function sendTextMessage(sender, text) {

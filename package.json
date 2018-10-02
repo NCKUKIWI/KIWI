@@ -24,7 +24,6 @@
     "fbgraph": "^1.4.1",
     "helmet": "^3.8.1",
     "mysql": "^2.11.1",
-    "nodemon": "^1.9.2",
     "redis": "^2.8.0",
     "request": "^2.79.0",
     "sanitize-html": "^1.18.4"

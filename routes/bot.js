@@ -3,11 +3,16 @@ var request = require('request');
 var config = require('../config');
 var router = express.Router();
 var dbsystem = require('../model/dba');
-var FBAPI = "https://graph.facebook.com/v3.1/me/messages";
-var token = config.fb.token;
-var disable = config.bot.disable;
-var tester = config.bot.tester;
+
+const apiVersion = "v3.1";
+const msg_url = `https://graph.facebook.com/${apiVersion}/me/messages`;
+const token = config.fb.token;
+const disable = config.bot.disable;
 var disableSQL = '';
+
+/**
+ * 載入設定 |START|
+ */
 
 //取得所有課程資料
 var courseNameList = [];
@@ -15,6 +20,8 @@ var courseSerialList = [];
 //定時通知餘額
 var checkCourse;
 var checkCourseStatus = 0;
+//廣播訊息標籤
+var broadcast_label = {};
 
 if (disable.length > 0) {
 	disableSQL += '系號 NOT IN(';
@@ -32,75 +39,28 @@ db.select().field(["課程名稱", "選課序號"]).from("course_new").where("�
 		courseSerialList.push(data[i].選課序號);
 	}
 	db.select().field("*").from("setting").where("id=", 1).run(function (data, err) {
-		db = null;
 		checkCourseStatus = data[0].status;
 		if (checkCourseStatus == 1) {
 			checkCourse = setInterval(function () {
 				checkCoureseRemain();
 			}, 1000 * 10);
 		}
+		db.select().field("*").from("fb_boardcast_labels").run(function (data, err) {
+			db = null;
+			data.forEach(aLabel => {
+				broadcast_label[aLabel.label_name] = aLabel.label_id;
+			});
+		});
 	});
 });
 
-router.post('/sendmsg', function (req, res) {
-	if (req.body.pw != "nckuhubsetting") {
-		res.send("fail");
-	} else {
-		if (req.body.type == "test") {
-			if (req.body.msg) {
-				if (req.body.msg == 'cancelMsg') {
-					tester.forEach(aTester => sendCancelMsg(aTester));
-				} else {
-					tester.forEach(aTester => sendTextMessage(aTester, req.body.msg));
-				}
-			}
-		} else if (req.body.type == "broadcast") {
-			var db = new dbsystem();
-			db.select().field("distinct fb_id").from("follow_copy").where("getMsg != 0").run(function (users) {
-				users.forEach(function (user) {
-					if (req.body.msg) {
-						if (req.body.msg == 'cancelMsg') {
-							sendCancelMsg(user.fb_id);
-						} else {
-							sendTextMessage(user.fb_id, req.body.msg);
-						}
-					}
-				});
-			});
-		}
-		res.send('ok');
-	}
-});
+/**
+ * 載入設定 |END|
+ */
 
-router.post('/sendlink', function (req, res) {
-	if (req.body.pw != "nckuhubsetting") {
-		res.send("fail");
-	} else {
-		if (req.body.type == "test") {
-			if (req.body.linktitle && req.body.linkurl) {
-				tester.forEach(aTester => sendLink(aTester, {
-					url: req.body.linkurl,
-					title: req.body.linktitle,
-					description: req.body.linkdescription
-				}));
-			}
-		} else if (req.body.type == "broadcast") {
-			var db = new dbsystem();
-			db.select().field("distinct fb_id").from("follow_copy").where("getMsg != 0").run(function (users) {
-				users.forEach(function (user) {
-					if (req.body.linktitle && req.body.linkurl) {
-						sendLink(user.fb_id, {
-							url: req.body.linkurl,
-							title: req.body.linktitle,
-							description: req.body.linkdescription
-						});
-					}
-				});
-			});
-		}
-		res.send('ok');
-	}
-});
+/**
+ * 餘額通知機器人開關API |START|
+ */
 
 router.post('/openbot', function (req, res) {
 	checkCourse = setInterval(function () {
@@ -124,13 +84,116 @@ router.post('/closebot', function (req, res) {
 	res.send('ok');
 });
 
-router.get('/webhook', function (req, res) {
-	if (req.query['hub.verify_token'] === 'nckuhubbver49') {
-		res.send(req.query['hub.challenge']);
-	} else {
-		res.send('Error, wrong token');
-	}
+/**
+ * 餘額通知機器人開關API |END|
+ */
+
+/**
+ * 廣播訊息 |START|
+ */
+
+const msg_creative_url = `https://graph.facebook.com/${apiVersion}/me/message_creatives`;
+const msg_broadcast_url = `https://graph.facebook.com/${apiVersion}/me/broadcast_messages`;
+const subscribe_broadcast_url = label => `https://graph.facebook.com/${apiVersion}/${broadcast_label[label]}/label`;
+const toCancelFollow = {
+	"messages": [{
+		"attachment": {
+			"type": "template",
+			"payload": {
+				"template_type": "button",
+				"text": "不想再收到 NCKU HUB 的訊息，請按以下按鈕：",
+				"buttons": [{
+					"type": "postback",
+					"title": "取消訂閱",
+					"payload": "cancelmsg"
+				}]
+			}
+		}
+	}]
+};
+const broadcastTextMsg = txt => ({
+	"messages": [{
+		"text": txt
+	}]
 });
+const broadcastLinkMsg = (txt, url, title) => ({
+	"messages": [{
+		"attachment": {
+			"type": "template",
+			"payload": {
+				"template_type": "button",
+				"text": txt,
+				"buttons": [{
+					"type": "web_url",
+					"url": url,
+					"title": title,
+					"webview_height_ratio": "tall"
+				}]
+			}
+		}
+	}]
+});
+const creativeMsgCb = target_label_id => resBody => {
+	sendPostRequest({
+		url: msg_broadcast_url,
+		json: {
+			message_creative_id: resBody.message_creative_id,
+			notification_type: "REGULAR",
+			messaging_type: "MESSAGE_TAG",
+			tag: "NON_PROMOTIONAL_SUBSCRIPTION",
+			custom_label_id: target_label_id
+		}
+	});
+};
+
+router.post('/sendmsg', function (req, res) {
+	var broadcastType = req.body.type;
+	var target_label_id = broadcast_label[(broadcastType === "test" ? "tester" : "all_user")];
+	if (req.body.msg) {
+		var msg = req.body.msg;
+		if (msg == 'cancelMsg') {
+			sendPostRequest({
+				url: msg_creative_url,
+				json: toCancelFollow
+			}, creativeMsgCb(target_label_id));
+		} else {
+			sendPostRequest({
+				url: msg_creative_url,
+				json: broadcastTextMsg(msg)
+			}, creativeMsgCb(target_label_id));
+		}
+	} else if (req.body.linktitle && req.body.linkurl) {
+		sendPostRequest({
+			url: msg_creative_url,
+			json: broadcastLinkMsg(req.body.linkdescription, req.body.linkurl, req.body.linktitle)
+		}, creativeMsgCb(target_label_id));
+	}
+	res.send('ok');
+});
+
+function subscribeBroadcast(sender, isTester) {
+	return sendPostRequest({
+		url: subscribe_broadcast_url((isTester ? "tester" : "all_user")),
+		json: {
+			user: sender
+		}
+	});
+}
+
+function unsubscribeBroadcast(sender) {
+	sendRequest({
+		url: subscribe_broadcast_url(),
+		method: "DELETE",
+		qs: {
+			user: sender
+		}
+	});
+	sendTextMessage(sender, "成功！你以後將不會再收到NCKUHUB的廣播訊息！");
+}
+
+/**
+ * 廣播訊息 |END|
+ */
 
 /**
  * 文章留言回覆相關宣告 |START|
@@ -151,8 +214,8 @@ const cmt_random_reply = [
 	"去檢查收件夾吧，我們把熱門排行都放在那裡了！"
 ];
 
-const get_cmt_reply_url = cid => `https://graph.facebook.com/v3.0/${cid}/comments`;
-const get_cmt_private_reply_url = cid => `https://graph.facebook.com/v3.0/${cid}/private_replies`;
+const get_cmt_reply_url = cid => `https://graph.facebook.com/${apiVersion}/${cid}/comments`;
+const get_cmt_private_reply_url = cid => `https://graph.facebook.com/${apiVersion}/${cid}/private_replies`;
 
 function cmtReply(response_cmt, cid) {
 	return sendPostRequest({
@@ -171,6 +234,14 @@ function cmtPrivateReply(response_msg, cid) {
 /**
  * 文章留言回覆相關宣告 |END|
  */
+
+router.get('/webhook', function (req, res) {
+	if (req.query['hub.verify_token'] === 'nckuhubbver49') {
+		res.send(req.query['hub.challenge']);
+	} else {
+		res.send('Error, wrong token');
+	}
+});
 
 const postback = {
 	courseIdFollow: {
@@ -232,6 +303,8 @@ router.post('/webhook', function (req, res) {
 					console.log(`[粉專私訊] 私訊者：『${sender}』訊息：「${text.replace(/\n/, "\\n")}」`);
 					if (text.indexOf("小幫手") !== -1) {
 						sendHello(sender);
+						if (text.indexOf("小幫手我是管理員") !== -1)
+							subscribeBroadcast(sender, true);
 					} else {
 						var serial = text.replace(/[\s|\-]/g, "").match(/^[a-zA-Z][0-9]{4}/i);
 						if (serial) {
@@ -303,10 +376,12 @@ router.post('/webhook', function (req, res) {
 					} else if (event.postback.payload == "cancelall") {
 						cancelAllFollowCourse(sender);
 					} else if (event.postback.payload == "cancelmsg") {
-						cancelMsg(sender);
+						unsubscribeBroadcast(sender);
 					} else if (event.postback.payload == "dontFollow") {
 						sendGoodbye(sender);
 					} else {
+						if (/開始使用/.test(event.postback.payload))
+							subscribeBroadcast(sender, false);
 						sendTextMessage(sender, event.postback.payload);
 					}
 				}
@@ -636,24 +711,6 @@ function sendGoodbye(sender) {
 	}, 2000);
 }
 
-function sendCancelMsg(sender) {
-	return sendButtonsMessage(sender, "不想再收到 NCKU HUB 的訊息，請按以下按鈕：", [{
-		"type": "postback",
-		"title": "取消訂閱",
-		"payload": "cancelmsg"
-	}]);
-}
-
-function cancelMsg(sender) {
-	var db = new dbsystem();
-	db.update().table("follow_copy").set({
-		getMsg: 0
-	}).where("fb_id=", sender).run(function (result) {
-		db = null;
-		sendTextMessage(sender, "成功！你以後將不會再收到NCKUHUB的廣播訊息！");
-	});
-}
-
 function sendDisableMsg(sender, dept_no) {
 	sendTextMessage(sender, `很抱歉！此階段 ${dept_no} 課程未開放追蹤餘額！`);
 }
@@ -730,15 +787,6 @@ function sendGenericTemplate(sender, subtitle, buttons) {
 	return sendMessage(sender, genericTemplateGenerator(subtitle, buttons));
 }
 
-function sendLink(sender, link) {
-	return sendButtonsMessage(sender, link.description, [{
-		"type": "web_url",
-		"url": link.url,
-		"title": link.title,
-		"webview_height_ratio": "tall"
-	}]);
-}
-
 function sendButtonsMessage(sender, txt, buttons) {
 	return sendMessage(sender, {
 		"attachment": {
@@ -760,34 +808,44 @@ function sendTextMessage(sender, text) {
 
 function sendMessage(sender, message) {
 	return sendPostRequest({
-		url: FBAPI,
+		url: msg_url,
 		json: {
 			recipient: {
 				id: sender
 			},
-			message: message
+			message: message,
+			messaging_type: "RESPONSE"
 		}
 	});
 }
 
 function sendPostRequest(option, cb) {
+	Object.assign(option, {
+		method: "POST"
+	});
+	return sendRequest(option, cb);
+}
+
+function sendRequest(option, cb) {
 	const url = option.url;
 	const json = option.json;
+	const method = option.method;
+	let qs = option.qs || {};
+	Object.assign(qs, {
+		access_token: token
+	});
 	request({
-		url: url,
-		qs: {
-			access_token: token
-		},
-		method: "POST",
-		json: json
+		url,
+		qs,
+		method,
+		json
 	}, (error, response, body) => {
 		if (error) {
 			console.error('[Error | sending request]: ', error);
 		} else if (response.body.error) {
 			console.error('[Error | facebook reply]: ', response.body.error);
-		}
-		if (cb) {
-			cb();
+		} else if (cb) {
+			cb(body);
 		}
 	});
 }

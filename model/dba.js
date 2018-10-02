@@ -320,7 +320,7 @@ db.prototype.ConditionBuilder = function () {
   }
 };
 
-db.prototype.run = function (callback) {
+db.prototype.run = function (callback, silence) {
   switch (this.sqlType) {
     case 1:
       if (this.joinTable != "") {
@@ -340,15 +340,14 @@ db.prototype.run = function (callback) {
       break;
     default:
       throw "Error";
-      break;
   }
-  console.log("\n" + this.sql);
+  if (!silence) console.log("\n" + this.sql);
   var sql = this.sql;
   this.init();
   connection.query(sql, function (err, results, fields) {
     end = new Date().getTime();
     var time = end - start;
-    console.log(chalk.green("Execute time: " + time + " ms"));
+    if (!silence) console.log(chalk.green("Execute time: " + time + " ms"));
     callback(results, err);
   });
 };

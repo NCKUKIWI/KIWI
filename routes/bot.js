@@ -266,7 +266,7 @@ const postback = {
 	},
 	courseIdAsk: {
 		generator: dataGetter => data => `ask${dataGetter(data)}`,
-		matcher: data => data.match(/^ask[A-Z]{1,2}[0-9]{1,}/i), //抓payload中的 course_id 用來傳送單一課程詳細資訊
+		matcher: data => data.match(/^ask[A-Z]{1,2}[0-9]{1,}/i), //抓payload中的 course.選課序號 用來傳送單一課程詳細資訊
 		replacer: data => data.replace(/ask|\s/g, "")
 	}
 };

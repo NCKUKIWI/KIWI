@@ -8,7 +8,7 @@ WORKDIR /usr/src/app
 COPY . .
 
 # Install package
-RUN npm install
+RUN npm install --production
 
 RUN npm install -g pm2
 

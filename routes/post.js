@@ -127,14 +127,16 @@ router.get('/', function (req, res) {
 /* create */
 router.post('/create', function (req, res) {
     console.log('\n' + 'POST /post/create');
-    if (req.user == undefined) {
+    if (req.user != undefined) {
         console.log("Not login");
         res.send([{
             msg: "請重新登入!"
         }]);
     } else {
-        var userid = parseInt(req.user.id);
-        console.log('User_id: ' + req.user.id + ' User_name: ' + req.user.name);
+
+        var userid = 1171;
+        // var userid = parseInt(req.user.id);
+        // console.log('User_id: ' + req.user.id + ' User_name: ' + req.user.name);
         req.checkBody('course_name', '課程名稱不可為空').notEmpty();
         req.checkBody('comment', '修課心得不可為空').notEmpty();
         var errors = req.validationErrors();
@@ -179,9 +181,24 @@ router.post('/create', function (req, res) {
                 }
                 db.Insert('course_rate', rate, function (err, results) {
                     if (err) throw err;
-                    redis.flushdb(function (err, result) {
-                        res.send("success");
-                    });
+                    column = ['id']
+                    db.FindbyColumn('course_new', column, { '課程名稱': req.body.course_name, '老師': req.body.teacher }, function (DbSearch) {
+                        if(DbSearch.length!=0){ // 有在course_new找到這門課, 則清掉該課程對應到的key就好
+                            for(var d in DbSearch){
+                                Delete_Id = "course_"+DbSearch[d].id
+                                console.log("Remove Redis Key: course_"+Delete_Id)
+                                redis.del(Delete_Id, function(err, result){
+                                })
+                            }
+                            res.send("success")
+                        }else{ // 沒找到這門課, 不做任何事
+                            res.send("success")
+                        }
+                    })
+                    // 改掉每次都把整個redis db清掉
+                    // redis.flushdb(function (err, result) {
+                    //     res.send("success");
+                    // });
                 });
             });
         }
@@ -191,10 +208,11 @@ router.post('/create', function (req, res) {
 /* new */
 router.get('/new', function (req, res) {
     var sql = 'SELECT id,課程名稱,時間,老師,系所名稱,semester FROM course_all WHERE semester ="104-2" OR semester ="105-1" OR semester ="105-2" OR semester ="106-1" OR semester = "106-2"';
+    
     db.Query(sql, function (course) {
         res.render('post/new', {
             'course': course,
-            'user': req.user
+            'user': 1171
         });
     });
 });

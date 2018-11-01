@@ -184,12 +184,14 @@ $(document).ready(function(){
 
   $('#createform-submit').on('click', function() {
     var data = $("#createform").serialize();
+    console.log("click")
     $.ajax({
       url: '/post/create',
       type: 'post',
       data: data,
       success: function(response) {
         if (response == "success") {
+          
           window.location.href = "/";
         }
         else {

@@ -47,7 +47,15 @@ router.get('/', function (req, res) {
         }
     });
 });
+router.get('/test', function(req, res){
+    column = ['id'];
+    console.log("in test")
+    db.FindbyColumnExact('course_new', column, { '課程名稱': '基督思想'}, function(result){
+        console.log(result)
+        
 
+    })
+})
 /*傳入所有課程 */
 router.get('/allCourse', function (req, res) {
     console.log('\n' + 'GET /allCourse');
@@ -189,6 +197,7 @@ router.get('/:id', function (req, res) {
     } else {
         redis.get(courseCacheKey(id), function (err, reply) {
             if (reply) {
+                console.log("redis has replied")
                 var data = JSON.parse(reply);
                 var rates = data.rates;
                 if (req.user && rates.length > 0) {
@@ -247,6 +256,7 @@ router.get('/:id', function (req, res) {
                             'rates': rates
                         }
                         redis.set(courseCacheKey(id), JSON.stringify(data));
+                        console.log("in redis setting");
                         if (req.user) {
                             if (rates.length > 0) {
                                 for (var i in rates) {

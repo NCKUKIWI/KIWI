@@ -139,6 +139,8 @@ function conditionjoin(conditions) {
     }
 }
 
+
+
 exports.Insert = function Insert(table, data, callback) {
     var sql = "INSERT INTO " + table + " SET ? ";
     console.log(sql);
@@ -153,6 +155,7 @@ exports.Insert = function Insert(table, data, callback) {
         callback(err, results);
     });
 }
+
 
 
 exports.DeleteById = function DeleteById(table, id, callback) {

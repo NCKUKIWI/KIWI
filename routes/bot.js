@@ -38,21 +38,23 @@ db.select().field(["課程名稱", "選課序號"]).from("course_new").where("�
 		courseNameList.push(data[i].課程名稱);
 		courseSerialList.push(data[i].選課序號);
 	}
-	db.select().field("*").from("setting").where("id=", 1).run(function (data, err) {
-		checkCourseStatus = data[0].status;
-		if (checkCourseStatus == 1) {
-			checkCourse = setInterval(function () {
-				checkCoureseRemain();
-			}, 1000 * 10);
-		}
-		db.select().field("*").from("fb_boardcast_labels").run(function (data, err) {
-			db = null;
-			data.forEach(aLabel => {
-				broadcast_label[aLabel.label_name] = aLabel.label_id;
-			});
-		});
+});
+/*
+db.select().field("*").from("setting").where("id=", 1).run(function (data, err) {
+	checkCourseStatus = data[0].status;
+	if (checkCourseStatus == 1) {
+		checkCourse = setInterval(function () {
+			checkCoureseRemain();
+		}, 1000 * 10);
+	}
+});
+*/
+db.select().field("*").from("fb_boardcast_labels").run(function (data, err) {
+	data.forEach(aLabel => {
+		broadcast_label[aLabel.label_name] = aLabel.label_id;
 	});
 });
+db = null;
 
 /**
  * 載入設定 |END|
@@ -63,6 +65,7 @@ db.select().field(["課程名稱", "選課序號"]).from("course_new").where("�
  */
 
 router.post('/openbot', function (req, res) {
+	/*
 	checkCourse = setInterval(function () {
 		checkCoureseRemain();
 	}, 1000 * 10);
@@ -71,6 +74,7 @@ router.post('/openbot', function (req, res) {
 		status: 1
 	}).where("id=", 1).run(function (result) {});
 	checkCourseStatus = 1;
+	*/
 	res.send('ok');
 });
 
@@ -457,6 +461,7 @@ function sendCourseInfo(sender, course_id) {
 }
 
 function sendFollowCourseByName(sender, name, dpt, teacher) {
+	return sendFuncCloseMsg(sender);
 	var db = new dbsystem();
 	db.select().field(["id", "系所名稱", "課程名稱", "時間"]).from("course_new").where("課程名稱 LIKE '%" + name + "%'").whereCheck("系所名稱 LIKE '%" + dpt + "%'", dpt).whereCheck("老師 LIKE '%" + teacher + "%'", teacher).run(function (course) {
 		db = null;
@@ -480,6 +485,7 @@ function sendFollowCourseByName(sender, name, dpt, teacher) {
 }
 
 function sendFollowCourseById(sender, serial) {
+	return sendFuncCloseMsg(sender);
 	serial = serial.toUpperCase();
 	var db = new dbsystem();
 	db.select().field(["id"]).from("course_new").where("選課序號=", serial).run(function (course) {
@@ -494,6 +500,7 @@ function sendFollowCourseById(sender, serial) {
 }
 
 function addFollowCourse(sender, course_id, force = false) {
+	return sendFuncCloseMsg(sender);
 	var db = new dbsystem();
 	db.select().field(["id", "系所名稱", "系號", "課程名稱", "時間", "餘額", "選課序號", "老師"]).from("course_new").where("id=", course_id).run(function (course) {
 		if (disable.indexOf(course[0]['系號']) == -1) {
@@ -670,14 +677,17 @@ function askPlaceOrFollow(sender, serial) {
 		if (course.length > 0) {
 			sendGenericTemplate(sender,
 				`你選擇的課程是：\n\n${course[0].系所名稱.replace(/[A-Z0-9]/g, "")}／${course[0].課程名稱.replace(/[（|）|\s]/g, "")}／${course[0].老師.replace(/\s/g, "")}／${course[0].時間}\n\n`, [{
-					"type": "postback",
-					"title": "尋找上課地點",
-					"payload": postback.courseIdInfo.generator(aCourse => aCourse.id)
-				}, {
-					"type": "postback",
-					"title": "追蹤課程餘額",
-					"payload": postback.courseIdFollow.generator(aCourse => aCourse.id)
-				}]);
+						"type": "postback",
+						"title": "尋找上課地點",
+						"payload": postback.courseIdInfo.generator(aCourse => aCourse.id)
+					}
+					/*, {
+						"type": "postback",
+						"title": "追蹤課程餘額",
+						"payload": postback.courseIdFollow.generator(aCourse => aCourse.id)
+					}
+					*/
+				]);
 		} else {
 			var text = "查無課程唷 😱😱 會不會是這學期沒開課，或是關鍵字有打錯呢？";
 			sendTextMessage(sender, text);
@@ -687,18 +697,22 @@ function askPlaceOrFollow(sender, serial) {
 }
 
 const helloMessage = genericTemplateGenerator("你好 👋👋 我是 NCKU HUB 新來的小幫手，請問需要什麼幫助嗎❓", [{
-	"type": "postback",
-	"title": "尋找上課地點",
-	"payload": "馬上為你尋找上課地點 😁😁\n\n請告訴我們課程名稱或是選課序號，例如「@微積分」或是「@h3001」\n\n你也可以加上「$系所 %老師名」，來精準搜尋課程，例如「@微積分 $工資 %侯世章」",
-}, {
-	"type": "postback",
-	"title": "追蹤課程餘額",
-	"payload": "馬上為你追蹤課程餘額 😀😀\n\n請告訴我們課程名稱或是選課序號，例如「#微積分」或是「#h3001」\n\n你也可以加上「$系所 %老師名」，來精準搜尋課程，例如「#微積分 $工資 %侯世章」",
-}, {
-	"type": "postback",
-	"title": "取消追蹤餘額",
-	"payload": "cancelfollow",
-}]);
+		"type": "postback",
+		"title": "尋找上課地點",
+		"payload": "馬上為你尋找上課地點 😁😁\n\n請告訴我們課程名稱或是選課序號，例如「@微積分」或是「@h3001」\n\n你也可以加上「$系所 %老師名」，來精準搜尋課程，例如「@微積分 $工資 %侯世章」",
+	}
+	/*
+	, {
+		"type": "postback",
+		"title": "追蹤課程餘額",
+		"payload": "馬上為你追蹤課程餘額 😀😀\n\n請告訴我們課程名稱或是選課序號，例如「#微積分」或是「#h3001」\n\n你也可以加上「$系所 %老師名」，來精準搜尋課程，例如「#微積分 $工資 %侯世章」",
+	}, {
+		"type": "postback",
+		"title": "取消追蹤餘額",
+		"payload": "cancelfollow",
+	}
+	*/
+]);
 
 function sendHello(sender) {
 	return sendMessage(sender, helloMessage);
@@ -722,6 +736,10 @@ function sendGoodbye(sender) {
 
 function sendDisableMsg(sender, dept_no) {
 	sendTextMessage(sender, `很抱歉！此階段 ${dept_no} 課程未開放追蹤餘額！`);
+}
+
+function sendFuncCloseMsg(sender) {
+	sendTextMessage(sender, `目前追蹤功能正在維護中～ 敬啟期待！`);
 }
 
 /**

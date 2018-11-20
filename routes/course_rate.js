@@ -7,7 +7,7 @@ var db = require('../model/db');
 router.get('/new/:id', function(req, res) {
     console.log('\n'+'GET /course_rate/new/'+req.params.id);
     if(req.user){
-        res.render('course_rate/new',{
+        res.send({
             'courseid':req.params.id,
             'course_name':req.query.course_name.replace(/\'|\#|\/\*/g,""),
             'teacher':req.query.teacher.replace(/\'|\#|\/\*/g,"")

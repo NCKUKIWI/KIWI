@@ -6,6 +6,19 @@ var redis = cache.redis;
 var courseCacheKey = cache.courseCacheKey;
 var db = require('../model/db');
 
+
+/** Legacy:
+ * /addcourse/:id
+ * /delcourse/:id
+ * /inputaddcourse/:courseid
+ */
+
+ 
+// 11/18
+// render -> send 
+// delete some redundancy edge
+
+
 /* index */
 router.get('/', function (req, res) {
     console.log("\n========================================");
@@ -48,33 +61,7 @@ router.get('/', function (req, res) {
     });
 });
 
-/*傳入所有課程 */
-router.get('/allCourse', function (req, res) {
-    console.log('\n' + 'GET /allCourse');
 
-    var columns = ['id', '課程名稱', '系號', '課程碼', '分班碼', '系所名稱', '老師', '時間', 'comment_num'];
-    db.GetColumn('course_new', columns, { 'column': 'id', 'order': 'DESC' }, function (courses) {
-        var nowCourse = [];
-        var nowCourse_hasComment = []; // 裝nowCourse的有comment的課程
-        var courses_Department = {}; // 用來分類所有系所，下面使用object property的方式逐一分類
-
-        for (var i in courses) {
-            nowCourse.push(courses[i]);
-            if (courses[i].comment_num != 0) nowCourse_hasComment.push(courses[i]);
-            if (courses_Department.hasOwnProperty(courses[i].系號)) {
-                courses_Department[courses[i].系號].push(courses[i]);
-            } else {
-                courses_Department[courses[i].系號] = [];
-                courses_Department[courses[i].系號].push(courses[i]);
-            }
-        }
-        // res.send(courses);
-        res.send({
-            'nowCourse': nowCourse,
-            'courses_Department': courses_Department,
-        });
-    });
-});
 
 router.get('/CourseByKeywords', function (req, res) {
     console.log('\n' + 'GET /course/CourseByKeywords');
@@ -97,88 +84,6 @@ router.get('/CourseByKeywords', function (req, res) {
     }
 });
 
-/* add course */
-router.post('/addcourse/:id', middleware.apiAuth(), function (req, res) {
-    var courseid = parseInt(req.params.id);
-    console.log('\n' + 'POST /course/addcourse/' + courseid);
-    var userid = parseInt(req.user.id);
-    var name = req.user.name;
-    console.log("選課者: " + name);
-    /* 確認是否選過課了 */
-    db.FindbyColumn('cart', ["id"], { 'user_id': userid, 'course_id': courseid }, function (carts) {
-        if (carts.length > 0) {
-            console.log('Already choose');
-            res.send('Already choose');
-        } else {
-            /* 新增選課紀錄 */
-            var cart = {
-                user_id: userid,
-                course_id: courseid
-            }
-            db.Insert('cart', cart, function (err, results) {
-                if (err) throw err;
-                console.log('Choose course ' + courseid + ' success');
-                res.send('success');
-            });
-        }
-    });
-});
-
-/* del course*/
-router.post('/delcourse/:id', function (req, res) {
-    var courseid = parseInt(req.params.id);
-    var userid = parseInt(req.user.id);
-    var name = req.user.name;
-    console.log('\n' + 'DELETE /course/delcourse/' + courseid);
-    console.log("退課者: " + name);
-    db.DeleteByColumn('cart', { 'course_id': courseid, 'user_id': userid }, function (err) {
-        res.send('Success');
-    });
-});
-
-/* input add course */
-router.post('/inputaddcourse/:courseid', function (req, res) {
-    var courseserial = req.params.courseid.toUpperCase();
-    console.log('\n' + 'POST /course/inputaddcourse/' + courseserial);
-    var column = ["id", "課程名稱", "時間"];
-    /* 透過輸入的選課序號 查找課程 */
-    db.FindbyColumn('course_new', column, { '選課序號': courseserial }, function (course) {
-        /* 若該選課序號無對應的課程 回傳not found */
-        if (course.length == 0) {
-            console.log("Course " + courseserial + " not found");
-            res.send("Not found");
-        }
-        /* 有找到課程 則傳送課程資訊 */
-        else {
-            var courseid = course[0].id
-            /* 若用戶非登入 則直接傳送課程資訊 */
-            if (req.user) {
-                var userid = parseInt(req.user.id);
-                var name = req.user.name;
-                console.log("選課者: " + name);
-                /* 確認是否選過課了 */
-                db.FindbyColumn('cart', ["id"], { 'user_id': userid, 'course_id': courseid }, function (carts) {
-                    /* 用戶清單中有該課程 */
-                    if (carts.length > 0) {
-                        console.log('Already choose');
-                        res.send('Already choose');
-                    } else {
-                        /* 新增選課紀錄 */
-                        var cart = {
-                            user_id: userid,
-                            course_id: courseid
-                        }
-                        db.Insert('cart', cart, function (err, results) {
-                            res.send(course);
-                        });
-                    }
-                });
-            } else {
-                res.send(course);
-            }
-        }
-    });
-});
 
 /* show */
 router.get('/:id', function (req, res) {
@@ -200,7 +105,7 @@ router.get('/:id', function (req, res) {
                 }
                 data['courserate_id'] = 0;
                 data['user'] = req.user;
-                res.render('course/show', data);
+                res.send(data);
             } else {
                 /* 尋找課程的資訊 */
                 db.query_post2(id, function (courseInfo, comment) {
@@ -261,7 +166,7 @@ router.get('/:id', function (req, res) {
                             data['courserate_id'] = 0;
                         }
                         data['user'] = req.user;
-                        res.render('course/show', data);
+                        res.send(data);
                     });
                 });
             }
@@ -275,7 +180,7 @@ function check_Login(req, res, all_courses, custom_courses) {
         var colmuns = ['course_id'];
         /* 有登入 抓取用戶的選課清單 */
         db.FindbyColumn('cart', ['course_id'], { 'user_id': userid }, function (carts) {
-            res.render('course/index', {
+            res.send({
                 'courses': all_courses,
                 'custom_courses': custom_courses,
                 'user': req.user,
@@ -283,7 +188,7 @@ function check_Login(req, res, all_courses, custom_courses) {
             });
         });
     } else {
-        res.render('course/index', {
+        res.send({
             'courses': all_courses,
             'custom_courses': custom_courses,
             'user': req.user,

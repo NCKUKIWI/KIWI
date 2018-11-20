@@ -66,7 +66,7 @@ router.get('/logout', function (req, res) {
 
 router.get('/edit', middleware.checkLogin(), function (req, res) {
     console.log('\n' + 'GET /user/edit');
-    res.render('user/edit', {
+    res.send({
         'user': req.user
     });
 });

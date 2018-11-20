@@ -31,7 +31,7 @@ router.get('/', function (req, res) {
                 if (req.query.order) {
                     res.send(posts);
                 } else {
-                    res.render('post/index', {
+                    res.send({
                         'posts': posts,
                         'teachers': teachers,
                         'course_name': course_name,
@@ -44,7 +44,7 @@ router.get('/', function (req, res) {
                 if (req.query.order) {
                     res.send(posts);
                 } else {
-                    res.render('post/index', {
+                    res.send({
                         'posts': posts,
                         'teachers': teachers,
                         'course_name': course_name,
@@ -57,7 +57,7 @@ router.get('/', function (req, res) {
                 if (req.query.order) {
                     res.send(posts);
                 } else {
-                    res.render('post/index', {
+                    res.send({
                         'posts': posts,
                         'teachers': teachers,
                         'course_name': course_name,
@@ -99,7 +99,7 @@ router.get('/', function (req, res) {
                 if (req.query.order) {
                     res.send(posts);
                 } else {
-                    res.render('post/index', {
+                    res.send({
                         'posts': posts,
                         'teachers': teachers,
                         'course_name': course_name,
@@ -113,7 +113,7 @@ router.get('/', function (req, res) {
             if (req.query.order) {
                 res.send(posts);
             } else {
-                res.render('post/index', {
+                res.send({
                     'posts': posts,
                     'teachers': teacher,
                     'course_name': courseName,
@@ -192,7 +192,7 @@ router.post('/create', function (req, res) {
 router.get('/new', function (req, res) {
     var sql = 'SELECT id,課程名稱,時間,老師,系所名稱,semester FROM course_all WHERE semester ="104-2" OR semester ="105-1" OR semester ="105-2" OR semester ="106-1" OR semester = "106-2"';
     db.Query(sql, function (course) {
-        res.render('post/new', {
+        res.send({
             'course': course,
             'user': req.user
         });
@@ -211,7 +211,7 @@ router.get('/:id', function (req, res) {
             db.FindbyColumn('course_rate', ['give', 'got'], {
                 "post_id": post.id
             }, function (rate) {
-                res.render('post/show', {
+                res.send({
                     'post': post,
                     'user': req.user,
                     'rate': (rate.length > 0) ? rate[0] : null

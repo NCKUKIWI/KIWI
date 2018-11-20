@@ -7,7 +7,7 @@ router.get('/dashboard', function (req, res) {
     var db = new dbsystem();
     db.select().field("*").from("setting").where("id=", 1).run(function (data, err) {
         checkCourseStatus = data[0].status;
-        res.render('setting', {
+        res.send( {
             botswitch: checkCourseStatus
         });
     });

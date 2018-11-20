@@ -386,6 +386,8 @@ router.post('/webhook', function (req, res) {
 					} else {
 						if (/開始使用/.test(event.postback.payload))
 							subscribeBroadcast(sender, false);
+						if (/馬上為你追蹤課程餘額/.test(event.postback.payload))
+							return sendFuncCloseMsg(sender);
 						sendTextMessage(sender, event.postback.payload);
 					}
 				}

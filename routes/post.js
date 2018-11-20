@@ -116,6 +116,7 @@ router.get('/', function (req, res) {
             if (req.query.order) {
                 res.send(posts);
             } else {
+                
                 res.render('post/index', {
                     'posts': posts,
                     'teachers': teacher,

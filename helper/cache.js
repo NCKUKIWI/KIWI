@@ -13,11 +13,11 @@ client.on("error", function (err) {
 });
 
 function courseCacheKey(id) {
-    return "course_" + id;
+    return "course:" + id;
 }
 
 function userCacheKey(id) {
-    return "user_" + id;
+    return "user:" + id;
 }
 
 module.exports = {

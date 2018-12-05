@@ -221,10 +221,22 @@ router.get('/:id', function (req, res) {
     }
 });
 
-/* update */
-router.post('/update', function (req, res) {
-
-});
+/* new */
+router.post('/allDepartment', function (req, res) {
+    request({
+        url: "http://course-query.acad.ncku.edu.tw/qry/",
+        method: "GET"
+    }, function(error,response, body) {
+        if(!error ) {
+            const $ = cheerio.load(body);
+            let department = [];
+            $('.content #dept_list li .tbody .dept').each(function(i, elem) {
+                department.push($(this).text());
+            })
+            res.send({'allDepartment': department});
+        }
+    });
+})
 
 /*report post */
 router.post('/report/:id', function (req, res) {

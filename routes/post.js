@@ -3,6 +3,8 @@ var router = express.Router();
 var redis = require('../helper/cache').redis;
 var db = require('../model/db');
 var sanitizeHtml = require('sanitize-html');
+var request = require("request");
+var cheerio = require("cheerio");
 
 var cache = require('../helper/cache');
 var courseCacheKey = cache.courseCacheKey;
@@ -131,6 +133,8 @@ router.get('/', function (req, res) {
 /* create */
 router.post('/create', function (req, res) {
     console.log('\n' + 'POST /post/create');
+    var startTime=new Date();
+
     if (req.user != undefined) {
         console.log("Not login");
         res.send([{
@@ -169,6 +173,7 @@ router.post('/create', function (req, res) {
                 course_style: req.body.course_style.replace(/\'|\#|\/\*/g, ""),
                 user_id: userid
             }
+
             db.Insert('post', post, function (err, results) {
                 if (err) throw err;
                 console.log(results);
@@ -187,7 +192,7 @@ router.post('/create', function (req, res) {
                     if (err) throw err;
                     column = ['id'];
                     db.FindbyColumn('course_new', column, { '課程名稱': req.body.course_name, '老師': req.body.teacher }, function (DbSearch) {
-                        if(DbSearch.length!=0){ // 有在course_new找到這門課, 則清掉該課程對應到的key就好
+                        if(DbSearch.length!=0){  // 有在course_new找到這門課, 則清掉該課程對應到的key就好
                             for(var d in DbSearch){
                                 Delete_Id = "course_"+DbSearch[d].id;
                                 console.log("Remove Redis Key: course_"+Delete_Id);
@@ -266,6 +271,24 @@ router.post('/create', function (req, res) {
         }
     }
 });
+
+/* new */
+router.post('/allDepartment', function (req, res) {
+    request({
+        url: "http://course-query.acad.ncku.edu.tw/qry/",
+        method: "GET"
+    }, function(error,response, body) {
+        if(!error ) {
+            const $ = cheerio.load(body);
+            let department = [];
+            $('.content #dept_list li .tbody .dept').each(function(i, elem) {
+                department.push($(this).text());
+            })
+            res.send({'allDepartment': department});
+        }
+    });
+})
+
 
 /* new */
 router.get('/new', function (req, res) {

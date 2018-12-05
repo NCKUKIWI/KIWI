@@ -17,10 +17,8 @@ router.get('/', function (req, res) {
 
     var all_courses = [];
     var custom_courses = [];
-
     db.GetColumn('course_new', columns, { 'column': 'id', 'order': 'DESC' }, function (courses) {
         all_courses = courses;
-
         if (req.query.hasOwnProperty("queryw")) {
             // clean the query to avoid sql injection
             var cleanQuery = req.query.queryw.replace(/\'|\#|\/\*/g, "");
@@ -29,14 +27,17 @@ router.get('/', function (req, res) {
 
             db.FindbyColumnFuzzy('course_new', columns, QueryArray, function (custom_courses) {
                 check_Login(req, res, all_courses, custom_courses);
+
             });
         } else if (req.query.hasOwnProperty("teacher")) {
             db.FindbyColumn('course_new', columns, { "老師": req.query.teacher }, function (custom_courses) {
                 check_Login(req, res, all_courses, custom_courses);
+
             });
         } else if (req.query.hasOwnProperty("course_name")) {
             db.FindbyColumn('course_new', columns, { "課程名稱": req.query.course_name }, function (custom_courses) {
                 check_Login(req, res, all_courses, custom_courses);
+
             });
         } else if (req.query.hasOwnProperty("catalog")) {
             db.FindbyColumn('course_new', columns, { "系號": req.query.catalog }, function (custom_courses) {
@@ -44,18 +45,10 @@ router.get('/', function (req, res) {
             });
         } else {
             check_Login(req, res, all_courses, custom_courses);
+
         }
     });
 });
-router.get('/test', function(req, res){
-    column = ['id'];
-    console.log("in test")
-    db.FindbyColumnExact('course_new', column, { '課程名稱': '基督思想'}, function(result){
-        console.log(result)
-        
-
-    })
-})
 /*傳入所有課程 */
 router.get('/allCourse', function (req, res) {
     console.log('\n' + 'GET /allCourse');
@@ -279,12 +272,16 @@ router.get('/:id', function (req, res) {
     }
 });
 
+
+
+
 function check_Login(req, res, all_courses, custom_courses) {
     if (req.user) {
         var userid = parseInt(req.user.id);
         var colmuns = ['course_id'];
         /* 有登入 抓取用戶的選課清單 */
         db.FindbyColumn('cart', ['course_id'], { 'user_id': userid }, function (carts) {
+            console.log("carts"+carts)
             res.render('course/index', {
                 'courses': all_courses,
                 'custom_courses': custom_courses,

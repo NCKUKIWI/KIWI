@@ -146,6 +146,25 @@ $(document).ready(function(){
     localStorage.removeItem("courseid");
     localStorage.removeItem("courseteacher");
   }
+  setInterval(function(){
+      let formData = $("#createform").serializeArray();
+      let uid = <%- user %>;
+      let tmpName = [];
+      let tmpValue = [];
+      for(let i in formData){
+        tmpName.push(formData[i]['name']);
+        tmpValue.push(formData[i]['value']);
+      }
+      let data = {'name':tmpName, 'value':tmpValue, 'uid':uid}
+      $.ajax({
+        url: '/post/setCommentCache',
+        type: 'post',
+        data: data,
+        success: function(response) {
+          console.log("Redis setting");
+        }})
+  },500);
+
   var course = [
     <% for(var i in course){ %>
       {
@@ -167,6 +186,7 @@ $(document).ready(function(){
     '104-2': course.filter(aCourse => aCourse.semester == '104-2'),
     '104-1': course.filter(aCourse => aCourse.semester == '104-1'),
   }
+  
 
   $('#createform .ui.search').search({
     source:categoryCourse[$("#semesterSelector option:selected").text()],
@@ -184,6 +204,7 @@ $(document).ready(function(){
 
   $('#createform-submit').on('click', function() {
     var data = $("#createform").serialize();
+
     console.log("click")
     $.ajax({
       url: '/post/create',

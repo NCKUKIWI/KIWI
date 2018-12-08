@@ -77,6 +77,17 @@ router.get('/allCourse', function (req, res) {
     });
 });
 
+/* 傳出歷屆所有課程 the courses all previous */
+router.get('/allCoursePrevious', function (req, res) {
+    // 名字太長
+    var columns = ['id', '課程名稱', '老師', 'semester'];
+    db.GetColumn('course_all', columns, { 'column': 'id', 'order': 'DESC' }, function (courses) {
+        // res.json(JSON.stringify(courses))
+        console.log(JSON.stringify(courses))
+    });
+});
+
+
 router.get('/CourseByKeywords', function (req, res) {
     console.log('\n' + 'GET /course/CourseByKeywords');
     console.log(req.query);

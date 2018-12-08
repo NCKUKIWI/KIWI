@@ -270,7 +270,10 @@ router.post('/create', function (req, res) {
 });
 
 /* new */
+
 router.post('/allDepartment', function (req, res) {
+    // 存到資料庫裡面，別再寫爬蟲
+    // 名字太長
     request({
         url: "http://course-query.acad.ncku.edu.tw/qry/",
         method: "GET"
@@ -299,12 +302,13 @@ router.post('/setCommentCache', function (req, res) {
     redis.set(cache.userCacheKey(uid), JSON.stringify(data));
     res.send('success')
 })
+//---
 
 /* new */
 router.get('/new', function (req, res) {
 
     //front-end: uid
-
+    
     var sql = 'SELECT id,課程名稱,時間,老師,系所名稱,semester FROM course_all WHERE semester ="104-2" OR semester ="105-1" OR semester ="105-2" OR semester ="106-1" OR semester = "106-2"';
     redis.get(cache.userCacheKey(1171),function (error, result) {
         if(result != null){

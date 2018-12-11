@@ -52,7 +52,7 @@ router.get('/', function (req, res) {
 /*傳入所有課程 */
 router.get('/allCourse', function (req, res) {
     console.log('\n' + 'GET /allCourse');
-
+    
     var columns = ['id', '課程名稱', '系號', '課程碼', '分班碼', '系所名稱', '老師', '時間', 'comment_num'];
     db.GetColumn('course_new', columns, { 'column': 'id', 'order': 'DESC' }, function (courses) {
         var nowCourse = [];
@@ -191,6 +191,15 @@ router.post('/inputaddcourse/:courseid', function (req, res) {
         }
     });
 });
+
+
+/* new */
+router.get('/allDpmt', function (req, res) {
+    db.Query('SELECT * FROM department_all', function(result){
+        // console.log(JSON.stringify(result))
+        res.json(JSON.stringify(result))
+    })
+})
 
 /* show */
 router.get('/:id', function (req, res) {

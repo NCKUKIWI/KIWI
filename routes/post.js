@@ -269,25 +269,7 @@ router.post('/create', function (req, res) {
     }
 });
 
-/* new */
 
-router.post('/allDepartment', function (req, res) {
-    // 存到資料庫裡面，別再寫爬蟲
-    // 名字太長
-    request({
-        url: "http://course-query.acad.ncku.edu.tw/qry/",
-        method: "GET"
-    }, function(error,response, body) {
-        if(!error ) {
-            const $ = cheerio.load(body);
-            let department = [];
-            $('.content #dept_list li .tbody .dept').each(function(i, elem) {
-                department.push($(this).text());
-            })
-            res.send({'allDepartment': department});
-        }
-    });
-})
 
 /* new */
 router.post('/setCommentCache', function (req, res) {

@@ -179,8 +179,68 @@ router.post('/create', function (req, res) {
                 }
                 db.Insert('course_rate', rate, function (err, results) {
                     if (err) throw err;
-                    redis.flushdb(function (err, result) {
-                        res.send("success");
+                    column = ['id'];
+                    db.FindbyColumn('course_new', column, { '課程名稱': req.body.course_name, '老師': req.body.teacher }, function (DbSearch) {
+                        if(DbSearch.length!=0){  // 有在course_new找到這門課, 則清掉該課程對應到的key就好
+                            for(var d in DbSearch){
+                                Delete_Id = "course_"+DbSearch[d].id;
+                                console.log("Remove Redis Key: course_"+Delete_Id);
+                                redis.del(Delete_Id, function(err, result){
+                                });
+                            }
+                            ////////////////
+                            res.send("success");
+                            db.query_post2(DbSearch[0].id, function (courseInfo, comment) {
+                                courseInfo = courseInfo[0];
+                                courseInfo.comment = 0;
+                                courseInfo.course_style = 0;
+                                courseInfo.report_hw = 0;
+                                courseInfo.score_style = 0;
+            
+                                for (var i in comment) {
+                                    var buf = comment[i];
+                                    for (var j in comment[i]) {
+                                        // console.log(buf[j])
+                                        if (buf[j] == "無" || buf[j] == "" || !buf[j]) {
+                                            delete buf[j];
+                                            continue;
+                                        }
+                                        courseInfo[j]++;
+                                    }
+                                }
+                            db.FindbyColumn('course_rate', ["*"], { course_name: req.body.course_name, teacher: req.body.teacher }, function (rates) {
+                                var sweet = 0;
+                                var hard = 0;
+                                var recommand = 0;
+                                var rate_count = 0;
+                                if (rates.length > 0) {
+                                    for (var i in rates) {
+                                        sweet += rates[i].sweet;
+                                        hard += rates[i].hard;
+                                        recommand += rates[i].recommand;
+                                    }
+                                    sweet /= rates.length;
+                                    hard /= rates.length;
+                                    recommand /= rates.length;
+                                    rate_count = rates.length;
+                                }
+                                var data = {
+                                    'recommand': recommand,
+                                    'hard': hard,
+                                    'sweet': sweet,
+                                    'rate_count': rate_count,
+                                    'courseInfo': courseInfo,
+                                    'comment': comment,
+                                    'rates': rates
+                                };
+                                for(var d in DbSearch){
+                                    redis.set(courseCacheKey(DbSearch[d].id), JSON.stringify(data));
+                                }
+                            })
+                        });
+                        }else{ // 沒找到這門課, 不做任何事
+                            res.send("success");
+                        }
                     });
                 });
             });
@@ -222,20 +282,17 @@ router.get('/:id', function (req, res) {
 });
 
 /* new */
-router.post('/allDepartment', function (req, res) {
-    request({
-        url: "http://course-query.acad.ncku.edu.tw/qry/",
-        method: "GET"
-    }, function(error,response, body) {
-        if(!error ) {
-            const $ = cheerio.load(body);
-            let department = [];
-            $('.content #dept_list li .tbody .dept').each(function(i, elem) {
-                department.push($(this).text());
-            })
-            res.send({'allDepartment': department});
-        }
-    });
+router.post('/setCmtCache', function (req, res) {
+    //front-end: uid, form-data
+    let uid = req.body['uid'];
+    let data = req.body;
+    delete data['uid'];
+    data['name'] = data['name[]'];
+    data['value'] = data['value[]'];
+    delete data['name[]'];
+    delete data['value[]'];
+    redis.set(cache.userCacheKey(uid), JSON.stringify(data));
+    res.send('success')
 })
 
 /*report post */
@@ -302,5 +359,7 @@ router.delete('/:id', function (req, res) {
         res.send('Success');
     });
 });
+
+
 
 module.exports = router;

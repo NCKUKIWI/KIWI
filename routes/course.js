@@ -62,6 +62,30 @@ router.get('/', function (req, res) {
 });
 
 
+/* 傳出歷屆所有課程 the courses all previous */
+router.get('/allCoursePrev', function (req, res) {
+    var columns = ['id', '課程名稱', '老師', 'semester'];
+    db.GetColumn('course_all', columns, { 'column': 'id', 'order': 'DESC' }, function (courses) {
+        // res.send(JSON.stringify(courses))
+        console.log(JSON.stringify(courses))
+    });
+});
+
+router.get('/allDpmt', function (req, res) {
+    db.Query('SELECT * FROM department_all', function(result){
+        data = JSON.stringify(result)
+        for(let r in result){ // split the raw data 
+            let name = result[r]['DepName']
+            from = name.indexOf('）')
+            to = from
+            while(name.charAt(to)!=' '){
+                to++;
+            }
+            result[r]['DepName'] = name.slice(from+1, to)
+        }
+        res.json(result)
+    })
+})
 
 router.get('/CourseByKeywords', function (req, res) {
     console.log('\n' + 'GET /course/CourseByKeywords');

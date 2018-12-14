@@ -18,10 +18,16 @@ router.get('/new/:id', function(req, res) {
     }
 });
 
-// router.post('/setLike', function(req, res) {
-//     console.log(req.query[])
-// });
-
+router.post('/setLike', function(req, res) {
+    console.log(req.query['like'])
+    let data = {
+        'like':req.query['like'],
+        'dislike':req.query['dislike']
+    }
+    db.Insert('course_rate',data,function(err,results){
+        res.send('success')
+    })
+});
 router.post('/create', function(req, res) {
     console.log('\n'+'POST /course_rate/create');
     if(req.user){

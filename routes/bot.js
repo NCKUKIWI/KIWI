@@ -176,8 +176,9 @@ router.post('/sendmsg', function (req, res) {
  * @param {String} broadcastType 
  */
 function broadcastMsg(msgData, broadcastType) {
-	var target_label_id = broadcast_label[(broadcastType === "broadcast" ? "all_user" : "tester")];
-	console.log(`[廣播訊息] To: ${target_label_id} Msg: ${JSON.stringify(msgData)}`);
+	let broadcastTag = broadcastType === "broadcast" ? "all_user" : "tester";
+	let target_label_id = broadcast_label[broadcastTag];
+	console.log(`[廣播訊息] To: ${broadcastTag} Msg: ${JSON.stringify(msgData)}`);
 	if (msgData.msg) {
 		if (msgData.msg == 'cancelMsg') {
 			sendPostRequest({
@@ -190,10 +191,10 @@ function broadcastMsg(msgData, broadcastType) {
 				json: broadcastTextMsg(msgData.msg)
 			}, creativeMsgCb(target_label_id));
 		}
-	} else if (msgData.title && msgData.url) {
+	} else if (msgData.link.title && msgData.link.url) {
 		sendPostRequest({
 			url: msg_creative_url,
-			json: broadcastLinkMsg(msgData.description, msgData.url, msgData.title)
+			json: broadcastLinkMsg(msgData.link.description, msgData.link.url, msgData.link.title)
 		}, creativeMsgCb(target_label_id));
 	}
 }

@@ -152,7 +152,7 @@ const creativeMsgCb = target_label_id => resBody => {
 
 router.post('/sendmsg', function (req, res) {
 	var broadcastType = req.body.type;
-	var target_label_id = broadcast_label[(broadcastType === "test" ? "tester" : "all_user")];
+	var target_label_id = broadcast_label[(broadcastType === "broadcast" ? "all_user" : "tester")];
 	if (req.body.msg) {
 		var msg = req.body.msg;
 		if (msg == 'cancelMsg') {

@@ -178,7 +178,7 @@ router.post('/sendmsg', function (req, res) {
 function broadcastMsg(msgData, broadcastType) {
 	let broadcastTag = broadcastType === "broadcast" ? "all_user" : "tester";
 	let target_label_id = broadcast_label[broadcastTag];
-	console.log(`[廣播訊息] To: ${broadcastTag} Msg: ${JSON.stringify(msgData)}`);
+	console.log(`[廣播訊息] To: 『${broadcastTag}』 Msg: 『${JSON.stringify(msgData)}』`);
 	if (msgData.msg) {
 		if (msgData.msg == 'cancelMsg') {
 			sendPostRequest({

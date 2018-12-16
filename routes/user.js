@@ -23,7 +23,7 @@ router.get("/fbcheck", middleware.checkLogin(1), function (req, res) {
                 }, function (user) {
                     if (user.length > 0) {
                         req.session.isLogin = true;
-                        req.session.id = user[0].id;
+                        req.session.user = user[0];
                         res.redirect("/");
                     } else {
                         db.Insert('user', {
@@ -35,7 +35,7 @@ router.get("/fbcheck", middleware.checkLogin(1), function (req, res) {
                         }, function (err, result) {
                             if (err) return console.log(err);
                             req.session.isLogin = true;
-                            req.session.id = result.insertId;
+                            req.session.user = result;
                             res.redirect("/");
                         })
                     }

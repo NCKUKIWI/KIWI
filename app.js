@@ -1,20 +1,23 @@
 var express = require("express");
-var app = express();
-var engine = require("ejs-locals"); //讓express支援layout
 var path = require("path");
-var bodyParser = require("body-parser");
-var expressValidator = require("express-validator");
-var session = require("express-session");
+var helmet = require("helmet");
+var engine = require("ejs-locals"); //讓express支援layout
+var flash = require("express-flash");
 var basicAuth = require('basic-auth');
+var bodyParser = require("body-parser");
+var compression = require("compression");
+var session = require("express-session");
+var cookieParser = require("cookie-parser");
+var RedisStore = require('connect-redis')(session);
+var expressValidator = require("express-validator");
+
 var db = require("./model/db");
+var config = require("./config");
 var cache = require("./helper/cache");
+
+var app = express();
 var redis = cache.redis;
 var userCacheKey = cache.userCacheKey;
-var flash = require("express-flash");
-var compression = require("compression");
-var cookieParser = require("cookie-parser");
-var helmet = require("helmet");
-var config = require("./config");
 
 app.engine("ejs", engine);
 app.set("views", path.join(__dirname, "views")); //view的路徑位在資料夾views中
@@ -38,7 +41,10 @@ app.use(session({
     },
     secret: "secret",
     saveUninitialized: true,
-    resave: true
+    resave: true,
+    store: new RedisStore({
+        client: redis
+    })
 }));
 
 app.use(function (req, res, next) {

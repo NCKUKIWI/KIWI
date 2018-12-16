@@ -1,7 +1,7 @@
 exports.checkLogin = function checkLogin(v){
   if(v === undefined){
     return function(req, res, next) {
-      if(req.user) {
+      if(req.session.user) {
         next();
       } else {
         res.redirect("back");
@@ -9,7 +9,7 @@ exports.checkLogin = function checkLogin(v){
     }
   }else{
     return function(req, res, next) {
-      if(!req.user) {
+      if(!req.session.user) {
         next();
       } else {
         res.redirect("back");
@@ -20,7 +20,7 @@ exports.checkLogin = function checkLogin(v){
 
 exports.apiAuth = function apiAuth(){
   return function(req, res, next) {
-    if (req.user) {
+    if (req.session.user) {
       next();
     } else {
       res.send("No login");

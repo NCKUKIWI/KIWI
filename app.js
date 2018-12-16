@@ -17,7 +17,6 @@ var cache = require("./helper/cache");
 
 var app = express();
 var redis = cache.redis;
-var userCacheKey = cache.userCacheKey;
 
 app.engine("ejs", engine);
 app.set("views", path.join(__dirname, "views")); //view的路徑位在資料夾views中
@@ -34,37 +33,18 @@ app.use(bodyParser.urlencoded({
 app.use("/assets", express.static("assets", {
     maxAge: 24 * 60 * 60
 }));
-app.use(cookieParser("secretString"));
+app.use(cookieParser(config.secret.cookie));
 app.use(session({
     cookie: {
         maxAge: 1000 * 60 * 60 * 12
     },
-    secret: "secret",
+    secret: config.secret.sessiond,
     saveUninitialized: true,
     resave: true,
     store: new RedisStore({
         client: redis
     })
 }));
-
-app.use(function (req, res, next) {
-    if (req.cookies.isLogin) {
-        redis.get(userCacheKey(req.cookies.id), function (err, result) {
-            if (result) {
-                req.user = JSON.parse(result);
-                next();
-            } else {
-                db.FindbyID("user", req.cookies.id, function (user) {
-                    redis.set(userCacheKey(req.cookies.id), JSON.stringify(user));
-                    req.user = user;
-                    next();
-                });
-            }
-        });
-    } else {
-        next();
-    }
-});
 
 //Route
 app.use("/course", require("./routes/course")); // get "/"時交給routes course

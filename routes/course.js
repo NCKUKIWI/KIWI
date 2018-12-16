@@ -101,8 +101,8 @@ router.get('/CourseByKeywords', function (req, res) {
 router.post('/addcourse/:id', middleware.apiAuth(), function (req, res) {
     var courseid = parseInt(req.params.id);
     console.log('\n' + 'POST /course/addcourse/' + courseid);
-    var userid = parseInt(req.user.id);
-    var name = req.user.name;
+    var userid = parseInt(req.session.user.id);
+    var name = req.session.user.name;
     console.log("選課者: " + name);
     /* 確認是否選過課了 */
     db.FindbyColumn('cart', ["id"], { 'user_id': userid, 'course_id': courseid }, function (carts) {
@@ -127,8 +127,8 @@ router.post('/addcourse/:id', middleware.apiAuth(), function (req, res) {
 /* del course*/
 router.post('/delcourse/:id', function (req, res) {
     var courseid = parseInt(req.params.id);
-    var userid = parseInt(req.user.id);
-    var name = req.user.name;
+    var userid = parseInt(req.session.user.id);
+    var name = req.session.user.name;
     console.log('\n' + 'DELETE /course/delcourse/' + courseid);
     console.log("退課者: " + name);
     db.DeleteByColumn('cart', { 'course_id': courseid, 'user_id': userid }, function (err) {
@@ -152,9 +152,9 @@ router.post('/inputaddcourse/:courseid', function (req, res) {
         else {
             var courseid = course[0].id
             /* 若用戶非登入 則直接傳送課程資訊 */
-            if (req.user) {
-                var userid = parseInt(req.user.id);
-                var name = req.user.name;
+            if (req.session.user) {
+                var userid = parseInt(req.session.user.id);
+                var name = req.session.user.name;
                 console.log("選課者: " + name);
                 /* 確認是否選過課了 */
                 db.FindbyColumn('cart', ["id"], { 'user_id': userid, 'course_id': courseid }, function (carts) {
@@ -191,15 +191,15 @@ router.get('/:id', function (req, res) {
             if (reply) {
                 var data = JSON.parse(reply);
                 var rates = data.rates;
-                if (req.user && rates.length > 0) {
+                if (req.session.user && rates.length > 0) {
                     for (var i in rates) {
-                        if (rates[i].user_id == req.user.id) {
+                        if (rates[i].user_id == req.session.user.id) {
                             data['courserate_id'] = rates[i].id;
                         }
                     }
                 }
                 data['courserate_id'] = 0;
-                data['user'] = req.user;
+                data['user'] = req.session.user;
                 res.render('course/show', data);
             } else {
                 /* 尋找課程的資訊 */
@@ -247,10 +247,10 @@ router.get('/:id', function (req, res) {
                             'rates': rates
                         }
                         redis.set(courseCacheKey(id), JSON.stringify(data));
-                        if (req.user) {
+                        if (req.session.user) {
                             if (rates.length > 0) {
                                 for (var i in rates) {
-                                    if (rates[i].user_id == req.user.id) {
+                                    if (rates[i].user_id == req.session.user.id) {
                                         data['courserate_id'] = rates[i].id;
                                     }
                                 }
@@ -260,7 +260,7 @@ router.get('/:id', function (req, res) {
                         } else {
                             data['courserate_id'] = 0;
                         }
-                        data['user'] = req.user;
+                        data['user'] = req.session.user;
                         res.render('course/show', data);
                     });
                 });
@@ -270,15 +270,15 @@ router.get('/:id', function (req, res) {
 });
 
 function check_Login(req, res, all_courses, custom_courses) {
-    if (req.user) {
-        var userid = parseInt(req.user.id);
+    if (req.session.user) {
+        var userid = parseInt(req.session.user.id);
         var colmuns = ['course_id'];
         /* 有登入 抓取用戶的選課清單 */
         db.FindbyColumn('cart', ['course_id'], { 'user_id': userid }, function (carts) {
             res.render('course/index', {
                 'courses': all_courses,
                 'custom_courses': custom_courses,
-                'user': req.user,
+                'user': req.session.user,
                 'carts': carts
             });
         });
@@ -286,7 +286,7 @@ function check_Login(req, res, all_courses, custom_courses) {
         res.render('course/index', {
             'courses': all_courses,
             'custom_courses': custom_courses,
-            'user': req.user,
+            'user': req.session.user,
             'carts': null //沒登入 選課清單為null
         });
     }

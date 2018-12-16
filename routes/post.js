@@ -12,7 +12,7 @@ router.get('/', function (req, res) {
     var dt = new Date();
     console.log(dt);
     console.log("query: " + req.url);
-    if (req.user !== undefined) console.log("使用者：" + req.user.name);
+    if (req.session.user !== undefined) console.log("使用者：" + req.session.user.name);
 
     /* 設定 Order 欄位 */
     if (req.query.order) {
@@ -35,7 +35,7 @@ router.get('/', function (req, res) {
                         'posts': posts,
                         'teachers': teachers,
                         'course_name': course_name,
-                        'user': req.user
+                        'user': req.session.user
                     });
                 }
             });
@@ -48,7 +48,7 @@ router.get('/', function (req, res) {
                         'posts': posts,
                         'teachers': teachers,
                         'course_name': course_name,
-                        'user': req.user
+                        'user': req.session.user
                     });
                 }
             });
@@ -61,7 +61,7 @@ router.get('/', function (req, res) {
                         'posts': posts,
                         'teachers': teachers,
                         'course_name': course_name,
-                        'user': req.user
+                        'user': req.session.user
                     });
                 }
             });
@@ -103,7 +103,7 @@ router.get('/', function (req, res) {
                         'posts': posts,
                         'teachers': teachers,
                         'course_name': course_name,
-                        'user': req.user
+                        'user': req.session.user
                     });
                 }
             });
@@ -117,7 +117,7 @@ router.get('/', function (req, res) {
                     'posts': posts,
                     'teachers': teacher,
                     'course_name': courseName,
-                    'user': req.user
+                    'user': req.session.user
                 });
             }
         }
@@ -127,14 +127,14 @@ router.get('/', function (req, res) {
 /* create */
 router.post('/create', function (req, res) {
     console.log('\n' + 'POST /post/create');
-    if (req.user == undefined) {
+    if (req.session.user == undefined) {
         console.log("Not login");
         res.send([{
             msg: "請重新登入!"
         }]);
     } else {
-        var userid = parseInt(req.user.id);
-        console.log('User_id: ' + req.user.id + ' User_name: ' + req.user.name);
+        var userid = parseInt(req.session.user.id);
+        console.log('User_id: ' + req.session.user.id + ' User_name: ' + req.session.user.name);
         req.checkBody('course_name', '課程名稱不可為空').notEmpty();
         req.checkBody('comment', '修課心得不可為空').notEmpty();
         var errors = req.validationErrors();
@@ -194,7 +194,7 @@ router.get('/new', function (req, res) {
     db.Query(sql, function (course) {
         res.render('post/new', {
             'course': course,
-            'user': req.user
+            'user': req.session.user
         });
     });
 });
@@ -213,7 +213,7 @@ router.get('/:id', function (req, res) {
             }, function (rate) {
                 res.render('post/show', {
                     'post': post,
-                    'user': req.user,
+                    'user': req.session.user,
                     'rate': (rate.length > 0) ? rate[0] : null
                 });
             });
@@ -232,9 +232,9 @@ router.post('/report/:id', function (req, res) {
     var postid = parseInt(req.params.id);
     console.log('\n' + 'POST /post/report/' + postid);
     /* 檢查用戶是否登入 */
-    if (req.user !== undefined) {
-        var name = req.user.name;
-        var userid = parseInt(req.user.id);
+    if (req.session.user !== undefined) {
+        var name = req.session.user.name;
+        var userid = parseInt(req.session.user.id);
         console.log('檢舉者：' + name)
         /* 檢查是否檢舉過 依照user_id及post_id去尋找 */
         db.FindbyColumn('report_post', ["id"], {

@@ -1,7 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var cache = require('../helper/cache').redis;
-var userCacheKey = require('../helper/cache').userCacheKey;
 var middleware = require('../middleware');
 var db = require('../model/db');
 var graph = require("fbgraph");
@@ -24,12 +22,8 @@ router.get("/fbcheck", middleware.checkLogin(1), function (req, res) {
                     'fb_id': fb.id
                 }, function (user) {
                     if (user.length > 0) {
-                        res.cookie("isLogin", 1, {
-                            maxAge: 60 * 60 * 1000
-                        });
-                        res.cookie("id", user[0].id, {
-                            maxAge: 60 * 60 * 1000
-                        });
+                        req.session.isLogin = true;
+                        req.session.id = user[0].id;
                         res.redirect("/");
                     } else {
                         db.Insert('user', {
@@ -39,13 +33,9 @@ router.get("/fbcheck", middleware.checkLogin(1), function (req, res) {
                             'department': '無',
                             'grade': '無'
                         }, function (err, result) {
-                            if (err) console.log(err);
-                            res.cookie("isLogin", 1, {
-                                maxAge: 60 * 60 * 1000
-                            });
-                            res.cookie("id", result.insertId, {
-                                maxAge: 60 * 60 * 1000
-                            });
+                            if (err) return console.log(err);
+                            req.session.isLogin = true;
+                            req.session.id = result.insertId;
                             res.redirect("/");
                         })
                     }
@@ -58,22 +48,22 @@ router.get("/fbcheck", middleware.checkLogin(1), function (req, res) {
 });
 
 router.get('/logout', function (req, res) {
-    cache.del(userCacheKey(req.user.id));
-    res.clearCookie("isLogin");
-    res.clearCookie("id");
+    req.session.destroy(err => {
+        if (err) console.error(err);
+    });
     res.redirect('/');
 });
 
 router.get('/edit', middleware.checkLogin(), function (req, res) {
     console.log('\n' + 'GET /user/edit');
     res.render('user/edit', {
-        'user': req.user
+        'user': req.session.user
     });
 });
 
 router.post('/update', middleware.checkLogin(), function (req, res) {
     console.log('\n' + 'POST /user/update');
-    var userid = req.user.id;
+    var userid = req.session.user.id;
     var user = {
         name: req.body.name,
         department: req.body.department,

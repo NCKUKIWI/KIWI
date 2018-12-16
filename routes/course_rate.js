@@ -6,7 +6,7 @@ var db = require('../model/db');
 /* course_rate form */
 router.get('/new/:id', function(req, res) {
     console.log('\n'+'GET /course_rate/new/'+req.params.id);
-    if(req.user){
+    if(req.session.user){
         res.render('course_rate/new',{
             'courseid':req.params.id,
             'course_name':req.query.course_name.replace(/\'|\#|\/\*/g,""),
@@ -20,8 +20,8 @@ router.get('/new/:id', function(req, res) {
 
 router.post('/create', function(req, res) {
     console.log('\n'+'POST /course_rate/create');
-    if(req.user){
-        var userid = parseInt(req.user.id);
+    if(req.session.user){
+        var userid = parseInt(req.session.user.id);
         var rate = {
             sweet:parseInt(req.body.sweet.replace(/\'|\#|\/\*/g,"")),
             hard:parseInt(req.body.hard.replace(/\'|\#|\/\*/g,"")),

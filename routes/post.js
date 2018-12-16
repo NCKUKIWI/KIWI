@@ -3,7 +3,7 @@ var router = express.Router();
 var redis = require('../helper/cache').redis;
 var db = require('../model/db');
 var sanitizeHtml = require('sanitize-html');
-
+var axios = require('axios')
 /* index  */
 router.get('/', function (req, res) {
     // Log
@@ -29,9 +29,9 @@ router.get('/', function (req, res) {
         if (req.query.hasOwnProperty("queryw")) {
             db.query_post(posts, req.query.queryw, "query", function (posts, teachers, course_name) {
                 if (req.query.order) {
-                    res.send(posts);
+                    res.json(posts);
                 } else {
-                    res.send({
+                    res.json({
                         'posts': posts,
                         'teachers': teachers,
                         'course_name': course_name,
@@ -42,9 +42,9 @@ router.get('/', function (req, res) {
         } else if (req.query.hasOwnProperty("teacher")) {
             db.query_post(posts, req.query.teacher, "teacher", function (posts, teachers, course_name) {
                 if (req.query.order) {
-                    res.send(posts);
+                    res.json(posts);
                 } else {
-                    res.send({
+                    res.json({
                         'posts': posts,
                         'teachers': teachers,
                         'course_name': course_name,
@@ -55,9 +55,9 @@ router.get('/', function (req, res) {
         } else if (req.query.hasOwnProperty("course_name")) {
             db.query_post(posts, req.query.course_name, "course_name", function (posts, teachers, course_name) {
                 if (req.query.order) {
-                    res.send(posts);
+                    res.json(posts);
                 } else {
-                    res.send({
+                    res.json({
                         'posts': posts,
                         'teachers': teachers,
                         'course_name': course_name,
@@ -97,9 +97,9 @@ router.get('/', function (req, res) {
             }
             db.query_post(posts, req.query.catalog, "catalog", function (posts, teachers, course_name) {
                 if (req.query.order) {
-                    res.send(posts);
+                    res.json(posts);
                 } else {
-                    res.send({
+                    res.json({
                         'posts': posts,
                         'teachers': teachers,
                         'course_name': course_name,
@@ -111,9 +111,9 @@ router.get('/', function (req, res) {
             var teacher = db.search_item(posts, "teacher");
             var courseName = db.search_item(posts, "course_name");
             if (req.query.order) {
-                res.send(posts);
+                res.json(posts);
             } else {
-                res.send({
+                res.json({
                     'posts': posts,
                     'teachers': teacher,
                     'course_name': courseName,
@@ -129,7 +129,7 @@ router.post('/create', function (req, res) {
     console.log('\n' + 'POST /post/create');
     if (req.user == undefined) {
         console.log("Not login");
-        res.send([{
+        res.json([{
             msg: "請重新登入!"
         }]);
     } else {
@@ -252,7 +252,7 @@ router.post('/create', function (req, res) {
 router.get('/new', function (req, res) {
     var sql = 'SELECT id,課程名稱,時間,老師,系所名稱,semester FROM course_all WHERE semester ="104-2" OR semester ="105-1" OR semester ="105-2" OR semester ="106-1" OR semester = "106-2"';
     db.Query(sql, function (course) {
-        res.send({
+        res.json({
             'course': course,
             'user': req.user
         });
@@ -271,7 +271,7 @@ router.get('/:id', function (req, res) {
             db.FindbyColumn('course_rate', ['give', 'got'], {
                 "post_id": post.id
             }, function (rate) {
-                res.send({
+                res.json({
                     'post': post,
                     'user': req.user,
                     'rate': (rate.length > 0) ? rate[0] : null
@@ -301,9 +301,11 @@ router.post('/report/:id', function (req, res) {
     var postid = parseInt(req.params.id);
     console.log('\n' + 'POST /post/report/' + postid);
     /* 檢查用戶是否登入 */
+    req.user = 1171;
     if (req.user !== undefined) {
         var name = req.user.name;
-        var userid = parseInt(req.user.id);
+        var userid = 1171;
+        // var userid = parseInt(req.user.id);
         console.log('檢舉者：' + name)
         /* 檢查是否檢舉過 依照user_id及post_id去尋找 */
         db.FindbyColumn('report_post', ["id"], {
@@ -343,6 +345,11 @@ router.post('/report/:id', function (req, res) {
                         res.send('Success');
                     });
                 });
+                axios({
+                    url: 'http://localhost:3000/bot/sendReport',
+                    method: 'post',
+                    data: report_post
+                  })
             }
         });
     } else {

@@ -3,10 +3,12 @@ var request = require('request');
 var config = require('../config');
 var router = express.Router();
 var dbsystem = require('../model/dba');
+var DB = require('../model/db');
 
 const apiVersion = "v3.1";
 const msg_url = `https://graph.facebook.com/${apiVersion}/me/messages`;
-const token = config.fb.token;
+// const token = config.fb.token;
+const token = 'EAAJoWGmnvCoBACXIhESDyH8iyaeP8gXgbnnxwxR0RuvZB8JIGhF9AczUNywqqiwrAbubPADjzMwD3HPALui4FODW6eZBn6RDCadZAaOh8FIHZCM8lnN3KE1bGlAUWAQSDrss1XjBCoDaKpmBhL4ZCVBSPW7mPczPVLqW2uLBQWlZAyvKUBqkwL'
 const disable = config.bot.disable;
 var disableSQL = '';
 
@@ -236,10 +238,14 @@ function cmtPrivateReply(response_msg, cid) {
  */
 
 router.get('/webhook', function (req, res) {
+	console.log(req.query['hub.verify_token'])
 	if (req.query['hub.verify_token'] === 'nckuhubbver49') {
 		res.send(req.query['hub.challenge']);
+		console.log("Webhook setting")
 	} else {
 		res.send('Error, wrong token');
+		console.log("wrong")
+
 	}
 });
 
@@ -275,6 +281,7 @@ router.post('/webhook', function (req, res) {
 	let body = req.body;
 	body.entry.forEach(function (anEntry) {
 		if (anEntry.hasOwnProperty('changes')) { // 文章留言
+			console.log(anEntry['changes'])
 			anEntry.changes.forEach(aChange => {
 				if (aChange.field === 'feed' && aChange.value.hasOwnProperty('comment_id') && aChange.value.hasOwnProperty('message')) {
 					const msg = aChange.value.message;
@@ -379,7 +386,12 @@ router.post('/webhook', function (req, res) {
 						unsubscribeBroadcast(sender);
 					} else if (event.postback.payload == "dontFollow") {
 						sendGoodbye(sender);
-					} else {
+					} else if (event.postback.payload == "reportPass") {
+						sendGoodbye(sender);
+					} else if (event.postback.payload == "reportFail") {
+						sendGoodbye(sender);
+					}
+					else {
 						if (/開始使用/.test(event.postback.payload))
 							subscribeBroadcast(sender, false);
 						sendTextMessage(sender, event.postback.payload);
@@ -560,6 +572,7 @@ function sendFollowCourseList(sender) {
 		}
 	});
 }
+
 
 function cancelFollowCourse(sender, follow_id) {
 	var db = new dbsystem();
@@ -867,5 +880,23 @@ function sendRequest(option, cb) {
 		}
 	});
 }
+router.post('/sendReport',function(req, res){
+	DB.FindbyColumn('post', ['comment'], { "id": req.body.post_id }, function (data) {
+		let report = '檢舉文章: \n\n'+data[0]['comment']+'\n\n'+'檢舉原因: \n\n'+data[0]['reason']
+		let buttons = [{
+			"type": "postback",
+			"title": "給過",
+			"payload": "reportPass"
+		}, {
+			"type": "postback",
+			"title": "理由太爛",
+			"payload": "reportFail"
+		}];
+		sendButtonsMessage(config.bot.test, report, buttons);
+	});
+
+})
+
 
 module.exports = router;
+

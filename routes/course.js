@@ -67,7 +67,7 @@ router.get('/allCoursePrev', function (req, res) {
     var columns = ['id', '課程名稱', '老師', 'semester'];
     db.GetColumn('course_all', columns, { 'column': 'id', 'order': 'DESC' }, function (courses) {
         // res.send(JSON.stringify(courses))
-        console.log(JSON.stringify(courses))
+        res.json(courses)
     });
 });
 
@@ -99,11 +99,11 @@ router.get('/CourseByKeywords', function (req, res) {
         var QueryArray = cleanQuery.split(" ");
 
         db.FindbyColumnFuzzy('course_new', columns, QueryArray, function (custom_courses) {
-            res.send(custom_courses);
+            res.json(custom_courses);
         });
     } else if (req.query.hasOwnProperty("course_id")) {
         db.FindbyColumn('course_new', columns, { "id": req.query.course_id }, function (custom_courses) {
-            res.send(custom_courses);
+            res.json(custom_courses);
         });
     }
 });
@@ -129,7 +129,7 @@ router.get('/:id', function (req, res) {
                 }
                 data['courserate_id'] = 0;
                 data['user'] = req.user;
-                res.send(data);
+                res.json(data);
             } else {
                 /* 尋找課程的資訊 */
                 db.query_post2(id, function (courseInfo, comment) {
@@ -190,7 +190,7 @@ router.get('/:id', function (req, res) {
                             data['courserate_id'] = 0;
                         }
                         data['user'] = req.user;
-                        res.send(data);
+                        res.json(data);
                     });
                 });
             }
@@ -204,7 +204,7 @@ function check_Login(req, res, all_courses, custom_courses) {
         var colmuns = ['course_id'];
         /* 有登入 抓取用戶的選課清單 */
         db.FindbyColumn('cart', ['course_id'], { 'user_id': userid }, function (carts) {
-            res.send({
+            res.json({
                 'courses': all_courses,
                 'custom_courses': custom_courses,
                 'user': req.user,
@@ -212,7 +212,7 @@ function check_Login(req, res, all_courses, custom_courses) {
             });
         });
     } else {
-        res.send({
+        res.json({
             'courses': all_courses,
             'custom_courses': custom_courses,
             'user': req.user,

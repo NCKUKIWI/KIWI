@@ -66,7 +66,7 @@ app.use("/post", require("./routes/post")); // get "/post"時交給routes post�
 app.use("/user", require("./routes/user")); // get "/user"時交給routes user處理
 app.use("/schedule", require("./routes/schedule")); // get "/schedule"時交給routes schedule
 app.use("/course_rate", require("./routes/course_rate")); // get "/course_rate"時交給routes course_rate
-app.use("/bot", require("./routes/bot"));
+app.use("/bot", require("./routes/bot").router);
 app.use("/admin", function (req, res, next) {
     function unauthorized(res) {
         res.set('WWW-Authenticate', 'Basic realm=Input User&Password');

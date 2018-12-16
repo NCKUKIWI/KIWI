@@ -151,11 +151,22 @@ const creativeMsgCb = target_label_id => resBody => {
 };
 
 router.post('/sendmsg', function (req, res) {
-	var broadcastType = req.body.type;
+	let reqType = {
+		msg: req.body.msg || null,
+		link: {
+			title: req.body.linktitle,
+			url: req.body.linkurl,
+			description: req.body.linkdescription
+		}
+	};
+	broadcastMsg(reqType, req.body.type);
+	res.send('ok');
+});
+
+function broadcastMsg(msgData, broadcastType) {
 	var target_label_id = broadcast_label[(broadcastType === "broadcast" ? "all_user" : "tester")];
-	if (req.body.msg) {
-		var msg = req.body.msg;
-		if (msg == 'cancelMsg') {
+	if (msgData.msg) {
+		if (msgData.msg == 'cancelMsg') {
 			sendPostRequest({
 				url: msg_creative_url,
 				json: toCancelFollow
@@ -163,17 +174,16 @@ router.post('/sendmsg', function (req, res) {
 		} else {
 			sendPostRequest({
 				url: msg_creative_url,
-				json: broadcastTextMsg(msg)
+				json: broadcastTextMsg(msgData.msg)
 			}, creativeMsgCb(target_label_id));
 		}
-	} else if (req.body.linktitle && req.body.linkurl) {
+	} else if (msgData.title && msgData.url) {
 		sendPostRequest({
 			url: msg_creative_url,
-			json: broadcastLinkMsg(req.body.linkdescription, req.body.linkurl, req.body.linktitle)
+			json: broadcastLinkMsg(msgData.description, msgData.url, msgData.title)
 		}, creativeMsgCb(target_label_id));
 	}
-	res.send('ok');
-});
+}
 
 function subscribeBroadcast(sender, isTester) {
 	return sendPostRequest({
@@ -888,4 +898,7 @@ function sendRequest(option, cb) {
 	});
 }
 
-module.exports = router;
+module.exports = {
+	router,
+	broadcastMsg
+};

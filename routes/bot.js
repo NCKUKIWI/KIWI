@@ -163,6 +163,18 @@ router.post('/sendmsg', function (req, res) {
 	res.send('ok');
 });
 
+/**
+ * 
+ * @param {Object} msgData {
+		msg: String || null,
+		link: {
+			title: String,
+			url: String,
+			description: String
+		}
+	}
+ * @param {String} broadcastType 
+ */
 function broadcastMsg(msgData, broadcastType) {
 	var target_label_id = broadcast_label[(broadcastType === "broadcast" ? "all_user" : "tester")];
 	if (msgData.msg) {

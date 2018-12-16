@@ -271,19 +271,7 @@ router.post('/create', function (req, res) {
 
 
 
-/* new */
-router.post('/setCommentCache', function (req, res) {
-    //front-end: uid, form-data
-    let uid = req.body['uid'];
-    let data = req.body;
-    delete data['uid'];
-    data['name'] = data['name[]'];
-    data['value'] = data['value[]'];
-    delete data['name[]'];
-    delete data['value[]'];
-    redis.set(cache.userCacheKey(uid), JSON.stringify(data));
-    res.send('success')
-})
+
 //---
 
 /* new */

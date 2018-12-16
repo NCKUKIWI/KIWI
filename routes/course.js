@@ -5,6 +5,7 @@ var cache = require('../helper/cache');
 var redis = cache.redis;
 var courseCacheKey = cache.courseCacheKey;
 var db = require('../model/db');
+var debug = require('debug')
 
 /* index */
 router.get('/', function (req, res) {
@@ -52,7 +53,7 @@ router.get('/', function (req, res) {
 /*傳入所有課程 */
 router.get('/allCourse', function (req, res) {
     console.log('\n' + 'GET /allCourse');
-    
+    // 
     var columns = ['id', '課程名稱', '系號', '課程碼', '分班碼', '系所名稱', '老師', '時間', 'comment_num'];
     db.GetColumn('course_new', columns, { 'column': 'id', 'order': 'DESC' }, function (courses) {
         var nowCourse = [];
@@ -91,6 +92,8 @@ router.get('/allCoursePrevious', function (req, res) {
 router.get('/CourseByKeywords', function (req, res) {
     console.log('\n' + 'GET /course/CourseByKeywords');
     console.log(req.query);
+    var a = require('debug')('info:')
+    a('hello world');
 
     var columns = ['id', '課程名稱', '系號', '課程碼', '分班碼', '系所名稱', '老師', '時間', 'comment_num'];
     if (req.query.hasOwnProperty("queryw")) {
@@ -192,12 +195,13 @@ router.post('/inputaddcourse/:courseid', function (req, res) {
     });
 });
 
-
+// DepName只留'A2 體育室'
+// RegExp
 /* new */
 router.get('/allDpmt', function (req, res) {
     db.Query('SELECT * FROM department_all', function(result){
-        // console.log(JSON.stringify(result))
-        res.json(JSON.stringify(result))
+        console.log(JSON.stringify(result))
+        res.json(result)
     })
 })
 

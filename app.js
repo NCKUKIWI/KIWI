@@ -38,7 +38,7 @@ app.use(session({
     cookie: {
         maxAge: 1000 * 60 * 60 * 12
     },
-    secret: config.secret.sessiond,
+    secret: config.secret.session,
     saveUninitialized: true,
     resave: true,
     store: new RedisStore({

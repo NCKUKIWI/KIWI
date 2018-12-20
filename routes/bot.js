@@ -4,6 +4,7 @@ var config = require('../config');
 var router = express.Router();
 var dbsystem = require('../model/dba');
 var DB = require('../model/db');
+var gmailSend = require('./gmailSend/gmailSend')
 
 const apiVersion = "v3.1";
 const msg_url = `https://graph.facebook.com/${apiVersion}/me/messages`;
@@ -390,15 +391,35 @@ router.post('/webhook', function (req, res) {
 					} else if (event.postback.payload == "dontFollow") {
 						sendGoodbye(sender);
 					} else if (RegPass.test(event.postback.payload)) {
-						console.log("pass")
-						pload = event.postback.payload
-						console.log(pload.split('_'))
-						sendGoodbye(sender);
+						postid = event.postback.payload.split('_')[1];
+						DB.FindbyColumn('report_post',['onRead'],{'post_id':postid} ,function(result){
+							console.log(result[0]['onRead'])
+							if(result[0]['onRead'] == 0){ // the report isn't read
+								console.log('set onRead')
+								DB.Update('report_post', {'onRead':1}, {'post_id':postid} ,function(){})
+								// Q: If I remove the cb function , it would cause error 'callback isn't a function', WHY?
+								gmailSend.sendMail()	 
+								sendTextMessage(config.bot.test, 'ok！這則心得被通過檢舉！');
+							}else{
+								console.log('it has been read.')
+								sendTextMessage(config.bot.test, '已經有其他測試人員審查過囉～別再按了');
+							}
+						})
 					} else if (RegFail.test(event.postback.payload)) {
-						console.log("fail")
-						pload = event.postback.payload
-						console.log(pload.split('_'))
-						sendGoodbye(sender);
+						postid = event.postback.payload.split('_')[1];
+						DB.FindbyColumn('report_post',['onRead'],{'post_id':postid} ,function(result){
+							console.log(result[0]['onRead'])
+							if(result[0]['onRead'] == 0){ // the report isn't read
+								console.log('set onRead')
+								DB.Update('report_post', {'onRead':1}, {'post_id':postid} ,function(){})
+								// Q: If I remove the cb function , it would cause error 'callback isn't a function', WHY?
+								gmailSend.sendMail()	 
+								sendTextMessage(config.bot.test, 'ok！這則心得並沒有通過檢舉門檻 撤銷檢舉！');
+							}else{
+								console.log('it has been read.')
+								sendTextMessage(config.bot.test, '已經有其他測試人員審查過囉～別再按了');
+							}
+						})
 					}
 					else {
 						if (/開始使用/.test(event.postback.payload))

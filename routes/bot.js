@@ -361,6 +361,9 @@ router.post('/webhook', function (req, res) {
 					var courseIdCancel = postback.courseIdCancel.matcher(event.postback.payload); //抓payload中的 course_id 用來取消追蹤課程
 					var courseIdInfo = postback.courseIdInfo.matcher(event.postback.payload); //抓payload中的 course_id 用來傳送單一課程詳細資訊
 					var courseIdAsk = postback.courseIdAsk.matcher(event.postback.payload);
+					let RegPass = /reportPass_/;
+					let RegFail = /reportFail_/;
+					console.log('pload'+event.postback.payload);
 					if (courseIdFollow) {
 						courseIdFollow = postback.courseIdFollow.replacer(courseIdFollow[0]);
 						addFollowCourse(sender, courseIdFollow);
@@ -386,9 +389,15 @@ router.post('/webhook', function (req, res) {
 						unsubscribeBroadcast(sender);
 					} else if (event.postback.payload == "dontFollow") {
 						sendGoodbye(sender);
-					} else if (event.postback.payload == "reportPass") {
+					} else if (RegPass.test(event.postback.payload)) {
+						console.log("pass")
+						pload = event.postback.payload
+						console.log(pload.split('_'))
 						sendGoodbye(sender);
-					} else if (event.postback.payload == "reportFail") {
+					} else if (RegFail.test(event.postback.payload)) {
+						console.log("fail")
+						pload = event.postback.payload
+						console.log(pload.split('_'))
 						sendGoodbye(sender);
 					}
 					else {
@@ -880,23 +889,22 @@ function sendRequest(option, cb) {
 		}
 	});
 }
-router.post('/sendReport',function(req, res){
-	DB.FindbyColumn('post', ['comment'], { "id": req.body.post_id }, function (data) {
-		let report = '檢舉文章: \n\n'+data[0]['comment']+'\n\n'+'檢舉原因: \n\n'+data[0]['reason']
+
+function sendReport(report_post){
+	DB.FindbyColumn('post', ['comment'], { "id": report_post['post_id'] }, function (data) {
+		let report = '檢舉文章: \n\n'+data[0]['comment']+'\n\n'+'檢舉原因: \n\n'+report_post['reason']
 		let buttons = [{
 			"type": "postback",
 			"title": "給過",
-			"payload": "reportPass"
+			"payload": "reportPass_"+report_post['post_id']
 		}, {
 			"type": "postback",
 			"title": "理由太爛",
-			"payload": "reportFail"
+			"payload": "reportFail_"+report_post['post_id']
 		}];
 		sendButtonsMessage(config.bot.test, report, buttons);
 	});
+}
 
-})
-
-
-module.exports = router;
+module.exports = {router, sendReport};
 

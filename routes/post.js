@@ -4,6 +4,8 @@ var redis = require('../helper/cache').redis;
 var db = require('../model/db');
 var sanitizeHtml = require('sanitize-html');
 var axios = require('axios')
+var bot = require('./bot');
+
 /* index  */
 router.get('/', function (req, res) {
     // Log
@@ -327,7 +329,7 @@ router.post('/report/:id', function (req, res) {
                         reason = "辱罵";
                         break;
                     default:
-                        reason = "無";
+                        reason = "(看前端是否要接這邊)";
                         break;
                 }
                 console.log("檢舉原因:" + reason);
@@ -345,11 +347,8 @@ router.post('/report/:id', function (req, res) {
                         res.send('Success');
                     });
                 });
-                axios({
-                    url: 'http://localhost:3000/bot/sendReport',
-                    method: 'post',
-                    data: report_post
-                  })
+                
+                bot.sendReport(report_post);
             }
         });
     } else {

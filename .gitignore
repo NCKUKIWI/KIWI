@@ -4,3 +4,4 @@ config.*
 npm-debug.log
 *.log
 .vscode
+token.*

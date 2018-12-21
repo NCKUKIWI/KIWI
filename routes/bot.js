@@ -398,8 +398,9 @@ router.post('/webhook', function (req, res) {
 								console.log('set onRead')
 								DB.Update('report_post', {'onRead':1}, {'post_id':postid} ,function(){})
 								// Q: If I remove the cb function , it would cause error 'callback isn't a function', WHY?
-								gmailSend.sendMail()	 
-								sendTextMessage(config.bot.test, 'ok！這則心得被通過檢舉！');
+								gmailSend.sendMail('jaja076076@gmail.com', 'TO 檢舉人： 你的檢舉並沒有通過')	 
+								sendTextMessage(config.bot.test, 'ok！這則心得被通過檢舉, 心得已下架！正在發信通知被檢舉人');
+								DB.DeleteByColumn('post', {'id':postid}, function(){} )
 							}else{
 								console.log('it has been read.')
 								sendTextMessage(config.bot.test, '已經有其他測試人員審查過囉～別再按了');
@@ -412,9 +413,8 @@ router.post('/webhook', function (req, res) {
 							if(result[0]['onRead'] == 0){ // the report isn't read
 								console.log('set onRead')
 								DB.Update('report_post', {'onRead':1}, {'post_id':postid} ,function(){})
-								// Q: If I remove the cb function , it would cause error 'callback isn't a function', WHY?
-								gmailSend.sendMail()	 
-								sendTextMessage(config.bot.test, 'ok！這則心得並沒有通過檢舉門檻 撤銷檢舉！');
+								gmailSend.sendMail('jaja076076@gmail.com', 'TO 檢舉人： 你的檢舉並沒有通過')	 
+								sendTextMessage(config.bot.test, 'ok！這則心得並沒有通過檢舉門檻 撤銷檢舉！已發信通知檢舉人');
 							}else{
 								console.log('it has been read.')
 								sendTextMessage(config.bot.test, '已經有其他測試人員審查過囉～別再按了');

@@ -8,10 +8,9 @@ const SCOPES = ['https://www.googleapis.com/auth/gmail.send', 'https://mail.goog
 // The file token.json stores the user's access and refresh tokens, and is
 // created automatically when the authorization flow completes for the first
 // time.
-const TOKEN_PATH = __dirname+'/gmailSend/token.json';
+const TOKEN_PATH = __dirname+'/token.json';
 // Load client secrets from a local file.
 function sendMail(to, txt){
-console.log('Token'+TOKEN_PATH)
 
   fs.readFile(__dirname+'/credentials.json', (err, content) => {
     if (err) return console.log('Error loading client secret file:', err);
@@ -35,6 +34,7 @@ function authorize(credentials, to, txt, callback) {
   // Check if we have previously stored a token.
   fs.readFile(TOKEN_PATH, (err, token) => {
     if (err) return getNewToken(oAuth2Client, callback);
+    // oAuth2Client.refreshToken("1/tIP2hIUg7FVc_s24dGsGdpGYpSZdUB89a2sQOhsb-883n2dE6kBimQKCZS-3VsTh")
     oAuth2Client.setCredentials(JSON.parse(token));
     callback(oAuth2Client, to, txt);
   });
@@ -104,7 +104,6 @@ function sendMessage(auth, to, txt)
       textEncoding: "base64",
     });
     console.log(mail)
-
   mail.compile().build( (error, msg) => {
     if (error) return console.log('Error compiling email ' + error);
     const encodedMessage = Buffer.from(msg)

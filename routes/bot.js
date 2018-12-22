@@ -8,8 +8,8 @@ var gmailSend = require('./gmailSend/gmailSend')
 
 const apiVersion = "v3.1";
 const msg_url = `https://graph.facebook.com/${apiVersion}/me/messages`;
-// const token = config.fb.token;
-const token = 'EAAJoWGmnvCoBACXIhESDyH8iyaeP8gXgbnnxwxR0RuvZB8JIGhF9AczUNywqqiwrAbubPADjzMwD3HPALui4FODW6eZBn6RDCadZAaOh8FIHZCM8lnN3KE1bGlAUWAQSDrss1XjBCoDaKpmBhL4ZCVBSPW7mPczPVLqW2uLBQWlZAyvKUBqkwL'
+const token = config.fb.token;
+// const token = 'EAAJoWGmnvCoBACXIhESDyH8iyaeP8gXgbnnxwxR0RuvZB8JIGhF9AczUNywqqiwrAbubPADjzMwD3HPALui4FODW6eZBn6RDCadZAaOh8FIHZCM8lnN3KE1bGlAUWAQSDrss1XjBCoDaKpmBhL4ZCVBSPW7mPczPVLqW2uLBQWlZAyvKUBqkwL'
 const disable = config.bot.disable;
 var disableSQL = '';
 
@@ -398,7 +398,7 @@ router.post('/webhook', function (req, res) {
 								console.log('set onRead')
 								DB.Update('report_post', {'onRead':1}, {'post_id':postid} ,function(){})
 								// Q: If I remove the cb function , it would cause error 'callback isn't a function', WHY?
-								gmailSend.sendMail('jaja076076@gmail.com', 'TO 檢舉人： 你的檢舉並沒有通過')	 
+								gmailSend.sendMail('jaja076076@gmail.com', 'TO 檢舉人： 你的檢舉通過囉')	 
 								sendTextMessage(config.bot.test, 'ok！這則心得被通過檢舉, 心得已下架！正在發信通知被檢舉人');
 								DB.DeleteByColumn('post', {'id':postid}, function(){} )
 							}else{

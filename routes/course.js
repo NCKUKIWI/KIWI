@@ -66,8 +66,8 @@ router.get('/', function (req, res) {
 router.get('/allCoursePrev', function (req, res) {
     var columns = ['id', '課程名稱', '老師', 'semester'];
     db.GetColumn('course_all', columns, { 'column': 'id', 'order': 'DESC' }, function (courses) {
-        // res.send(JSON.stringify(courses))
-        console.log(JSON.stringify(courses))
+        res.send(JSON.stringify(courses))
+        // console.log(JSON.stringify(courses))
     });
 });
 

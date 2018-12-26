@@ -83,11 +83,11 @@ router.get('/getList/:userID', function (req, res) {
                 if(name_table.length === 0){
                     db.FindbyColumn('user', ['name'], {'id' :userID}, function(name){
                         console.log(name)
-                        data = {'name': name, 'now_wishlist':[], 'now_table':[]}
+                        data = {'name': name, 'now_wishlist':[], 'now_table':[], 'photo':[]}
                         res.json(data)
                     })
                 }else{
-                    data = {'name': name_table[0]['userName'], 'now_wishlist':[], 'now_table':[]}
+                    data = {'name': name_table[0]['userName'], 'now_wishlist':[], 'now_table':[], 'photo':[]}
                     for (let n in name_table){
                         console.log(name_table[n])
                         data['now_table'].push(name_table[n]['courseID'])

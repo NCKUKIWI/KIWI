@@ -357,13 +357,11 @@ router.post('/setList/:userID', function (req, res) {
     console.log('\n' + 'POST /post/setList/' + userID);
     let wishList = req.query.now_wishlist;
     let tableList = req.query.now_table;
-
-    // wishList = [30153, 30154]
-    // tableList = [30153, 30154]
     db.FindbyColumn('user', ['name'], {'id':userID}, function(rs){
         if(rs.length === 0){
             res.send('wrong user')
         }else{
+            res.send('success')
             for (let w in wishList){
                 let data = {
                     'userID':userID,
@@ -380,10 +378,7 @@ router.post('/setList/:userID', function (req, res) {
                 db.Insert('tableList',data,function(err,results){})
             }
         }
-
-
     })
-    
 });
 
 /* del */

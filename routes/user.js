@@ -101,7 +101,6 @@ router.get('/getList/:userID', function (req, res) {
         
         })
     }   
-    console.log('hi')
 });
 
 router.post('/update', middleware.checkLogin(), function (req, res) {

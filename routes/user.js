@@ -71,6 +71,39 @@ router.get('/edit', middleware.checkLogin(), function (req, res) {
     });
 });
 
+router.get('/getList/:userID', function (req, res) {
+    var userID = req.params.userID;
+    console.log('\n' + 'GET /course/' + userID);
+    if (userID.match(/\D/g)) { // if ID isn't the digital.
+        res.redirect('/');
+    }else{
+        db.Query('SELECT userName, courseID FROM `tableList` WHERE userID='+userID ,function(name_table){
+            db.Query('SELECT courseID FROM `wishList` WHERE userID='+userID,function(wish){
+                console.log(name_table)
+                if(name_table.length === 0){
+                    db.FindbyColumn('user', ['name'], {'id' :userID}, function(name){
+                        console.log(name)
+                        data = {'name': name, 'now_wishlist':[], 'now_table':[]}
+                        res.json(data)
+                    })
+                }else{
+                    data = {'name': name_table[0]['userName'], 'now_wishlist':[], 'now_table':[]}
+                    for (let n in name_table){
+                        console.log(name_table[n])
+                        data['now_table'].push(name_table[n]['courseID'])
+                    }
+                    for (let w in wish){
+                        data['now_wishlist'].push(wish[w]['courseID'])
+                    }
+                    res.json(data)
+                }      
+            })
+        
+        })
+    }   
+    console.log('hi')
+});
+
 router.post('/update', middleware.checkLogin(), function (req, res) {
     console.log('\n' + 'POST /user/update');
     var userid = req.user.id;

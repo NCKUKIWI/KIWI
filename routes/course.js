@@ -198,6 +198,24 @@ router.get('/:id', function (req, res) {
     }
 });
 
+router.get('/Info/:courseID', function (req, res) {
+    var id = req.params.courseID;
+    console.log('\n' + 'GET /course/' + id);
+    if (id.match(/\D/g)) { // if ID isn't the digital.
+        res.redirect('/');
+    }else{
+        let col = ['id', '系號', '選課序號', '課程名稱', '老師', '時間', '學分', '選必修', '系所名稱'];
+        db.FindbyColumn('course_new', col, {'id':id}, function(info, err){
+            if(info.length == 0){
+                res.send('No data')
+            }else{
+                info[0]['選課序號'] = info[0]['選課序號'].replace(info[0]['系號'], '');
+                res.json(info[0]);
+            }
+        })
+    } 
+});
+
 function check_Login(req, res, all_courses, custom_courses) {
     if (req.user) {
         var userid = parseInt(req.user.id);

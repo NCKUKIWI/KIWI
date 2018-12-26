@@ -351,6 +351,41 @@ router.post('/report/:id', function (req, res) {
     }
 });
 
+/*report post */
+router.post('/setList/:userID', function (req, res) {
+    var userID = parseInt(req.params.userID);
+    console.log('\n' + 'POST /post/setList/' + userID);
+    let wishList = req.query.now_wishlist;
+    let tableList = req.query.now_table;
+
+    // wishList = [30153, 30154]
+    // tableList = [30153, 30154]
+    db.FindbyColumn('user', ['name'], {'id':userID}, function(rs){
+        if(rs.length === 0){
+            res.send('wrong user')
+        }else{
+            for (let w in wishList){
+                let data = {
+                    'userID':userID,
+                    'courseID':wishList[w]
+                }
+                db.Insert('wishList',data,function(err,results){})
+            }
+            for (let t in tableList){
+                let data = {
+                    'userID':userID,
+                    'courseID':tableList[t],
+                    'userName':rs[0]['name']
+                }
+                db.Insert('tableList',data,function(err,results){})
+            }
+        }
+
+
+    })
+    
+});
+
 /* del */
 router.delete('/:id', function (req, res) {
     var id = req.params.id;

@@ -2,23 +2,24 @@ const fs = require('fs');
 const readline = require('readline');
 const {google} = require('googleapis');
 const mailcomposer = require('mailcomposer').MailComposer
-
+let to = 'jaja076076@gmail.com'
+let txt = 'hihi'
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/gmail.send', 'https://mail.google.com/' , 'https://www.googleapis.com/auth/gmail.modify', 'https://www.googleapis.com/auth/gmail.compose'];
 // The file token.json stores the user's access and refresh tokens, and is
 // created automatically when the authorization flow completes for the first
 // time.
-const TOKEN_PATH = __dirname+'/gmailSend/token.json';
+const TOKEN_PATH = 'token.json';
 // Load client secrets from a local file.
-function sendMail(to, txt){
+//function sendMail(to, txt){
 console.log('Token'+TOKEN_PATH)
 
-  fs.readFile(__dirname+'/credentials.json', (err, content) => {
+  fs.readFile('credentials.json', (err, content) => {
     if (err) return console.log('Error loading client secret file:', err);
     // Authorize a client with credentials, then call the Gmail API.
     authorize(JSON.parse(content), to, txt, sendMessage);
   });
-}
+//}
 
 
 /**
@@ -121,4 +122,4 @@ function sendMessage(auth, to, txt)
        });
   })
 }
-module.exports = {sendMail};
+//module.exports = {sendMail};

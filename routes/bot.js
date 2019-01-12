@@ -57,6 +57,7 @@ db.select().field(["課程名稱", "選課序號"]).from("course_new").where("�
 	});
 });
 
+
 /**
  * 載入設定 |END|
  */
@@ -310,7 +311,9 @@ router.post('/webhook', function (req, res) {
 					var text = event.message.text; //用戶傳送的訊息
 					console.log(`[粉專私訊] 私訊者：『${sender}』訊息：「${text.replace(/\n/, "\\n")}」`);
 					if (text.indexOf("小幫手") !== -1) {
-						sendHello(sender);
+						
+						userValidation(sender);
+							
 						if (text.indexOf("小幫手我是管理員") !== -1)
 							subscribeBroadcast(sender, true);
 					} else {
@@ -383,7 +386,8 @@ router.post('/webhook', function (req, res) {
 					} else if (event.postback.payload == "cancelfollow") {
 						sendFollowCourseList(sender);
 					} else if (event.postback.payload == "callagain") {
-						sendHello(sender);
+						userValidation(sender);
+						//sendHello(sender);
 					} else if (event.postback.payload == "cancelall") {
 						cancelAllFollowCourse(sender);
 					} else if (event.postback.payload == "cancelmsg") {
@@ -729,6 +733,7 @@ function askPlaceOrFollow(sender, serial) {
 	});
 }
 
+//已開通的user
 const helloMessage = genericTemplateGenerator("你好 👋👋 我是 NCKU HUB 新來的小幫手，請問需要什麼幫助嗎❓", [{
 	"type": "postback",
 	"title": "尋找上課地點",
@@ -743,8 +748,23 @@ const helloMessage = genericTemplateGenerator("你好 👋👋 我是 NCKU HUB �
 	"payload": "cancelfollow",
 }]);
 
+//未開通的user
+const subMessage = genericTemplateGenerator("你好 👋👋 我是 NCKU HUB 新來的小幫手，看來你還沒有開通呦～", [{
+	"type": "postback",
+	"title": "開通小幫手服務",
+	"payload": "為你提供一個開通的流程圖"
+}, {
+	"type": "postback",
+	"title": "回報網站問題",
+	"payload": "為你提供一個回報表單"
+}]);
+
 function sendHello(sender) {
 	return sendMessage(sender, helloMessage);
+}
+
+function sendSub(sender) {
+	return sendMessage(sender, subMessage);
 }
 
 const goodbyeMessage = genericTemplateGenerator("感謝使用 🙏 希望有幫上你的忙！", [{
@@ -926,6 +946,30 @@ function sendReport(report_post){
 		sendButtonsMessage(config.bot.test, report, buttons);
 	});
 }
+
+//使用者驗證狀況
+var userValidation = 0;
+
+function userValidation (sender) {
+	db.select().field(["*"]).from("user").where("fb_id=", sender).run(function (data, err) {
+		userValidation = data[0].validation;
+		if(userValidation == 2) {
+			sendHello(sender);
+		} else {
+			sendSub(sender);
+		}
+	});
+}
+
+// 撈使用者認證
+
+// db.select("validation").from("user").where("validation=","1").run(function(data, err){
+// 	for (var i in data){
+// 		userValidation.push(dara[i].validation);
+// 	}
+// });
+
+
 
 module.exports = {router, sendReport};
 

@@ -28,13 +28,15 @@ router.get('/', function (req, res) {
     let col = ['id', '系號', '選課序號', '課程名稱', '老師', '時間', '學分', '選必修', '系所名稱'];
     db.GetColumn('course_new', col , { 'column': 'id', 'order': 'DESC' }, function (courses) {
         all_courses = courses;
-
-	        res.send({
-	            'courses': all_courses,
-	            // 'custom_courses': custom_courses,
-	            'user': req.user,
-	            'carts': null //沒登入 選課清單為null
-	        });
+        for(var i in all_courses){
+        	all_courses[i]['選課序號'] = all_courses[i]['選課序號'].replace(all_courses[i]['系號'], '');
+        }
+        res.send({
+            'courses': all_courses,
+            // 'custom_courses': custom_courses,
+            'user': req.user,
+            'carts': null //沒登入 選課清單為null
+        });
     });
 });
 

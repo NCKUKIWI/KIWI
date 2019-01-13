@@ -11,7 +11,6 @@ const SCOPES = ['https://www.googleapis.com/auth/gmail.send', 'https://mail.goog
 const TOKEN_PATH = __dirname+'/token.json';
 // Load client secrets from a local file.
 function sendMail(to, txt){
-
   fs.readFile(__dirname+'/credentials.json', (err, content) => {
     if (err) return console.log('Error loading client secret file:', err);
     // Authorize a client with credentials, then call the Gmail API.

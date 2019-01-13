@@ -25,39 +25,16 @@ router.get('/', function (req, res) {
     var dt = new Date();
     console.log(dt);
     console.log('\n' + 'GET /course');
-    /*  設定要的欄位 */
-    var columns = ['id', '課程名稱', '系號', '課程碼', '分班碼', '系所名稱', '老師', '時間', 'comment_num'];
-
-    var all_courses = [];
-    var custom_courses = [];
-
-    db.GetColumn('course_new', columns, { 'column': 'id', 'order': 'DESC' }, function (courses) {
+    let col = ['id', '系號', '選課序號', '課程名稱', '老師', '時間', '學分', '選必修', '系所名稱'];
+    db.GetColumn('course_new', col , { 'column': 'id', 'order': 'DESC' }, function (courses) {
         all_courses = courses;
 
-        if (req.query.hasOwnProperty("queryw")) {
-            // clean the query to avoid sql injection
-            var cleanQuery = req.query.queryw.replace(/\'|\#|\/\*/g, "");
-            // if someone want to query alternately by "space"
-            var QueryArray = cleanQuery.split(" ");
-
-            db.FindbyColumnFuzzy('course_new', columns, QueryArray, function (custom_courses) {
-                check_Login(req, res, all_courses, custom_courses);
-            });
-        } else if (req.query.hasOwnProperty("teacher")) {
-            db.FindbyColumn('course_new', columns, { "老師": req.query.teacher }, function (custom_courses) {
-                check_Login(req, res, all_courses, custom_courses);
-            });
-        } else if (req.query.hasOwnProperty("course_name")) {
-            db.FindbyColumn('course_new', columns, { "課程名稱": req.query.course_name }, function (custom_courses) {
-                check_Login(req, res, all_courses, custom_courses);
-            });
-        } else if (req.query.hasOwnProperty("catalog")) {
-            db.FindbyColumn('course_new', columns, { "系號": req.query.catalog }, function (custom_courses) {
-
-            });
-        } else {
-            check_Login(req, res, all_courses, custom_courses);
-        }
+	        res.send({
+	            'courses': all_courses,
+	            // 'custom_courses': custom_courses,
+	            'user': req.user,
+	            'carts': null //沒登入 選課清單為null
+	        });
     });
 });
 

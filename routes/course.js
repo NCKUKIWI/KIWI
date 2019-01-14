@@ -51,17 +51,8 @@ router.get('/allCoursePrev', function (req, res) {
 });
 
 router.get('/allDpmt', function (req, res) {
-    db.Query('SELECT * FROM department_all', function(result){
+    db.Query('select distinct course_new.系號 as DepPrefix, course_new.系所名稱 as DepName from course_new', function(result){
         data = JSON.stringify(result)
-        for(let r in result){ // split the raw data 
-            let name = result[r]['DepName']
-            from = name.indexOf('）')
-            to = from
-            while(name.charAt(to)!=' '){
-                to++;
-            }
-            result[r]['DepName'] = name.slice(from+1, to)
-        }
         res.json(result)
     })
 })

@@ -20,7 +20,7 @@ router.get("/fbcheck", middleware.checkLogin(1), function (req, res) {
             "code": req.query.code
         }, function (err, result) {
             graph.get(`/me?fields=id,name&access_token=${result.access_token}`, function (err, fb) {
-                db.FindbyColumn('user', ['id', 'fb_id'], {
+                db.FindbyColumn('user', ['id', 'fb_id', 'name'], {
                     'fb_id': fb.id
                 }, function (user) {
                     if (user.length > 0) {
@@ -30,6 +30,7 @@ router.get("/fbcheck", middleware.checkLogin(1), function (req, res) {
                         res.cookie("id", user[0].id, {
                             maxAge: 60 * 60 * 1000
                         });
+                        console.log(user);
                         res.send(user);
                     } else {
                         db.Insert('user', {
@@ -46,13 +47,8 @@ router.get("/fbcheck", middleware.checkLogin(1), function (req, res) {
                             res.cookie("id", result.insertId, {
                                 maxAge: 60 * 60 * 1000
                             });
-                            res.cookie("fb_id", result.fb_id, {
-                                maxAge: 60 * 60 * 1000
-                            });
-                            res.send({
-                            	'fb_name': result.name,
-                            	'fb_id': result.id
-                            });
+                            console.log(result);
+                            res.send(result);
                         })
                     }
                 });

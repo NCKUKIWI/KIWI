@@ -150,6 +150,7 @@ const creativeMsgCb = target_label_id => resBody => {
 };
 
 router.post('/sendmsg', function (req, res) {
+	console.log(req.body)
 	var broadcastType = req.body.type;
 	var target_label_id = broadcast_label[(broadcastType === "test" ? "tester" : "all_user")];
 	if (req.body.msg) {
@@ -174,6 +175,27 @@ router.post('/sendmsg', function (req, res) {
 	res.send('ok');
 });
 
+
+function broad() {
+	var broadcastType = 'tester';
+	var target_label_id = broadcast_label[(broadcastType === "test" ? "tester" : "all_user")];
+	let report = 'test'
+	// let buttons = [{
+	// 	"type": "postback",
+	// 	"title": "給過",
+	// 	"payload": "reportPass_"+report_post['post_id']
+	// }, {
+	// 	"type": "postback",
+	// 	"title": "理由太爛",
+	// 	"payload": "reportFail_"+report_post['post_id']
+	// }];
+	sendPostRequest({
+		url: msg_creative_url,
+		// json: sendButtonsMessage(sender, report, buttons)
+		json:broadcastTextMsg('hi')
+	}, creativeMsgCb(target_label_id));
+	// res.send('ok');
+}
 function subscribeBroadcast(sender, isTester) {
 	return sendPostRequest({
 		url: subscribe_broadcast_url((isTester ? "tester" : "all_user")),
@@ -391,38 +413,9 @@ router.post('/webhook', function (req, res) {
 					} else if (event.postback.payload == "dontFollow") {
 						sendGoodbye(sender);
 					} else if (RegPass.test(event.postback.payload)) {
-						console.log(event.postback.body)
-						postid = event.postback.payload.split('_')[1];
-						DB.FindbyColumn('report_post',['onRead'],{'post_id':postid} ,function(result){
-							console.log(result[0]['onRead'])
-							if(result[0]['onRead'] == 0){ // the report isn't read
-								console.log('set onRead')
-								DB.Update('report_post', {'onRead':1}, {'post_id':postid} ,function(){})
-								// Q: If I remove the cb function , it would cause error 'callback isn't a function', WHY?
-								gmailSend.sendMail('nckuhub@gmail.com', 'TO 檢舉人： 你的檢舉通過囉')
-								gmailSend.sendMail('nckuhub@gmail.com', 'TO 被檢舉人： 有人檢舉你的心得，且通過我們審核了，你的心得將會GG喔')	 
-								sendTextMessage(config.bot.test, 'ok！這則心得被通過檢舉, 心得已下架！正在發信通知被檢舉人');
-								DB.DeleteByColumn('post', {'id':postid}, function(){} )
-							}else{
-								console.log('it has been read.')
-								sendTextMessage(event.sender.id, '已經有其他測試人員審查過囉～別再按了');
-							}
-						})
+						sendReportReview(true)
 					} else if (RegFail.test(event.postback.payload)) {
-						console.log(event)
-						postid = event.postback.payload.split('_')[1];
-						DB.FindbyColumn('report_post',['onRead'],{'post_id':postid} ,function(result){
-							console.log(result[0]['onRead'])
-							if(result[0]['onRead'] == 0){ // the report isn't read
-								console.log('set onRead')
-								DB.Update('report_post', {'onRead':1}, {'post_id':postid} ,function(){})
-								gmailSend.sendMail('nckuhub@gmail.com', 'TO 檢舉人： 你的檢舉並沒有通過')	 
-								sendTextMessage(config.bot.test, 'ok！這則心得並沒有通過檢舉門檻 撤銷檢舉！已發信通知檢舉人');
-							}else{
-								console.log('it has been read.')
-								sendTextMessage(event.sender.id, '已經有其他測試人員審查過囉～別再按了');
-							}
-						})
+						sendReportReview(false)
 					}
 					else {
 						if (/開始使用/.test(event.postback.payload))
@@ -766,6 +759,30 @@ function sendGoodbye(sender) {
 	}, 2000);
 }
 
+function sendReportReview(pass){
+	postid = event.postback.payload.split('_')[1];
+		DB.FindbyColumn('report_post',['onRead'],{'post_id':postid} ,function(result){
+			console.log(result[0]['onRead'])
+			if(result[0]['onRead'] == 0){ // the report isn't read
+				console.log('set onRead')
+				DB.Update('report_post', {'onRead':1, 'reviewer':event.sender.id}, {'post_id':postid} ,function(){})
+				// Q: If I remove the cb function , it would cause error 'callback isn't a function', WHY?
+				if(pass){
+					gmailSend.sendMail('nckuhub@gmail.com', 'TO 檢舉人： 你的檢舉通過囉')
+					gmailSend.sendMail('nckuhub@gmail.com', 'TO 被檢舉人： 有人檢舉你的心得，且通過我們審核了，你的心得將會GG喔')	 
+					sendTextMessage(config.bot.test, 'ok！這則心得被通過檢舉, 心得已下架！正在發信通知被檢舉人');
+					DB.DeleteByColumn('post', {'id':postid}, function(){} )
+				}else{
+					gmailSend.sendMail('nckuhub@gmail.com', 'TO 檢舉人： 你的檢舉並沒有通過')	 
+					sendTextMessage(config.bot.test, 'ok！這則心得並沒有通過檢舉門檻 撤銷檢舉！已發信通知檢舉人');
+				}
+			}else{
+				console.log('it has been read.')
+				sendTextMessage(event.sender.id, '已經有其他測試人員審查過囉～別再按了');
+			}
+		})
+}
+
 function sendDisableMsg(sender, dept_no) {
 	sendTextMessage(sender, `很抱歉！此階段 ${dept_no} 課程未開放追蹤餘額！`);
 }
@@ -926,7 +943,8 @@ function sendReport(report_post){
 			"title": "理由太爛",
 			"payload": "reportFail_"+report_post['post_id']
 		}];
-		sendButtonsMessage(config.bot.test, report, buttons);
+		// sendButtonsMessage(config.bot.test, report, buttons);
+		broad()
 	});
 }
 

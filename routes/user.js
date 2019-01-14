@@ -6,6 +6,9 @@ var middleware = require('../middleware');
 var db = require('../model/db');
 var graph = require("fbgraph");
 var config = require('../config');
+var cache = require('../helper/cache');
+var redis = require('../helper/cache').redis;
+
 
 router.get("/fblogin", middleware.checkLogin(1), function (req, res) {
     res.redirect(`https://www.facebook.com/v3.1/dialog/oauth?client_id=${config.fb.appid}&scope=email,public_profile&response_type=code&redirect_uri=${config.website}/user/fbcheck`);
@@ -104,6 +107,29 @@ router.get('/getList/:userID', function (req, res) {
         })
     }   
 });
+
+router.get('/getDraft', function (req, res) {
+    uid = req.query['uid']
+    redis.get(cache.userCacheKey(uid),function (error, result) {
+        res.send(result)
+    });
+});
+
+router.post('/setDraft/:uid', function (req, res) {
+    uid = req.params.uid
+    let data = req.body;
+    redis.set(cache.userCacheKey(uid), JSON.stringify(data));
+    res.send('done')
+})
+
+
+router.post('/delDraft/:uid', function (req, res) {
+    uid = req.params.uid
+    redis.del(cache.userCacheKey(uid),function (error, result) {
+        res.send('done')
+    });
+});
+
 
 router.post('/update', middleware.checkLogin(), function (req, res) {
     console.log('\n' + 'POST /user/update');

@@ -30,7 +30,7 @@ router.get("/fbcheck", middleware.checkLogin(1), function (req, res) {
                         res.cookie("id", user[0].id, {
                             maxAge: 60 * 60 * 1000
                         });
-                        res.redirect("/");
+                        res.send(user);
                     } else {
                         db.Insert('user', {
                             'name': fb.name,
@@ -46,7 +46,13 @@ router.get("/fbcheck", middleware.checkLogin(1), function (req, res) {
                             res.cookie("id", result.insertId, {
                                 maxAge: 60 * 60 * 1000
                             });
-                            res.redirect("/");
+                            res.cookie("fb_id", result.fb_id, {
+                                maxAge: 60 * 60 * 1000
+                            });
+                            res.send({
+                            	'fb_name': result.name,
+                            	'fb_id': result.id
+                            });
                         })
                     }
                 });

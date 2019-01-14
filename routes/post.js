@@ -346,17 +346,16 @@ router.post('/report/:id', function (req, res) {
             }
         });
     } else {
-        console.log('Not login');
-        res.send('Not Login');
+        console.log('No login');
+        res.send('No Login');
     }
 });
 
 /*report post */
-router.post('/setList/:userID', function (req, res) {
+router.post('/setWish/:userID', function (req, res) {
     var userID = parseInt(req.params.userID);
-    console.log('\n' + 'POST /post/setList/' + userID);
+    console.log('\n' + 'POST /post/setWish/' + userID);
     let wishList = req.query.now_wishlist;
-    let tableList = req.query.now_table;
     db.FindbyColumn('user', ['name'], {'id':userID}, function(rs){
         if(rs.length === 0){
             res.send('wrong user')
@@ -369,6 +368,18 @@ router.post('/setList/:userID', function (req, res) {
                 }
                 db.Insert('wishList',data,function(err,results){})
             }
+        }
+    })
+});
+router.post('/setTable/:userID', function (req, res) {
+    var userID = parseInt(req.params.userID);
+    console.log('\n' + 'POST /post/setTable/' + userID);
+    let tableList = req.query.now_table;
+    db.FindbyColumn('user', ['name'], {'id':userID}, function(rs){
+        if(rs.length === 0){
+            res.send('wrong user')
+        }else{
+            res.send('success')
             for (let t in tableList){
                 let data = {
                     'userID':userID,

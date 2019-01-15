@@ -348,13 +348,15 @@ router.post('/setWish/:userID', function (req, res) {
         if(rs.length === 0){
             res.send('wrong user')
         }else{
-            res.send('success')
             for (let w in wishList){
                 let data = {
                     'userID':userID,
                     'courseID':wishList[w]
                 }
-                db.Insert('wishList',data,function(err,results){})
+                db.Insert('wishList',data,function(err,results){
+                    if(err)res.send('error')
+                    res.send('success')
+                })
             }
         }
     })

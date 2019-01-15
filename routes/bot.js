@@ -326,95 +326,115 @@ router.post('/webhook', function (req, res) {
 		} else if (anEntry.hasOwnProperty('messaging')) { // Messenger
 			anEntry.messaging.forEach(event => {
 				var sender = event.sender.id; //使用者messenger id
-				if (event.message && event.message.text && typeof event.message.is_echo === "undefined") {
+
+				//維修時期的code
+				if (event.message && event.message.text && typeof event.message.is_echo === "undefined"){
 					var text = event.message.text; //用戶傳送的訊息
 					console.log(`[粉專私訊] 私訊者：『${sender}』訊息：「${text.replace(/\n/, "\\n")}」`);
 					if (text.indexOf("小幫手") !== -1) {
-						sendHello(sender);
+						sendTextMessage(sender,'同學你好，NCKU HUB 小幫手服務目前正在進行維修，歡迎密切關注粉專或設定搶先看，我們會在重新上線時發文公告 🙌\n\n再次感謝對我們的支持 🙏🏻 如果有任何問題也可以直接回覆在此，我們會儘速為你解答 🚶🚶🚶');
 						if (text.indexOf("小幫手我是管理員") !== -1)
 							subscribeBroadcast(sender, true);
-					} else {
-						var serial = text.replace(/[\s|\-]/g, "").match(/^[a-zA-Z][0-9]{4}/i);
-						if (serial) {
-							if (courseSerialList.indexOf(serial[0].toUpperCase()) !== -1) {
-								askPlaceOrFollow(sender, serial[0]);
-							}
-						} else {
-							if (courseNameList.indexOf(text) != -1) {
-								searchCourseByName(sender, text);
-							} else {
-								var teacher = text.match(/[\%|\uff05][\u4e00-\u9fa5]{1,}/i); //檢查 %老師名稱
-								var dpt = text.match(/[\$|\uff04][\u4e00-\u9fa5]{1,}/i); //檢查 $系所名稱
-								if (dpt) dpt = dpt[0].replace(/[\$|\uff04|\s]/g, ""); //過濾掉不該有的內容
-								if (teacher) teacher = teacher[0].replace(/[\%|\uff05|\s]/g, "");
-								if (text.indexOf('%') == 0) {
-									searchCourseByTeacher(sender, teacher);
-								} else {
-									var courseNamePlace = text.match(/^[\uff20|@][\u4e00-\u9fa5]{1,}/i); //檢查 @課程名稱
-									if (courseNamePlace) {
-										courseNamePlace = courseNamePlace[0].replace(/[\uff20|@|\s]/g, "");
-										sendCoursePlaceByName(sender, courseNamePlace, dpt, teacher); //透過課程名稱搜尋並傳送課程地點
-									}
-									var courseSerialPlace = text.match(/^[\uff20|@][a-zA-Z0-9]{5}/i); //檢查 @選課序號
-									if (courseSerialPlace) {
-										courseSerialPlace = courseSerialPlace[0].replace(/[\uff20|@|\s]/g, "");
-										sendCoursePlaceById(sender, courseSerialPlace); //透過課程序號搜尋並傳送課程地點
-									}
-									var courseNameFollow = text.match(/^[#|\uff03][\u4e00-\u9fa5]{1,}/i); //檢查 #課程名稱
-									if (courseNameFollow) {
-										courseNameFollow = courseNameFollow[0].replace(/[#|\uff03|\s]/g, "");
-										sendFollowCourseByName(sender, courseNameFollow, dpt, teacher); //透過課程名稱搜尋並傳送追蹤課程按鈕
-									}
-									var courseSerialFollow = text.match(/^[#|\uff03][a-zA-Z0-9]{5}/i); //檢查 #選課序號
-									if (courseSerialFollow) {
-										courseSerialFollow = courseSerialFollow[0].replace(/[#|\uff03|\s]/g, "");
-										sendFollowCourseById(sender, courseSerialFollow); //透過選課序號搜尋並傳送追蹤課程按鈕
-									}
-								}
-							}
-						}
+					}
+					else{
+						sendTextMessage(sender,'同學你好，NCKU HUB 小幫手服務目前正在進行維修，歡迎密切關注粉專或設定搶先看，我們會在重新上線時發文公告 🙌\n\n再次感謝對我們的支持 🙏🏻 如果有任何問題也可以直接回覆在此，我們會儘速為你解答 🚶🚶🚶');
 					}
 				}
-				//檢查使用者是否按下訊息中的按鈕
-				if (event.postback) {
-					var courseIdFollow = postback.courseIdFollow.matcher(event.postback.payload); //抓payload中的 course_id 用來追蹤課程
-					var courseIdForceFollow = postback.courseIdForceFollow.matcher(event.postback.payload); //抓payload中的 course_id 用來強制追蹤課程
-					var courseIdCancel = postback.courseIdCancel.matcher(event.postback.payload); //抓payload中的 course_id 用來取消追蹤課程
-					var courseIdInfo = postback.courseIdInfo.matcher(event.postback.payload); //抓payload中的 course_id 用來傳送單一課程詳細資訊
-					var courseIdAsk = postback.courseIdAsk.matcher(event.postback.payload);
-					if (courseIdFollow) {
-						courseIdFollow = postback.courseIdFollow.replacer(courseIdFollow[0]);
-						addFollowCourse(sender, courseIdFollow);
-					} else if (courseIdForceFollow) {
-						courseIdForceFollow = postback.courseIdForceFollow.replacer(courseIdForceFollow[0]);
-						addFollowCourse(sender, courseIdForceFollow, true);
-					} else if (courseIdCancel) {
-						courseIdCancel = postback.courseIdCancel.replacer(courseIdCancel[0]);
-						cancelFollowCourse(sender, courseIdCancel);
-					} else if (courseIdInfo) {
-						courseIdInfo = postback.courseIdInfo.replacer(courseIdInfo[0]);
-						sendCourseInfo(sender, courseIdInfo);
-					} else if (courseIdAsk) {
-						courseIdAsk = postback.courseIdAsk.replacer(courseIdAsk[0]);
-						askPlaceOrFollow(sender, courseIdAsk);
-					} else if (event.postback.payload == "cancelfollow") {
-						sendFollowCourseList(sender);
-					} else if (event.postback.payload == "callagain") {
-						sendHello(sender);
-					} else if (event.postback.payload == "cancelall") {
-						cancelAllFollowCourse(sender);
-					} else if (event.postback.payload == "cancelmsg") {
-						unsubscribeBroadcast(sender);
-					} else if (event.postback.payload == "dontFollow") {
-						sendGoodbye(sender);
-					} else {
-						if (/開始使用/.test(event.postback.payload))
-							subscribeBroadcast(sender, false);
-						if (/馬上為你追蹤課程餘額/.test(event.postback.payload))
-							return sendFuncCloseMsg(sender);
-						sendTextMessage(sender, event.postback.payload);
-					}
+				if (event.postback){
+					sendTextMessage(sender,'同學你好，NCKU HUB 小幫手服務目前正在進行維修，歡迎密切關注粉專或設定搶先看，我們會在重新上線時發文公告 🙌\n\n再次感謝對我們的支持 🙏🏻 如果有任何問題也可以直接回覆在此，我們會儘速為你解答 🚶🚶🚶');
 				}
+				
+				//先註解掉其他功能
+
+				// if (event.message && event.message.text && typeof event.message.is_echo === "undefined") {
+				// 	var text = event.message.text; //用戶傳送的訊息
+				// 	console.log(`[粉專私訊] 私訊者：『${sender}』訊息：「${text.replace(/\n/, "\\n")}」`);
+				// 	if (text.indexOf("小幫手") !== -1) {
+				// 		sendHello(sender);
+				// 		if (text.indexOf("小幫手我是管理員") !== -1)
+				// 			subscribeBroadcast(sender, true);
+				// 	} else {
+				// 		var serial = text.replace(/[\s|\-]/g, "").match(/^[a-zA-Z][0-9]{4}/i);
+				// 		if (serial) {
+				// 			if (courseSerialList.indexOf(serial[0].toUpperCase()) !== -1) {
+				// 				askPlaceOrFollow(sender, serial[0]);
+				// 			}
+				// 		} else {
+				// 			if (courseNameList.indexOf(text) != -1) {
+				// 				searchCourseByName(sender, text);
+				// 			} else {
+				// 				var teacher = text.match(/[\%|\uff05][\u4e00-\u9fa5]{1,}/i); //檢查 %老師名稱
+				// 				var dpt = text.match(/[\$|\uff04][\u4e00-\u9fa5]{1,}/i); //檢查 $系所名稱
+				// 				if (dpt) dpt = dpt[0].replace(/[\$|\uff04|\s]/g, ""); //過濾掉不該有的內容
+				// 				if (teacher) teacher = teacher[0].replace(/[\%|\uff05|\s]/g, "");
+				// 				if (text.indexOf('%') == 0) {
+				// 					searchCourseByTeacher(sender, teacher);
+				// 				} else {
+				// 					var courseNamePlace = text.match(/^[\uff20|@][\u4e00-\u9fa5]{1,}/i); //檢查 @課程名稱
+				// 					if (courseNamePlace) {
+				// 						courseNamePlace = courseNamePlace[0].replace(/[\uff20|@|\s]/g, "");
+				// 						sendCoursePlaceByName(sender, courseNamePlace, dpt, teacher); //透過課程名稱搜尋並傳送課程地點
+				// 					}
+				// 					var courseSerialPlace = text.match(/^[\uff20|@][a-zA-Z0-9]{5}/i); //檢查 @選課序號
+				// 					if (courseSerialPlace) {
+				// 						courseSerialPlace = courseSerialPlace[0].replace(/[\uff20|@|\s]/g, "");
+				// 						sendCoursePlaceById(sender, courseSerialPlace); //透過課程序號搜尋並傳送課程地點
+				// 					}
+				// 					var courseNameFollow = text.match(/^[#|\uff03][\u4e00-\u9fa5]{1,}/i); //檢查 #課程名稱
+				// 					if (courseNameFollow) {
+				// 						courseNameFollow = courseNameFollow[0].replace(/[#|\uff03|\s]/g, "");
+				// 						sendFollowCourseByName(sender, courseNameFollow, dpt, teacher); //透過課程名稱搜尋並傳送追蹤課程按鈕
+				// 					}
+				// 					var courseSerialFollow = text.match(/^[#|\uff03][a-zA-Z0-9]{5}/i); //檢查 #選課序號
+				// 					if (courseSerialFollow) {
+				// 						courseSerialFollow = courseSerialFollow[0].replace(/[#|\uff03|\s]/g, "");
+				// 						sendFollowCourseById(sender, courseSerialFollow); //透過選課序號搜尋並傳送追蹤課程按鈕
+				// 					}
+				// 				}
+				// 			}
+				// 		}
+				// 	}
+				// }
+				// //檢查使用者是否按下訊息中的按鈕
+				// if (event.postback) {
+				// 	var courseIdFollow = postback.courseIdFollow.matcher(event.postback.payload); //抓payload中的 course_id 用來追蹤課程
+				// 	var courseIdForceFollow = postback.courseIdForceFollow.matcher(event.postback.payload); //抓payload中的 course_id 用來強制追蹤課程
+				// 	var courseIdCancel = postback.courseIdCancel.matcher(event.postback.payload); //抓payload中的 course_id 用來取消追蹤課程
+				// 	var courseIdInfo = postback.courseIdInfo.matcher(event.postback.payload); //抓payload中的 course_id 用來傳送單一課程詳細資訊
+				// 	var courseIdAsk = postback.courseIdAsk.matcher(event.postback.payload);
+				// 	if (courseIdFollow) {
+				// 		courseIdFollow = postback.courseIdFollow.replacer(courseIdFollow[0]);
+				// 		addFollowCourse(sender, courseIdFollow);
+				// 	} else if (courseIdForceFollow) {
+				// 		courseIdForceFollow = postback.courseIdForceFollow.replacer(courseIdForceFollow[0]);
+				// 		addFollowCourse(sender, courseIdForceFollow, true);
+				// 	} else if (courseIdCancel) {
+				// 		courseIdCancel = postback.courseIdCancel.replacer(courseIdCancel[0]);
+				// 		cancelFollowCourse(sender, courseIdCancel);
+				// 	} else if (courseIdInfo) {
+				// 		courseIdInfo = postback.courseIdInfo.replacer(courseIdInfo[0]);
+				// 		sendCourseInfo(sender, courseIdInfo);
+				// 	} else if (courseIdAsk) {
+				// 		courseIdAsk = postback.courseIdAsk.replacer(courseIdAsk[0]);
+				// 		askPlaceOrFollow(sender, courseIdAsk);
+				// 	} else if (event.postback.payload == "cancelfollow") {
+				// 		sendFollowCourseList(sender);
+				// 	} else if (event.postback.payload == "callagain") {
+				// 		sendHello(sender);
+				// 	} else if (event.postback.payload == "cancelall") {
+				// 		cancelAllFollowCourse(sender);
+				// 	} else if (event.postback.payload == "cancelmsg") {
+				// 		unsubscribeBroadcast(sender);
+				// 	} else if (event.postback.payload == "dontFollow") {
+				// 		sendGoodbye(sender);
+				// 	} else {
+				// 		if (/開始使用/.test(event.postback.payload))
+				// 			subscribeBroadcast(sender, false);
+				// 		if (/馬上為你追蹤課程餘額/.test(event.postback.payload))
+				// 			return sendFuncCloseMsg(sender);
+				// 		sendTextMessage(sender, event.postback.payload);
+				// 	}
+				// }
 			});
 		}
 	});

@@ -42,6 +42,7 @@ app.use(session({
 }));
 
 app.use(function (req, res, next) {
+	console.log("init登入狀態" + req.cookies.isLogin);
     if (req.cookies.isLogin) {
         redis.get(userCacheKey(req.cookies.id), function (err, result) {
             if (result) {
@@ -54,8 +55,11 @@ app.use(function (req, res, next) {
                     next();
                 });
             }
+            console.log("----- find active user -----");
+            console.log(req.user);
         });
     } else {
+    	console.log('test');
         next();
     }
 });

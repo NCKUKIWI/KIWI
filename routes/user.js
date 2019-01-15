@@ -30,8 +30,10 @@ router.get("/fbcheck", middleware.checkLogin(1), function (req, res) {
                         res.cookie("id", user[0].id, {
                             maxAge: 60 * 60 * 1000
                         });
+                        console.log("======user======");
                         console.log(user);
-                        res.send(user);
+                        // res.send(user);
+                        res.redirect("http://localhost:8000");
                     } else {
                         db.Insert('user', {
                             'name': fb.name,
@@ -47,8 +49,10 @@ router.get("/fbcheck", middleware.checkLogin(1), function (req, res) {
                             res.cookie("id", result.insertId, {
                                 maxAge: 60 * 60 * 1000
                             });
+                            console.log("======create user======");
                             console.log(result);
-                            res.send(result);
+                            // res.send(result);
+                            res.redirect("http://localhost:8000");
                         })
                     }
                 });
@@ -63,7 +67,8 @@ router.get('/logout', function (req, res) {
     cache.del(userCacheKey(req.user.id));
     res.clearCookie("isLogin");
     res.clearCookie("id");
-    res.redirect('/');
+    console.log("---user logout---");
+    res.redirect("http://localhost:8000");
 });
 
 router.get('/edit', middleware.checkLogin(), function (req, res) {

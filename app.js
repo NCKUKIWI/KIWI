@@ -15,6 +15,7 @@ var compression = require("compression");
 var cookieParser = require("cookie-parser");
 var helmet = require("helmet");
 var config = require("./config");
+var fs = require("fs");
 
 app.engine("ejs", engine);
 app.set("views", path.join(__dirname, "views")); //view的路徑位在資料夾views中
@@ -28,7 +29,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: false
 }));
-app.use("/assets", express.static("assets", {
+app.use("/dist", express.static("dist", {
     maxAge: 24 * 60 * 60
 }));
 app.use(cookieParser("secretString"));
@@ -42,24 +43,22 @@ app.use(session({
 }));
 
 app.use(function (req, res, next) {
-	console.log("init登入狀態" + req.cookies.isLogin);
     if (req.cookies.isLogin) {
         redis.get(userCacheKey(req.cookies.id), function (err, result) {
             if (result) {
                 req.user = JSON.parse(result);
                 next();
             } else {
-                db.FindbyID("user", req.cookies.id, function (user) {
+                db.FindbyColumn("user",  ['id', 'name', 'department', 'email', 'grade', 'fb_id'], {
+                    'check_key': req.cookies.id
+                }, function (user) {
                     redis.set(userCacheKey(req.cookies.id), JSON.stringify(user));
                     req.user = user;
                     next();
                 });
             }
-            console.log("----- find active user -----");
-            console.log(req.user);
         });
     } else {
-    	console.log('test');
         next();
     }
 });
@@ -86,7 +85,18 @@ app.use("/admin", function (req, res, next) {
         return unauthorized(res);
     }
 }, require("./routes/admin"));
-app.use("/*", require("./routes/course"));
+app.get("/", function(req, res) {
+	res.send(render('index.html'))
+})
+
+function render(filename, params) {
+  var data = fs.readFileSync(filename, 'utf8');
+  for (var key in params) {
+    data = data.replace('{' + key + '}', params[key]);
+  }
+  return data;
+}
+// app.use("/*", require("./routes/course"));
 
 setInterval(() => require("./script"), 1000 * 60 * 60 * 24); // 更新心得數
 

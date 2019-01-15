@@ -37,7 +37,6 @@ router.get('/', function (req, res) {
             // 'custom_courses': custom_courses,
             'user_data': req.user,
             'carts': null, //沒登入 選課清單為null
-            'test': false
         });
     });
 });

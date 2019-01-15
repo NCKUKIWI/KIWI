@@ -4,3 +4,6 @@ config.*
 npm-debug.log
 *.log
 .vscode
+dist/*
+dist/**/*
+index.html

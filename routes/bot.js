@@ -119,6 +119,18 @@ const broadcastTextMsg = txt => ({
 		"text": txt
 	}]
 });
+const broadcastBtnMsg = (txt, btn) => ({
+	"messages": [{
+		"attachment": {
+			"type": "template",
+			"payload": {
+				"template_type": "button",
+				"text": txt,
+				"buttons": btn
+			}
+		}
+	}]
+});
 const broadcastLinkMsg = (txt, url, title) => ({
 	"messages": [{
 		"attachment": {
@@ -176,26 +188,7 @@ router.post('/sendmsg', function (req, res) {
 });
 
 
-function broad() {
-	var broadcastType = 'tester';
-	var target_label_id = broadcast_label[(broadcastType === "test" ? "tester" : "all_user")];
-	let report = 'test'
-	// let buttons = [{
-	// 	"type": "postback",
-	// 	"title": "給過",
-	// 	"payload": "reportPass_"+report_post['post_id']
-	// }, {
-	// 	"type": "postback",
-	// 	"title": "理由太爛",
-	// 	"payload": "reportFail_"+report_post['post_id']
-	// }];
-	sendPostRequest({
-		url: msg_creative_url,
-		// json: sendButtonsMessage(sender, report, buttons)
-		json:broadcastTextMsg('hi')
-	}, creativeMsgCb(target_label_id));
-	// res.send('ok');
-}
+
 function subscribeBroadcast(sender, isTester) {
 	return sendPostRequest({
 		url: subscribe_broadcast_url((isTester ? "tester" : "all_user")),
@@ -413,9 +406,9 @@ router.post('/webhook', function (req, res) {
 					} else if (event.postback.payload == "dontFollow") {
 						sendGoodbye(sender);
 					} else if (RegPass.test(event.postback.payload)) {
-						sendReportReview(true)
+						sendReportReview(true, event)
 					} else if (RegFail.test(event.postback.payload)) {
-						sendReportReview(false)
+						sendReportReview(false, event)
 					}
 					else {
 						if (/開始使用/.test(event.postback.payload))
@@ -759,9 +752,14 @@ function sendGoodbye(sender) {
 	}, 2000);
 }
 
-function sendReportReview(pass){
+function sendReportReview(pass, event){
 	postid = event.postback.payload.split('_')[1];
+	
+	console.log(postid)
 		DB.FindbyColumn('report_post',['onRead'],{'post_id':postid} ,function(result){
+			let broadcastType = 'test';
+			// var target_label_id = broadcast_label[(broadcastType === "test" ? "tester" : "all_user")]; // 正式版
+			let target_label_id = broadcast_label[(broadcastType === "test" ? "broad" : "all_user")];
 			console.log(result[0]['onRead'])
 			if(result[0]['onRead'] == 0){ // the report isn't read
 				console.log('set onRead')
@@ -770,11 +768,20 @@ function sendReportReview(pass){
 				if(pass){
 					gmailSend.sendMail('nckuhub@gmail.com', 'TO 檢舉人： 你的檢舉通過囉')
 					gmailSend.sendMail('nckuhub@gmail.com', 'TO 被檢舉人： 有人檢舉你的心得，且通過我們審核了，你的心得將會GG喔')	 
-					sendTextMessage(config.bot.test, 'ok！這則心得被通過檢舉, 心得已下架！正在發信通知被檢舉人');
+					// sendTextMessage(config.bot.test, 'ok！這則心得被通過檢舉, 心得已下架！正在發信通知被檢舉人');
+					sendPostRequest({
+						url: msg_creative_url,
+						json: broadcastTextMsg('這則心得被通過檢舉, 心得已下架！正在發信通知被檢舉人')
+					}, creativeMsgCb(target_label_id));
 					DB.DeleteByColumn('post', {'id':postid}, function(){} )
 				}else{
 					gmailSend.sendMail('nckuhub@gmail.com', 'TO 檢舉人： 你的檢舉並沒有通過')	 
-					sendTextMessage(config.bot.test, 'ok！這則心得並沒有通過檢舉門檻 撤銷檢舉！已發信通知檢舉人');
+					// sendTextMessage(config.bot.test, 'ok！這則心得並沒有通過檢舉門檻 撤銷檢舉！已發信通知檢舉人');
+					
+					sendPostRequest({
+						url: msg_creative_url,
+						json: broadcastTextMsg('這則心得並沒有通過檢舉門檻 撤銷檢舉！已發信通知檢舉人')
+					}, creativeMsgCb(target_label_id));
 				}
 			}else{
 				console.log('it has been read.')
@@ -932,19 +939,26 @@ function sendRequest(option, cb) {
 }
 
 function sendReport(report_post){
+	var broadcastType = 'test';
+	// var target_label_id = broadcast_label[(broadcastType === "test" ? "tester" : "all_user")]; // 正式版
+	var target_label_id = broadcast_label[(broadcastType === "test" ? "broad" : "all_user")];
+
 	DB.FindbyColumn('post', ['comment'], { "id": report_post['post_id'] }, function (data) {
-		let report = '檢舉文章: \n\n'+data[0]['comment']+'\n\n'+'檢舉原因: \n\n'+report_post['reason']
+		let report = '測試中建議關掉通知ＱＱ \n\n'+'檢舉文章: \n\n'+data[0]['comment']+'\n\n'+'檢舉原因: \n\n'+report_post['reason']
 		let buttons = [{
 			"type": "postback",
 			"title": "給過",
 			"payload": "reportPass_"+report_post['post_id']
 		}, {
 			"type": "postback",
-			"title": "理由太爛",
+			"title": "理由偏爛",
 			"payload": "reportFail_"+report_post['post_id']
 		}];
+		sendPostRequest({
+			url: msg_creative_url,
+			json:broadcastBtnMsg(report, buttons)
+		}, creativeMsgCb(target_label_id));
 		// sendButtonsMessage(config.bot.test, report, buttons);
-		broad()
 	});
 }
 

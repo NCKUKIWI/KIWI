@@ -25,7 +25,7 @@ router.get('/', function (req, res) {
     var dt = new Date();
     console.log(dt);
     console.log('\n' + 'GET /course');
-    let col = ['id', '系號', '選課序號', '課程名稱', '老師', '時間', '學分', '選必修', '系所名稱', 'comment_num'];
+    let col = ['id', '系號', '選課序號', '課程名稱', '老師', '時間', '學分', '選必修', '系所名稱', 'comment_num', '課程碼'];
     db.GetColumn('course_new', col , { 'column': 'id', 'order': 'DESC' }, function (courses) {
         all_courses = courses;
         for(var i in all_courses){

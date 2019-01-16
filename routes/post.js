@@ -344,23 +344,27 @@ router.post('/setWish/:userID', function (req, res) {
     var userID = parseInt(req.params.userID);
     console.log('\n' + 'POST /post/setWish/' + userID);
     let wishList = req.query.now_wishlist;
-    db.FindbyColumn('user', ['name'], {'id':userID}, function(rs){
-        if(rs.length === 0){
-            res.send('wrong user')
-        }else{
-            for (let w in wishList){
-                let data = {
-                    'userID':userID,
-                    'courseID':wishList[w]
+        db.FindbyColumn('user', ['name'], {'id':userID}, function(rs){
+            if(rs.length === 0){
+                res.send('wrong user')
+            }else{
+                for (let w in wishList){
+                    let data = {
+                        'userID':userID,
+                        'courseID':wishList[w]
+                    }
+                    db.DeleteByColumn('wishList', {'userID':userID}, function (err) {
+                        if(err)console.log(err)
+                        db.Insert('wishList',data,function(err,results){
+                            if(err)console.log(err)                           
+                            res.send('success')
+                        })
+                    });
                 }
-                db.Insert('wishList',data,function(err,results){
-                    if(err)res.send('error')
-                    res.send('success')
-                })
             }
-        }
-    })
-});
+        })
+    });
+
 router.post('/setTable/:userID', function (req, res) {
     var userID = parseInt(req.params.userID);
     console.log('\n' + 'POST /post/setTable/' + userID);
@@ -376,7 +380,10 @@ router.post('/setTable/:userID', function (req, res) {
                     'courseID':tableList[t],
                     'userName':rs[0]['name']
                 }
-                db.Insert('tableList',data,function(err,results){})
+                db.DeleteByColumn('tableList', {'userID':userID}, function (err) {
+                    db.Insert('tableList',data,function(err,results){})
+                });
+
             }
         }
     })

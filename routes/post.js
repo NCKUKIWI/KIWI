@@ -344,11 +344,11 @@ router.post('/setWish/:userID', function (req, res) {
     var userID = parseInt(req.params.userID);
     console.log('\n' + 'POST /post/setWish/' + userID);
     let wishList = [];
-    if(Array.isArray(req.body['now_wishlist[]'])){
-   		wishList = req.body['now_wishlist[]'];
+    if(Array.isArray(req.body['now_wishlist'])){
+   		wishList = req.body['now_wishlist'];
     }
     else{
-    	wishList.push(req.body['now_wishlist[]']);
+    	wishList.push(req.body['now_wishlist']);
     }
     
     console.log(wishList)
@@ -379,11 +379,11 @@ router.post('/setTable/:userID', function (req, res) {
     console.log('\n' + 'POST /post/setTable/' + userID);
     let tableList = [];
     console.log(req.body);
-    if(Array.isArray(req.body['now_table[]'])){
-   		tableList = req.body['now_table[]'];
+    if(Array.isArray(req.body['now_table'])){
+   		tableList = req.body['now_table'];
     }
     else{
-    	tableList.push(req.body['now_table[]']);
+    	tableList.push(req.body['now_table']);
     }
     console.log(tableList);
     db.FindbyColumn('user', ['name'], {'id':userID}, function(rs){

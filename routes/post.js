@@ -383,7 +383,6 @@ router.post('/setTable/:userID', function (req, res) {
                 db.DeleteByColumn('tableList', {'userID':userID}, function (err) {
                     db.Insert('tableList',data,function(err,results){})
                 });
-
             }
         }
     })

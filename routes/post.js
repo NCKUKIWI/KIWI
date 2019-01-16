@@ -343,24 +343,33 @@ router.post('/report/:id', function (req, res) {
 router.post('/setWish/:userID', function (req, res) {
     var userID = parseInt(req.params.userID);
     console.log('\n' + 'POST /post/setWish/' + userID);
-    let wishList = req.query.now_wishlist;
+    let wishList = [];
+    if(Array.isArray(req.body['now_wishlist[]'])){
+   		wishList = req.body['now_wishlist[]'];
+    }
+    else{
+    	wishList.push(req.body['now_wishlist[]']);
+    }
+    
+    console.log(wishList)
         db.FindbyColumn('user', ['name'], {'id':userID}, function(rs){
             if(rs.length === 0){
                 res.send('wrong user')
             }else{
+
                 for (let w in wishList){
                     let data = {
                         'userID':userID,
                         'courseID':wishList[w]
                     }
                     db.DeleteByColumn('wishList', {'userID':userID}, function (err) {
-                        if(err)console.log(err)
+                        if(err) console.log(err);
                         db.Insert('wishList',data,function(err,results){
-                            if(err)console.log(err)                           
-                            res.send('success')
+                            if(err)console.log(err)                
                         })
                     });
                 }
+                res.send('success');
             }
         })
     });
@@ -368,7 +377,15 @@ router.post('/setWish/:userID', function (req, res) {
 router.post('/setTable/:userID', function (req, res) {
     var userID = parseInt(req.params.userID);
     console.log('\n' + 'POST /post/setTable/' + userID);
-    let tableList = req.query.now_table;
+    let tableList = [];
+    console.log(req.body);
+    if(Array.isArray(req.body['now_table[]'])){
+   		tableList = req.body['now_table[]'];
+    }
+    else{
+    	tableList.push(req.body['now_table[]']);
+    }
+    console.log(tableList);
     db.FindbyColumn('user', ['name'], {'id':userID}, function(rs){
         if(rs.length === 0){
             res.send('wrong user')

@@ -36,7 +36,7 @@ router.get("/fbcheck", middleware.checkLogin(1), function (req, res) {
                         console.log("======user======");
                         console.log(user);
                         // res.send(user);
-                        res.redirect("/");
+                        res.redirect('/');
                     } else {
                     	var check_key = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
                         db.Insert('user', {
@@ -59,14 +59,14 @@ router.get("/fbcheck", middleware.checkLogin(1), function (req, res) {
                             console.log("======create user======");
                             console.log(result);
                             // res.send(result);
-                            res.redirect("/");
+                            res.redirect('/');
                         })
                     }
                 });
             });
         });
     } else {
-        res.redirect("/");
+        res.redirect(`${config.website}`);
     }
 });
 
@@ -75,7 +75,7 @@ router.get('/logout', function (req, res) {
     res.clearCookie("isLogin");
     res.clearCookie("id");
     console.log("---user logout---");
-    res.redirect("/");
+    res.redirect(`${config.website}`);
 });
 
 router.get('/edit', middleware.checkLogin(), function (req, res) {

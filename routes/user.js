@@ -66,7 +66,7 @@ router.get("/fbcheck", middleware.checkLogin(1), function (req, res) {
             });
         });
     } else {
-        res.redirect(`${config.website}`);
+        res.redirect('/');
     }
 });
 
@@ -75,7 +75,7 @@ router.get('/logout', function (req, res) {
     res.clearCookie("isLogin");
     res.clearCookie("id");
     console.log("---user logout---");
-    res.redirect(`${config.website}`);
+    res.redirect('/');
 });
 
 router.get('/edit', middleware.checkLogin(), function (req, res) {

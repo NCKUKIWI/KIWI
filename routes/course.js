@@ -31,11 +31,12 @@ router.get('/', function (req, res) {
         for(var i in all_courses){
         	all_courses[i]['選課序號'] = all_courses[i]['選課序號'].replace(all_courses[i]['系號'], '');
         }
+        console.log("登入時的使用者資料: " + req.user);
         res.send({
             'courses': all_courses,
             // 'custom_courses': custom_courses,
-            'user': req.user,
-            'carts': null //沒登入 選課清單為null
+            'user_data': req.user,
+            'carts': null, //沒登入 選課清單為null
         });
     });
 });

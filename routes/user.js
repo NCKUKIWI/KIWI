@@ -23,35 +23,43 @@ router.get("/fbcheck", middleware.checkLogin(1), function (req, res) {
             "code": req.query.code
         }, function (err, result) {
             graph.get(`/me?fields=id,name&access_token=${result.access_token}`, function (err, fb) {
-                db.FindbyColumn('user', ['id', 'fb_id', 'name'], {
+                db.FindbyColumn('user', ['id', 'check_key', 'fb_id'], {
                     'fb_id': fb.id
                 }, function (user) {
                     if (user.length > 0) {
                         res.cookie("isLogin", 1, {
                             maxAge: 60 * 60 * 1000
                         });
-                        res.cookie("id", user[0].id, {
+                        res.cookie("id", user[0].check_key, {
                             maxAge: 60 * 60 * 1000
                         });
+                        console.log("======user======");
                         console.log(user);
-                        res.send(user);
+                        // res.send(user);
+                        res.redirect("/");
                     } else {
+                    	var check_key = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
                         db.Insert('user', {
                             'name': fb.name,
                             'fb_id': fb.id,
                             'role': 0,
                             'department': '無',
-                            'grade': '無'
+                            'grade': '無',
+                            'check_key': check_key,
+                            'licensing': Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15),
+                            'validation': 0
                         }, function (err, result) {
                             if (err) console.log(err);
                             res.cookie("isLogin", 1, {
                                 maxAge: 60 * 60 * 1000
                             });
-                            res.cookie("id", result.insertId, {
+                            res.cookie("id", check_key, {
                                 maxAge: 60 * 60 * 1000
                             });
+                            console.log("======create user======");
                             console.log(result);
-                            res.send(result);
+                            // res.send(result);
+                            res.redirect("/");
                         })
                     }
                 });
@@ -63,10 +71,11 @@ router.get("/fbcheck", middleware.checkLogin(1), function (req, res) {
 });
 
 router.get('/logout', function (req, res) {
-    cache.del(userCacheKey(req.user.id));
+    redis.del(userCacheKey(req.user.id));
     res.clearCookie("isLogin");
     res.clearCookie("id");
-    res.redirect('/');
+    console.log("---user logout---");
+    res.redirect("/");
 });
 
 router.get('/edit', middleware.checkLogin(), function (req, res) {

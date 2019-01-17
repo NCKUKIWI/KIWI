@@ -303,12 +303,8 @@ router.post('/report/:id', function (req, res) {
     var postid = parseInt(req.params.id);
     console.log('\n' + 'POST /post/report/' + postid);
     /* 檢查用戶是否登入 */
-    req.user = 1171;
-    if (req.user !== undefined) {
-        var name = req.user.name;
-        var userid = 1171;
-        // var userid = parseInt(req.user.id);
-        console.log('檢舉者：' + name)
+    var userid = req.body['user'];
+    if (userid !== undefined) {
         /* 檢查是否檢舉過 依照user_id及post_id去尋找 */
         db.FindbyColumn('report_post', ["id"], {
             'post_id': postid,
@@ -319,7 +315,7 @@ router.post('/report/:id', function (req, res) {
                 res.send('Already report');
             } else {
                 /* 區分檢舉原因 */
-                var type = req.query.type;
+                var type = req.body['reason'];
                 var reason = "";
                 switch (type) {
                     case 'A':
@@ -347,7 +343,6 @@ router.post('/report/:id', function (req, res) {
                         res.send('Success');
                     });
                 });
-                
                 bot.sendReport(report_post);
             }
         });

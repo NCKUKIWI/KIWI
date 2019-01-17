@@ -773,7 +773,9 @@ function sendReportReview(pass, event){
 						url: msg_creative_url,
 						json: broadcastTextMsg('這則心得被通過檢舉, 心得已下架！正在發信通知被檢舉人')
 					}, creativeMsgCb(target_label_id));
-					DB.DeleteByColumn('post', {'id':postid}, function(){} )
+					
+					DB.Query('INSERT INTO BadPost SELECT * FROM post WHERE id='+postid)
+					// DB.DeleteByColumn('post', {'id':postid}, function(){} )
 				}else{
 					gmailSend.sendMail('nckuhub@gmail.com', 'TO 檢舉人： 你的檢舉並沒有通過')	 
 					// sendTextMessage(config.bot.test, 'ok！這則心得並沒有通過檢舉門檻 撤銷檢舉！已發信通知檢舉人');

@@ -20,7 +20,7 @@
     var course_db = [];
     var user_id = '5';                                       // todo: 從登錄狀態取得
 
-    
+
     axios.get ( '/course/' )
         .then ( function ( response ) {
             course_db = response.data.courses;
@@ -133,7 +133,7 @@
                     console.log ( '更新願望清單: 更新成功！' ) ;
                 })
                 .catch ( function ( error ) {
-                    console.log (  '更新願望清單:' + error ) ; 
+                    console.log (  '更新願望清單:' + error ) ;
                 });
             }
         }

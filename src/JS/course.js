@@ -101,6 +101,9 @@ $.ajax({
           this.count_height++;
         }
       },
+      course_circle: function() {
+
+      }
     },
     created: function() {
       document.getElementById("courseList").addEventListner('scroll', this.handleScroll, true);

@@ -1,0 +1,49 @@
+
+
+<nav>
+    <div id="navbar" class="hub_navbar">
+      <div class="hub_navbar__right_area">
+          <a class="hub_navbar__logo"></a>
+          <!-- todo: 新增「查無結果」的顯示 -->
+          <input class="hub_navbar__search" type="text" v-model="search_keyword" placeholder="搜尋「課程名」或「教師名」" ><br>
+          <div v-if="search_keyword.replace(' ','') != ''" class="hub_navbar__search__dropdown">
+              <div v-for="item in result_cont" class="list_course_item" @click="openCourse(item.id)">
+                <div class="list_course_item_left">
+                  <p class="list_course_item_category text_20 text_white" :class="item.dept_id"> {{ item.category }} </p>
+                </div>
+                <div class="list_course_item_mid">
+                  <p class="list_course_item_title text_16">{{ item.dept_id }}-{{ item.class_id }} {{ item.title }}</p>
+                  <p class="list_course_item_description text_14 text_dark">{{ item.teacher }} — {{ item.time }}</p>
+                </div>
+                <div class="list_course_item_right">
+                </div>
+              </div>
+              <span> {{ result }} </span>
+          </div>
+      </div>
+      <div class="hub_navbar__left_area">
+          <div class="hub_navbar__link nav_link" name="course" @click="change_tab('course')">找課程</div>
+          <div class="hub_navbar__link nav_link" name="table" @click="change_tab('table')">排課表 <span class="wishlist_count">5</span></div>
+          <div class="hub_navbar__profile nav_link" name="profile" @click="switch_profile_window()"></div>
+          <div class="hub_navbar__profile__dropdown">
+            <div class="hub_navbar__profile__dropdown__info">
+                <div class="hub_navbar__profile__dropdown__info__photo"></div>
+                <div class="hub_navbar__profile__dropdown__info__detail">
+                    <!-- 若有開通權限則在 nav_profile_name 添加 vip class  -->
+                    <!-- todo: 這邊要 vue 化（含未登入狀態） -->
+                    <div class="nav_profile_name vip">{{user_name}}</div>
+                    <div v-show="user_department != ''" class="nav_profile_dept">{{user_department}}</div>
+                    <div v-show="user_grade != ''" class="nav_profile_grade">{{user_grade}}年級</div>
+                </div>
+            </div>
+            <div v-show="user_name != '訪客'" class="hub_navbar__profile__dropdown__goto" @click="change_tab('profile')" >前往個人頁面</div>
+            <a v-show="user_name == '訪客'" href='/user/fblogin'><div class="hub_navbar__profile__dropdown__goto" @click="change_tab('profile')" >登入</div></a>
+            <div class="hub_navbar__profile__dropdown__links">
+                <a>關於 NCKU HUB</a>
+                <a>回報問題</a>
+                <a v-show="user_name != '訪客'" href='/user/logout'>登出帳戶</a>
+            </div>
+          </div>
+      </div>
+    </div>
+</nav>

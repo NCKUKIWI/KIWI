@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>NCKU HUB</title>
+  <!-- Add to homescreen for Chrome on Android -->
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="icon" sizes="192x192" href="images/NCKU HUB_ICON.png">
+
+<!-- Add to homescreen for Safari on iOS -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title">
+<link rel="apple-touch-icon-precomposed" href="images/NCKU HUB_ICON.png">
+
+<!-- Tile icon for Win8 (144x144 + tile color) -->
+<meta name="msapplication-TileImage" content="images/NCKU HUB_ICON.png">
+<meta name="msapplication-TileColor" content="#3372DF">
+
+<link rel="shortcut icon" href="images/NCKU HUB_ICON.png">
+  <!-- CSS  -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+ </head>
+<body class="grey lighten-3" style="font-family:Microsoft JhengHei">
+    <div class="fixed-action-btn">
+      <a class="btn-floating btn-large waves-effect waves-light modal-trigger light-blue darken-4" href="#setting">
+        <i class="large material-icons">create</i>
+      </a>
+    </div>
+
+    <div id="setting" class="modal modal-fixed-footer grey-text darken-1 provCourse" :style="{bottom:provCourseBottom, marginRight:provCourseMarginRight, width:provCourseWidth, height:provCourseHeight}">
+      <nav style="height:45px;background-color: #4A4A4A">
+        <div class="nav-wrapper" style="margin-top:-4px">
+          <a href=""><i class="material-icons right" style="font-size:18px;margin-top:-8px;margin-right:5px;">close</i></a>
+          <a class="zoomin" href="#" @click="ZoomIn"><i class="material-icons right" style="font-size:16px;margin-top:-8px;"><strong>{{ icon }}</strong></i></a>
+          <a class="zoomout" href="#" @click="ZoomOut"><i class="material-icons right" style="font-size:18px;margin-top:-8px">remove</i></a>
+          <a class="brand-logo left" style="font-size:14px;letter-spacing: 2px;margin-left:15px;margin-top:-8px"><strong>提供心得</strong></a>
+        </div>
+      </nav>
+      <div class="white provCourseBody modal-content" v-if="hasZoomOut==false">
+          <div class="input-field col s12">
+            <input  type="text" id="getcourse" class="autocomplete col s10 push-s2" style="height:1.5rem; margin-bottom:0;" oninput="OnInput (event)" placeholder="輸入課程名稱"/>
+            <label for="autocomplete-input"></label>
+          </div>
+          <div class="box"style="display:none; overflow:scroll; position:absolute; z-index:2; width:30vw; height:30vh;  top:9vh; " >
+           <ul style="margin:0px" id="coursename" >
+          </ul>
+          </div>
+          <div class="row">
+            <div class="input-field col s4">
+              <select id="sem" style="height:1.3rem">
+              </select>
+              <label></label>
+            </div>
+            <div class="input-field col s8">
+              <select style="height:1.3rem">
+                <option value="" disabled selected>蕭仁傑</option>
+                <option>貓貓</option>
+                <option>貓貓</option>
+              </select>
+              <label></label>
+            </div>
+          </div>
+          <div class="row black-text">
+            <div class="col s4">
+              <p>甜度</p>
+              <a href="#" @click="decreaseSweet"><i class="material-icons circle" style="background-color:#FAFAFA">keyboard_arrow_left</i></a>
+              {{ sweet }}
+              <a href="#" @click="increaseSweet"><i class="material-icons circle" style="background-color:#FAFAFA">keyboard_arrow_right</i></a>
+            </div>
+            <div class="col s4">
+              <p>涼度</p>
+              <a href="#" @click="decreaseCool"><i class="material-icons circle" style="background-color:#FAFAFA">keyboard_arrow_left</i></a>
+              {{ cool }}
+              <a href="#" @click="increaseCool"><i class="material-icons circle" style="background-color:#FAFAFA">keyboard_arrow_right</i></a>
+            </div>
+            <div class="col s4">
+              <p>推薦</p>
+              <a href="#" @click="decreaseReco"><i class="material-icons circle" style="background-color:#FAFAFA">keyboard_arrow_left</i></a>
+              {{ recommend }}
+              <a href="#" @click="increaseReco"><i class="material-icons circle" style="background-color:#FAFAFA">keyboard_arrow_right</i></a>
+            </div>
+          </div>
+
+          <div class="type-area white" style="background-color:#fff;height:160px;">
+            <div class="row">
+              <form class="col s10">
+                <div class="input-field">
+                  <textarea placeholder="說些什麼吧..." id="first_name" name="message" rows="50" required="" class="materialize-textarea"></textarea>
+                  <label for="first_name"></label>
+                </div>
+              </form>
+            </div>
+         </div>
+
+      </div>
+      <div class="modal-footer sentrow" style="background-color:#FAFAFA;" v-if="hasZoomOut==false">
+        <a href="#!" class="modal-close waves-effect waves-white btn-small btn-flat right" style="background-color:white; color:#F35A5A;"><i class="material-icons left">send</i>送出心得</a>
+        <a href="#!" class="modal-close waves-effect waves-green btn-small btn-flat right disabled" style="background-color:white ;margin-right:15px;margin-left:10px">放棄</a>
+      </div>
+    </div>
+  <div id="index-banner" class="parallax-container">
+  </div>
+  <!--  Scripts-->
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <script src="./js/materialize.js"></script>
+  <script src="./js/init.js"></script>
+  <script>
+   var words;
+   var isChange = false;
+    var data;
+    var data1;
+   function returnobject(obj){
+     var name;
+     var k;
+    name=$(obj).text();
+    $('#getcourse').val(name)
+     $('.box').hide();
+     for(k=0;k<data1.length;k++)
+     {
+        if(data1[k]["課程名稱"]==name)
+       {
+         $('#sem').append("<option>"+data1[k]['semester']+"</option>")
+         $('select').formSelect();  
+       }
+     } 
+    }
+   $(window).on('beforeunload', function (e){  //send the input to the server
+             words=$('textarea').val()
+            if(words!='')
+            {   
+             $.ajax({                  
+     	     url:'./123',
+     	     method:"GET",
+             data:{info:words}
+              });
+            }
+    });
+   $.ajax({                //get the courses information  
+     	url:'https://nckuhub.com/test/course',
+     	method:"GET",
+     	success:function(result){
+        data=result;
+	},
+       });
+    $.ajax({                //get the courses semester  
+     	url:'https://nckuhub.com/test/course/allCoursePrev',
+     	method:"GET",
+     	success:function(result){
+        data1=result;
+        console.log(data1);
+	},
+    });
+      function OnInput (event){     //detect the input 
+       $('#coursename').html('');
+       var input,i,j,k,compare
+       k=0;
+       j=0;
+       input=event.target.value
+       if(input=='')
+       $('.box').hide();
+       else
+       $('.box').show();
+       var get=new RegExp(input)
+       var array = new Array(); 
+       var array1= new Array(); 
+         for(i=0;i<5112;i++)    //get the courses matched
+        {
+           if((get.test(data["courses"][i]["課程名稱"]))&&(input!=''))  
+         {
+           array[j]=data['courses'][i];
+            j++; 
+          }
+        }
+          for(i=0;i<array.length;i++)
+        {
+             k=i;
+             compare=array[i]["課程名稱"];
+             while(k<array.length-1)
+           {
+              k++;
+              if(compare==array[k]["課程名稱"])
+               array[k]["課程名稱"]='0';
+           } 
+        }
+        for(i=0;i<array.length;i++)
+       {
+          if(array[i]["課程名稱"]!='0')
+         $('#coursename').append("<li style='cursor:pointer; id='"+array[i]['id']+"' background-color:rgba(255,255,255,1); z-index:3' class='list' onclick='returnobject(this)'>"+array[i]['課程名稱']+"</li>")   
+       }
+     }
+  var setScale = new Vue({
+      el: ".provCourse",
+      data:{
+                hasZoomOut:false,
+                hasZoomIn:false,
+                provCourseBottom:'0%',
+                provCourseMarginRight:'8%',
+                provCourseWidth:'35%',
+                provCourseHeight:'70%',
+                icon:'crop_din',
+                sweet:9,
+                cool:9,
+                recommend:9
+
+      },
+      methods:{       //這個區塊裡面可以使用的method(函數、功能)
+          ZoomOut: function(){
+              setScale.hasZoomOut= ! setScale.hasZoomOut;
+              if(setScale.hasZoomOut==true){
+                setScale.hasZoomIn=false;
+                setScale.provCourseHeight='30px';
+                setScale.provCourseWidth='35%';
+                setScale.provCourseMarginRight='8%';
+                setScale.icon='crop_din';
+              }else{
+                setScale.hasZoomIn=false;
+                setScale.provCourseHeight='70%';
+              }
+          },
+          ZoomIn: function(){
+              setScale.hasZoomIn= ! setScale.hasZoomIn;
+              if(setScale.hasZoomIn==true){
+                setScale.hasZoomOut=false;
+                setScale.provCourseHeight='100%';
+                setScale.provCourseWidth='100%';
+                setScale.provCourseMarginRight='0%';
+                setScale.icon='content_copy';
+              }else{
+                setScale.hasZoomOut=false;
+                setScale.provCourseHeight='70%';
+                setScale.provCourseWidth='35%';
+                setScale.provCourseMarginRight='8%';
+                setScale.icon='crop_din';
+              }
+          },
+          increaseSweet: function(){
+            if(setScale.sweet<10){
+              setScale.sweet++;
+            }
+          },
+          decreaseSweet: function(){
+            if(setScale.sweet>0){
+              setScale.sweet--;
+            }
+          },
+          increaseCool: function(){
+            if(setScale.cool<10){
+              setScale.cool++;
+            }
+          },
+          decreaseCool: function(){
+            if(setScale.cool>0){
+              setScale.cool--;
+            }
+          },
+          increaseReco: function(){
+            if(setScale.recommend<10){
+              setScale.recommend++;
+            }
+          },
+          decreaseReco: function(){
+            if(setScale.recommend>0){
+              setScale.recommend--;
+            }
+          }
+      }
+  });
+</script>
+  </body>
+</html>

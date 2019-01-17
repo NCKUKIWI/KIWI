@@ -1,0 +1,66 @@
+@import url(https://fonts.googleapis.com/earlyaccess/cwtexyen.css);
+::-webkit-scrollbar{
+  display: none;
+}
+html {
+  height: 100%;
+}
+
+body {
+  /*font-family: "cwTeXYen", sans-serif;
+  font-weight: 300;*/
+  min-height: 100%;
+}
+
+textarea:focus {
+  border-bottom: none!important;
+  box-shadow: none!important;
+}
+textarea {
+  border-bottom: none!important;
+  box-shadow: none!important;
+}
+.input-field input[type=text]:focus {
+     border-bottom: none!important;
+     box-shadow: none!important;
+   }
+.input-field{
+     border-bottom: none!important;
+     box-shadow: none!important;
+      }
+
+.wrapper {
+    padding-left: 300px;
+}
+
+nav ul a,
+nav .brand-logo {
+  color: white;
+}
+
+.blue {
+  background-color: #18ABD6  !important;
+}
+
+p {
+  line-height: 2rem;
+}
+
+.button-collapse {
+  color: #26a69a;
+}
+
+.fixed-action-btn{
+top:75%;/*desired value*/
+}
+
+.modal {
+  top: auto !important;
+}
+
+ .modal-overlay{
+    background: none;
+ }
+.list:hover{background-color:rgba(25,25,25,.7)
+}
+

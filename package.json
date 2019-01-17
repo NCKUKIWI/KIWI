@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js",
+    "start": "gulp & nodemon app.js",
     "dev": "NODE_ENV=production node ./node_modules/nodemon/bin/nodemon -e '.js .ejs .css .html' app.js -V"
   },
   "author": "KIWI",
@@ -29,6 +29,19 @@
     "sanitize-html": "^1.18.4"
   },
   "devDependencies": {
-    "nodemon": "^1.18.4"
+    "nodemon": "^1.18.4",
+    "browser-sync": "^2.26.3",
+    "gulp": "^3.9.1",
+    "gulp-changed": "^3.2.0",
+    "gulp-clean-css": "^4.0.0",
+    "gulp-file-include": "^2.0.1",
+    "gulp-imagemin": "^3.3.0",
+    "gulp-jshint": "^2.0.4",
+    "gulp-minify": "^1.0.0",
+    "gulp-notify": "^3.0.0",
+    "gulp-pug": "^3.3.0",
+    "gulp-sass": "^3.1.0",
+    "gulp-webserver": "^0.9.1",
+    "jshint": "^2.9.5"
   }
 }

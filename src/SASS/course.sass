@@ -76,7 +76,7 @@ h4
   font-weight: 500
 
 .quick_search_dropdown--course
-  height: 30vh
+  max-height: 20vh
   overflow-y: scroll
 
 .search_result--course
@@ -191,8 +191,6 @@ section
     // display: inline-block
     // position: absolute
     // padding: 3vh 3vw
-    p
-      font-size: 12px
     &__itemBox
       position: relative
       display: flex
@@ -232,6 +230,9 @@ section
 .courseList__sideList__itemBox__item:hover
   background-color: $colorBlack5
 
+.list_course_item_right--mod
+  width: auto
+
 //course item in wishlist
 .circle
   height: 40px
@@ -245,7 +246,6 @@ section
   height: 40px
   width: 40px
   z-index: 10
-  padding: 1px
   img
     width: 90%
 

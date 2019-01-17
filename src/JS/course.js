@@ -6,6 +6,8 @@ $.ajax({
   success: function (response) {
         vue_course_item.course_data_db = response.courses;
 
+        console.log(vue_course_item.course_data_db[0]);
+
         for(var i=0;i<200;i++){
           vue_course_item.course_data.push(vue_course_item.course_data_db[i]);
         }
@@ -101,7 +103,10 @@ $.ajax({
       },
     },
     created: function() {
-      document.getElementById("courseList").addEventListner('scroll', this.handleScroll);
+      document.getElementById("courseList").addEventListner('scroll', this.handleScroll, true);
+      // $("#courseList").bind('scroll', function() {
+      //   this.handleScroll();
+      // });
 
     }
   });
@@ -150,6 +155,15 @@ $.ajax({
           // document.getElementById("score_input").innerHTML = "寫心得";
 
       },
+      content_addtowishlist: function(id) {
+        vue_user_data.wishlistAdd(id);
+      },
+      openOutline: function(dept,dept_serial) {
+        // let dept = 'H3';
+        // let dept_serial = 'H345100';
+        let url = 'http://course-query.acad.ncku.edu.tw/crm/course_map/course.php?dept=' + dept + '&cono=' + dept_serial;
+        window.open(url, '_blank');
+      }
     }
   });
 

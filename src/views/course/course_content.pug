@@ -2,11 +2,11 @@ div#courseContent(v-show="isShow" @click.self="showContent()")
   div.courseContentBody
     div.courseContentBody__left
       span.courseSerial {{course_data.系號}}{{course_data.選課序號}}
-      h2(style="margin-top:20px") {{course_data.課程名稱}}
-      div(style="margin-top:30px").flex-container.icon-span
+      h2(style="margin-top:20px;") {{course_data.課程名稱}}
+      div(style="margin-top:30px").flex-container.icon-span(@click="openOutline(course_data.系號,course_data.課程碼)")
         div.content-icon.see_clip
         span 檢視課程大綱
-      div.flex-container.icon-span
+      div.flex-container.icon-span(@click="content_addtowishlist(course_data.id)")
         div.content-icon.add_wishlist
         span 加入願望清單
       div.courseUnit
@@ -91,7 +91,7 @@ div.course__whole
       div.block_title
         p.text_18 願望清單（{{ wishlist_cont.length }})
       div.wishlist_cont
-        div.list_course_item(v-for="item in wishlist_cont")
+        div.list_course_item(v-for="item in wishlist_cont" style="justify-content:none")
           div.list_course_item_left
             p.list_course_item_category.text_20.text_white.clickable(:class="item.dept_id" @click="deleteItem(item.id)") {{ item.category }}
           div.list_course_item_mid
@@ -103,14 +103,13 @@ div.course__whole
   div.flex-container.courseList__sideList
     div.card.courseList__sideList__itemBox#courseList
       div#course_item(v-on:scroll="handleScroll")
-        div(@click.self="courseLink(index)" v-for="(course, index) in course_data").flex-container.courseList__sideList__itemBox__item
-          div.flex-container.course_info
-            div.circle(:class="course.系號")
-              span.circle-content {{course.系號}}
-            div.courseText
-              p.text_16 {{course.課程名稱}}
-              p.text_14 {{course.系號}}{{course.選課序號}} - {{course.老師}}
-          div.flex-container
+        div.list_course_item(@click.self="courseLink(index)" v-for="(course, index) in course_data")
+          div.list_course_item_left
+            p.list_course_item_category.text_white.text_20(:class="course.dept_id") 工
+          div.list_course_item_mid
+            p.list_course_item_title.text_16 {{course.課程名稱}}
+            p.list_course_item_description.text_14.text_dark {{course.系所名稱}} {{course.系號}}{{course.選課序號}} - {{course.老師}}
+          div.list_course_item_right(style="width:auto")
             div.circle--img
               img(src="./dist/images/course/edit.png")
             div.circle--img(style="z-index: 20" @click="addCourse(index)")

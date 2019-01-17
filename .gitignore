@@ -7,3 +7,4 @@ npm-debug.log
 dist/*
 dist/**/*
 index.html
+src/views/course/course_content.html

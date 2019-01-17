@@ -18,8 +18,17 @@
     // Get Course Data
 
     var course_db = [];
-    var user_id = '5';                                       // todo: 從登錄狀態取得
 
+    var userData = {
+    	user_id: 0,  
+        user_name: '訪客貓咪',
+        user_photo: 'dist/images/table/profile.png',        // todo: 取得正確圖片
+        user_department: '',
+        user_grade: '',
+        credit_count: 9,                                    // todo: 讓他可以用計算ㄉ
+        now_wishlist: [],
+        now_table: [],
+    }
     
     axios.get ( '/course/' )
         .then ( function ( response ) {
@@ -28,18 +37,38 @@
             if(response.data.user_data !== undefined) {
             	console.log(response.data.user_data[0]);
             	console.log(response.data.user_data[0].name);
-            	vue_user_data.user_name = response.data.user_data[0].name;
-            	vue_nav_bar.logIn();
+            	userData.user_name = response.data.user_data[0].name;
+            	// vue_nav_bar.logIn();
             }
+
+            vue_course_item.course_data_db = response.data.courses;
+	        for(var i=0;i<200;i++){
+	          vue_course_item.course_data.push(vue_course_item.course_data_db[i]);
+	        }
+
+	        for( var i in vue_course_item.course_data_db) {
+	          if(vue_course_item.course_data_db[i].comment_num>0) {
+	            vue_course_item.course_with_comment.push(vue_course_item.course_data_db[i]);
+	          }
+	        }
+
             vue_user_data.getData( user_id );                 // todo: 每次登入都要重新開始
             // vue_course_item.refresh();
+
+
         })
         .catch ( function ( error ) {
             console.log (  '課程資料庫:' + error ) ;
         });
 
 
-
+    axios.get ( '/course/allDpmt' )
+        .then ( function ( response ) {
+	        vue_courseFilter.dept = response;
+        })
+        .catch ( function ( error ) {
+            console.log (  'axios error:' + error ) ;
+        });
 
 
 
@@ -47,12 +76,8 @@
 
     var vue_user_data = new Vue ({
         el: '#user_data',
-        data: {
-            user_name: '',
-            user_photo: 'dist/images/table/profile.png',        // todo: 取得正確圖片
-            credit_count: 9,                                    // todo: 讓他可以用計算ㄉ
-            now_wishlist: [],
-            now_table: [],
+        data: function(){
+        	return userData;
         },
         methods: {
             getData: function( user_id ) {

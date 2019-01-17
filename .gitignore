@@ -1,11 +1,8 @@
-
 .DS_Store
 config.*
 *.log
 .vscode
-
 /node_modules
-
 /dist/**
 /index.html
 /src/views/course/course_content.html

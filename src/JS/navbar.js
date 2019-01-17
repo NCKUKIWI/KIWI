@@ -4,9 +4,7 @@ var vue_nav_bar = new Vue({
 		now_tab : '',
 		search_keyword: '',
 		result_cont: [],
-		user_name: '訪客',
-		user_department: '',
-		user_grade: '',
+		user_data: userData,
 	},
 	created: function() {
 		var initial_tab = 'course';

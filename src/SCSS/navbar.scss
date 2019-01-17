@@ -204,7 +204,7 @@ $material_trans: cubic-bezier(0.0, 0.0, 0.2, 1);
             margin-top: 64px;
             margin-right: 4vw;
             width: 250px;
-            padding: 20px 25px 15px 25px;
+            padding: 20px 25px 17px 25px;
             background: white;
             border: $light_2 1px solid;
             border-bottom: $blue 4px solid;
@@ -278,7 +278,7 @@ $material_trans: cubic-bezier(0.0, 0.0, 0.2, 1);
                 background: $blue;
                 margin-top: 15px;
                 margin-left: 5%;
-                margin-bottom: 15px;
+                margin-bottom: 18px;
                 @include box_shadow_1();
                 cursor: pointer;
                 transition: .2s $material_trans;
@@ -300,11 +300,15 @@ $material_trans: cubic-bezier(0.0, 0.0, 0.2, 1);
                     margin: 10px 5%;
                     cursor: pointer;
                     transition: .2s $material_trans;
+                    text-decoration: none;
                     &:hover {
                         opacity: 0.8;
                     }
                     &:active {
                         opacity: 0.6;
+                    }
+                    &:visited {
+                        color: $black;
                     }
                 }
                 &::before {
@@ -314,7 +318,7 @@ $material_trans: cubic-bezier(0.0, 0.0, 0.2, 1);
                     left: -50%;
                     height: 1px;
                     width: 200%;
-                    margin-bottom: 15px;
+                    margin-bottom: 17px;
                     background: $light_2;
                 }
             }

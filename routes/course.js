@@ -53,6 +53,13 @@ router.get('/allCoursePrev', function (req, res) {
 
 router.get('/allDpmt', function (req, res) {
     db.Query('select distinct course_new.系號 as DepPrefix, course_new.系所名稱 as DepName from course_new', function(result){
+        for(item in result){
+        	console.log(item);
+        	var new_name = result[item].DepName.replace(/[a-zA-Z]/g, "");
+        	if(new_name != ""){
+        		result[item].DepName = new_name;
+        	}
+        }
         data = JSON.stringify(result)
         res.json(result)
     })

@@ -136,10 +136,10 @@
     <div class="card courseList__sideList__itemBox" id="courseList">
       <div id="course_item" v-on:scroll="handleScroll">
         <div class="list_course_item" @click.self="courseLink(index)" v-for="(course, index) in course_data">
-          <div class="list_course_item_left">
-            <p class="list_course_item_category text_white text_20" :class="course.系號">工</p>
+          <div class="list_course_item_left" @click="courseLink(index)">
+            <p class="list_course_item_category text_white text_20" :class="course.系號">{{course_circle(course.系號,course.系所名稱)}}</p>
           </div>
-          <div class="list_course_item_mid">
+          <div class="list_course_item_mid" @click="courseLink(index)">
             <p class="list_course_item_title text_16">{{course.課程名稱}}</p>
             <p class="list_course_item_description text_14 text_dark">{{course.系所名稱}} {{course.系號}}{{course.選課序號}} - {{course.老師}}</p>
           </div>

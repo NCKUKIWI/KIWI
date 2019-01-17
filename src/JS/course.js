@@ -101,8 +101,9 @@ $.ajax({
           this.count_height++;
         }
       },
-      course_circle: function() {
-
+      course_circle: function(dept, dept_name) {
+        var name = deptTransCat(dept, dept_name);
+        return name;
       }
     },
     created: function() {

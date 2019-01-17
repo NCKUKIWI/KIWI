@@ -108,12 +108,12 @@
         <p class="text_18">檢視選項</p>
       </div>
       <div class="quick_search_area">
-        <div class="quick_search_checkbox">
-          <input id="commentCheck" type="checkbox" @click="comment_filter()"/><span>僅顯示有心得之課程</span>
+        <div class="quick_search_custom">
+          <input id="commentCheck" type="checkbox" @click="comment_filter()"/><span class="fucking_checkmark"></span><span>僅顯示有心得之課程</span>
         </div>
       </div>
     </div>
-    <div class="wishlist">
+    <div class="wishlist" style="margin-top:4vh">
       <div class="block_title">
         <p class="text_18">願望清單（{{ wishlist_cont.length }})</p>
       </div>
@@ -129,7 +129,9 @@
           <div class="list_course_item_right"> </div>
         </div>
       </div>
-      <button class="btn courseList__sidenav__courseType course-btn">加入完成，開始安排課表！</button>
+      <div class="quick_search_custom quick_search_custom--btn" @click="opentabletab()"><img src="./dist/images/course/arrange.svg"/>
+        <p>加入完成，開始安排課表！</p>
+      </div>
     </div>
   </div>
   <div class="flex-container courseList__sideList">
@@ -143,9 +145,13 @@
             <p class="list_course_item_title text_16">{{course.課程名稱}}</p>
             <p class="list_course_item_description text_14 text_dark">{{course.系所名稱}} {{course.系號}}{{course.選課序號}} - {{course.老師}}</p>
           </div>
-          <div class="list_course_item_right" style="width:auto">
-            <div class="circle--img"><img src="./dist/images/course/edit.png"/></div>
-            <div class="circle--img" style="z-index: 20" @click="addCourse(index)"><img src="./dist/images/course/heart.png"/></div>
+          <div class="list_course_item_right large_right">
+            <div class="list_course_item_right--courseList"><img src="./dist/images/course/comment_num.svg"/>
+              <p class="text_14 text_dark">{{course.comment_num}}</p>
+            </div>
+            <div class="large_right--circle">
+              <div class="circle--img" @click="addCourse(index)"><img src="./dist/images/course/heart.svg"/></div>
+            </div>
           </div>
         </div>
       </div>

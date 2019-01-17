@@ -98,8 +98,8 @@ $material_trans: cubic-bezier(0.0, 0.0, 0.2, 1);
             @include box_shadow_1();
             outline: none;
         }
-        &::placeholder { 
-            color: white; 
+        &::placeholder {
+            color: white;
         }
         &__dropdown {
             position: fixed;
@@ -251,14 +251,14 @@ $material_trans: cubic-bezier(0.0, 0.0, 0.2, 1);
                         }
                     }
                     .nav_profile_dept {
-                        font-size: 12px;             
-                        color: $dark;       
+                        font-size: 12px;
+                        color: $dark;
                         line-height: 16px;
                         @include ellipsis();
 
                     }
                     .nav_profile_grade {
-                        font-size: 12px;             
+                        font-size: 12px;
                         color: $dark;
                         line-height: 16px;
                         @include ellipsis();
@@ -321,4 +321,3 @@ $material_trans: cubic-bezier(0.0, 0.0, 0.2, 1);
         }
     }
 }
-

@@ -247,6 +247,9 @@ $.ajax({
       deleteItem: function ( id ) {
         vue_user_data.wishlistRemove( id );
       },
+      opentabletab: function() {
+        vue_nav_bar.change_tab('table');
+      },
     },
     computed: {
       search_result: function() {

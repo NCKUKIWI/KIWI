@@ -83,11 +83,12 @@ div.course__whole
       div.block_title
         p.text_18 檢視選項
       div.quick_search_area
-        div.quick_search_checkbox
+        div.quick_search_custom
           input#commentCheck(type="checkbox" @click="comment_filter()")
+          span.fucking_checkmark
           span 僅顯示有心得之課程
 
-    div.wishlist
+    div.wishlist(style="margin-top:4vh")
       div.block_title
         p.text_18 願望清單（{{ wishlist_cont.length }})
       div.wishlist_cont
@@ -98,7 +99,9 @@ div.course__whole
             p.list_course_item_title.text_16 {{ item.dept_id }}-{{ item.class_id }} {{ item.title }}
             p.list_course_item_description.text_14.text_dark {{ item.teacher }} — {{ item.time }}
           div.list_course_item_right 
-      button.btn.courseList__sidenav__courseType.course-btn 加入完成，開始安排課表！
+      div.quick_search_custom.quick_search_custom--btn(@click="opentabletab()")
+        img(src="./dist/images/course/arrange.svg")
+        p 加入完成，開始安排課表！
         
   div.flex-container.courseList__sideList
     div.card.courseList__sideList__itemBox#courseList
@@ -109,9 +112,11 @@ div.course__whole
           div.list_course_item_mid(@click="courseLink(index)")
             p.list_course_item_title.text_16 {{course.課程名稱}}
             p.list_course_item_description.text_14.text_dark {{course.系所名稱}} {{course.系號}}{{course.選課序號}} - {{course.老師}}
-          div.list_course_item_right(style="width:auto")
-            div.circle--img
-              img(src="./dist/images/course/edit.png")
-            div.circle--img(style="z-index: 20" @click="addCourse(index)")
-              img(src="./dist/images/course/heart.png")
+          div.list_course_item_right.large_right
+            div.list_course_item_right--courseList
+              img(src="./dist/images/course/comment_num.svg")
+              p.text_14.text_dark {{course.comment_num}}
+            div.large_right--circle
+              div.circle--img(@click="addCourse(index)")
+                img(src="./dist/images/course/heart.svg")
             

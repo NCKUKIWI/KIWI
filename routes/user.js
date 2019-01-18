@@ -118,7 +118,6 @@ router.get('/getList/:userID', function (req, res) {
 });
 
 router.get('/getDraft', function (req, res) {
-    console.log(cache.userCourseKey(req.query['userID'], req.query['courseID']))
     redis.get(cache.userCourseKey(req.query['userID'], req.query['courseID']),function (err, result) {
         res.send(result)
     });

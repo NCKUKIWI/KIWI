@@ -61,7 +61,7 @@
             class_table_locked: true
         },
         methods: {
-            refresh: function () {    
+            refresh: function () { 
                 this.wishlist_cont.length = 0;
                 for ( var i = 0 ; i < vue_user_data.now_wishlist.length ; i ++ ) {
                     var class_item = getClassObject ( course_db, vue_user_data.now_wishlist[i] ) ;

@@ -769,16 +769,18 @@ function sendReportReview(pass, event){
 				if(pass){
 					gmailSend.sendMail('nckuhub@gmail.com', 'TO 檢舉人： 你的檢舉通過囉')
 					gmailSend.sendMail('nckuhub@gmail.com', 'TO 被檢舉人： 有人檢舉你的心得，且通過我們審核了，你的心得將會GG喔')	 
+					
 					sendTextMessage(config.bot.test, 'ok！這則心得被通過檢舉, 心得已下架！正在發信通知被檢舉人');
 					// sendPostRequest({
 					// 	url: msg_creative_url,
 					// 	json: broadcastTextMsg('這則心得被通過檢舉, 心得已下架！正在發信通知被檢舉人')
 					// }, creativeMsgCb(target_label_id));
 					DB.Query(`SELECT * FROM post WHERE id=${postid}`, function(result){
-						data = result[0]
-						if(data['user_id']!=0){
-							redis.set(cache.userCourseKey(data['user_id'], postid), data)
-
+						uid = result[0].user_id;
+						data = JSON.stringify(result[0])
+						console.log(data)
+						if(uid!=0){
+							redis.set(cache.userCourseKey(uid, postid), data)
 						}
 					})
 					// DB.Query('INSERT INTO BadPost SELECT * FROM post WHERE id='+postid)

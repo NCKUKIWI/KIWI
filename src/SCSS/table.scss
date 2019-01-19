@@ -186,13 +186,16 @@ div {
     &_left {
         @include inline_flex_center(row);
         margin-left: 2%;
-        width: 70px;
+        // width: 70px;
+        width: auto;
+        padding: 0 13px;
         height: 100%;
     }
     &_mid {
         @include inline_flex_center_top();
         @include ellipsis();
-        width: calc(96% - 140px);
+        // width: calc(96% - 140px);
+        width: 100%;
         height: 100%;
         padding-left: 10px;
         & > p {
@@ -202,7 +205,8 @@ div {
     &_right {
         @include inline_flex_center(row);
         margin-right: 2%;
-        width: 70px;
+        width: auto;
+        padding: 0 19px;
         height: 100%;
     }
     &_category {
@@ -263,7 +267,7 @@ div {
         .list_course_item_button {
             background-size: 16px;
             background-color: $deep_blue;
-            margin-left: 8px;
+            margin-right: -8px;
             &:active {
                 filter: brightness(80%);
             }

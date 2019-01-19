@@ -17,7 +17,7 @@
 
     // Get Course Data
 
-    var course_db = [];
+    var course_db = []; // course_db
 
     var userData = {
     	user_id: 0,  
@@ -38,17 +38,21 @@
             	console.log(response.data.user_data[0]);
             	console.log(response.data.user_data[0].name);
             	userData.user_name = response.data.user_data[0].name;
+                userData.user_id = response.data.user_data[0].id;
+                userData.user_department = response.data.user_data[0].department;
+                userData.user_grade = response.data.user_data[0].grade;
             	// vue_nav_bar.logIn();
             }
 
-            vue_course_item.course_data_db = response.data.courses;
+
+            // vue_course_item.course_data_db = response.data.courses;
 	        for(var i=0;i<200;i++){
-	          vue_course_item.course_data.push(vue_course_item.course_data_db[i]);
+	          vue_course_item.course_data.push(vue_course_item.course_data_db()[i]);
 	        }
 
-	        for( var i in vue_course_item.course_data_db) {
-	          if(vue_course_item.course_data_db[i].comment_num>0) {
-	            vue_course_item.course_with_comment.push(vue_course_item.course_data_db[i]);
+	        for( var i in vue_course_item.course_data_db()) {
+	          if(vue_course_item.course_data_db()[i].comment_num>0) {
+	            vue_course_item.course_with_comment.push(vue_course_item.course_data_db()[i]);
 	          }
 	        }
 
@@ -92,15 +96,15 @@
                         console.log (  '使用者資料:' + error ) ;
                     });
             },
-            fillData: function ( user_data ) {
+            checkCourseValid: function ( user_data ) {
                 // 初始化用資料
-                this.user_name = user_data.name;
+                // this.user_name = user_data.name;
                 // this.user_photo = user_data.photo;          // todo: 取得圖片
                 // this.credit_count = 0;                      // todo 計算學分數
 
                 // 篩選合格且不重複者填入願望清單
                 this.now_wishlist.length = 0;           // todo: 篩選完成後把 this.now_wishlist 存回資料庫
-                for ( var i = 0 ; i < user_data.now_wishlist.length ; i ++ ) {
+                for ( var i = 0; i < user_data.now_wishlist.length; i ++ ) {
                     if ( getClassObject ( course_db, user_data.now_wishlist[i] ) ) {
                         var ifRepeated = this.now_wishlist.find( function ( item ) {
                             return item == user_data.now_wishlist[i]

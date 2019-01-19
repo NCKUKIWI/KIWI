@@ -5,7 +5,7 @@ var router = express.Router();
 var dbsystem = require('../model/dba');
 var DB = require('../model/db');
 var gmailSend = require('./gmailSend/gmailSend')
-var cache = require("./helper/cache");
+var cache = require("../helper/cache");
 var redis = cache.redis;
 const apiVersion = "v3.1";
 const msg_url = `https://graph.facebook.com/${apiVersion}/me/messages`;
@@ -775,9 +775,9 @@ function sendReportReview(pass, event){
 					// 	json: broadcastTextMsg('這則心得被通過檢舉, 心得已下架！正在發信通知被檢舉人')
 					// }, creativeMsgCb(target_label_id));
 					DB.Query(`SELECT * FROM post WHERE id=${postid}`, function(result){
-						console.log(result)
-						if(result['user_id']!=0){
-							redis.set(cache.usercachekey)
+						data = result[0]
+						if(data['user_id']!=0){
+							redis.set(cache.userCourseKey(data['user_id'], postid), data)
 
 						}
 					})

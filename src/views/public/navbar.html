@@ -36,7 +36,7 @@
                     <div v-show="user_grade != ''" class="nav_profile_grade">{{user_grade}}年級</div>
                 </div>
             </div>
-            <div v-show="user_name != '訪客'" class="hub_navbar__profile__dropdown__goto" @click="change_tab('profile')" >前往個人頁面</div>
+            <div v-show="user_name != '訪客'" class="hub_navbar__profile__dropdown__goto" @click="change_tab('helper')" >開通小幫手</div>
             <a v-show="user_name == '訪客'" href='/user/fblogin'><div class="hub_navbar__profile__dropdown__goto" @click="change_tab('profile')" >登入</div></a>
             <div class="hub_navbar__profile__dropdown__links">
                 <a>關於 NCKU HUB</a>

@@ -9,7 +9,7 @@ var vue_nav_bar = new Vue({
 		user_grade: '',
 	},
 	created: function() {
-		var initial_tab = 'course';
+		var initial_tab = 'helper';
 		this.change_tab( initial_tab );
 	},
 	computed: {

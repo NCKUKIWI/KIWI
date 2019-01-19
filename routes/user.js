@@ -118,23 +118,27 @@ router.get('/getList/:userID', function (req, res) {
 });
 
 router.get('/getDraft', function (req, res) {
-    uid = req.query['uid']
-    redis.get(cache.userCacheKey(uid),function (error, result) {
+    redis.get(cache.userCourseKey(req.query['userID'], req.query['courseID']),function (err, result) {
         res.send(result)
     });
+    
 });
 
 router.post('/setDraft/:uid', function (req, res) {
-    uid = req.params.uid
+    uid = req.params.uid;
     let data = req.body;
-    redis.set(cache.userCacheKey(uid), JSON.stringify(data));
-    res.send('done')
+    if(data['courseID']!=null){
+        redis.set(cache.userCourseKey(uid, data['courseID']), JSON.stringify(data));
+        res.send('done');
+    }else{
+        res.send('Empty course ID');
+    }
 })
 
 
 router.post('/delDraft/:uid', function (req, res) {
     uid = req.params.uid
-    redis.del(cache.userCacheKey(uid),function (error, result) {
+    redis.del(cache.userCourseKey(uid, req.body['courseID']),function (error, result) {
         res.send('done')
     });
 });

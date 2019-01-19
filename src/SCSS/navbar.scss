@@ -2,11 +2,27 @@
 
 // 共用
 
+$bg_color: #FAFAFA;
+$black: #4A4A4A;
+$dark: #9B9B9B;
+$gray: #CBCBCB;
+$light_2: #EEEEEE;
+$light_1: #FAFAFA;
+$light_0: #F5F5F5;
+$white: #FFFFFF;
+$red: #F35A5A;
 $blue: #18ABD6;
 $blue_darken: #19A3CB;
-$light_2: #EEEEEE;
-$dark: #9B9B9B;
-$black: #4A4A4A;
+$deep_blue: #1A6CBD;
+$pink: #FF6097;
+$green: #17CF94;
+$default: $dark;
+// $default: $blue;
+
+// other color
+$warning_red: #c62828;
+
+// transition
 $material_trans: cubic-bezier(0.0, 0.0, 0.2, 1);
 
 
@@ -75,6 +91,7 @@ $material_trans: cubic-bezier(0.0, 0.0, 0.2, 1);
         background-size: 100%;
         background-repeat: no-repeat;
         background-position: center;
+        cursor: pointer;
     }
     &__search {
         display: inline-block;
@@ -204,7 +221,7 @@ $material_trans: cubic-bezier(0.0, 0.0, 0.2, 1);
             margin-top: 64px;
             margin-right: 4vw;
             width: 250px;
-            padding: 20px 25px 15px 25px;
+            padding: 20px 25px 17px 25px;
             background: white;
             border: $light_2 1px solid;
             border-bottom: $blue 4px solid;
@@ -220,15 +237,16 @@ $material_trans: cubic-bezier(0.0, 0.0, 0.2, 1);
                 align-items: center;
                 &__photo {
                     display: block;
-                    height: 76px;
-                    width: 76px;
+                    height: 72px;
+                    width: 72px;
                     border: $light_2 4px solid;
                     border-radius: 50px;
                     background-image: url("../images/course/hugecat.png");
                     background-repeat: no-repeat;
                     background-position: center;
                     background-size: contain;
-                    margin-right: 10px;
+                    margin-right: 12px;
+                    margin-left: 2px;
                 }
                 &__detail {
                     .nav_profile_name {
@@ -278,15 +296,19 @@ $material_trans: cubic-bezier(0.0, 0.0, 0.2, 1);
                 background: $blue;
                 margin-top: 15px;
                 margin-left: 5%;
-                margin-bottom: 15px;
+                margin-bottom: 18px;
                 @include box_shadow_1();
                 cursor: pointer;
                 transition: .2s $material_trans;
+                text-decoration: none;
                 &:hover {
                     background: $blue_darken;
                 }
                 &:active {
                     filter: brightness(95%);
+                }
+                &:link, &:visited {
+                    color: $black;
                 }
             }
             &__links {
@@ -297,14 +319,21 @@ $material_trans: cubic-bezier(0.0, 0.0, 0.2, 1);
                     position: relative;
                     display: block;
                     font-size: 14px;
-                    margin: 10px 5%;
+                    line-height: 38px;
+                    width: calc( 250px - 35px );
+                    left: -25px;
+                    padding-left: 35px;
                     cursor: pointer;
                     transition: .2s $material_trans;
+                    text-decoration: none;
                     &:hover {
-                        opacity: 0.8;
+                        background: $light_1;
                     }
                     &:active {
-                        opacity: 0.6;
+                        opacity: 0.8;
+                    }
+                    &:link, &:visited {
+                        color: $black;
                     }
                 }
                 &::before {
@@ -314,7 +343,7 @@ $material_trans: cubic-bezier(0.0, 0.0, 0.2, 1);
                     left: -50%;
                     height: 1px;
                     width: 200%;
-                    margin-bottom: 15px;
+                    margin-bottom: 17px;
                     background: $light_2;
                 }
             }

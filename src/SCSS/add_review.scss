@@ -1,0 +1,189 @@
+
+
+// 共用
+
+$bg_color: #FAFAFA;
+$black: #4A4A4A;
+$dark: #9B9B9B;
+$gray: #CBCBCB;
+$light_2: #EEEEEE;
+$light_1: #FAFAFA;
+$light_0: #F5F5F5;
+$white: #FFFFFF;
+$red: #F35A5A;
+$blue: #18ABD6;
+$blue_darken: #19A3CB;
+$deep_blue: #1A6CBD;
+$pink: #FF6097;
+$green: #17CF94;
+$default: $dark;
+// $default: $blue;
+
+// other color
+$warning_red: #c62828;
+
+// transition
+$material_trans: cubic-bezier(0.0, 0.0, 0.2, 1);
+
+
+@mixin box_shadow_1() {
+    box-shadow: 0 0 14px 0 rgba(0,0,0,0.06);
+}
+
+@mixin box_shadow_2() {
+    box-shadow: 0 0 14px 0 rgba(0,0,0,0.10);
+}
+
+@mixin box_shadow_3() {
+    box-shadow: 0 0 24px 0 rgba(0,0,0,0.28);
+}
+
+@mixin ellipsis() {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    $white-space: nowrap;
+}
+
+
+// Add Review Window
+
+.add_review {
+    z-index: 200;
+    &__window {
+        position: fixed;
+        z-index: 300;
+        display: flex;
+        flex-direction: column;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        margin: auto;
+        height: 90vh;
+        max-height: 620px;
+        width: 90vw;
+        max-width: 800px;
+        background: $white;
+        @include box_shadow_3();
+        &__top_bar {
+            position: relative;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            height: 48px;
+            background: $black;
+            box-sizing: border-box;
+            border: $black 1px solid;
+            padding: 0 1.5vw;
+            &__title {
+                color: $white;
+                opacity: 0.95;
+            }      
+        }
+        &__mid_cont {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            height: calc( 100% - 103px );
+            background: $white;
+            box-sizing: border-box;
+            border: $light_2 1px solid;
+            border-right: none;
+            &__top_row {
+                position: relative;
+                display: flex;
+                width: 100%;
+                height: 45px;
+                box-sizing: border-box;
+                border-bottom: $light_2 1px solid;
+                & > input {
+                    width: 100%;
+                    outline: none;
+                    box-sizing: border-box;
+                    border-right: $light_2 1px solid;
+                    padding: 0 1.5vw;
+                    &::placeholder {
+                        color: $gray;
+                    }
+                }
+            }
+            &__mid_area {
+                position: relative;
+                display: flex;
+                width: 100%;
+                height: calc( 100% - 90px );
+                box-sizing: border-box;
+                border: $light_2 0px solid;
+                border-right: $light_2 1px solid;
+                resize: none;
+                outline: none;
+                padding: 2vw 1.5vw;
+                &::placeholder {
+                    color: $gray;
+                }
+            }
+            &__bottom_row {
+                position: relative;
+                display: flex;
+                width: 100%;
+                height: 45px;
+                box-sizing: border-box;
+                border-top: $light_2 1px solid;
+                .add_review_rate {
+                    display: flex;
+                    align-items: center;
+                    height: 100%;
+                    width: 100%;
+                    box-sizing: border-box;
+                    border-right: $light_2 1px solid;
+                    padding: 0 1.5vw;
+                    color: $gray;
+                }
+            }
+        }
+        &__bottom_bar {
+            position: relative;
+            display: flex;
+            width: 100%;
+            height: 55px;
+            background: $light_1;
+            box-sizing: border-box;
+            border: $light_2 1px solid;
+            border-top: none;
+            padding: 0 1.5vw;
+            &__status {
+                display: flex;
+                align-items: center;
+                height: 100%;
+                width: 100%;
+                & > .add_review_status {
+                    color: $dark;
+                }
+            }
+            &__buttons {
+                display: flex;
+                align-items: center;
+                height: 100%;
+                width: auto;
+                float: right;
+                & > .add_review_button {
+                    display: flex;
+                    justify-content: center;
+                    width: 70px;
+                }
+            }
+        }
+    }
+    &__background {
+        position: fixed;
+        z-index: 200;
+        content: '';
+        display: block;
+        left: 0;
+        right: 0;
+        height: 100vh;
+        width: 100vw;
+        background: rgba(0,0,0,0.6);
+    }
+}

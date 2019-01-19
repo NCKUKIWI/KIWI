@@ -22,7 +22,7 @@
     var userData = {
     	user_id: 0,  
         user_name: '訪客貓咪',
-        user_photo: 'dist/images/table/profile.png',        // todo: 取得正確圖片
+        user_photo: 'dist/images/course/hugecat.png',        // todo: 取得正確圖片
         user_department: '',
         user_grade: '',
         credit_count: 9,                                    // todo: 讓他可以用計算ㄉ
@@ -41,6 +41,9 @@
                 userData.user_id = response.data.user_data[0].id;
                 userData.user_department = response.data.user_data[0].department;
                 userData.user_grade = response.data.user_data[0].grade;
+                userData.user_photo = "http://graph.facebook.com/" + response.data.user_data[0].fb_id + "/picture?type=small";
+                document.getElementsByClassName("hub_navbar__profile")[0].style.backgroundImage = "url(" + userData.user_photo + ")";
+                document.getElementsByClassName("hub_navbar__profile__dropdown__info__photo")[0].style.backgroundImage = "url(" + userData.user_photo + ")";
             	// vue_nav_bar.logIn();
             }
 

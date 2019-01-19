@@ -50,6 +50,7 @@ var vue_nav_bar = new Vue({
 		openCourse: function(id) {
 			vue_courseContent.isShow = true;
 			vue_course_item.openCoursePage(id);
+			vue_nav_bar.search_keyword = "";
 		},
 		logIn: function(){
 			vue_nav_bar.user_name = vue_user_data.user_name;

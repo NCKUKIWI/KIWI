@@ -67,7 +67,7 @@
 
     axios.get ( '/course/allDpmt' )
         .then ( function ( response ) {
-	        vue_courseFilter.dept = response;
+	        vue_courseFilter.dept = response.data;
         })
         .catch ( function ( error ) {
             console.log (  'axios error:' + error ) ;

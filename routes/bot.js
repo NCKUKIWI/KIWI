@@ -10,7 +10,6 @@ var redis = cache.redis;
 const apiVersion = "v3.1";
 const msg_url = `https://graph.facebook.com/${apiVersion}/me/messages`;
 const token = config.fb.token;
-// const token = 'EAAJoWGmnvCoBACXIhESDyH8iyaeP8gXgbnnxwxR0RuvZB8JIGhF9AczUNywqqiwrAbubPADjzMwD3HPALui4FODW6eZBn6RDCadZAaOh8FIHZCM8lnN3KE1bGlAUWAQSDrss1XjBCoDaKpmBhL4ZCVBSPW7mPczPVLqW2uLBQWlZAyvKUBqkwL'
 const disable = config.bot.disable;
 var disableSQL = '';
 
@@ -770,24 +769,26 @@ function sendReportReview(pass, event){
 					gmailSend.sendMail('nckuhub@gmail.com', 'TO 檢舉人： 你的檢舉通過囉')
 					gmailSend.sendMail('nckuhub@gmail.com', 'TO 被檢舉人： 有人檢舉你的心得，且通過我們審核了，你的心得將會GG喔')	 
 					
-					sendTextMessage(config.bot.test, 'ok！這則心得被通過檢舉, 心得已下架！正在發信通知被檢舉人');
-					// sendPostRequest({
-					// 	url: msg_creative_url,
-					// 	json: broadcastTextMsg('這則心得被通過檢舉, 心得已下架！正在發信通知被檢舉人')
-					// }, creativeMsgCb(target_label_id));
+					// sendTextMessage(config.bot.test, 'ok！這則心得被通過檢舉, 心得已下架！正在發信通知被檢舉人');
+					sendPostRequest({
+						url: msg_creative_url,
+						json: broadcastTextMsg('這則心得被通過檢舉, 心得已下架！正在發信通知被檢舉人')
+					}, creativeMsgCb(target_label_id));
 					DB.Query(`SELECT * FROM post WHERE id=${postid}`, function(result){
 						uid = result[0].user_id;
 						data = JSON.stringify(result[0])
-						console.log(data)
 						if(uid!=0){
-							redis.set(cache.userCourseKey(uid, postid), data)
+							redis.set(cache.userCourseKey(uid, postid), data,function(){
+								DB.DeleteByColumn('post', {'id':postid}, function(){} )
+							})
+							
 						}
 					})
 					// DB.Query('INSERT INTO BadPost SELECT * FROM post WHERE id='+postid)
-					// DB.DeleteByColumn('post', {'id':postid}, function(){} )
+					
 				}else{
 					gmailSend.sendMail('nckuhub@gmail.com', 'TO 檢舉人： 你的檢舉並沒有通過')	 
-					sendTextMessage(config.bot.test, 'ok！這則心得並沒有通過檢舉門檻 撤銷檢舉！已發信通知檢舉人');
+					// sendTextMessage(config.bot.test, 'ok！這則心得並沒有通過檢舉門檻 撤銷檢舉！已發信通知檢舉人');
 					
 					sendPostRequest({
 						url: msg_creative_url,
@@ -965,11 +966,11 @@ function sendReport(report_post){
 			"title": "理由偏爛",
 			"payload": "reportFail_"+report_post['post_id']
 		}];
-		// sendPostRequest({
-		// 	url: msg_creative_url,
-		// 	json:broadcastBtnMsg(report, buttons)
-		// }, creativeMsgCb(target_label_id));
-		sendButtonsMessage(config.bot.test, report, buttons);
+		sendPostRequest({
+			url: msg_creative_url,
+			json:broadcastBtnMsg(report, buttons)
+		}, creativeMsgCb(target_label_id));
+		// sendButtonsMessage(config.bot.test, report, buttons);
 	});
 }
 

@@ -240,7 +240,7 @@ gulp.task('watch', ['compile'], function() {
 		// 	baseDir: './'
 		// },
         // startPath: '/'
-        // reloadDelay: 1000 
+        reloadDelay: 2000
     });
     gulp.watch('src/SASS/*.sass', ['sass']);
     gulp.watch('src/SCSS/*.scss', ['scss']);

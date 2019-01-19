@@ -33,7 +33,8 @@ div#courseContent(v-show="isShow" @click.self="showContent()")
     div.courseContentBody__right
       div.courseContentBody__right__score
         div.block_title
-          p 課程評分 ({{score_data.rates.length}})
+          p(v-if="score_data.rates != undefined") 課程評分 ({{score_data.rates.length}})
+          p(v-if="score_data.rates == undefined") 課程評分 (0)
         div.flex-container.score-btn--all
           div.score-btn
             span 甜度

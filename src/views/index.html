@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" id="viewport" name="viewport">
+    <title>NCKU HUB｜資訊改善校園</title>
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css"> -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script> -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <!-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> -->
+    <link rel="stylesheet" href="dist/CSS/course.css">
+    <!-- <link rel="stylesheet" href="dist/CSS/course/course.css"> -->
+    <link rel="stylesheet" href="dist/CSS/reset.css">
+    <link rel="stylesheet" href="dist/CSS/table.css">
+    <link rel="stylesheet" href="dist/CSS/navbar.css">
+    <link rel="stylesheet" href="dist/CSS/add_review.css">
+    <!-- <script src="dist/JS/profile/init2.js"></script> -->
+	<!-- <link rel="stylesheet" type="text/css" href="./dist/CSS/profile/profile.css "> -->
+    <!-- @@include('course/navbar.html') -->
+        @@include('public/navbar.html')
+        <!-- @@include('public/add_review.html') -->
+    <body>
+    	<div class="change_tab" name="course">
+    	<!-- <div class="change_tab" name="course" style="display: none;"> -->
+    		@@include('course/course_content.html')
+
+    	</div>
+    	<div class="change_tab" name="table">
+        <!-- <div class="change_tab" name="table" style="display: none;"> -->
+    		@@include('table/arrange_table.html')
+    	</div>
+    	<div class="change_tab" name="profile" style="background-color:rgba(247,247,247,0.8)">
+        <!-- <div class="change_tab" name="profile" style="display:none; background-color:rgba(247,247,247,0.8)"> -->
+    		<!-- @@include('profile/profile.html') -->
+    	</div>
+    </body>
+</head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17/vue.js"> </script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="dist/JS/public.js"></script>
+<script src="dist/JS/navbar.js"></script>
+<script src="dist/JS/course.js"></script>
+<script src="dist/JS/table.js"></script>
+<script src="dist/JS/table_function.js"></script>
+<!-- <script src="dist/JS/profile/profile.js "></script> -->
+</html>

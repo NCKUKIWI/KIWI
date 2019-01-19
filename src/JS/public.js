@@ -17,29 +17,61 @@
 
     // Get Course Data
 
-    var course_db = [];
-    var user_id = '5';                                       // todo: 從登錄狀態取得
+    var course_db = []; // course_db
 
+    var userData = {
+    	user_id: 0,
+        user_name: '訪客貓咪',
+        user_photo: 'dist/images/course/hugecat.png',        // todo: 取得正確圖片
+        user_department: '無',
+        user_grade: '無',
+        credit_count: 9,                                    // todo: 讓他可以用計算ㄉ
+        now_wishlist: [],
+        now_table: [],
+    }
 
     axios.get ( '/course/' )
         .then ( function ( response ) {
             course_db = response.data.courses;
             console.log ( '課程資料庫: 抓取資料成功！' ) ;
             if(response.data.user_data !== undefined) {
-            	console.log(response.data.user_data[0]);
-            	console.log(response.data.user_data[0].name);
-            	vue_user_data.user_name = response.data.user_data[0].name;
-            	vue_nav_bar.logIn();
+            	userData.user_name = response.data.user_data[0].name;
+                userData.user_id = response.data.user_data[0].id;
+                userData.user_department = response.data.user_data[0].department;
+                userData.user_grade = response.data.user_data[0].grade;
+                userData.user_photo = "http://graph.facebook.com/" + response.data.user_data[0].fb_id + "/picture?type=normal";
+                document.getElementsByClassName("hub_navbar__profile")[0].style.backgroundImage = "url(" + userData.user_photo + ")";
+                document.getElementsByClassName("hub_navbar__profile__dropdown__info__photo")[0].style.backgroundImage = "url(" + userData.user_photo + ")";
             }
+
+            // 將course_db放入
+	        for(var i=0;i<200;i++){
+	          vue_course_item.course_data.push(vue_course_item.course_data_db()[i]);
+	        }
+
+	        for( var i in vue_course_item.course_data_db()) {
+	          if(vue_course_item.course_data_db()[i].comment_num>0) {
+	            vue_course_item.course_with_comment.push(vue_course_item.course_data_db()[i]);
+	          }
+	        }
+
             vue_user_data.getData( user_id );                 // todo: 每次登入都要重新開始
             // vue_course_item.refresh();
+
+
         })
         .catch ( function ( error ) {
             console.log (  '課程資料庫:' + error ) ;
         });
 
 
-
+    axios.get ( '/course/allDpmt' )
+        .then ( function ( response ) {
+	        vue_courseFilter.dept = response.data;
+        })
+        .catch ( function ( error ) {
+            console.log (  'axios error:' + error ) ;
+        });
 
 
 
@@ -47,12 +79,8 @@
 
     var vue_user_data = new Vue ({
         el: '#user_data',
-        data: {
-            user_name: '',
-            user_photo: 'dist/images/table/profile.png',        // todo: 取得正確圖片
-            credit_count: 9,                                    // todo: 讓他可以用計算ㄉ
-            now_wishlist: [],
-            now_table: [],
+        data: function(){
+        	return userData;
         },
         methods: {
             getData: function( user_id ) {
@@ -67,15 +95,15 @@
                         console.log (  '使用者資料:' + error ) ;
                     });
             },
-            fillData: function ( user_data ) {
+            checkCourseValid: function ( user_data ) {
                 // 初始化用資料
-                this.user_name = user_data.name;
+                // this.user_name = user_data.name;
                 // this.user_photo = user_data.photo;          // todo: 取得圖片
                 // this.credit_count = 0;                      // todo 計算學分數
 
                 // 篩選合格且不重複者填入願望清單
                 this.now_wishlist.length = 0;           // todo: 篩選完成後把 this.now_wishlist 存回資料庫
-                for ( var i = 0 ; i < user_data.now_wishlist.length ; i ++ ) {
+                for ( var i = 0; i < user_data.now_wishlist.length; i ++ ) {
                     if ( getClassObject ( course_db, user_data.now_wishlist[i] ) ) {
                         var ifRepeated = this.now_wishlist.find( function ( item ) {
                             return item == user_data.now_wishlist[i]

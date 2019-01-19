@@ -1,9 +1,8 @@
 .DS_Store
-node_modules
 config.*
-npm-debug.log
 *.log
 .vscode
-dist/*
-dist/**/*
-index.html
+/node_modules
+/dist/**
+/index.html
+/src/views/course/course_content.html

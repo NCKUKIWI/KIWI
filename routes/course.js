@@ -30,11 +30,14 @@ router.get('/', function (req, res) {
         all_courses = courses;
         for(var i in all_courses){
         	all_courses[i]['選課序號'] = all_courses[i]['選課序號'].replace(all_courses[i]['系號'], '');
+            var new_name = all_courses[i]['系所名稱'].replace(/[a-zA-Z]/g, ""); // 把系所的英文名稱拿掉（但是要避免全英文的系所）
+            if(new_name != ""){
+                all_courses[i]['系所名稱'] = new_name;
+            }
         }
         console.log("登入時的使用者資料: " + req.user);
         res.send({
             'courses': all_courses,
-            // 'custom_courses': custom_courses,
             'user_data': req.user,
             'carts': null, //沒登入 選課清單為null
         });
@@ -54,7 +57,6 @@ router.get('/allCoursePrev', function (req, res) {
 router.get('/allDpmt', function (req, res) {
     db.Query('select distinct course_new.系號 as DepPrefix, course_new.系所名稱 as DepName from course_new', function(result){
         for(item in result){
-        	console.log(item);
         	var new_name = result[item].DepName.replace(/[a-zA-Z]/g, "");
         	if(new_name != ""){
         		result[item].DepName = new_name;

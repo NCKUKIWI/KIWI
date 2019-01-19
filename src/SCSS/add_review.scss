@@ -164,6 +164,7 @@ $material_trans: cubic-bezier(0.0, 0.0, 0.2, 1);
                     box-sizing: border-box;
                     border-bottom: $light_2 1px solid;
                     .add_review_dropdown {
+                        opacity: 0;
                         height: 45px;
                         // max-height: 100px;      // todo
                         width: 100%;

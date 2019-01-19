@@ -23,8 +23,8 @@
     	user_id: 0,  
         user_name: '訪客貓咪',
         user_photo: 'dist/images/course/hugecat.png',        // todo: 取得正確圖片
-        user_department: '',
-        user_grade: '',
+        user_department: '無',
+        user_grade: '無',
         credit_count: 9,                                    // todo: 讓他可以用計算ㄉ
         now_wishlist: [],
         now_table: [],
@@ -35,20 +35,16 @@
             course_db = response.data.courses;
             console.log ( '課程資料庫: 抓取資料成功！' ) ;
             if(response.data.user_data !== undefined) {
-            	console.log(response.data.user_data[0]);
-            	console.log(response.data.user_data[0].name);
             	userData.user_name = response.data.user_data[0].name;
                 userData.user_id = response.data.user_data[0].id;
                 userData.user_department = response.data.user_data[0].department;
                 userData.user_grade = response.data.user_data[0].grade;
-                userData.user_photo = "http://graph.facebook.com/" + response.data.user_data[0].fb_id + "/picture?type=small";
+                userData.user_photo = "http://graph.facebook.com/" + response.data.user_data[0].fb_id + "/picture?type=normal";
                 document.getElementsByClassName("hub_navbar__profile")[0].style.backgroundImage = "url(" + userData.user_photo + ")";
                 document.getElementsByClassName("hub_navbar__profile__dropdown__info__photo")[0].style.backgroundImage = "url(" + userData.user_photo + ")";
-            	// vue_nav_bar.logIn();
             }
 
-
-            // vue_course_item.course_data_db = response.data.courses;
+            // 將course_db放入
 	        for(var i=0;i<200;i++){
 	          vue_course_item.course_data.push(vue_course_item.course_data_db()[i]);
 	        }

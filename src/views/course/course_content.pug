@@ -104,7 +104,7 @@ div.course__whole
   div.flex-container.courseList__sideList
     div.card.courseList__sideList__itemBox#courseList
       div#course_item(v-on:scroll="handleScroll")
-        div.list_course_item(@click.self="courseLink(index)" v-for="(course, index) in course_data")
+        div.list_course_item(@click="courseLink(index)" v-for="(course, index) in course_data")
           div.list_course_item_left
             p.list_course_item_category.text_white.text_20(:class="course.dept_id") 工
           div.list_course_item_mid
@@ -113,6 +113,6 @@ div.course__whole
           div.list_course_item_right(style="width:auto")
             div.circle--img
               img(src="./dist/images/course/edit.png")
-            div.circle--img(style="z-index: 20" @click="addCourse(index)")
+            div.circle--img(style="z-index: 20" @click.stop="addCourse(index)")
               img(src="./dist/images/course/heart.png")
             

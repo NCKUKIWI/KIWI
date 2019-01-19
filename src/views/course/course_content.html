@@ -41,7 +41,8 @@
     <div class="courseContentBody__right">
       <div class="courseContentBody__right__score">
         <div class="block_title">
-          <p>課程評分 ({{score_data.rates.length}})</p>
+          <p v-if="score_data.rates != undefined">課程評分 ({{score_data.rates.length}})</p>
+          <p v-if="score_data.rates == undefined">課程評分 (0)</p>
         </div>
         <div class="flex-container score-btn--all">
           <div class="score-btn"><span>甜度</span>

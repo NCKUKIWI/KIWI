@@ -62,7 +62,7 @@ $material_trans: cubic-bezier(0.0, 0.0, 0.2, 1);
         height: 90vh;
         max-height: 620px;
         width: 90vw;
-        max-width: 840px;
+        max-width: 800px;
         background: $white;
         @include box_shadow_3();
         &__top_bar {
@@ -157,7 +157,6 @@ $material_trans: cubic-bezier(0.0, 0.0, 0.2, 1);
                 align-items: center;
                 height: 100%;
                 width: 100%;
-                background: blue;
                 & > .add_review_status {
                     color: $dark;
                 }
@@ -168,7 +167,6 @@ $material_trans: cubic-bezier(0.0, 0.0, 0.2, 1);
                 height: 100%;
                 width: auto;
                 float: right;
-                background: green;
                 & > .add_review_button {
                     display: flex;
                     justify-content: center;

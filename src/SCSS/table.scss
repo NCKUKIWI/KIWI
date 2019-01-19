@@ -122,6 +122,10 @@ div {
     box-sizing: border-box;
 }
 
+a {
+    text-decoration: none;
+}
+
 .text {
     &_24 {
         font-size: 18px;

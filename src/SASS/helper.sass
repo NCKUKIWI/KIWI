@@ -12,18 +12,18 @@
   color: #9b9b9b
 
 .helper_background
-  background-color: rgba(66,66,66,0.7)
+  background-color: rgba(66,66,66,0.4)
   width: 100vw
   height: 100vh
   display: flex
   justify-content: center
   align-items: center
-  z-index: 100
+  z-index: 400
 .helper_content
   margin-top: 5vh
   background-color: rgba(255,255,255,1)
   width: 40vw
-  z-index: 300
+  z-index: 450
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5)
   transition: -webkit-box-shadow .25s
   transition: box-shadow .25s
@@ -46,24 +46,29 @@
   display: flex
   justify-content: center
   align-items: center
-  margin-top: 2vh
+  margin: 2vh 0px
   cursor: pointer
 .close-btn
-  background-image: url('./dist/images/helper/close-btn.png')
-  background-position: center
-  background-repeat: no-repeat
-  width: 20px
-  height: 20px
+  // background-image: url('../images/helper/closebtn.svg')
+  // background-position: center
+  // background-repeat: no-repeat
+  width: 20%
+  // height: 20%
+  // float: right
+  // padding: 5px
+  // background-color: #eee
+  // border-radius: 15px
   position: absolute
-  right: 32%
+  right: 15%
   top: 29%
+  cursor: pointer
 
 #helper_success
-  // display: none
+  display: none
   margin-top: 3vh
   padding: 3.5vh 3vw
   position: absolute
-  z-index: 400
+  z-index: 500
   width: 30vw
   height: 32vh
 
@@ -78,5 +83,6 @@
   a
     color: inherit
     margin-right: 15px
+    cursor: pointer
   a:visited
     color: inherit

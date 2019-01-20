@@ -54,6 +54,9 @@ var vue_nav_bar = new Vue({
 		},
 		logIn: function(){
 			vue_nav_bar.user_name = vue_user_data.user_name;
+		},
+		open_helper: function() {
+			// document.getElementById("helper_background").style.display = "block";
 		}
 	}
 })

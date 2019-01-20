@@ -50,43 +50,45 @@ input[type=checkbox]:checked
 input[type=checkbox]:focus
   outline: none
 
-.fucking_checkmark:after
-  content: ""
-  position: absolute
-  display: none
-
 .quick_search_custom
-  padding: 14px 50px 14px 15px
+  padding: 14px 50px 14px 18px
   background-color: #fff
   box-shadow: 0 0 14px 0 rgba(0,0,0,0.06)
   border: #eee 1px solid
   box-sizing: content-box
   display: flex
   align-items: center
-  span
-    margin-left: 5px
-  a:visited
-    color: #F35A5A
-    text-decoration: none
-  a, p
-    text-decoration: none
-  &--btn
-    padding: 16px 50px 16px 15px
-    color: #F35A5A
-    margin-top: 1vh
-    display: inline-flex
+  input
+    position: absolute
+    opacity: 0
     cursor: pointer
-    p
-      margin-left: 10px
-      color: #F35A5A
+    height: 0
+    width: 0
+  span:nth-child(3)
+    padding-left: 14px
 
+.fucking_checkmark
+  height: 17px
+  width: 17px
+  border-radius: 2px
+  background-color: #eee
+
+.fucking_checkmark:after
+  content: ""
+  position: absolute
+  display: none
+
+
+.quick_search_custom input:checked ~ .fucking_checkmark
+  background-color: #1A6CBD
 
 .quick_search_custom input:checked ~ .fucking_checkmark:after
   display: block
 
+
 .quick_search_custom .fucking_checkmark:after
   left: 24px
-  top: 20px
+  top: 16px
   width: 5px
   height: 10px
   border: solid #fff

@@ -68,7 +68,7 @@
           <p>課程心得 ({{comment_data.length}})</p>
         </div>
         <div class="courseFeedback">
-          <div class="courseFeedback__single courseFeedback__single--default">
+          <div class="courseFeedback__single courseFeedback__single--default" v-if="course_data.comment_num == 0">
             <div class="courseFeedback__msg">
               <p>點擊按鈕，立即提供課程心得，</p>
               <p>幫助 480 位對這門課有興趣的同學！</p>
@@ -109,9 +109,9 @@
         <p class="text_18">檢視選項</p>
       </div>
       <div class="quick_search_area">
-        <div class="quick_search_custom">
+        <label class="quick_search_custom"> 
           <input id="commentCheck" type="checkbox" @click="comment_filter()"/><span class="fucking_checkmark"></span><span>僅顯示有心得之課程</span>
-        </div>
+        </label>
       </div>
     </div>
     <div class="wishlist" style="margin-top:4vh">

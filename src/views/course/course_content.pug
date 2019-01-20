@@ -59,7 +59,7 @@ div#courseContent(v-show="isShow" @click.self="showContent()")
         div.block_title
           p 課程心得 ({{comment_data.length}})
         div.courseFeedback
-          div.courseFeedback__single.courseFeedback__single--default
+          div(v-if="course_data.comment_num == 0").courseFeedback__single.courseFeedback__single--default
             div.courseFeedback__msg
               p 點擊按鈕，立即提供課程心得，
               p 幫助 480 位對這門課有興趣的同學！
@@ -84,7 +84,7 @@ div.course__whole
       div.block_title
         p.text_18 檢視選項
       div.quick_search_area
-        div.quick_search_custom
+        label.quick_search_custom 
           input#commentCheck(type="checkbox" @click="comment_filter()")
           span.fucking_checkmark
           span 僅顯示有心得之課程

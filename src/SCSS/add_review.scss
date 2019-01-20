@@ -68,24 +68,54 @@ $material_trans: cubic-bezier(0.0, 0.0, 0.2, 1);
         &__top_bar {
             position: relative;
             display: flex;
-            align-items: center;
             width: 100%;
             height: 48px;
             background: $black;
             box-sizing: border-box;
             border: $black 1px solid;
-            padding: 0 1.5vw;
+            padding: 0 20px;
+            cursor: default;
             &__title {
-                color: $white;
-                opacity: 0.95;
-            }      
+                display: flex;
+                align-items: center;
+                height: 100%;
+                width: 100%;
+                .add_review_title {
+                    color: $white;
+                    opacity: 0.95;
+                }
+            }
+            &__icons {
+                display: flex;
+                align-items: center;
+                height: 100%;
+                width: auto;
+                .add_review_icon {
+                    height: 14px;
+                    width: 14px;
+                    cursor: pointer;
+                    transition: .2s $material_trans;
+                    &:hover {
+                        opacity: 0.8;
+                    }
+                    &:active {
+                        opacity: 0.6;
+                    }
+                    &.close {
+                        background-image: url("../images/add_review/icon_close.svg");
+                        background-size: contain;
+                        background-repeat: no-repeat;
+                        background-position: center;
+                    }
+                }
+            }
         }
         &__mid_cont {
             position: relative;
             display: flex;
             flex-direction: column;
             width: 100%;
-            height: calc( 100% - 103px );
+            height: calc( 100% - 108px );
             background: $white;
             box-sizing: border-box;
             border: $light_2 1px solid;
@@ -97,14 +127,63 @@ $material_trans: cubic-bezier(0.0, 0.0, 0.2, 1);
                 height: 45px;
                 box-sizing: border-box;
                 border-bottom: $light_2 1px solid;
-                & > input {
+                .add_review_class {
                     width: 100%;
                     outline: none;
                     box-sizing: border-box;
                     border-right: $light_2 1px solid;
-                    padding: 0 1.5vw;
+                    padding: 0 20px;
+                    position: relative;
+                    background-color: $white;
                     &::placeholder {
-                        color: $gray;
+                        color: $black;
+                    }
+                    &.title {
+                        flex: 6;
+                    }
+                    &.semester {
+                        flex: 2;
+                    }
+                    &.teacher {
+                        flex: 3;
+                    }
+                    &.semester, &.teacher {
+                        background-image: url("../images/add_review/icon_down_arrow.svg");
+                        background-color: $white;
+                        background-repeat: no-repeat;
+                        background-position: 90% center;
+                        opacity: 0.4;
+                    }
+                }
+                .add_review_dropdowns {
+                    position: absolute;
+                    z-index: 100;
+                    display: flex;
+                    width: 100%;
+                    top: 45px;
+                    box-sizing: border-box;
+                    border-bottom: $light_2 1px solid;
+                    .add_review_dropdown {
+                        opacity: 0;
+                        height: 45px;
+                        // max-height: 100px;      // todo
+                        width: 100%;
+                        outline: none;
+                        box-sizing: border-box;
+                        border-right: $light_2 1px solid;
+                        padding: 0 20px;
+                        position: relative;
+                        background-color: $white;
+                        @include box_shadow_1();
+                        &.title {
+                            flex: 6;
+                        }
+                        &.semester {
+                            flex: 2;
+                        } 
+                        &.teacher {
+                            flex: 3;
+                        }
                     }
                 }
             }
@@ -118,9 +197,10 @@ $material_trans: cubic-bezier(0.0, 0.0, 0.2, 1);
                 border-right: $light_2 1px solid;
                 resize: none;
                 outline: none;
-                padding: 2vw 1.5vw;
+                padding: 25px 20px;
+                opacity: 0.4;
                 &::placeholder {
-                    color: $gray;
+                    color: $black;
                 }
             }
             &__bottom_row {
@@ -137,8 +217,46 @@ $material_trans: cubic-bezier(0.0, 0.0, 0.2, 1);
                     width: 100%;
                     box-sizing: border-box;
                     border-right: $light_2 1px solid;
-                    padding: 0 1.5vw;
-                    color: $gray;
+                    padding: 0 20px;
+                    opacity: 0.4;
+                    &__left_area {
+                        display: flex;
+                        align-items: center;
+                        height: 100%;
+                        width: 100%;
+                        cursor: default;                    
+                        .add_review_rate__name {
+                            color: $black;
+                        }
+                    }
+                    &__right_area {
+                        display: flex;
+                        align-items: center;
+                        height: 100%;
+                        width: auto;
+                        .add_review_rate__score {
+                            color: $black;
+                            margin: 0 20px;
+                            cursor: default;
+                        }
+                        .add_review_rate__button {
+                            display: block;
+                            height: 20px;
+                            width: 20px;
+                            &.go_down {
+                                background-image: url("../images/add_review/icon_left_arrow_round.svg");
+                                background-size: contain;
+                                background-repeat: no-repeat;
+                                background-position: center;
+                            }
+                            &.go_up {
+                                background-image: url("../images/add_review/icon_right_arrow_round.svg");
+                                background-size: contain;
+                                background-repeat: no-repeat;
+                                background-position: center;
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -146,18 +264,19 @@ $material_trans: cubic-bezier(0.0, 0.0, 0.2, 1);
             position: relative;
             display: flex;
             width: 100%;
-            height: 55px;
+            height: 60px;
             background: $light_1;
             box-sizing: border-box;
             border: $light_2 1px solid;
             border-top: none;
-            padding: 0 1.5vw;
+            padding: 0 20px;
             &__status {
                 display: flex;
                 align-items: center;
                 height: 100%;
                 width: 100%;
-                & > .add_review_status {
+                cursor: default;
+                .add_review_status {
                     color: $dark;
                 }
             }
@@ -167,10 +286,48 @@ $material_trans: cubic-bezier(0.0, 0.0, 0.2, 1);
                 height: 100%;
                 width: auto;
                 float: right;
-                & > .add_review_button {
+                .add_review_button {
                     display: flex;
                     justify-content: center;
-                    width: 70px;
+                    border-radius: 50px;
+                    padding: 5px 0;
+                    background-color: $white;
+                    margin-left: 10px;
+                    @include box_shadow_1();
+                    transition: .2s $material_trans;
+                    cursor: default;
+                    &.enabled {
+                        cursor: pointer;
+                        &:hover {
+                            opacity: 0.8;
+                        }
+                        &:active {
+                            filter: brightness(95%);
+                        }
+                    }
+                    &.give_up {
+                        width: 55px;
+                        color: $gray;
+                        &.enabled {
+                            color: $dark;
+                        }
+                    }
+                    &.send_review {
+                        width: 100px;
+                        background-image: url("../images/add_review/icon_send_disabled.svg");
+                        background-size: 12px;
+                        background-repeat: no-repeat;
+                        background-position: 14px center;
+                        padding-left: 18px;
+                        color: $gray;
+                        &.enabled {
+                            background-image: url("../images/add_review/icon_send.svg");
+                            background-size: 12px;
+                            background-repeat: no-repeat;
+                            background-position: 14px center; 
+                            color: $red;                       
+                        }
+                    }
                 }
             }
         }

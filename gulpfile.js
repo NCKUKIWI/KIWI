@@ -235,12 +235,12 @@ gulp.task('compile', ['sass','scss', 'js', 'compresspug', 'combine_html', 'asset
 gulp.task('watch', ['compile'], function() {
 	browserSync.init({
         port: 8000,
-        proxy: 'http://localhost:3000/',
-		// server: {
-		// 	baseDir: './'
-		// },
-        // startPath: '/'
-        reloadDelay: 2000
+        // proxy: 'http://localhost:3000/',
+        reloadDelay: 1000,
+		server: {
+			baseDir: './'
+		},
+        startPath: '/'
     });
     gulp.watch('src/SASS/*.sass', ['sass']);
     gulp.watch('src/SCSS/*.scss', ['scss']);

@@ -6,4 +6,5 @@ config.*
 /dist/**
 /index.html
 /src/views/course/course_content.html
+token.*
 gulpfile.js

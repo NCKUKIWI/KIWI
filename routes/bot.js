@@ -3,7 +3,10 @@ var request = require('request');
 var config = require('../config');
 var router = express.Router();
 var dbsystem = require('../model/dba');
-
+var DB = require('../model/db');
+var gmailSend = require('./gmailSend/gmailSend')
+var cache = require("../helper/cache");
+var redis = cache.redis;
 const apiVersion = "v3.1";
 const msg_url = `https://graph.facebook.com/${apiVersion}/me/messages`;
 const token = config.fb.token;
@@ -116,6 +119,18 @@ const broadcastTextMsg = txt => ({
 		"text": txt
 	}]
 });
+const broadcastBtnMsg = (txt, btn) => ({
+	"messages": [{
+		"attachment": {
+			"type": "template",
+			"payload": {
+				"template_type": "button",
+				"text": txt,
+				"buttons": btn
+			}
+		}
+	}]
+});
 const broadcastLinkMsg = (txt, url, title) => ({
 	"messages": [{
 		"attachment": {
@@ -145,8 +160,33 @@ const creativeMsgCb = target_label_id => resBody => {
 		}
 	});
 };
+router.post('/broadd',function(req, res){
 
+	var broadcastType = 'broad';
+	var target_label_id = broadcast_label[(broadcastType === "broad" ? "tester" : "all_user")];
+	console.log(target_label_id)
+
+	sendPostRequest({
+		url: msg_creative_url,
+		json: broadcastTextMsg('好巧喔比巧克力還巧 測試一下')
+	}, creativeMsgCb(target_label_id));
+	// let report = '明天早餐吃什麼'
+	// 	let buttons = [{
+	// 		"type": "postback",
+	// 		"title": "A",
+	// 		"payload": "reportPass_"
+	// 	}, {
+	// 		"type": "postback",
+	// 		"title": "D",
+	// 		"payload": "reportFail_"
+	// 	}];
+	// 	sendPostRequest({
+	// 		url: msg_creative_url,
+	// 		json:broadcastBtnMsg(report, buttons)
+	// 	}, creativeMsgCb(target_label_id));
+})
 router.post('/sendmsg', function (req, res) {
+	console.log(req.body)
 	var broadcastType = req.body.type;
 	var target_label_id = broadcast_label[(broadcastType === "test" ? "tester" : "all_user")];
 	if (req.body.msg) {
@@ -170,6 +210,8 @@ router.post('/sendmsg', function (req, res) {
 	}
 	res.send('ok');
 });
+
+
 
 function subscribeBroadcast(sender, isTester) {
 	return sendPostRequest({
@@ -236,10 +278,14 @@ function cmtPrivateReply(response_msg, cid) {
  */
 
 router.get('/webhook', function (req, res) {
+	console.log(req.query['hub.verify_token'])
 	if (req.query['hub.verify_token'] === 'nckuhubbver49') {
 		res.send(req.query['hub.challenge']);
+		console.log("Webhook setting")
 	} else {
 		res.send('Error, wrong token');
+		console.log("wrong")
+
 	}
 });
 
@@ -275,6 +321,7 @@ router.post('/webhook', function (req, res) {
 	let body = req.body;
 	body.entry.forEach(function (anEntry) {
 		if (anEntry.hasOwnProperty('changes')) { // 文章留言
+			console.log(anEntry['changes'])
 			anEntry.changes.forEach(aChange => {
 				if (aChange.field === 'feed' && aChange.value.hasOwnProperty('comment_id') && aChange.value.hasOwnProperty('message')) {
 					const msg = aChange.value.message;
@@ -354,6 +401,9 @@ router.post('/webhook', function (req, res) {
 					var courseIdCancel = postback.courseIdCancel.matcher(event.postback.payload); //抓payload中的 course_id 用來取消追蹤課程
 					var courseIdInfo = postback.courseIdInfo.matcher(event.postback.payload); //抓payload中的 course_id 用來傳送單一課程詳細資訊
 					var courseIdAsk = postback.courseIdAsk.matcher(event.postback.payload);
+					let RegPass = /reportPass_/;
+					let RegFail = /reportFail_/;
+					console.log('pload'+event.postback.payload);
 					if (courseIdFollow) {
 						courseIdFollow = postback.courseIdFollow.replacer(courseIdFollow[0]);
 						addFollowCourse(sender, courseIdFollow);
@@ -379,7 +429,12 @@ router.post('/webhook', function (req, res) {
 						unsubscribeBroadcast(sender);
 					} else if (event.postback.payload == "dontFollow") {
 						sendGoodbye(sender);
-					} else {
+					} else if (RegPass.test(event.postback.payload)) {
+						sendReportReview(true, event)
+					} else if (RegFail.test(event.postback.payload)) {
+						sendReportReview(false, event)
+					}
+					else {
 						if (/開始使用/.test(event.postback.payload))
 							subscribeBroadcast(sender, false);
 						sendTextMessage(sender, event.postback.payload);
@@ -561,6 +616,7 @@ function sendFollowCourseList(sender) {
 	});
 }
 
+
 function cancelFollowCourse(sender, follow_id) {
 	var db = new dbsystem();
 	db.select().field(["content", "teacher", "time"]).from("follow").where("id=", follow_id).run(function (follow) {
@@ -720,6 +776,49 @@ function sendGoodbye(sender) {
 	}, 2000);
 }
 
+function sendReportReview(pass, event){
+	postid = event.postback.payload.split('_')[1];
+		DB.FindbyColumn('report_post',['onRead'],{'post_id':postid} ,function(result){
+			let broadcastType = 'test';
+			// var target_label_id = broadcast_label[(broadcastType === "broad" ? "broad" : "all_user")]; // 正式版
+			var target_label_id = broadcast_label[(broadcastType === "test" ? "tester" : "all_user")];
+			if(result[0]['onRead'] == 0){ // the report isn't read
+				DB.Update('report_post', {'onRead':1, 'reviewer':event.sender.id}, {'post_id':postid} ,function(){})
+				// Q: If I remove the cb function , it would cause error 'callback isn't a function', WHY?
+				if(pass){
+					gmailSend.sendMail('nckuhub@gmail.com', 'TO 檢舉人： 你的檢舉通過囉')
+					gmailSend.sendMail('nckuhub@gmail.com', 'TO 被檢舉人： 有人檢舉你的心得，且通過我們審核了，你的心得將會GG喔')	 
+					// sendTextMessage(config.bot.test, 'ok！這則心得被通過檢舉, 心得已下架！正在發信通知被檢舉人');
+					sendPostRequest({
+						url: msg_creative_url,
+						json: broadcastTextMsg('以上這則心得被通過檢舉, 心得已下架！正在發信通知被檢舉人')
+					}, creativeMsgCb(target_label_id));
+					DB.Query(`SELECT * FROM post WHERE id=${postid}`, function(result){
+						uid = result[0].user_id;
+						data = JSON.stringify(result[0])
+						if(uid!=0){
+							redis.set(cache.userCourseKey(uid, postid), data,function(){
+								DB.DeleteByColumn('post', {'id':postid}, function(){} )
+							})
+						}
+					})
+					// DB.Query('INSERT INTO BadPost SELECT * FROM post WHERE id='+postid)
+					
+				}else{
+					gmailSend.sendMail('nckuhub@gmail.com', 'TO 檢舉人： 你的檢舉並沒有通過')	 
+					// sendTextMessage(config.bot.test, 'ok！這則心得並沒有通過檢舉門檻 撤銷檢舉！已發信通知檢舉人');
+					sendPostRequest({
+						url: msg_creative_url,
+						json: broadcastTextMsg('以上這則心得並沒有通過檢舉門檻 撤銷檢舉！已發信通知檢舉人')
+					}, creativeMsgCb(target_label_id));
+				}
+			}else{
+				console.log('it has been read.')
+				sendTextMessage(event.sender.id, '已經有其他測試人員審查過囉～別再按了');
+			}
+		})
+}
+
 function sendDisableMsg(sender, dept_no) {
 	sendTextMessage(sender, `很抱歉！此階段 ${dept_no} 課程未開放追蹤餘額！`);
 }
@@ -868,4 +967,31 @@ function sendRequest(option, cb) {
 	});
 }
 
-module.exports = router;
+function sendReport(report_post){
+	var broadcastType = 'test';
+	var target_label_id = broadcast_label[(broadcastType === "test" ? "tester" : "all_user")]; // 正式版
+	// var target_label_id = broadcast_label[(broadcastType === "test" ? "broad" : "all_user")];
+
+	DB.FindbyColumn('post', ['comment'], { "id": report_post['post_id'] }, function (data) {
+		let report = '測試中建議關掉通知ＱＱ \n\n'+'檢舉文章: \n\n'+data[0]['comment']+'\n\n'+'檢舉原因: \n\n'+report_post['reason']
+		let buttons = [{
+			"type": "postback",
+			"title": "給過",
+			"payload": "reportPass_"+report_post['post_id']
+		}, {
+			"type": "postback",
+			"title": "理由偏爛",
+			"payload": "reportFail_"+report_post['post_id']
+		}];
+		sendPostRequest({
+			url: msg_creative_url,
+			json:broadcastBtnMsg(report, buttons)
+		}, creativeMsgCb(target_label_id));
+		// sendButtonsMessage(config.bot.test, report, buttons);
+	});
+}
+
+
+// broadcast labelid: https://developers.facebook.com/docs/messenger-platform/send-messages/broadcast-messages/target-broadcasts/?locale=zh_TW
+module.exports = {router, sendReport};
+

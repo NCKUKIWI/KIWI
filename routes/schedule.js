@@ -6,7 +6,7 @@ var db = require('../model/db');
 router.get('/', function(req, res) {
   console.log('\n'+'GET /schedule');
   if(req.user == undefined){
-    res.send({
+    res.json({
       'user': req.user,
       'carts':null   //沒登入 選課清單為null
     });
@@ -19,7 +19,7 @@ router.get('/', function(req, res) {
     var cols = ['course_new.id','course_new.課程名稱','course_new.時間'];
     var conditions = {'cart.user_id':userid,'course_new.id':'cart.course_id'};
     db.InnerJoin(tables,cols,conditions,function(carts){
-      res.send({
+      res.json({
         'user': req.user,
         'carts':carts
       });

@@ -18,6 +18,7 @@
             <div class="three wide field">
               <label>學期:</label>
               <select name="semester" form="createform" style="height: 42px;" id="semesterSelector">
+                <option value="106-2">107-1</option>
               	<option value="106-2">106-2</option>
                 <option value="106-1">106-1</option>
                 <option value="105-2">105-2</option>
@@ -39,7 +40,7 @@
         <input type="hidden" name="teacher" value="">
         <div class="partB">
           <div class="field">
-            <label>推薦程度:</label>
+            <label>收穫程度:</label>
             <div class="scorebar" id="recommand">
               <div class="scorebtn" style="border-left:1px solid black;" data-score="1">1</div>
               <div class="scorebtn" data-score="2">2</div>
@@ -54,7 +55,7 @@
             </div>
           </div>
           <div class="field">
-            <label>課程硬度:</label>
+            <label>課程涼度:</label>
             <div class="scorebar" id="hard">
               <div class="scorebtn" style="border-left:1px solid black;" data-score="1">1</div>
               <div class="scorebtn" data-score="2">2</div>
@@ -83,7 +84,7 @@
               <div class="scorebtn" data-score="10">10</div>
             </div>
           </div>
-          <div class="field">
+<!--           <div class="field">
             <label>付出程度:</label>
             <div class="scorebar" id="give">
               <div class="scorebtn" style="border-left:1px solid black;" data-score="1">1</div>
@@ -97,8 +98,8 @@
               <div class="scorebtn" data-score="9">9</div>
               <div class="scorebtn" data-score="10">10</div>
             </div>
-          </div>
-          <div class="field">
+          </div> -->
+<!--           <div class="field">
             <label>收穫程度:</label>
             <div class="scorebar" id="got">
               <div class="scorebtn" style="border-left:1px solid black;" data-score="1">1</div>
@@ -112,21 +113,21 @@
               <div class="scorebtn" data-score="9">9</div>
               <div class="scorebtn" data-score="10">10</div>
             </div>
-          </div>
+          </div> -->
         </div>
         <div class="partA">
           <div class="field">
             <label>修課心得:</label>
             <textarea rows="4" cols="50" name="comment" form="createform" placeholder="這學期修完這堂課的感想"></textarea>
           </div>
-          <div class="field">
+<!--           <div class="field">
             <label>上課內容: </label>
             <textarea rows="4" cols="50" name="course_style" form="createform" placeholder="老師的上課方式、使用的教材與課堂規則"></textarea>
           </div>
           <div class="field">
             <label>作業考試: </label>
             <textarea rows="4" cols="50" name="report_hw" form="createform" placeholder="這堂課的作業、報告、考試形式以及評分方式"></textarea>
-          </div>
+          </div> -->
           <div class="field" style="text-align:center;">
             <div class="ui button" id="createform-submit">送出</div>
             <div class="ui button" data-dismiss="modal">返回</div>
@@ -160,6 +161,7 @@ $(document).ready(function(){
   ];
 
   var categoryCourse = {
+    '107-1': course.filter(aCourse => aCourse.semester == '107-1'),
   	'106-2': course.filter(aCourse => aCourse.semester == '106-2'),
     '106-1': course.filter(aCourse => aCourse.semester == '106-1'),
     '105-2': course.filter(aCourse => aCourse.semester == '105-2'),

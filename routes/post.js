@@ -190,7 +190,7 @@ router.post('/create', function (req, res) {
 
 /* new */
 router.get('/new', function (req, res) {
-    var sql = 'SELECT id,課程名稱,時間,老師,系所名稱,semester FROM course_all WHERE semester ="104-2" OR semester ="105-1" OR semester ="105-2" OR semester ="106-1" OR semester = "106-2"';
+    var sql = 'SELECT id,課程名稱,時間,老師,系所名稱,semester FROM course_all WHERE semester ="104-2" OR semester ="105-1" OR semester ="105-2" OR semester ="106-1" OR semester = "106-2" OR semester = "107-1"';
     db.Query(sql, function (course) {
         res.render('post/new', {
             'course': course,

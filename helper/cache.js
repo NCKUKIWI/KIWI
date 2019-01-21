@@ -19,6 +19,9 @@ function courseCacheKey(id) {
 function userCacheKey(id) {
     return "user_" + id;
 }
+function userCourseKey(uid, cid) {
+    return "user_" + uid + "_"+cid;
+}
 
 function userCourseKey(uid, cid) {
     return "user_" + uid + "_"+cid;

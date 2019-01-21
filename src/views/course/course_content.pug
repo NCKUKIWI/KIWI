@@ -1,8 +1,11 @@
 div#courseContent(v-show="isShow" @click.self="showContent()")
+  div.content_nextpage
+    img(src="./dist/images/course/left-btn.svg")
+    img(src="./dist/images/course/right-btn.svg")
   div.courseContentBody
     div.courseContentBody__left
       span.courseSerial {{course_data.系號}}{{course_data.選課序號}}
-      h2(style="margin-top:20px;") {{course_data.課程名稱}}
+      h2 {{course_data.課程名稱}}
       div(style="margin-top:30px").flex-container.icon-span(@click="openOutline(course_data.系號,course_data.課程碼)")
         div.content-icon.see_clip
         span 檢視課程大綱
@@ -59,7 +62,7 @@ div#courseContent(v-show="isShow" @click.self="showContent()")
         div.block_title
           p 課程心得 ({{comment_data.length}})
         div.courseFeedback
-          div.courseFeedback__single.courseFeedback__single--default
+          div(v-if="course_data.comment_num == 0").courseFeedback__single.courseFeedback__single--default
             div.courseFeedback__msg
               p 點擊按鈕，立即提供課程心得，
               p 幫助 480 位對這門課有興趣的同學！
@@ -84,7 +87,7 @@ div.course__whole
       div.block_title
         p.text_18 檢視選項
       div.quick_search_area
-        div.quick_search_custom
+        label.quick_search_custom 
           input#commentCheck(type="checkbox" @click="comment_filter()")
           span.fucking_checkmark
           span 僅顯示有心得之課程
@@ -107,17 +110,17 @@ div.course__whole
   div.flex-container.courseList__sideList
     div.card.courseList__sideList__itemBox#courseList
       div#course_item(v-on:scroll="handleScroll")
-        div.list_course_item(@click.self="courseLink(index)" v-for="(course, index) in course_data")
-          div.list_course_item_left(@click="courseLink(index)")
+        div.list_course_item(@click="courseLink(index)" v-for="(course, index) in course_data")
+          div.list_course_item_left
             p.list_course_item_category.text_white.text_20(:class="course.系號") {{course_circle(course.系號,course.系所名稱)}}
-          div.list_course_item_mid(@click="courseLink(index)")
+          div.list_course_item_mid
             p.list_course_item_title.text_16 {{course.課程名稱}}
             p.list_course_item_description.text_14.text_dark {{course.系所名稱}} {{course.系號}}{{course.選課序號}} - {{course.老師}}
           div.list_course_item_right.large_right
             div.list_course_item_right--courseList
               img(src="./dist/images/course/comment_num.svg")
-              p.text_14.text_dark {{course.comment_num}}
+              p.text_14.text_dark(style="margin-right:15px") {{course.comment_num}}
             div.large_right--circle
-              div.circle--img(@click="addCourse(index)")
+              div.circle--img(@click.stop="addCourse(index)")
                 img(src="./dist/images/course/heart.svg")
             

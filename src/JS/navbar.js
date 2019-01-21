@@ -7,7 +7,7 @@ var vue_nav_bar = new Vue({
 		user_data: userData,
 	},
 	created: function() {
-		var initial_tab = 'helper';
+		var initial_tab = 'register';
 		this.change_tab( initial_tab );
 	},
 	computed: {

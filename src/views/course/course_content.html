@@ -1,8 +1,9 @@
 
 <div id="courseContent" v-show="isShow" @click.self="showContent()">
+  <div class="content_nextpage"><img src="./dist/images/course/left-btn.svg"/><img src="./dist/images/course/right-btn.svg"/></div>
   <div class="courseContentBody">
     <div class="courseContentBody__left"><span class="courseSerial">{{course_data.系號}}{{course_data.選課序號}}</span>
-      <h2 style="margin-top:20px;">{{course_data.課程名稱}}</h2>
+      <h2>{{course_data.課程名稱}}</h2>
       <div class="flex-container icon-span" style="margin-top:30px" @click="openOutline(course_data.系號,course_data.課程碼)">
         <div class="content-icon see_clip"></div><span>檢視課程大綱</span>
       </div>
@@ -68,7 +69,7 @@
           <p>課程心得 ({{comment_data.length}})</p>
         </div>
         <div class="courseFeedback">
-          <div class="courseFeedback__single courseFeedback__single--default">
+          <div class="courseFeedback__single courseFeedback__single--default" v-if="course_data.comment_num == 0">
             <div class="courseFeedback__msg">
               <p>點擊按鈕，立即提供課程心得，</p>
               <p>幫助 480 位對這門課有興趣的同學！</p>
@@ -109,9 +110,9 @@
         <p class="text_18">檢視選項</p>
       </div>
       <div class="quick_search_area">
-        <div class="quick_search_custom">
+        <label class="quick_search_custom"> 
           <input id="commentCheck" type="checkbox" @click="comment_filter()"/><span class="fucking_checkmark"></span><span>僅顯示有心得之課程</span>
-        </div>
+        </label>
       </div>
     </div>
     <div class="wishlist" style="margin-top:4vh">
@@ -138,20 +139,20 @@
   <div class="flex-container courseList__sideList">
     <div class="card courseList__sideList__itemBox" id="courseList">
       <div id="course_item" v-on:scroll="handleScroll">
-        <div class="list_course_item" @click.self="courseLink(index)" v-for="(course, index) in course_data">
-          <div class="list_course_item_left" @click="courseLink(index)">
+        <div class="list_course_item" @click="courseLink(index)" v-for="(course, index) in course_data">
+          <div class="list_course_item_left">
             <p class="list_course_item_category text_white text_20" :class="course.系號">{{course_circle(course.系號,course.系所名稱)}}</p>
           </div>
-          <div class="list_course_item_mid" @click="courseLink(index)">
+          <div class="list_course_item_mid">
             <p class="list_course_item_title text_16">{{course.課程名稱}}</p>
             <p class="list_course_item_description text_14 text_dark">{{course.系所名稱}} {{course.系號}}{{course.選課序號}} - {{course.老師}}</p>
           </div>
           <div class="list_course_item_right large_right">
             <div class="list_course_item_right--courseList"><img src="./dist/images/course/comment_num.svg"/>
-              <p class="text_14 text_dark">{{course.comment_num}}</p>
+              <p class="text_14 text_dark" style="margin-right:15px">{{course.comment_num}}</p>
             </div>
             <div class="large_right--circle">
-              <div class="circle--img" @click="addCourse(index)"><img src="./dist/images/course/heart.svg"/></div>
+              <div class="circle--img" @click.stop="addCourse(index)"><img src="./dist/images/course/heart.svg"/></div>
             </div>
           </div>
         </div>

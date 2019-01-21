@@ -19,28 +19,16 @@
     <link rel="stylesheet" href="dist/CSS/register.css">
     <!-- <script src="dist/JS/profile/init2.js"></script> -->
 	<!-- <link rel="stylesheet" type="text/css" href="./dist/CSS/profile/profile.css "> -->
-    <!-- @@include('course/navbar.html') -->
-        @@include('public/navbar.html')
     <body>
-    	<div class="change_tab" name="course">
-    	<!-- <div class="change_tab" name="course" style="display: none;"> -->
-    		@@include('course/course_content.html')
-
-    	</div>
-    	<div class="change_tab" name="table">
-        <!-- <div class="change_tab" name="table" style="display: none;"> -->
-    		@@include('table/arrange_table.html')
-    	</div>
-    	<div class="change_tab" name="profile" style="background-color:rgba(247,247,247,0.8)">
-        <!-- <div class="change_tab" name="profile" style="display:none; background-color:rgba(247,247,247,0.8)"> -->
-    		<!-- @@include('profile/profile.html') -->
-    	</div>
-      <div class="change_tab" name="helper">
-          @@include('public/helper.html')
-      </div>
-      <div class="change_tab" name="register">
-          @@include('public/register.html')
-      </div>
+        <!-- 基礎建設 -->
+        <div class="basic_div" name="navbar"> @@include('public/navbar.html')  </div>
+        <div class="basic_div" name="button"> @@include('public/button.html')  </div>
+        <!-- 個別分頁 -->
+    	<div class="tab_div" name="course">  @@include('course/course_content.html')  </div>
+    	<div class="tab_div" name="table">  @@include('table/table.html')  </div>
+    	<!-- <div class="tab_div" name="profile">  @@include('profile/profile.html')  </div> -->
+        <div class="tab_div" name="helper">  @@include('public/helper.html')  </div>
+        <div class="tab_div" name="register">  @@include('public/register.html')  </div>
     </body>
 </head>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17/vue.js"> </script>

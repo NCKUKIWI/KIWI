@@ -6,3 +6,4 @@ config.*
 /dist/**
 /index.html
 /src/views/course/course_content.html
+gulpfile.js

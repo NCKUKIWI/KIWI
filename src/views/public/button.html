@@ -1,0 +1,5 @@
+
+<div id="fixed_button_table" class="fixed_button_area" :class="{ locked: class_table_locked }">
+    <div class="major_button" :class="[{ deep_blue_edit: class_table_locked },{ red_done: !class_table_locked }]" @click="switchLockStatus"></div>
+    <div class="minor_button dark_cancel" @click="switchLockStatus"></div>
+</div>

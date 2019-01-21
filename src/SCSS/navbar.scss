@@ -200,7 +200,7 @@ $material_trans: cubic-bezier(0.0, 0.0, 0.2, 1);
         width: 30px;
         height: 30px;
         border-radius: 30px;
-        border: transparent 3px solid;
+        border: $blue 3px solid;
         box-sizing: content-box;
         cursor: pointer;
         transition: 0.2s $material_trans;

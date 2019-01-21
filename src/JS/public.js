@@ -20,9 +20,13 @@
 
 
 
-    // Get Course Data
+    // Public Data----------------------------------------------------------------
+
+    // 課程資料
 
     var course_db = []; // course_db
+
+    // 使用者資料
 
     var userData = {
     	user_id: 0,
@@ -34,6 +38,10 @@
         now_wishlist: [],
         now_table: [],
     }
+
+    // 視窗狀態 
+
+
 
     axios.get ( '/course/' )
         .then ( function ( response ) {
@@ -131,11 +139,6 @@
                 vue_classtable.refresh();
 
             },
-            wishlistAdd: function ( target_id ) {
-                this.now_wishlist.push( target_id );
-                vue_wishlist.refresh();
-                vue_courseFilter.refresh();
-            },
             wishlistRemove: function ( target_id ) {
                 var index = this.now_wishlist.indexOf( target_id );
                 console.log( 'kill wishlist: ' + index );
@@ -166,3 +169,13 @@
             }
         }
     })
+
+
+
+    // Public Function----------------------------------------------------------------
+
+    function wishlistAdd ( target_id ) {
+        userData.now_wishlist.push( target_id );
+        vue_wishlist.refresh();
+        vue_courseFilter.refresh();
+    }

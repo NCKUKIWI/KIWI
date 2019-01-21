@@ -31,8 +31,8 @@ var vue_nav_bar = new Vue({
     	change_tab: function( tab ) {
 			now_tab = tab ;
 			// 切換頁面
-    		$( ".change_tab" ).hide();
-			$( ".change_tab[name='" + tab + "']" ).show();
+    		$( ".tab_div" ).hide();
+			$( ".tab_div[name='" + tab + "']" ).show();
 			// 切換 Navbar 顯示
     		$( ".nav_link" ).removeClass( "on" );
 			$( ".nav_link[name='" + tab + "']" ).addClass( "on" );

@@ -57,6 +57,15 @@ db.select().field(["課程名稱", "選課序號"]).from("course_new").where("�
 	});
 });
 
+const startbot = {
+"greeting":[
+	{
+	  "locale":"default",
+	  "text":" NCKU HUB 推出的小幫手服務，整合「追蹤課程餘額」、「尋找上課教室」、「回報使用問題」等功能，期許能在修課之路助大家一臂之力。\n按下「開始使用」，立即使用由 NCKU HUB 提供的各種方便功能吧！ "
+	}
+  ]
+};
+
 
 /**
  * 載入設定 |END|
@@ -307,6 +316,7 @@ router.post('/webhook', function (req, res) {
 		} else if (anEntry.hasOwnProperty('messaging')) { // Messenger
 			anEntry.messaging.forEach(event => {
 				var sender = event.sender.id; //使用者messenger id
+				sendTextMessage(sender, "{{user_full_name}} 你好 👋\nNCKU HUB 小幫手的使命是幫助大家處理各種修課上的麻煩事，請點擊下方選單，選擇你需要的服務唷 ❗❗❗");
 				if (event.message && event.message.text && typeof event.message.is_echo === "undefined") {
 					var text = event.message.text; //用戶傳送的訊息
 					console.log(`[粉專私訊] 私訊者：『${sender}』訊息：「${text.replace(/\n/, "\\n")}」`);
@@ -734,29 +744,35 @@ function askPlaceOrFollow(sender, serial) {
 }
 
 //已開通的user
+//常設功能表的要求不一樣，要記得更改 function 
 const helloMessage = genericTemplateGenerator("你好 👋👋 我是 NCKU HUB 新來的小幫手，請問需要什麼幫助嗎❓", [{
-	"type": "postback",
-	"title": "尋找上課地點",
-	"payload": "馬上為你尋找上課地點 😁😁\n\n請告訴我們課程名稱或是選課序號，例如「@微積分」或是「@h3001」\n\n你也可以加上「$系所 %老師名」，來精準搜尋課程，例如「@微積分 $工資 %侯世章」",
-}, {
-	"type": "postback",
-	"title": "追蹤課程餘額",
-	"payload": "馬上為你追蹤課程餘額 😀😀\n\n請告訴我們課程名稱或是選課序號，例如「#微積分」或是「#h3001」\n\n你也可以加上「$系所 %老師名」，來精準搜尋課程，例如「#微積分 $工資 %侯世章」",
-}, {
-	"type": "postback",
-	"title": "取消追蹤餘額",
-	"payload": "cancelfollow",
+	
+	//表單連結
+		"title":"回報問題",
+		"type":"postback",
+		"payload":"PAYBILL_PAYLOAD"
+	  },
+	  {
+		"title":"追蹤課程功能",
+		"type":"postback",
+		"payload":"HISTORY_PAYLOAD"
+	  },
+	  {
+		"title":"查詢教室功能",
+		"type":"postback",
+		"payload":"CONTACT_INFO_PAYLOAD"
+	  
 }]);
 
-//未開通的user
+
 const subMessage = genericTemplateGenerator("你好 👋👋 我是 NCKU HUB 新來的小幫手，看來你還沒有開通呦～", [{
 	"type": "postback",
-	"title": "開通小幫手服務",
-	"payload": "為你提供一個開通的流程圖"
+	"title": "查詢追蹤課程",
+	"payload": "courseIdInfo"
 }, {
 	"type": "postback",
-	"title": "回報網站問題",
-	"payload": "為你提供一個回報表單"
+	"title": "取消追蹤課程",
+	"payload": "courseIdCancel"
 }]);
 
 function sendHello(sender) {
@@ -843,6 +859,9 @@ function elementsGenerator(subtitle, buttons) {
  * @param {String} subtitle 
  * @param {Array} buttons 
  */
+
+
+ 
 function genericTemplateGenerator(subtitle, buttons) {
 	return {
 		"attachment": {

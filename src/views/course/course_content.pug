@@ -1,7 +1,7 @@
 div#courseContent(v-show="isShow" @click.self="showContent()")
   div.content_nextpage
-    img(src="./dist/images/course/left-btn.svg")
-    img(src="./dist/images/course/right-btn.svg")
+    img(style="cursor: pointer;")(src="./dist/images/course/left-btn.svg")
+    img(style="cursor: pointer;")(src="./dist/images/course/right-btn.svg")
   div.courseContentBody
     div.courseContentBody__left
       span.courseSerial {{course_data.系號}}{{course_data.選課序號}}

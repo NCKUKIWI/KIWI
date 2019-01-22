@@ -109,6 +109,9 @@ router.get('/:id', function (req, res) {
                 }
                 data['courserate_id'] = 0;
                 data['user'] = req.user;
+                for (var i in data.comment){
+                    data['comment'][i].comment = data['comment'][i].comment.replace(/\n/g, "<br>");    
+                }
                 res.json(data);
             } else {
                 /* 尋找課程的資訊 */
@@ -154,6 +157,9 @@ router.get('/:id', function (req, res) {
                             'courseInfo': courseInfo,
                             'comment': comment,
                             'rates': rates
+                        }
+                        for (var i in data.comment){
+                            data['comment'][i].comment = data['comment'][i].comment.replace(/\n/g, "<br>");    
                         }
                         redis.set(courseCacheKey(id), JSON.stringify(data));
                         if (req.user) {

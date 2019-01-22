@@ -27,11 +27,11 @@
             console.log ( '課程資料庫: 抓取資料成功！' ) ;
             if(response.data.user_data !== undefined) {
                 // 取得使用者資料               // todo: 之後要往外移    
-            	userData.user_name = response.data.user_data[0].name;
-                userData.user_id = response.data.user_data[0].id;
-                userData.user_department = response.data.user_data[0].department;
-                userData.user_grade = response.data.user_data[0].grade;
-                userData.user_photo = "http://graph.facebook.com/" + response.data.user_data[0].fb_id + "/picture?type=normal";
+            	userData.user_name = response.data.user_data.name;
+                userData.user_id = response.data.user_data.id;
+                userData.user_department = response.data.user_data.department;
+                userData.user_grade = response.data.user_data.grade;
+                userData.user_photo = "http://graph.facebook.com/" + response.data.user_data.fb_id + "/picture?type=normal";
                 getWishlistTable();
             }
             // 將 course_db 放入

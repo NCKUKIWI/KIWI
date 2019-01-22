@@ -5,6 +5,8 @@ var db = require('../model/db');
 var sanitizeHtml = require('sanitize-html');
 var axios = require('axios')
 var bot = require('./bot');
+var cache = require('../helper/cache');
+var courseCacheKey = cache.courseCacheKey;
 
 /* index  */
 router.get('/', function (req, res) {
@@ -161,19 +163,19 @@ router.post('/create', function (req, res) {
                 semester: req.body.semester.replace(/\'|\#|\/\*/g, ""),
                 catalog: req.body.catalog.replace(/\'|\#|\/\*/g, ""),
                 comment: req.body.comment.replace(/\'|\#|\/\*/g, ""),
-                report_hw: req.body.report_hw.replace(/\'|\#|\/\*/g, ""),
-                course_style: req.body.course_style.replace(/\'|\#|\/\*/g, ""),
+                // report_hw: req.body.report_hw.replace(/\'|\#|\/\*/g, ""),
+                // course_style: req.body.course_style.replace(/\'|\#|\/\*/g, ""),
                 user_id: userid
             }
             db.Insert('post', post, function (err, results) {
                 if (err) throw err;
                 console.log(results);
                 var rate = {
-                    sweet: parseInt(req.body.sweet.replace(/\'|\#|\/\*/g, "")),
-                    hard: parseInt(req.body.hard.replace(/\'|\#|\/\*/g, "")),
-                    recommand: parseInt(req.body.recommand.replace(/\'|\#|\/\*/g, "")),
-                    give: parseInt(req.body.give.replace(/\'|\#|\/\*/g, "")),
-                    got: parseInt(req.body.got.replace(/\'|\#|\/\*/g, "")),
+                    sweet: parseInt(req.body.sweet.replace(/\'|\#|\/\*/g, "")), // 課程甜度
+                    cold: parseInt(req.body.cold.replace(/\'|\#|\/\*/g, "")), // 課程涼度
+                    // recommand: parseInt(req.body.recommand.replace(/\'|\#|\/\*/g, "")),
+                    // give: parseInt(req.body.give.replace(/\'|\#|\/\*/g, "")),
+                    got: parseInt(req.body.got.replace(/\'|\#|\/\*/g, "")), // 課程收穫
                     course_name: req.body.course_name.replace(/\'|\#|\/\*/g, ""),
                     teacher: req.body.teacher.replace(/\'|\#|\/\*/g, ""),
                     user_id: userid,
@@ -212,23 +214,23 @@ router.post('/create', function (req, res) {
                                 }
                             db.FindbyColumn('course_rate', ["*"], { course_name: req.body.course_name, teacher: req.body.teacher }, function (rates) {
                                 var sweet = 0;
-                                var hard = 0;
-                                var recommand = 0;
+                                var cold = 0;
+                                var got = 0;
                                 var rate_count = 0;
                                 if (rates.length > 0) {
                                     for (var i in rates) {
                                         sweet += rates[i].sweet;
-                                        hard += rates[i].hard;
-                                        recommand += rates[i].recommand;
+                                        cold += rates[i].cold;
+                                        got += rates[i].got;
                                     }
                                     sweet /= rates.length;
-                                    hard /= rates.length;
-                                    recommand /= rates.length;
+                                    cold /= rates.length;
+                                    got /= rates.length;
                                     rate_count = rates.length;
                                 }
                                 var data = {
-                                    'recommand': recommand,
-                                    'hard': hard,
+                                    'got': got,
+                                    'cold': cold,
                                     'sweet': sweet,
                                     'rate_count': rate_count,
                                     'courseInfo': courseInfo,

@@ -1,9 +1,9 @@
 
 <div id="courseContent" v-show="isShow" @click.self="showContent()">
-  <div class="content_nextpage"><img src="./dist/images/course/left-btn.svg"/><img src="./dist/images/course/right-btn.svg"/></div>
+  <div class="content_nextpage"><img style="cursor: pointer;" src="./dist/images/course/left-btn.svg"/><img style="cursor: pointer;" src="./dist/images/course/right-btn.svg"/></div>
   <div class="courseContentBody">
     <div class="courseContentBody__left"><span class="courseSerial">{{course_data.系號}}{{course_data.選課序號}}</span>
-      <h2>{{course_data.課程名稱}}</h2>
+      <h2>{{course_data.課程名稱, course_data.index}}</h2>
       <div class="flex-container icon-span" style="margin-top:30px" @click="openOutline(course_data.系號,course_data.課程碼)">
         <div class="content-icon see_clip"></div><span>檢視課程大綱</span>
       </div>

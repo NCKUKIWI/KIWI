@@ -20,7 +20,7 @@
       <% }else if (courseInfo.備註 != ""){%>
         <div class="ui label" style="margin-bottom:10px;"><%= courseInfo.備註 %></div><br>
       <% } %>
-      <button class="ui blue button" onclick="window.open('http://class-qry.acad.ncku.edu.tw/syllabus/online_display.php?syear=0107&sem=2&co_no=<%= courseInfo.課程碼 %>&class_code=<%= courseInfo.分班碼 %>')" config='height = N,width = N'>課程大綱</button><br>
+      <button class="ui blue button" onclick="window.open('http://class-qry.acad.ncku.edu.tw/syllabus/online_display.php?syear=0107&sem=1&co_no=<%= courseInfo.課程碼 %>&class_code=<%= courseInfo.分班碼 %>')" config='height = N,width = N'>課程大綱</button><br>
       <% if(courserate_id == 0){ %>
         <button class="ui blue button showcourseratebtn" data-id="<%= courseInfo.id %>" data-name="<%= courseInfo.課程名稱 %>" data-teacher="<%= courseInfo.老師 %>">評分課程</button>
       <% }else{ %>

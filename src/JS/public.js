@@ -23,7 +23,7 @@
     // 頁面顯示狀態
 
     var pageStatus = {
-        initial_tab: 'course',
+        initial_tab: 'register',
         now_tab: '',
         table_locked: true,
         loggedIn: false,
@@ -31,15 +31,15 @@
 
     changeTab( pageStatus.initial_tab );
 
-    
+
 
 
     axios.get ( '/course/' )
         .then ( function ( response ) {
             course_db = response.data.courses;
             console.log ( '課程資料庫: 抓取資料成功！' ) ;
-            if(response.data.user_data !== undefined) { 
-                pageStatus.loggedIn = true;  
+            if(response.data.user_data !== undefined) {
+                pageStatus.loggedIn = true;
             	userData.user_name = response.data.user_data[0].name;
                 userData.user_id = response.data.user_data[0].id;
                 userData.user_department = response.data.user_data[0].department;

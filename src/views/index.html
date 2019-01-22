@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" id="viewport" name="viewport">
+    <title>NCKU HUB｜資訊改善校園</title>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <link rel="stylesheet" href="dist/CSS/course.css">
+    <link rel="stylesheet" href="dist/CSS/helper.css">
+    <!-- <link rel="stylesheet" href="dist/CSS/course/course.css"> -->
+    <link rel="stylesheet" href="dist/CSS/reset.css">
+    <link rel="stylesheet" href="dist/CSS/table.css">
+    <link rel="stylesheet" href="dist/CSS/navbar.css">
+    <link rel="stylesheet" href="dist/CSS/button.css">
+    <link rel="stylesheet" href="dist/CSS/add_review.css">
+    <link rel="stylesheet" href="dist/CSS/register.css">
+    <!-- <script src="dist/JS/profile/init2.js"></script> -->
+	<!-- <link rel="stylesheet" type="text/css" href="./dist/CSS/profile/profile.css "> -->
+    <body>
+        <!-- 基礎建設 -->
+        <div class="basic_div" name="navbar"> @@include('public/navbar.html')  </div>
+        <div class="basic_div" name="button"> @@include('public/button.html')  </div>
+        <!-- 個別分頁 -->
+    	<div class="tab_div" name="course">  @@include('course/course_content.html')  </div>
+    	<div class="tab_div" name="table">  @@include('table/table.html')  </div>
+    	<!-- <div class="tab_div" name="profile">  @@include('profile/profile.html')  </div> -->
+        <div class="tab_div" name="helper">  @@include('public/helper.html')  </div>
+        <div class="tab_div" name="register">  @@include('public/register.html')  </div>
+    </body>
+</head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17/vue.js"> </script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="dist/JS/functions.js"></script>
+<script src="dist/JS/public.js"></script>
+<script src="dist/JS/navbar.js"></script>
+<script src="dist/JS/button.js"></script>
+<script src="dist/JS/course.js"></script>
+<script src="dist/JS/table.js"></script>
+<script src="dist/JS/helper.js"></script>
+<!-- <script src="dist/JS/profile/profile.js "></script> -->
+</html>

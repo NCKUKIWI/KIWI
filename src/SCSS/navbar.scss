@@ -193,10 +193,6 @@ $material_trans: cubic-bezier(0.0, 0.0, 0.2, 1);
         position: relative;
         display: block;
         margin-left: 8px;
-        background-image: url("../images/course/sad_hugecat.png");
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: contain;
         width: 30px;
         height: 30px;
         border-radius: 30px;
@@ -237,16 +233,12 @@ $material_trans: cubic-bezier(0.0, 0.0, 0.2, 1);
                 align-items: center;
                 &__photo {
                     display: block;
-                    height: 72px;
-                    width: 72px;
+                    height: 70px;
+                    width: 70px;
                     border: $light_2 4px solid;
                     border-radius: 50px;
-                    background-image: url("../images/course/hugecat.png");
-                    background-repeat: no-repeat;
-                    background-position: center;
-                    background-size: contain;
-                    margin-right: 12px;
-                    margin-left: 2px;
+                    margin-right: 10px;
+                    margin-left: 4px;
                 }
                 &__detail {
                     .nav_profile_name {

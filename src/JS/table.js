@@ -1,14 +1,22 @@
 
 
 
+
+    // User Data
+
+    var vue_user_data = new Vue ({
+        el: '#user_data',
+        data: function(){
+        	return userData;
+        },
+        methods: {   
+        }
+    })
+
+
     // Component: wishlist-item
 
     Vue.component( 'wishlist-item', {
-        data: function () {
-            return {
-                hover_now: false
-            }
-        },
         props: ['class_item'],
         template: [
             '<div v-if="class_item.isSeen" class="list_course_item" @mouseover="mouseoverItem" @mouseout="mouseoutItem" >',
@@ -31,14 +39,14 @@
             },
             addToTable: function () {
                 if ( checkConflict ( this.class_item, vue_classtable ) ) {
-                    vue_user_data.tableAdd( this.class_item.id );
-                    vue_user_data.wishlistRemove( this.class_item.id );
+                    tableAdd( this.class_item.id );
+                    wishlistRemove( this.class_item.id );
                     vue_classtable.clearFilterCell();
                 }
             },
             deleteItem: function () {
                 console.log ( 'wishlist killed: ' +  vue_wishlist.wishlist_cont.indexOf( this.class_item ) + ' (' + this.class_item.title + ')' ); 
-                vue_user_data.wishlistRemove( this.class_item.id );
+                wishlistRemove( this.class_item.id );
             },
             mouseoverItem: function () {
                 if ( checkConflict ( this.class_item, vue_classtable ) ) {
@@ -63,8 +71,8 @@
         methods: {
             refresh: function () { 
                 this.wishlist_cont.length = 0;
-                for ( var i = 0 ; i < vue_user_data.now_wishlist.length ; i ++ ) {
-                    var class_item = getClassObject ( course_db, vue_user_data.now_wishlist[i] ) ;
+                for ( var i = 0 ; i < userData.now_wishlist.length ; i ++ ) {
+                    var class_item = getClassObject ( course_db, userData.now_wishlist[i] ) ;
                     class_item.isSeen = true;
                     this.wishlist_cont.push( class_item );
                 }
@@ -102,10 +110,6 @@
     // Component: result-list-item
 
     Vue.component( 'result-list-item', {
-        data: function () {
-            return {
-            }
-        },
         props: ['class_item'],
         template: [
             '<div class="list_course_item"  @mouseover="mouseoverItem" @mouseout="mouseoutItem" >',
@@ -128,7 +132,7 @@
             },
             addToTable: function () {
                 if ( checkConflict ( this.class_item, vue_classtable ) ) {
-                    vue_user_data.tableAdd( this.class_item.id );
+                    tableAdd( this.class_item.id );
                     // todo: 按下加入後從清單裡消失( 像 wishlist 那樣)
                     vue_classtable.clearFilterCell();
                 }
@@ -203,10 +207,6 @@
     // Component: class-table-cell
 
     Vue.component( 'class-table-cell', {
-        data: function () {
-            return {
-            }
-        },
         props: ['day','cell_data'],
         template: [
             '<div class="class_table_cont_cell class_cell" :style="getHeight()" @click="startFilterTIme" :class="getClass()" >',
@@ -249,8 +249,8 @@
             },
             deleteItem: function() {
                 if ( this.cell_data.status > 0 ) {
-                    vue_user_data.wishlistAdd( this.cell_data.class_item.id );
-                    vue_user_data.tableRemove( this.cell_data.class_item.id );
+                    wishlistAdd( this.cell_data.class_item.id );
+                    tableRemove( this.cell_data.class_item.id );
                 }
             },
             startFilterTIme: function() {
@@ -328,8 +328,8 @@
             },
             refresh: function ( preview_id ) {
                 var message = '目前課表課程：';
-                for ( var i = 0 ; i < vue_user_data.now_table.length ; i ++ ) {
-                    message += vue_user_data.now_table[i] + ' ' ;
+                for ( var i = 0 ; i < userData.now_table.length ; i ++ ) {
+                    message += userData.now_table[i] + ' ' ;
                 }
                 console.log ( message );
                 // 產生空白表格
@@ -344,9 +344,8 @@
                     }
                 }
                 // 加入目前課表
-                var target_id ;
-                for ( var i = 0 ; i < vue_user_data.now_table.length ; i ++ ) {
-                    target_id = vue_user_data.now_table[i];
+                for ( var i = 0 ; i < userData.now_table.length ; i ++ ) {
+                    var target_id = userData.now_table[i];
                     this.toTable ( target_id, course_db );
                 }
                 // 加入預覽中課程（wishlist） 

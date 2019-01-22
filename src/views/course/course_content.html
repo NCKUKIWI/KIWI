@@ -92,15 +92,17 @@
 </div>
 <div class="course__whole">        
   <div class="courseList__sidenav" id="courseFilter">
-    <div class="block_title">
-      <p class="text_18">開課單位</p>
-    </div>
-    <div class="quick_search_area" style="z-index:300">
-      <input class="quick_search_input" id="dpmtFilter" type="text" v-model="keyword" placeholder="選擇開課單位"/>
-      <div class="quick_search_dropdown--course">
-        <div class="search_result--course" v-for="(result, index) in search_result">
-          <div @click="result_click(index)">
-            <p>{{result.prefix}} {{result.name}}</p>
+    <div class="courseList__sidenav__deptChoose">
+      <div class="block_title">
+        <p class="text_18">開課單位</p>
+      </div>
+      <div class="quick_search_area" style="z-index:300">
+        <input class="quick_search_input" id="dpmtFilter" type="text" v-model="keyword" placeholder="選擇開課單位"/>
+        <div class="quick_search_dropdown--course">
+          <div class="search_result--course" v-for="(result, index) in search_result">
+            <div @click="result_click(index)">
+              <p>{{result.prefix}} {{result.name}}</p>
+            </div>
           </div>
         </div>
       </div>
@@ -115,7 +117,7 @@
         </label>
       </div>
     </div>
-    <div class="wishlist" style="margin-top:4vh">
+    <div class="wishlist courseList__sidenav__wishList in_course">
       <div class="block_title">
         <p class="text_18">願望清單（{{ wishlist_cont.length }})</p>
       </div>

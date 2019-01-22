@@ -452,8 +452,14 @@ a {
 }
 
 .wishlist {
-    margin-top: 2vh;
-    height: calc(77vh - 185px);
+    &.in_table {
+        margin-top: 2vh;
+        height: calc( 77vh - 185px);
+    }
+    &.in_course {
+        margin-top: 1.5vh;
+        height: calc( 82vh - 200px - 3vh );
+    }
     width: 100%;
     @include flex_center_top();
     &_cont {

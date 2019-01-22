@@ -41,7 +41,7 @@ var vue_nav_bar = new Vue({
 			$( ".hub_navbar__profile__dropdown" ).removeClass( "on" );
 		},
 		switch_profile_window: function() {
-			// todo: 切換用起來怪怪的，有空再調整一下？
+			// todo: 寫起來怪怪的，有空再調整一下？
 			if ( now_tab != 'profile' ) {
 				$( ".nav_link[name='profile']" ).toggleClass( "on" );
 			}
@@ -53,35 +53,10 @@ var vue_nav_bar = new Vue({
 			vue_nav_bar.search_keyword = "";
 		},
 		logIn: function(){
-			vue_nav_bar.user_name = vue_user_data.user_name;
+			vue_nav_bar.user_name = userData.user_name;
 		},
 		open_helper: function() {
 			// document.getElementById("helper_background").style.display = "block";
 		}
 	}
 })
-
-	// methods: {
-	// 	filterMode: function ( command, filter_day, filter_time ) {
-	// 		if ( command == 'on' ) {
-	// 			this.keyword = '正在篩選：[' + textTransDay(filter_day) + ']' + filter_time ;
-	// 			this.filter_status = true ;
-	// 			this.title_text = '篩選時段';
-	// 		}
-	// 		else if ( command == 'off' ) {
-	// 			this.keyword = '';
-	// 			this.filter_status = false ;
-	// 			this.title_text = '快速添加';
-	// 		}
-	// 	},
-	// 	clearFilter: function () {
-	// 		if ( this.filter_status ) {
-	// 			this.filterMode( "off" );
-	// 			vue_classtable.clearFilterCell();
-	// 			vue_wishlist.clearFilter();
-	// 		}
-	// 	},
-	// 	switchLockStatus: function () {
-	// 		this.class_table_locked = ! this.class_table_locked;
-	// 	}
-	// }

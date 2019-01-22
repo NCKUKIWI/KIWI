@@ -1,29 +1,33 @@
 
-
     // 輸入課程列表、查找代碼，輸出課程資訊物件(class_item)
 
     function getClassObject ( course_db, target_id ) {
-        var course_item = course_db.find( function ( item ) {
-            return item.id == target_id 
-        });
-        if ( course_item ) {   
-            var class_id = course_item.選課序號 ;
-            if ( ! class_id ) {
-                class_id = '000' ;
+        if ( course_db.length ) {
+            var course_item = course_db.find( function ( item ) {
+                return item.id == target_id 
+            });
+            if ( course_item ) {   
+                var class_id = course_item.選課序號 ;
+                if ( ! class_id ) {
+                    class_id = '000' ;
+                }
+                return {
+                    id: target_id,
+                    category: deptTransCat( course_item.系號, course_item.系所名稱 ),
+                    dept_id: course_item.系號,
+                    class_id: class_id,
+                    title: course_item.課程名稱,
+                    teacher: course_item.老師,
+                    time: course_item.時間,
+                    credit: course_item.學分
+                }
             }
-            return {
-                id: target_id,
-                category: deptTransCat( course_item.系號, course_item.系所名稱 ),
-                dept_id: course_item.系號,
-                class_id: class_id,
-                title: course_item.課程名稱,
-                teacher: course_item.老師,
-                time: course_item.時間,
-                credit: course_item.學分
+            else { 
+                return 0;
             }
         }
-        else {        
-            return 0;
+        else {
+            console.log( '錯誤！course_db 尚未載入！' );
         }
     }
 
@@ -96,6 +100,25 @@
     }
 
 
+    // 輸入 now_wishlist / now_table，將不重複或找不到課程的，刪去後傳回
+    
+    function checkValid ( list_to_check ) {
+        var temp_list = [];
+        for ( var i = 0; i < list_to_check.length; i ++ ) {
+            if ( getClassObject ( course_db, list_to_check[i] ) ) {
+                var ifRepeated = temp_list.find( function ( item ) {
+                    return item == list_to_check[i]
+                });
+                if ( ! ifRepeated ) {
+                    temp_list.push( list_to_check[i] );
+                }
+            }
+        }
+        console.log( temp_list );
+        return temp_list ; 
+    }
+
+
     // 輸入 time_item, table_item，輸出檢查結果
     
     function checkConflict ( class_item, table_item ) {
@@ -128,8 +151,8 @@
             }
         }
         return 1;
-    }
-
+    } 
+    
 
     // 上課時段：把「文字」轉成「真實時段順序」
 

@@ -97,7 +97,7 @@ router.get('/:id', function (req, res) {
         res.redirect('/');
     } else {
         redis.get(courseCacheKey(id), function (err, reply) {
-            if (reply) {
+            if (0) {
                 var data = JSON.parse(reply);
                 var rates = data.rates;
                 if (req.user && rates.length > 0) {

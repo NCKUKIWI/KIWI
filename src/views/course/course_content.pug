@@ -75,14 +75,15 @@ div#courseContent(v-show="isShow" @click.self="showContent()")
               div.arrow-down
 div.course__whole         
   div.courseList__sidenav#courseFilter
-    div.block_title
-      p.text_18 開課單位
-    div.quick_search_area(style="z-index:300")
-      input#dpmtFilter(type="text" v-model="keyword" placeholder="選擇開課單位" class="quick_search_input") 
-      div.quick_search_dropdown--course
-        div(v-for="(result, index) in search_result").search_result--course
-          div(@click="result_click(index)")
-            p {{result.prefix}} {{result.name}}
+    div.courseList__sidenav__deptChoose
+      div.block_title
+        p.text_18 開課單位
+      div.quick_search_area(style="z-index:300")
+        input#dpmtFilter(type="text" v-model="keyword" placeholder="選擇「開課單位」" class="quick_search_input") 
+        div.quick_search_dropdown--course
+          div(v-for="(result, index) in search_result").search_result--course
+            div(@click="result_click(index)")
+              p {{result.prefix}} {{result.name}}
     div#courseArrange.courseList__sidenav__courseType
       div.block_title
         p.text_18 檢視選項
@@ -92,7 +93,7 @@ div.course__whole
           span.fucking_checkmark
           span 僅顯示有心得之課程
 
-    div.wishlist(style="margin-top:4vh")
+    div.wishlist.courseList__sidenav__wishList.in_course
       div.block_title
         p.text_18 願望清單（{{ wishlist_cont.length }})
       div.wishlist_cont

@@ -9,31 +9,30 @@
 		</div>
 	</div>
 	<div id="quick_search" class="quick_search"> 
-          <!-- todo: 新增：查無結果的顯示 -->
 		<div class="block_title">
 			<p class="text_18 "> {{ title_text }} </p>
 		</div>
 		<div class="quick_search_area" :class="{ filter_mode: filter_status }"  @click="clearFilter">
 			<div v-if="filter_status" class="quick_search_clear_filter"></div>
-			<input class="quick_search_input" type="text" v-model="keyword" :disabled="filter_status || class_table_locked" :class="{ locked: class_table_locked }" placeholder="輸入「課程名」或「教師名」" ><br>
+			<input class="quick_search_input" type="text" v-model="keyword" :disabled="filter_status || page_status.table_locked" :class="{ locked: page_status.table_locked }" placeholder="輸入「課程名」或「教師名」" ><br>
 		</div>
 		<div v-if="keyword.replace(' ','') != '' && !filter_status" class="quick_search_dropdown">
 			<span> {{ result }} </span>
 			<result-list-item v-for="item in result_cont" :class_item="item"></result-list-item>
 		</div>
 	</div>
-	<div id="wishlist_in_table" class="wishlist">
+	<div id="wishlist_in_table" class="wishlist in_table">
 		<div class="block_title">
 			<p class="text_18">願望清單（{{ wishlist_cont.length }}） </p>
 		</div>
-		<div class="wishlist_cont" :class="{ locked: class_table_locked }" >
+		<div class="wishlist_cont" :class="{ locked: page_status.table_locked }" >
 			<wishlist-item v-for="item in wishlist_cont" :class_item="item"></wishlist-item>
 		</div>
 	</div>
 </div>
 
 <div class="right_area">
-	<div id="class_table" class="class_table" :class="{ locked: class_table_locked }">
+	<div id="class_table" class="class_table" :class="{ locked: page_status.table_locked }">
 		<div class="class_table_title">
 			<div class="class_table_title_cell left">　</div>
 			<div class="class_table_title_cell"><p class="text_18">Mon</p></div>
@@ -77,9 +76,4 @@
 			</div>
 		</div>
 	</div>
-</div>
-
-<div id="fixed_button_table" class="fixed_button_area" :class="{ locked: class_table_locked }">
-	<div class="major_button" :class="[{ deep_blue_edit: class_table_locked },{ red_done: !class_table_locked }]" @click="switchLockStatus"></div>
-	<div class="minor_button dark_cancel" @click="switchLockStatus"></div>
 </div>

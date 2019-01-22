@@ -4,7 +4,7 @@
     <div id="navbar" class="hub_navbar">
       <div class="hub_navbar__right_area">
           <a class="hub_navbar__logo" href="/"></a>
-          <!-- todo: 新增「查無結果」的顯示 -->
+          <!-- todo: 新增「查無結果」的顯示（所有搜尋處都要） -->
           <input class="hub_navbar__search" type="text" v-model="search_keyword" placeholder="搜尋「課程名」或「教師名」" ><br>
           <div v-if="search_keyword.replace(' ','') != ''" class="hub_navbar__search__dropdown">
               <div v-for="item in result_cont" class="list_course_item" @click="openCourse(item.id)">
@@ -22,29 +22,30 @@
           </div>
       </div>
       <div class="hub_navbar__left_area">
-          <div class="hub_navbar__link nav_link" name="course" @click="change_tab('course')">找課程</div>
-          <div class="hub_navbar__link nav_link" name="table" @click="change_tab('table')">排課表 <span class="wishlist_count">5</span></div>
-          <div class="hub_navbar__profile nav_link" name="profile" @click="switch_profile_window()"></div>
+          <div class="hub_navbar__link nav_link" name="course" @click="switchTo('course')">找課程</div>
+          <div class="hub_navbar__link nav_link" name="table" @click="switchTo('table')">排課表 <span class="wishlist_count">{{ user_data.now_wishlist.length }}</span></div>
+          <img class="hub_navbar__profile nav_link" name="profile" @click="switchProfileWindow()" :src="user_data.user_photo">
           <div class="hub_navbar__profile__dropdown">
             <div class="hub_navbar__profile__dropdown__info">
-                <div class="hub_navbar__profile__dropdown__info__photo"></div>
+                <img class="hub_navbar__profile__dropdown__info__photo" :src="user_data.user_photo">
                 <div class="hub_navbar__profile__dropdown__info__detail">
-                    <!-- 若有開通權限則在 nav_profile_name 添加 vip class  -->
-                    <!-- todo: 這邊要 vue 化（含未登入狀態） -->
+                    <!-- todo: 若有開通權限則在 nav_profile_name 添加 vip class  -->
                     <div class="nav_profile_name vip">{{user_data.user_name}}</div>
                     <div v-show="user_data.user_id == 0" class="nav_profile_dept">請登入網站，</div>
                     <div v-show="user_data.user_id == 0" class="nav_profile_grade">以使用完整功能！</div>
                     <div v-show="user_data.user_department != '無'" class="nav_profile_dept">{{user_data.user_department}}</div>
                     <div v-show="user_data.user_grade != '無'" class="nav_profile_grade">{{user_data.user_grade}}年級</div>
+                    <div v-show="user_data.user_id != 0 && user_data.user_department == '無'" class="nav_profile_dept">尚未輸入系所資料</div>
+                    <div v-show="user_data.user_id != 0 && user_data.user_grade == '無'" class="nav_profile_grade">尚未輸入年級資料</div>
                 </div>
             </div>
             <div v-show="user_data.user_id != 0" class="hub_navbar__profile__dropdown__goto" @click="open_helper()" >開通小幫手</div>
-            <a v-show="user_data.user_id == 0" href='/user/fblogin'><div class="hub_navbar__profile__dropdown__goto" @click="change_tab('profile')" >立即登入 / 註冊</div></a>
+            <a v-show="user_data.user_id == 0" href='/user/fblogin'><div class="hub_navbar__profile__dropdown__goto" @click="switchTo('profile')" >立即登入 / 註冊</div></a>
             <div class="hub_navbar__profile__dropdown__links">
                 <!-- <a>關於 NCKU HUB</a> -->
-                <a href="https://www.facebook.com/nckuhub">粉絲專頁</a>
+                <a href="https://www.facebook.com/nckuhub" target="_blank">粉絲專頁</a>
+                <a href="https://www.messenger.com/t/nckuhub" target="_blank">回報問題</a>
                 <a>返回舊版</a>
-                <a href="https://www.messenger.com/t/nckuhub">回報問題</a>
                 <a v-show="user_data.user_id != 0" href='/user/logout'>登出帳戶</a>
             </div>
           </div>

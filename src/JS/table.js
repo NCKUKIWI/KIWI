@@ -1,14 +1,22 @@
 
 
 
+
+    // User Data
+
+    var vue_user_data = new Vue ({
+        el: '#user_data',
+        data: function(){
+        	return userData;
+        },
+        methods: {   
+        }
+    })
+
+
     // Component: wishlist-item
 
     Vue.component( 'wishlist-item', {
-        data: function () {
-            return {
-                hover_now: false
-            }
-        },
         props: ['class_item'],
         template: [
             '<div v-if="class_item.isSeen" class="list_course_item" @mouseover="mouseoverItem" @mouseout="mouseoutItem" >',
@@ -31,14 +39,14 @@
             },
             addToTable: function () {
                 if ( checkConflict ( this.class_item, vue_classtable ) ) {
-                    vue_user_data.tableAdd( this.class_item.id );
-                    vue_user_data.wishlistRemove( this.class_item.id );
+                    wishlistRemove( this.class_item.id );
+                    vue_classtable.tableTempAdd( this.class_item.id );
                     vue_classtable.clearFilterCell();
                 }
             },
             deleteItem: function () {
                 console.log ( 'wishlist killed: ' +  vue_wishlist.wishlist_cont.indexOf( this.class_item ) + ' (' + this.class_item.title + ')' ); 
-                vue_user_data.wishlistRemove( this.class_item.id );
+                wishlistRemove( this.class_item.id );
             },
             mouseoverItem: function () {
                 if ( checkConflict ( this.class_item, vue_classtable ) ) {
@@ -58,13 +66,13 @@
         el: '#wishlist_in_table',
         data: {
             wishlist_cont: [],
-            class_table_locked: true
+            page_status: pageStatus,
         },
         methods: {
             refresh: function () { 
                 this.wishlist_cont.length = 0;
-                for ( var i = 0 ; i < vue_user_data.now_wishlist.length ; i ++ ) {
-                    var class_item = getClassObject ( course_db, vue_user_data.now_wishlist[i] ) ;
+                for ( var i = 0 ; i < userData.now_wishlist.length ; i ++ ) {
+                    var class_item = getClassObject ( course_db, userData.now_wishlist[i] ) ;
                     class_item.isSeen = true;
                     this.wishlist_cont.push( class_item );
                 }
@@ -90,9 +98,6 @@
                         this.wishlist_cont[i].isSeen = false ;
                     }
                 }
-            },
-            switchLockStatus: function () {
-                this.class_table_locked = ! this.class_table_locked;
             }
         }
     })
@@ -102,10 +107,6 @@
     // Component: result-list-item
 
     Vue.component( 'result-list-item', {
-        data: function () {
-            return {
-            }
-        },
         props: ['class_item'],
         template: [
             '<div class="list_course_item"  @mouseover="mouseoverItem" @mouseout="mouseoutItem" >',
@@ -128,8 +129,8 @@
             },
             addToTable: function () {
                 if ( checkConflict ( this.class_item, vue_classtable ) ) {
-                    vue_user_data.tableAdd( this.class_item.id );
-                    // todo: 按下加入後從清單裡消失( 像 wishlist 那樣)
+                    // todo: 按下加入後從清單裡消失( 像 wishlist 那樣)（改成標記）
+                    vue_classtable.tableTempAdd( this.class_item.id );
                     vue_classtable.clearFilterCell();
                 }
             },
@@ -154,7 +155,7 @@
             result_cont: [],
             filter_status: false,
             title_text: '快速添加',
-            class_table_locked: true
+            page_status: pageStatus,
         },
         computed: {
             result: function () {
@@ -192,9 +193,6 @@
                     vue_classtable.clearFilterCell();
                     vue_wishlist.clearFilter();
                 }
-            },
-            switchLockStatus: function () {
-                this.class_table_locked = ! this.class_table_locked;
             }
         }
     })
@@ -203,10 +201,6 @@
     // Component: class-table-cell
 
     Vue.component( 'class-table-cell', {
-        data: function () {
-            return {
-            }
-        },
         props: ['day','cell_data'],
         template: [
             '<div class="class_table_cont_cell class_cell" :style="getHeight()" @click="startFilterTIme" :class="getClass()" >',
@@ -249,12 +243,12 @@
             },
             deleteItem: function() {
                 if ( this.cell_data.status > 0 ) {
-                    vue_user_data.wishlistAdd( this.cell_data.class_item.id );
-                    vue_user_data.tableRemove( this.cell_data.class_item.id );
+                    wishlistAdd( this.cell_data.class_item.id );
+                    vue_classtable.tableTempRemove( this.cell_data.class_item.id );
                 }
             },
             startFilterTIme: function() {
-                if ( this.cell_data.status == 0 && ! vue_classtable.class_table_locked ) {
+                if ( this.cell_data.status == 0 && ! pageStatus.table_locked ) {
                     var filtering = vue_classtable.markFilterCell( this.day, this.cell_data.time );
                     if ( filtering ) {
                         vue_wishlist.clearFilter() ;
@@ -271,7 +265,7 @@
 
     // Class Table
 
-    var vue_classtable = new Vue ({
+    var vue_classtable = new Vue ({         // todo: 篩選中願望清單文字改為「符合此時段」，若為空則需顯示提示文字
         el: '#class_table',
         data: {
             monday: [],
@@ -283,9 +277,30 @@
                 day: null,
                 time: null
             },
-            class_table_locked: true
+            page_status: pageStatus,
+            temp_table: []
+        },
+        created: function() {
+            // 產生空白表格
+            var day, time ;
+            for ( var i = 1 ; i <= 5 ; i ++ ) {
+                day = dayTransText(i);
+                this[day].length = 0;
+                for ( var j = 1 ; j <= 15 ; j ++ ) {
+                    time = timeTransText(j).toString();
+                    this[day].push( { time: time, status: 0, class_item: '', ifFilterTime: false, cell_status_title: '篩選課程', cell_status_text:'選擇此時段' } ); 
+                    // status： 1 以上 - 該課程佔據節次數、 0 - 該節次無課程、 (-1) - 該節次已被上方課程佔據
+                }
+            }
         },
         methods: {
+            initialize: function() {
+                this.temp_table.length = 0;
+                for ( var i = 0 ; i < userData.now_table.length ; i ++ ) {
+                    this.temp_table.push( userData.now_table[i] );
+                }
+                this.refresh();
+            },
             // 輸入課程 id、課程資料庫，將課程加入課表
             toTable: function ( target_id, course_db, ifPreview ) {
                 var class_item = getClassObject ( course_db, target_id ); 
@@ -328,10 +343,15 @@
             },
             refresh: function ( preview_id ) {
                 var message = '目前課表課程：';
-                for ( var i = 0 ; i < vue_user_data.now_table.length ; i ++ ) {
-                    message += vue_user_data.now_table[i] + ' ' ;
+                for ( var i = 0 ; i < this.temp_table.length ; i ++ ) {
+                    message += this.temp_table[i] + ' ' ;
                 }
                 console.log ( message );
+                var message2 = '線上課表課程：';
+                for ( var i = 0 ; i < userData.now_table.length ; i ++ ) {
+                    message2 += userData.now_table[i] + ' ' ;
+                }
+                console.log ( message2 );
                 // 產生空白表格
                 var day, time ;
                 for ( var i = 1 ; i <= 5 ; i ++ ) {
@@ -344,9 +364,8 @@
                     }
                 }
                 // 加入目前課表
-                var target_id ;
-                for ( var i = 0 ; i < vue_user_data.now_table.length ; i ++ ) {
-                    target_id = vue_user_data.now_table[i];
+                for ( var i = 0 ; i < this.temp_table.length ; i ++ ) {
+                    var target_id = this.temp_table[i];
                     this.toTable ( target_id, course_db );
                 }
                 // 加入預覽中課程（wishlist） 
@@ -394,39 +413,28 @@
                 this.filtering_now.time = null;
                 vue_quick_search.keyword = null;
             },
-            switchLockStatus: function () {
-                this.class_table_locked = ! this.class_table_locked;
+            tableTempAdd: function ( target_id ) {
+                this.temp_table.push( target_id );
+                this.refresh();
+            },
+            tableTempRemove: function ( target_id ) {
+                var index = this.temp_table.indexOf( target_id );
+                this.temp_table.splice( index, 1 );
+                this.refresh();
+            },
+            tableConfirm: function () {;
+                userData.now_table.length = 0;
+                for ( var i = 0 ; i < this.temp_table.length ; i ++ ) {
+                    userData.now_table.push( this.temp_table[i] );
+                }
+                tableUpload();
+            },
+            tableGiveUp: function () {
+                this.initialize();
+                this.refresh();
             }
         }
     }) 
-
-
-    // Fixed Button
-
-    var vue_fixed_button = new Vue({
-        el: '#fixed_button_table',
-        data: {
-            class_table_locked: true
-        },
-        methods: {
-            switchLockStatus: function () {                                // todo: 儲存與放棄功能
-                this.class_table_locked = ! this.class_table_locked ;
-                vue_wishlist.switchLockStatus();
-                vue_quick_search.switchLockStatus();
-                vue_classtable.switchLockStatus();
-                if ( this.class_table_locked == true ) {
-                    // 課表鎖定，進入儲存狀態
-                    window.onbeforeunload = null;     
-                }
-                else {
-                    // 課表未鎖定，進入編輯狀態
-                    window.onbeforeunload = function(event){
-                        event.returnValue = false;
-                    }
-                }
-            }
-        }
-    })
 
 
 
@@ -438,6 +446,7 @@
     3. 習醫之道：共有四個，前三個不知為何不會正常顯示（實際時段是啥？調查一下）
     4. 篩選時段 - 加入課表 - wishlist 不會回復原狀？
     5. hover wishlist - 產生衝堂 - 刪除 wishlist item - 衝堂不會消失？
+    6. 放棄課表的話，wishlist 不會回復到原樣。
 
     ( ui / ux )
     1. 課表空空時的文字提示

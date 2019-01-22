@@ -87,7 +87,7 @@
       addCourse: function(index){
         var chooseCourse_id = vue_course_item.course_data[index].id;
         var chooseCourse = vue_course_item.course_data[index];
-        vue_user_data.wishlistAdd(chooseCourse_id);
+        wishlistAdd(chooseCourse_id);
         vue_courseFilter.wishList.push(chooseCourse);
         console.log("add");
       },
@@ -161,7 +161,7 @@
 
       },
       content_addtowishlist: function(id) {
-        vue_user_data.wishlistAdd(id);
+        wishlistAdd(id);
       },
       openOutline: function(dept,dept_serial) {
         // let dept = 'H3';
@@ -240,16 +240,16 @@
       },
       refresh: function () {
         this.wishlist_cont.length = 0;
-        for ( var i = 0 ; i < vue_user_data.now_wishlist.length ; i ++ ) {
-            var class_item = getClassObject ( course_db, vue_user_data.now_wishlist[i] ) ;
+        for ( var i = 0 ; i < userData.now_wishlist.length ; i ++ ) {
+            var class_item = getClassObject ( course_db, userData.now_wishlist[i] ) ;
             this.wishlist_cont.push( class_item );
         }
       },
       deleteItem: function ( id ) {
-        vue_user_data.wishlistRemove( id );
+        wishlistRemove( id );
       },
       opentabletab: function() {
-        vue_nav_bar.change_tab('table');
+        changeTab('table');
       },
     },
     computed: {

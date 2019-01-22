@@ -80,7 +80,7 @@ router.get('/logout', function (req, res) {
 
 router.get('/edit', middleware.checkLogin(), function (req, res) {
     console.log('\n' + 'GET /user/edit');
-    res.send({
+    res.json({
         'user': req.user
     });
 });

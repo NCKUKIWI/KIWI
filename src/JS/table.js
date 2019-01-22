@@ -129,7 +129,7 @@
             },
             addToTable: function () {
                 if ( checkConflict ( this.class_item, vue_classtable ) ) {
-                    // todo: 按下加入後從清單裡消失( 像 wishlist 那樣)
+                    // todo: 按下加入後從清單裡消失( 像 wishlist 那樣)（改成標記）
                     vue_classtable.tableTempAdd( this.class_item.id );
                     vue_classtable.clearFilterCell();
                 }

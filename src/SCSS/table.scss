@@ -400,6 +400,9 @@ a {
         @include box_shadow_1();
         @include ellipsis();
         @include box_shadow_1_hover();
+        &::placeholder {
+            color: $black;
+        }
         &:focus {
             @include ellipsis();
             box-shadow: 0 0 28px 0 rgba(0,0,0,0.1);

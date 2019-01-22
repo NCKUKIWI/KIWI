@@ -27,7 +27,7 @@
 				else {
 				}
 			},
-            switchLockStatus: function () {                                // todo: 儲存與放棄功能
+            switchLockStatus: function () {
                 pageStatus.table_locked = ! pageStatus.table_locked ;
                 if ( pageStatus.table_locked == true ) {
                     // 課表鎖定，進入儲存狀態

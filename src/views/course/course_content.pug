@@ -79,7 +79,7 @@ div.course__whole
       div.block_title
         p.text_18 開課單位
       div.quick_search_area(style="z-index:300")
-        input#dpmtFilter(type="text" v-model="keyword" placeholder="選擇開課單位" class="quick_search_input") 
+        input#dpmtFilter(type="text" v-model="keyword" placeholder="選擇「開課單位」" class="quick_search_input") 
         div.quick_search_dropdown--course
           div(v-for="(result, index) in search_result").search_result--course
             div(@click="result_click(index)")

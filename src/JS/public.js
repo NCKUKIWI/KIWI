@@ -12,7 +12,7 @@
     var userData = {
     	user_id: 0,
         user_name: '訪客貓咪',
-        user_photo: 'dist/images/course/sad_hugecat.png',        // todo: 取得正確圖片
+        user_photo: 'dist/images/course/sad_hugecat.png',
         user_department: '無',
         user_grade: '無',
         credit_count: 9,                                    // todo: 讓他可以用計算ㄉ
@@ -38,8 +38,7 @@
         .then ( function ( response ) {
             course_db = response.data.courses;
             console.log ( '課程資料庫: 抓取資料成功！' ) ;
-            if(response.data.user_data !== undefined) {
-                // 取得使用者資料               // todo: 之後要往外移  
+            if(response.data.user_data !== undefined) { 
                 pageStatus.loggedIn = true;  
             	userData.user_name = response.data.user_data[0].name;
                 userData.user_id = response.data.user_data[0].id;
@@ -57,7 +56,6 @@
 	                vue_course_item.course_with_comment.push(vue_course_item.course_data_db()[i]);
 	            }
             }
-            // todo: 每次登入都要重新開始
         })
         .catch ( function ( error ) {
             console.log (  '課程資料庫:' + error ) ;
@@ -102,7 +100,7 @@
                 userData.now_table = checkValid( response.data.now_table );
                 wishlistUpload();
                 tableUpload();
-                vue_wishlist.refresh();                     // todo: 遇到值改變直接 refresh
+                vue_wishlist.refresh();
                 vue_courseFilter.refresh();
                 vue_classtable.initialize();
             })

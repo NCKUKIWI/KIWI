@@ -22,9 +22,9 @@
           </div>
       </div>
       <div class="hub_navbar__left_area">
-          <div class="hub_navbar__link nav_link" name="course" @click="change_tab('course')">找課程</div>
-          <div class="hub_navbar__link nav_link" name="table" @click="change_tab('table')">排課表 <span class="wishlist_count">5</span></div>
-          <img class="hub_navbar__profile nav_link" name="profile" @click="switch_profile_window()" :src="user_data.user_photo">
+          <div class="hub_navbar__link nav_link" name="course" @click="switchTo('course')">找課程</div>
+          <div class="hub_navbar__link nav_link" name="table" @click="switchTo('table')">排課表 <span class="wishlist_count">{{ user_data.now_wishlist.length }}</span></div>
+          <img class="hub_navbar__profile nav_link" name="profile" @click="switchProfileWindow()" :src="user_data.user_photo">
           <div class="hub_navbar__profile__dropdown">
             <div class="hub_navbar__profile__dropdown__info">
                 <img class="hub_navbar__profile__dropdown__info__photo" :src="user_data.user_photo">
@@ -40,7 +40,7 @@
                 </div>
             </div>
             <div v-show="user_data.user_id != 0" class="hub_navbar__profile__dropdown__goto" @click="open_helper()" >開通小幫手</div>
-            <a v-show="user_data.user_id == 0" href='/user/fblogin'><div class="hub_navbar__profile__dropdown__goto" @click="change_tab('profile')" >立即登入 / 註冊</div></a>
+            <a v-show="user_data.user_id == 0" href='/user/fblogin'><div class="hub_navbar__profile__dropdown__goto" @click="switchTo('profile')" >立即登入 / 註冊</div></a>
             <div class="hub_navbar__profile__dropdown__links">
                 <!-- <a>關於 NCKU HUB</a> -->
                 <a href="https://www.facebook.com/nckuhub">粉絲專頁</a>

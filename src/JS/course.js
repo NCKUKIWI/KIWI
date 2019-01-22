@@ -249,7 +249,7 @@
         wishlistRemove( id );
       },
       opentabletab: function() {
-        vue_nav_bar.change_tab('table');
+        changeTab('table');
       },
     },
     computed: {

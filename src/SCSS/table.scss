@@ -400,6 +400,9 @@ a {
         @include box_shadow_1();
         @include ellipsis();
         @include box_shadow_1_hover();
+        &::placeholder {
+            color: $black;
+        }
         &:focus {
             @include ellipsis();
             box-shadow: 0 0 28px 0 rgba(0,0,0,0.1);
@@ -458,7 +461,7 @@ a {
     }
     &.in_course {
         margin-top: 1.5vh;
-        height: calc( 82vh - 200px - 3vh );
+        height: calc( 82vh - 200px - 2.5vh );
     }
     width: 100%;
     @include flex_center_top();
@@ -778,81 +781,6 @@ a {
                 width: 30px;
                 border-radius: 100%;
             }
-        }
-    }
-}
-
-.fixed_button_area {
-    position: fixed;
-    z-index: 1000;
-    display: block;
-    bottom: 40px;
-    right: 40px;
-    height: 130px;
-    width: 65px;
-    &:hover {
-        .minor_button {
-            bottom: 120px;
-        }
-    }
-    &.locked:hover {
-        .minor_button {
-            bottom: 50px;
-        }
-    }
-    .major_button {
-        position: fixed;
-        z-index: 1000;
-        display: block;
-        bottom: 40px;
-        right: 40px;
-        height: 65px;
-        width: 65px;
-        border-radius: 100%;
-        cursor: pointer;
-        @include box_shadow_3();
-        @include box_shadow_3_hover();
-        transition: .3s $material_trans ;
-        &:active {
-            filter: brightness(80%);
-        }
-        &.deep_blue_edit {
-            background-image: url("../images/table/icon_edit.svg") ;
-            background-size: 40% ;
-            background-repeat: no-repeat ;
-            background-position: center ;
-            background-color: $deep_blue;
-        }
-        &.red_done {
-            background-image: url("../images/table/icon_done.svg") ;
-            background-size: 40% ;
-            background-repeat: no-repeat ;
-            background-position: center ;
-            background-color: $red;
-        }
-    }
-    .minor_button {
-        position: fixed;
-        z-index: 900;
-        display: block;
-        bottom: 50px;
-        right: 50px;
-        height: 45px;
-        width: 45px;
-        border-radius: 100%;
-        cursor: pointer;
-        @include box_shadow_2();
-        @include box_shadow_2_hover();
-        transition: .3s $material_trans;
-        &:active {
-            filter: brightness(80%);
-        }
-        &.dark_cancel {
-            background-image: url("../images/table/icon_close.svg") ;
-            background-size: 30% ;
-            background-repeat: no-repeat ;
-            background-position: center ;
-            background-color: $dark;
         }
     }
 }

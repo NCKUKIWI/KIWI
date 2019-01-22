@@ -1,8 +1,12 @@
-$colorBlue: #1A6CBD
 .text_40
-  font-size: 32px
+  font-size: 29px
 .text_26
-  font-size: 20px
+  font-size: 16px
+.text_34--register
+  font-size: 24px
+  margin-bottom: 3vh
+.text_20--register
+  font-size: 14px
 
 .register__content
   background-color: #fafafa
@@ -24,9 +28,18 @@ $colorBlue: #1A6CBD
     flex-direction: column
     align-items: center
     background-color: transparent
+    &--mods
+      display: flex
+      flex-direction: column
+      align-items: flex-start
+      p.text_40
+        margin-bottom: 4vh
+      &__par
+        margin-bottom: 10vh
   &__right
     padding: 5vh 3vw
     width: 45%
+    height: 95%
     box-shadow: 0 0 14px 0 rgba(0,0,0,0.06)
     &__head
       padding-bottom: 5vh
@@ -44,7 +57,7 @@ $colorBlue: #1A6CBD
           -webkit-appearance: none
           border-bottom: 1px solid #eee
           margin-bottom: 2vh
-          font-size: 16px
+          font-size: 14px
         input:focus
           outline: none
           border-bottom: 1px solid #1A6CBD
@@ -69,6 +82,7 @@ $colorBlue: #1A6CBD
   justify-content: center
   align-items: center
   margin-top: 3vh
+  cursor: pointer
   img
     width: 14px
     height: 14px
@@ -76,17 +90,18 @@ $colorBlue: #1A6CBD
 
 
 .logo__circle
-  width: 200px
-  height: 200px
-  border-radius: 100px
-  background-color: #eee
-  margin-bottom: 3vh
+  margin-bottom: 7vh
+  img
+    width: 200px
+    height: 200px
+    border-radius: 100px
+    box-shadow: 0 0 14px 0 rgba(0,0,0,0.06)
 
 .rectangle-btn
   background-color: #fff
-  height: 48px
+  height: 43px
   box-shadow: 0 0 14px 0 rgba(0,0,0,0.06)
-  width: 210px
+  width: 190px
   display: flex
   align-items: center
   padding-left: 16px

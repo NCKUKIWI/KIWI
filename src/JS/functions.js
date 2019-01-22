@@ -142,7 +142,7 @@
                         }
                     }
                     else {
-                        console.log ( 'checkConflict: 找到衝堂' );            // todo: 新增衝堂的正確反應
+                        console.log ( 'checkConflict: 找到衝堂' );
                         check_cell.cell_status_title = "時段衝堂";
                         check_cell.ifRush = true;
                         return 0 ;

@@ -40,6 +40,12 @@ div#courseContent(v-show="isShow" @click.self="showContent()")
           p(v-if="score_data.rates == undefined") 課程評分 (0)
         div.flex-container.score-btn--all
           div.score-btn
+            span 收穫 
+            div.arrow-left(@click="minusRate('recom_rate')")
+            span.score_span {{score_data.recommand}}
+            input#recom_rate.score_input(type="number" value="5" min="1" max="10")
+            div.arrow-right(@click="addRate('recom_rate')")
+          div.score-btn
             span 甜度
             div.arrow-left(@click="minusRate('sweet_rate')")
             span.score_span {{score_data.sweet}}
@@ -51,12 +57,6 @@ div#courseContent(v-show="isShow" @click.self="showContent()")
             span.score_span {{score_data.hard}}
             input#hard_rate.score_input(type="number" value="5" min="1" max="10")
             div.arrow-right(@click="addRate('hard_rate')")
-          div.score-btn
-            span 收穫 
-            div.arrow-left(@click="minusRate('recom_rate')")
-            span.score_span {{score_data.recommand}}
-            input#recom_rate.score_input(type="number" value="5" min="1" max="10")
-            div.arrow-right(@click="addRate('recom_rate')")
           //button.score-btn.score-btn__submit#score_input(type="submit" @click="submit_score()") 評分
       div.courseContentBody__right__comment
         div.block_title
@@ -79,7 +79,7 @@ div.course__whole
       div.block_title
         p.text_18 開課單位
       div.quick_search_area(style="z-index:300")
-        input#dpmtFilter(type="text" v-model="keyword" placeholder="選擇開課單位" class="quick_search_input") 
+        input#dpmtFilter(type="text" v-model="keyword" placeholder="選擇「開課單位」" class="quick_search_input") 
         div.quick_search_dropdown--course
           div(v-for="(result, index) in search_result").search_result--course
             div(@click="result_click(index)")

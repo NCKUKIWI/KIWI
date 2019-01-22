@@ -12,26 +12,39 @@
     var userData = {
     	user_id: 0,
         user_name: '訪客貓咪',
-        user_photo: 'dist/images/course/sad_hugecat.png',        // todo: 取得正確圖片
+        user_photo: 'dist/images/course/sad_hugecat.png',
         user_department: '無',
         user_grade: '無',
         credit_count: 9,                                    // todo: 讓他可以用計算ㄉ
         now_wishlist: [],
-        now_table: [],
+        now_table: []
     }
+
+    // 頁面顯示狀態
+
+    var pageStatus = {
+        initial_tab: 'course',
+        now_tab: '',
+        table_locked: true,
+        loggedIn: false,
+    }
+
+    changeTab( pageStatus.initial_tab );
+
+    
 
 
     axios.get ( '/course/' )
         .then ( function ( response ) {
             course_db = response.data.courses;
             console.log ( '課程資料庫: 抓取資料成功！' ) ;
-            if(response.data.user_data !== undefined) {
-                // 取得使用者資料               // todo: 之後要往外移    
-            	userData.user_name = response.data.user_data.name;
-                userData.user_id = response.data.user_data.id;
-                userData.user_department = response.data.user_data.department;
-                userData.user_grade = response.data.user_data.grade;
-                userData.user_photo = "http://graph.facebook.com/" + response.data.user_data.fb_id + "/picture?type=normal";
+            if(response.data.user_data !== undefined) { 
+                pageStatus.loggedIn = true;  
+            	userData.user_name = response.data.user_data[0].name;
+                userData.user_id = response.data.user_data[0].id;
+                userData.user_department = response.data.user_data[0].department;
+                userData.user_grade = response.data.user_data[0].grade;
+                userData.user_photo = "http://graph.facebook.com/" + response.data.user_data[0].fb_id + "/picture?type=normal";
                 getWishlistTable();
             }
             // 將 course_db 放入
@@ -43,7 +56,6 @@
 	                vue_course_item.course_with_comment.push(vue_course_item.course_data_db()[i]);
 	            }
             }
-            // todo: 每次登入都要重新開始
         })
         .catch ( function ( error ) {
             console.log (  '課程資料庫:' + error ) ;
@@ -62,6 +74,21 @@
     // Function ----------------------------------------------------------------
 
 
+    // 切換顯示中頁面
+
+    function changeTab( tab ) {
+        pageStatus.now_tab = tab ;
+        // 切換頁面
+        $( ".tab_div" ).hide();
+        $( ".tab_div[name='" + tab + "']" ).show();
+        // 切換 Navbar 顯示
+        $( ".nav_link" ).removeClass( "on" );
+        $( ".nav_link[name='" + tab + "']" ).addClass( "on" );
+        // 取消個人選單顯示
+        $( ".nav_link[name='profile']" ).removeClass( "on" );
+        $( ".hub_navbar__profile__dropdown" ).removeClass( "on" );
+    }
+
     // 取得使用者課表、願望清單資訊
 
     function getWishlistTable() {
@@ -73,9 +100,9 @@
                 userData.now_table = checkValid( response.data.now_table );
                 wishlistUpload();
                 tableUpload();
-                vue_wishlist.refresh();                     // todo: 遇到值改變直接 refresh
+                vue_wishlist.refresh();
                 vue_courseFilter.refresh();
-                vue_classtable.refresh();
+                vue_classtable.initialize();
             })
             .catch ( function ( error ) {
                 console.log (  '願望清單及課表: ' + error ) ;
@@ -117,22 +144,6 @@
         });
     }
 
-    // 課程加入課表
-
-    function tableAdd ( target_id ) {
-        userData.now_table.push( target_id );
-        vue_classtable.refresh();
-        return tableUpload();       // todo: 過陣子改為依鎖定狀態
-    }
-
-    // 課程移出課表
-
-    function tableRemove ( target_id ) {
-        var index = userData.now_table.indexOf( target_id );
-        userData.now_table.splice( index, 1 );
-        vue_classtable.refresh();
-        return tableUpload();       // todo: 過陣子改為依鎖定狀態
-    }
 
     // 課表傳回資料庫
 

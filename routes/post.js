@@ -159,8 +159,8 @@ router.post('/create', function (req, res) {
                 semester: req.body.semester.replace(/\'|\#|\/\*/g, ""),
                 catalog: req.body.catalog.replace(/\'|\#|\/\*/g, ""),
                 comment: req.body.comment.replace(/\'|\#|\/\*/g, ""),
-                report_hw: req.body.report_hw.replace(/\'|\#|\/\*/g, ""),
-                course_style: req.body.course_style.replace(/\'|\#|\/\*/g, ""),
+                // report_hw: req.body.report_hw.replace(/\'|\#|\/\*/g, ""),
+                // course_style: req.body.course_style.replace(/\'|\#|\/\*/g, ""),
                 user_id: userid
             }
             db.Insert('post', post, function (err, results) {
@@ -168,7 +168,7 @@ router.post('/create', function (req, res) {
                 console.log(results);
                 var rate = {
                     sweet: parseInt(req.body.sweet.replace(/\'|\#|\/\*/g, "")),
-                    hard: parseInt(req.body.hard.replace(/\'|\#|\/\*/g, "")),
+                    cold: parseInt(req.body.hard.replace(/\'|\#|\/\*/g, "")),
                     recommand: parseInt(req.body.recommand.replace(/\'|\#|\/\*/g, "")),
                     give: parseInt(req.body.give.replace(/\'|\#|\/\*/g, "")),
                     got: parseInt(req.body.got.replace(/\'|\#|\/\*/g, "")),

@@ -446,6 +446,11 @@ router.post('/webhook', function (req, res) {
 	res.sendStatus(200);
 });
 
+router.post('/gmailTest', function(req, res){
+	gmailSend.sendMail('nckuhub@gmail.com', 'TO 檢舉人： 你的檢舉通過囉')
+})
+
+
 const aCourseButtonTitleGenerator = aCourse => `${aCourse.系所名稱.replace(/[A-Z0-9]/g, "")} ${aCourse.課程名稱.replace(/[（|）|\s]/g, "")} ${aCourse.時間}`;
 
 function sendCoursePlaceByName(sender, name, dpt, teacher) {

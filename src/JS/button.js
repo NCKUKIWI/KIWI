@@ -15,7 +15,9 @@
 				}
 				else {
 					if ( ! pageStatus.windows.add_review ) {
-						setWindow( 'add_review', 'open' );
+						if ( checkLoggedIn() ) {
+							setWindow( 'add_review', 'open' );
+						}
 					}
 				}
 			},

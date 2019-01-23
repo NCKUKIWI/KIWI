@@ -42,7 +42,7 @@ div#courseContent(v-show="isShow" @click.self="showContent()")
           div.score-btn
             span 收穫 
             div.arrow-left(@click="minusRate('recom_rate')")
-            span.score_span {{score_data.recommand}}
+            span.score_span {{score_data.got}}
             input#recom_rate.score_input(type="number" value="5" min="1" max="10")
             div.arrow-right(@click="addRate('recom_rate')")
           div.score-btn
@@ -54,7 +54,7 @@ div#courseContent(v-show="isShow" @click.self="showContent()")
           div.score-btn
             span 涼度 
             div.arrow-left(@click="minusRate('hard_rate')")
-            span.score_span {{score_data.hard}}
+            span.score_span {{score_data.cold}}
             input#hard_rate.score_input(type="number" value="5" min="1" max="10")
             div.arrow-right(@click="addRate('hard_rate')")
           //button.score-btn.score-btn__submit#score_input(type="submit" @click="submit_score()") 評分
@@ -64,8 +64,7 @@ div#courseContent(v-show="isShow" @click.self="showContent()")
         div.courseFeedback
           div(v-if="course_data.comment_num == 0").courseFeedback__single.courseFeedback__single--default
             div.courseFeedback__msg
-              p 點擊按鈕，立即提供課程心得，
-              p 幫助 480 位對這門課有興趣的同學！
+              p 本課程暫時沒有心得，歡迎你成為第一個提供者：）
           div.courseFeedback__single(v-for="comment in comment_data")
             div.courseFeedback__msg
               p(v-html='comment.comment') {{comment.comment}}

@@ -22,10 +22,10 @@
           </div>
       </div>
       <div class="hub_navbar__left_area">
-          <div class="hub_navbar__link nav_link" name="course" @click="switchTo('course')">找課程</div>
-          <div class="hub_navbar__link nav_link" name="table" @click="switchTo('table')">排課表 <span class="wishlist_count">{{ user_data.now_wishlist.length }}</span></div>
-          <img class="hub_navbar__profile nav_link" name="profile" @click="switchProfileWindow()" :src="user_data.user_photo">
-          <div class="hub_navbar__profile__dropdown">
+          <div :class="{ on: page_status.now_tab == 'course' }" class="hub_navbar__link" @click="switchTo('course')">找課程</div>
+          <div :class="{ on: page_status.now_tab == 'table' }" class="hub_navbar__link" @click="switchTo('table')">排課表 <span class="wishlist_count">{{ user_data.now_wishlist.length }}</span></div>
+          <img :class="{ on: page_status.nav_profile_dropdown || page_status.now_tab == 'profile' }" class="hub_navbar__profile" @click="switchProfileWindow()" :src="user_data.user_photo">
+          <div :class="{ on: page_status.nav_profile_dropdown } " class="hub_navbar__profile__dropdown">
             <div class="hub_navbar__profile__dropdown__info">
                 <img class="hub_navbar__profile__dropdown__info__photo" :src="user_data.user_photo">
                 <div class="hub_navbar__profile__dropdown__info__detail">

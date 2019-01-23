@@ -6,6 +6,7 @@ var vue_nav_bar = new Vue({
 		search_keyword: '',
 		result_cont: [],
 		user_data: userData,
+		page_status: pageStatus,
 	},
 	computed: {
 		result: function () {
@@ -26,13 +27,17 @@ var vue_nav_bar = new Vue({
 	},
     methods: {
 		switchTo: function ( tab ) {
-			toTab( tab );
+			if ( tab == 'table' ) {
+				if ( checkLoggedIn() ) {
+					toTab( tab );
+				}
+			}
+			else {
+				toTab( tab );
+			}
 		},
 		switchProfileWindow: function() {
-			if ( pageStatus.now_tab != 'profile' ) {
-				$( ".nav_link[name='profile']" ).toggleClass( "on" );
-			}
-			$( ".hub_navbar__profile__dropdown" ).toggleClass( "on" );
+			pageStatus.nav_profile_dropdown = ! pageStatus.nav_profile_dropdown;
 		},
 		openCourse: function(id) {
 			toTab('course');

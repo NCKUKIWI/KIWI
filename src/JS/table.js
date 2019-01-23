@@ -6,8 +6,9 @@
 
     var vue_user_data = new Vue ({
         el: '#user_data',
-        data: function(){
-        	return userData;
+        data: {
+            user_data: userData,
+            credit_count: 0,
         },
         methods: {   
         }
@@ -306,6 +307,12 @@
                 var class_item = getClassObject ( course_db, target_id ); 
                 var time_item = getTimeObject ( class_item );
                 if ( checkConflict ( class_item, this ) ) {
+                    // 計算學分數
+                    if ( !ifPreview ) {
+                        console.log( '目前學分：' + vue_user_data.credit_count + '，本課名稱：' + class_item.title + '，本課學分數：' + class_item.credit );
+                        vue_user_data.credit_count += class_item.credit;
+                        console.log( '新增後學分：' + vue_user_data.credit_count );
+                    }
                     // 完成填入課表
                     var day, start, hrs;
                     for ( var i = 0 ; i < time_item.length ; i ++ ) {
@@ -338,6 +345,7 @@
                     return 1;
                 }
                 else {
+                    console.log( 'toTable 時發生錯誤！' );
                     return 0;
                 }
             },
@@ -364,6 +372,7 @@
                     }
                 }
                 // 加入目前課表
+                vue_user_data.credit_count = 0;
                 for ( var i = 0 ; i < this.temp_table.length ; i ++ ) {
                     var target_id = this.temp_table[i];
                     this.toTable ( target_id, course_db );
@@ -447,6 +456,7 @@
     4. 篩選時段 - 加入課表 - wishlist 不會回復原狀？
     5. hover wishlist - 產生衝堂 - 刪除 wishlist item - 衝堂不會消失？
     6. 放棄課表的話，wishlist 不會回復到原樣。
+    7. 讓所有搜尋不會區分大小寫＆刪去所有空格。
 
     ( ui / ux )
     1. 課表空空時的文字提示

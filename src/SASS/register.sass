@@ -66,12 +66,21 @@
           justify-content: space-between
           width: 100%
           input:nth-child(1)
-            width: 65%
+            width: 60%
           input:nth-child(2)
-            width: 30%
+            width: 37%
         &__line2
           input
             width: 100%
+
+input[type=text]:disabled::placeholder
+  color: #eee
+.disabled_text
+  color: #eee
+  p
+    color: #eee
+
+
 .round-btn
   width: 176px
   height: 42px
@@ -88,6 +97,10 @@
     height: 14px
     margin-right: 10px
 
+.roundBtnClicked
+  background-color: #eee
+  opacity: 0.5
+  cursor: default
 
 .logo__circle
   margin-bottom: 7vh
@@ -105,6 +118,7 @@
   display: flex
   align-items: center
   padding-left: 16px
+  cursor: pointer
   img
     width: 19px
     height: 19px
@@ -114,3 +128,40 @@
       color: #1A6CBD
     &__finishRegist
       color: #F35A5A
+
+#register__right__submited
+  display: none
+  justify-content: center
+  align-items: center
+  height: 100%
+  .rectangle-btn
+    box-shadow: none
+    border: 1px solid #1A6CBD
+    color: #1A6CBD
+  a
+    color: #1A6CBD
+  a:visited
+    color: #1A6CBD
+
+.register__right__submited__content
+  margin: 5vh 0px
+  img
+    width: 15px
+    height: 15px
+.register__dropdown
+  max-height: 10vh
+  overflow-y: scroll
+  position: absolute
+  left: 74%
+  top: 70%
+  background-color: #fff
+  box-shadow: 0 0 14px 0 rgba(0,0,0,0.06)
+  display: flex
+  align-items: center
+  flex-direction: column
+  cursor: pointer
+  &__dept
+    height: 50px
+    width: 200px
+    padding: 10px 8px
+    border-bottom: 1px solid #eee

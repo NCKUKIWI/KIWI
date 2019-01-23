@@ -448,6 +448,8 @@ router.post('/webhook', function (req, res) {
 
 router.post('/gmailTest', function(req, res){
 	gmailSend.sendMail('nckuhub@gmail.com', 'TO 檢舉人： 你的檢舉通過囉')
+	res.send('gmailSend')
+
 })
 
 

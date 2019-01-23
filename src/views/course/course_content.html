@@ -3,7 +3,7 @@
   <div class="content_nextpage"><img style="cursor: pointer;" src="./dist/images/course/left-btn.svg"/><img style="cursor: pointer;" src="./dist/images/course/right-btn.svg"/></div>
   <div class="courseContentBody">
     <div class="courseContentBody__left"><span class="courseSerial">{{course_data.系號}}{{course_data.選課序號}}</span>
-      <h2>{{course_data.課程名稱, course_data.index}}</h2>
+      <h2>{{course_data.課程名稱}}</h2>
       <div class="flex-container icon-span" style="margin-top:30px" @click="openOutline(course_data.系號,course_data.課程碼)">
         <div class="content-icon see_clip"></div><span>檢視課程大綱</span>
       </div>
@@ -46,6 +46,11 @@
           <p v-if="score_data.rates == undefined">課程評分 (0)</p>
         </div>
         <div class="flex-container score-btn--all">
+          <div class="score-btn"><span>收穫 </span>
+            <div class="arrow-left" @click="minusRate('recom_rate')"></div><span class="score_span">{{score_data.recommand}}</span>
+            <input class="score_input" id="recom_rate" type="number" value="5" min="1" max="10"/>
+            <div class="arrow-right" @click="addRate('recom_rate')"></div>
+          </div>
           <div class="score-btn"><span>甜度</span>
             <div class="arrow-left" @click="minusRate('sweet_rate')"></div><span class="score_span">{{score_data.sweet}}</span>
             <input class="score_input" id="sweet_rate" type="number" value="5" min="1" max="10"/>
@@ -55,11 +60,6 @@
             <div class="arrow-left" @click="minusRate('hard_rate')"></div><span class="score_span">{{score_data.hard}}</span>
             <input class="score_input" id="hard_rate" type="number" value="5" min="1" max="10"/>
             <div class="arrow-right" @click="addRate('hard_rate')"></div>
-          </div>
-          <div class="score-btn"><span>收穫 </span>
-            <div class="arrow-left" @click="minusRate('recom_rate')"></div><span class="score_span">{{score_data.recommand}}</span>
-            <input class="score_input" id="recom_rate" type="number" value="5" min="1" max="10"/>
-            <div class="arrow-right" @click="addRate('recom_rate')"></div>
           </div>
           <!--button.score-btn.score-btn__submit#score_input(type="submit" @click="submit_score()") 評分-->
         </div>
@@ -97,7 +97,7 @@
         <p class="text_18">開課單位</p>
       </div>
       <div class="quick_search_area" style="z-index:300">
-        <input class="quick_search_input" id="dpmtFilter" type="text" v-model="keyword" placeholder="選擇開課單位"/>
+        <input class="quick_search_input" id="dpmtFilter" type="text" v-model="keyword" placeholder="選擇「開課單位」"/>
         <div class="quick_search_dropdown--course">
           <div class="search_result--course" v-for="(result, index) in search_result">
             <div @click="result_click(index)">

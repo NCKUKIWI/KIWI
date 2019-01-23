@@ -3,9 +3,25 @@
 
     // Data----------------------------------------------------------------
 
-    // 課程資料
+    // 本學期課程資料
 
     var course_db = [];
+
+
+    // 過往課程資料
+
+    var course_prev_db = [];
+
+    axios.get ( '/course/allCoursePrev' )
+        .then ( function ( response ) {
+            course_prev_db = response.data;
+        })
+        .catch ( function ( error ) {
+            console.log (  'axios error:' + error ) ;
+        });
+
+    
+
 
     // 使用者資料
 

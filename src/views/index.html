@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="dist/CSS/helper.css">
     <!-- <link rel="stylesheet" href="dist/CSS/course/course.css"> -->
     <link rel="stylesheet" href="dist/CSS/reset.css">
+    <link rel="stylesheet" href="dist/CSS/public.css">
     <link rel="stylesheet" href="dist/CSS/table.css">
     <link rel="stylesheet" href="dist/CSS/navbar.css">
     <link rel="stylesheet" href="dist/CSS/button.css">
@@ -18,15 +19,21 @@
     <!-- <script src="dist/JS/profile/init2.js"></script> -->
 	<!-- <link rel="stylesheet" type="text/css" href="./dist/CSS/profile/profile.css "> -->
     <body>
-        <!-- 基礎建設 -->
+        <!-- 視窗 -->
+        <div class="window_div"> @@include('public/add_review.html') </div>
+        <!-- <div class="window_div"> @@include('public/windows.html') </div> -->
+    
+        <!-- 基本 -->
         <div class="basic_div" name="navbar"> @@include('public/navbar.html')  </div>
         <div class="basic_div" name="button"> @@include('public/button.html')  </div>
-        <!-- 個別分頁 -->
+
+        <!-- 分頁 -->
     	<div class="tab_div" name="course">  @@include('course/course_content.html')  </div>
-    	<div class="tab_div" name="table">  @@include('table/table.html')  </div>
+        <div class="tab_div" name="table">  @@include('table/table.html')  </div>
+        <div class="tab_div" name="register">  @@include('public/register.html')  </div>        
     	<!-- <div class="tab_div" name="profile">  @@include('profile/profile.html')  </div> -->
         <div class="tab_div" name="helper">  @@include('public/helper.html')  </div>
-        <div class="tab_div" name="register">  @@include('public/register.html')  </div>
+
     </body>
 </head>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17/vue.js"> </script>
@@ -38,5 +45,6 @@
 <script src="dist/JS/course.js"></script>
 <script src="dist/JS/table.js"></script>
 <script src="dist/JS/helper.js"></script>
+<script src="dist/JS/add_review.js"></script>
 <!-- <script src="dist/JS/profile/profile.js "></script> -->
 </html>

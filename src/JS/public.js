@@ -64,23 +64,13 @@
         .then ( function ( response ) {
             course_db = response.data.courses;
             console.log ( '課程資料庫: 抓取資料成功！' ) ;
-<<<<<<< HEAD
             if(response.data.user_data !== undefined) {
                 pageStatus.loggedIn = true;
-            	userData.user_name = response.data.user_data[0].name;
-                userData.user_id = response.data.user_data[0].id;
-                userData.user_department = response.data.user_data[0].department;
-                userData.user_grade = response.data.user_data[0].grade;
-                userData.user_photo = "http://graph.facebook.com/" + response.data.user_data[0].fb_id + "/picture?type=normal";
-=======
-            if(response.data.user_data !== undefined) { 
-                pageStatus.loggedIn = true;  
             	userData.user_name = response.data.user_data.name;
                 userData.user_id = response.data.user_data.id;
                 userData.user_department = response.data.user_data.department;
                 userData.user_grade = response.data.user_data.grade;
                 userData.user_photo = "http://graph.facebook.com/" + response.data.user_data.fb_id + "/picture?type=normal";
->>>>>>> 65f330fed0aec0d21ccb5580176da2dda90673d4
                 getWishlistTable();
             }
             // 將 course_db 放入

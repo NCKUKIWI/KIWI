@@ -20,10 +20,13 @@ var vue_register = new Vue ({
       document.getElementById("register__right__content").style.display = "none";
       document.getElementById("register__right__submited").style.display = "flex";
     },
+    old_user_login: function() {
+      
+    }
   },
   computed: {
     dept_result: function() {
-      
+
     },
     grade_result: function() {
 

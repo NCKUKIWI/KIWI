@@ -116,7 +116,7 @@ function sendMessage(auth, to, txt)
          resource: {
            'raw': encodedMessage
          }
-       });
+       }).catch(error => console.log('error: ', error));
   })
 }
 module.exports = {sendMail};

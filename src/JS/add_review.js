@@ -160,7 +160,21 @@ var vue_add_review = new Vue({
 		},
 		sendReview: function () {
 			if ( this.course_title_filled && this.course_semester != '選擇學期' && this.course_teacher != '選擇開課教師' ) {
-				// todo: 把它寫完～
+				// axios.post('/post/create/' , {
+				// 	'course_name': this.course_title, 
+				// 	'teacher': this.course_teacher,
+				// 	'semester': this.course_semester,
+				// 	'comment': this.course_review,
+				// 	'sweet': this.course_rate.sweet,
+				// 	'cold': this.course_rate.cold,
+				// 	'got': this.course_rate.gain,
+				// })
+				// .then ( function ( response ) {
+				// 	console.log ( '送出心得: success' ) ;
+				// })
+				// .catch ( function ( error ) {
+				// 	console.log (  '送出心得: ' + error ) ;
+				// });
 			}
 		},
 		giveUpReview: function () {

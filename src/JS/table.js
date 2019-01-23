@@ -274,8 +274,8 @@
             thursday: [],
             friday: [],
             filtering_now: {
-                day: null,
-                time: null
+                day: '',
+                time: ''
             },
             page_status: pageStatus,
             temp_table: []
@@ -330,8 +330,8 @@
                                     return item.time == timeTransText( textTransTime(start) + k )
                                 });
                                 fill_cell.status = -1;
-                                fill_cell.cell_status_title = null;
-                                fill_cell.cell_status_text = null; 
+                                fill_cell.cell_status_title = '';
+                                fill_cell.cell_status_text = ''; 
                             }
                         }
                     }
@@ -409,9 +409,9 @@
                         now_cell.ifFilterTime = false;
                     }
                 }
-                this.filtering_now.day = null;
-                this.filtering_now.time = null;
-                vue_quick_search.keyword = null;
+                this.filtering_now.day = '';
+                this.filtering_now.time = '';
+                vue_quick_search.keyword = '';
             },
             tableTempAdd: function ( target_id ) {
                 this.temp_table.push( target_id );

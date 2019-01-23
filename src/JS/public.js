@@ -64,7 +64,8 @@
         .then ( function ( response ) {
             course_db = response.data.courses;
             console.log ( '課程資料庫: 抓取資料成功！' ) ;
-            if(response.data.user_data !== undefined) { 
+            // todo: 這邊之後可以移出來？
+            if( response.data.user_data !== undefined ) { 
                 pageStatus.loggedIn = true;  
             	userData.user_name = response.data.user_data.name;
                 userData.user_id = response.data.user_data.id;
@@ -72,6 +73,9 @@
                 userData.user_grade = response.data.user_data.grade;
                 userData.user_photo = "http://graph.facebook.com/" + response.data.user_data.fb_id + "/picture?type=normal";
                 getWishlistTable();
+            }
+            else {
+                pageStatus.loggedIn = false;  
             }
             // 將 course_db 放入
 	        for (var i = 0; i < 200; i++) {

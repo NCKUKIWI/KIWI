@@ -26,7 +26,7 @@ var vue_nav_bar = new Vue({
 	},
     methods: {
 		switchTo: function ( tab ) {
-			changeTab( tab );
+			toTab( tab );
 		},
 		switchProfileWindow: function() {
 			if ( pageStatus.now_tab != 'profile' ) {

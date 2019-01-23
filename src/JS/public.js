@@ -20,7 +20,6 @@
             console.log (  'axios error:' + error ) ;
         });
 
-    
 
 
     // 使用者資料
@@ -41,11 +40,22 @@
     var pageStatus = {
         initial_tab: 'course',
         now_tab: '',
+        windows: {
+            add_review: false,
+            helper: false,
+            // 新的視窗加在這裡
+        },
         table_locked: true,
         loggedIn: false,
     }
 
-    changeTab( pageStatus.initial_tab );
+    // 轉換目前頁面
+    toTab( pageStatus.initial_tab );
+
+    // 開啟或關閉視窗
+    // setWindow( 'add_review', 'open' );
+
+
 
     
 
@@ -92,7 +102,7 @@
 
     // 切換顯示中頁面
 
-    function changeTab( tab ) {
+    function toTab( tab ) {
         pageStatus.now_tab = tab ;
         // 切換頁面
         $( ".tab_div" ).hide();
@@ -103,6 +113,15 @@
         // 取消個人選單顯示
         $( ".nav_link[name='profile']" ).removeClass( "on" );
         $( ".hub_navbar__profile__dropdown" ).removeClass( "on" );
+    }
+
+
+    // 開啟或關閉視窗
+
+    function setWindow( window, status ) {
+        // status = open 開啟視窗, cloose 關閉視窗
+        if ( status == 'open' ) { pageStatus.windows[ window ] = true ; }
+        if ( status == 'close' ) { pageStatus.windows[ window ] = false ; }
     }
 
     // 取得使用者課表、願望清單資訊

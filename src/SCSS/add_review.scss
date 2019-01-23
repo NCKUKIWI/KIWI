@@ -348,14 +348,11 @@ $material_trans: cubic-bezier(0.0, 0.0, 0.2, 1);
                     background-color: $white;
                     margin-left: 10px;
                     @include box_shadow_1();
-                    // transition: .2s $material_trans;
                     cursor: default;
                     &.enabled {
                         cursor: pointer;
                         &:hover {
-                            // opacity: 0.8;
                             @include box_shadow_2();
-                            // filter: brightness(98%);
                         }
                         &:active {
                             filter: brightness(98%);
@@ -376,12 +373,14 @@ $material_trans: cubic-bezier(0.0, 0.0, 0.2, 1);
                         background-position: 14px center;
                         padding-left: 18px;
                         color: $gray;
+                        opacity: 0.7;
                         &.enabled {
                             background-image: url("../images/add_review/icon_send.svg");
                             background-size: 12px;
                             background-repeat: no-repeat;
                             background-position: 14px center; 
-                            color: $red;                       
+                            color: $red;       
+                            opacity: 1;
                         }
                     }
                 }

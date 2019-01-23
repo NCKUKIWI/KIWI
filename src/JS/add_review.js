@@ -3,6 +3,7 @@
 var vue_add_review = new Vue({
 	el: '#add_review',
     data: {
+		page_status: pageStatus,
 		course_title: '',
 		course_semester: '選擇學期',
 		course_teacher: '選擇開課教師',
@@ -133,7 +134,6 @@ var vue_add_review = new Vue({
 		},
 		giveRate: function ( item, value ) {
 			value =  parseInt( value );
-			console.log ( value );
 			if ( this.course_title_filled && this.course_semester != '選擇學期' && this.course_teacher != '選擇開課教師' ) {
 				if ( !( value > 0 && this.course_rate[item] == 10 ) && !( value < 0 && this.course_rate[item] == 1 ) ) {
 					this.course_rate[item] += value ;
@@ -157,6 +157,18 @@ var vue_add_review = new Vue({
 			if ( command == 'no_save' ) {
 				this.window_status = '您的心得不會自動儲存，請確認送出後再關閉視窗。'
 			}
-		}
+		},
+		sendReview: function () {
+			if ( this.course_title_filled && this.course_semester != '選擇學期' && this.course_teacher != '選擇開課教師' ) {
+				// todo: 把它寫完～
+			}
+		},
+		giveUpReview: function () {
+			this.closeWindow();
+			// todo: 清除自動儲存的內容
+		},
+		closeWindow: function () {
+			setWindow( 'add_review', 'close' );
+		},
 	}
 })

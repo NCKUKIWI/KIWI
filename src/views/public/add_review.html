@@ -1,5 +1,5 @@
 
-<div id="add_review" class="add_review">
+<div v-if="page_status.windows.add_review" id="add_review" class="add_review">
     <div class="add_review__window">
         <div class="add_review__window__top_bar">
             <div class="add_review__window__top_bar__title">
@@ -8,7 +8,7 @@
             <div class="add_review__window__top_bar__icons">
                 <div class="add_review_icon minimize"></div>
                 <div class="add_review_icon strech"></div>
-                <div class="add_review_icon close"></div>
+                <div class="add_review_icon close" @click="closeWindow"></div>
             </div>
         </div>
         <div class="add_review__window__mid_cont">
@@ -67,8 +67,8 @@
                 <p class="add_review_status text_14"> {{ window_status }} </p>
             </div>
             <div class="add_review__window__bottom_bar__buttons">
-                <div :class="{ enabled: course_review != '' }" class="add_review_button give_up text_16">放棄</div>
-                <div :class="{ enabled: course_review != '' }" class="add_review_button send_review text_16">送出心得</div>
+                <div class="add_review_button give_up text_16 enabled" @click="giveUpReview">放棄</div>
+                <div :class="{ enabled: course_review != '' }" class="add_review_button send_review text_16" @click="sendReview">送出心得</div>
             </div>
         </div>
     </div>

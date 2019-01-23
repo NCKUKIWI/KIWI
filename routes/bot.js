@@ -351,7 +351,7 @@ router.post('/webhook', function (req, res) {
 				if (event.message && event.message.text && typeof event.message.is_echo === "undefined") {
 					var text = event.message.text; //用戶傳送的訊息
 					console.log(`[粉專私訊] 私訊者：『${sender}』訊息：「${text.replace(/\n/, "\\n")}」`);
-					if (text.indexOf("小幫手") !== -1) {
+					if (text.indexOf("小幫手") !== -1 || text.indexOf("追蹤課程餘額") !== -1 || text.indexOf("尋找上課地點") !== -1) {
 
 						// sendHello(sender);
 						sendTextMessage(sender,Tmp_text );

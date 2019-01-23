@@ -3,9 +3,24 @@
 
     // Data----------------------------------------------------------------
 
-    // 課程資料
+    // 本學期課程資料
 
     var course_db = [];
+
+
+    // 過往課程資料
+
+    var course_prev_db = [];
+
+    axios.get ( '/course/allCoursePrev' )
+        .then ( function ( response ) {
+            course_prev_db = response.data;
+        })
+        .catch ( function ( error ) {
+            console.log (  'axios error:' + error ) ;
+        });
+
+
 
     // 使用者資料
 
@@ -25,11 +40,22 @@
     var pageStatus = {
         initial_tab: 'register',
         now_tab: '',
+        windows: {
+            add_review: false,
+            helper: false,
+            // 新的視窗加在這裡
+        },
         table_locked: true,
         loggedIn: false,
     }
 
-    changeTab( pageStatus.initial_tab );
+    // 轉換目前頁面
+    toTab( pageStatus.initial_tab );
+
+    // 開啟或關閉視窗
+    // setWindow( 'add_review', 'open' );
+
+
 
 
 
@@ -38,6 +64,7 @@
         .then ( function ( response ) {
             course_db = response.data.courses;
             console.log ( '課程資料庫: 抓取資料成功！' ) ;
+<<<<<<< HEAD
             if(response.data.user_data !== undefined) {
                 pageStatus.loggedIn = true;
             	userData.user_name = response.data.user_data[0].name;
@@ -45,6 +72,15 @@
                 userData.user_department = response.data.user_data[0].department;
                 userData.user_grade = response.data.user_data[0].grade;
                 userData.user_photo = "http://graph.facebook.com/" + response.data.user_data[0].fb_id + "/picture?type=normal";
+=======
+            if(response.data.user_data !== undefined) { 
+                pageStatus.loggedIn = true;  
+            	userData.user_name = response.data.user_data.name;
+                userData.user_id = response.data.user_data.id;
+                userData.user_department = response.data.user_data.department;
+                userData.user_grade = response.data.user_data.grade;
+                userData.user_photo = "http://graph.facebook.com/" + response.data.user_data.fb_id + "/picture?type=normal";
+>>>>>>> 65f330fed0aec0d21ccb5580176da2dda90673d4
                 getWishlistTable();
             }
             // 將 course_db 放入
@@ -76,7 +112,7 @@
 
     // 切換顯示中頁面
 
-    function changeTab( tab ) {
+    function toTab( tab ) {
         pageStatus.now_tab = tab ;
         // 切換頁面
         $( ".tab_div" ).hide();
@@ -87,6 +123,15 @@
         // 取消個人選單顯示
         $( ".nav_link[name='profile']" ).removeClass( "on" );
         $( ".hub_navbar__profile__dropdown" ).removeClass( "on" );
+    }
+
+
+    // 開啟或關閉視窗
+
+    function setWindow( window, status ) {
+        // status = open 開啟視窗, cloose 關閉視窗
+        if ( status == 'open' ) { pageStatus.windows[ window ] = true ; }
+        if ( status == 'close' ) { pageStatus.windows[ window ] = false ; }
     }
 
     // 取得使用者課表、願望清單資訊

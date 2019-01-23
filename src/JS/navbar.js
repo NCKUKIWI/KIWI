@@ -26,7 +26,7 @@ var vue_nav_bar = new Vue({
 	},
     methods: {
 		switchTo: function ( tab ) {
-			changeTab( tab );
+			toTab( tab );
 		},
 		switchProfileWindow: function() {
 			if ( pageStatus.now_tab != 'profile' ) {
@@ -34,7 +34,8 @@ var vue_nav_bar = new Vue({
 			}
 			$( ".hub_navbar__profile__dropdown" ).toggleClass( "on" );
 		},
-		openCourse: function( id ) {
+		openCourse: function(id) {
+			vue_nav_bar.change_tab('course');
 			vue_courseContent.isShow = true;
 			vue_course_item.openCoursePage(id);
 			vue_nav_bar.search_keyword = "";

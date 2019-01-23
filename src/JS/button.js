@@ -14,7 +14,9 @@
 					this.switchLockStatus();
 				}
 				else {
-					// todo: add_review
+					if ( ! pageStatus.windows.add_review ) {
+						setWindow( 'add_review', 'open' );
+					}
 				}
 			},
 			minorBtnClicked: function() {

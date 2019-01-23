@@ -249,7 +249,7 @@
         wishlistRemove( id );
       },
       opentabletab: function() {
-        changeTab('table');
+        toTab('table');
       },
     },
     computed: {

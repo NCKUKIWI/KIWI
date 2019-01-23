@@ -35,7 +35,7 @@ var vue_nav_bar = new Vue({
 			$( ".hub_navbar__profile__dropdown" ).toggleClass( "on" );
 		},
 		openCourse: function(id) {
-			vue_nav_bar.change_tab('course');
+			toTab('course');
 			vue_courseContent.isShow = true;
 			vue_course_item.openCoursePage(id);
 			vue_nav_bar.search_keyword = "";

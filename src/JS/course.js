@@ -31,9 +31,6 @@
 
 // end --------------------------/
 
-//js functions -------------------------
-
-// end -------------------------/
 
 // vue functions -----------------------
   var vue_course_item = new Vue({
@@ -185,15 +182,16 @@
       wishlist_cont: [],
       dept_dropdown: [],
       filter_by_dpmt: [],
+      keyPrefix: '',
     },
     methods: {
       comment_filter: function() {
+        console.log("check");
         var cCheck = document.getElementById("commentCheck");
         var dpmt_value = document.getElementById("dpmtFilter").value;
 
         if (cCheck.checked==true) {
             vue_course_item.course_data = [];
-            console.log(this.keyword);
           if(dpmt_value=="") {
               vue_course_item.course_data = vue_course_item.course_with_comment;
           } else if (dpmt_value!="") {
@@ -210,16 +208,23 @@
             for(var i=0;i<100;i++){
               vue_course_item.course_data.push(vue_course_item.course_data_db()[i]);
             }
+            console.log("not checked no dpmt");
           } else if (dpmt_value!=""){
-            vue_course_item.course_data = vue_courseFilter.filter_by_dpmt;
+            vue_course_item.course_data = [];
+            for(var i in vue_course_item.course_data_db()) {
+              if(vue_course_item.course_data_db()[i].系號 == this.keyPrefix){
+                vue_course_item.course_data.push(vue_course_item.course_data_db()[i]);
+              }
+            }
+            console.log("not checked have" + this.keyPrefix);
           }
         }
       },
       result_click: function(index) {
         var key = document.getElementById("dpmtFilter");
         var key_prefix = vue_courseFilter.dept_dropdown[index].prefix;
+        this.keyPrefix = key_prefix;
         key.value = key_prefix + " " + vue_courseFilter.dept_dropdown[index].name;
-        console.log(key_prefix);
         this.filter_by_dpmt = [];
         if(this.keyword) {
           if (document.getElementById("commentCheck").checked==true) {

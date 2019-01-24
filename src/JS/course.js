@@ -46,6 +46,7 @@
       comment_only: false,
       count_height: 1,
       count_index: 0,
+      userData: userData
     },
 
     methods: {
@@ -98,12 +99,17 @@
         // }
         // console.log(vue_courseContent.course_data);
       },
-      addCourse: function(index){
+      setCourse: function(index){
         var chooseCourse_id = vue_course_item.course_data[index].id;
         var chooseCourse = vue_course_item.course_data[index];
-        wishlistAdd(chooseCourse_id);
-        vue_courseFilter.wishList.push(chooseCourse);
-        console.log("add");
+        if (userData.now_wishlist.includes(chooseCourse_id)){
+          wishlistRemove(chooseCourse_id);
+        }
+        else{
+          wishlistAdd(chooseCourse_id);
+        }
+        
+        vue_courseFilter.wishList = userData.now_wishlist;
       },
       handleScroll: function() {
         var list_height = $("#course_item").height();

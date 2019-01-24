@@ -159,4 +159,15 @@ router.post('/update', middleware.checkLogin(), function (req, res) {
     });
 });
 
+router.get('/info', function (req, res) {
+    console.log('\n' + 'GET /user/info');
+    if (req.user === undefined){
+        res.status(404).send('not longin');
+    }
+    else{
+        res.send({user: req.user});    
+    }
+    
+});
+
 module.exports = router;

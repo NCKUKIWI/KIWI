@@ -135,23 +135,23 @@ router.get('/:id', function (req, res) {
                     }
                     db.FindbyColumn('course_rate', ["*"], { course_name: courseInfo.課程名稱, teacher: courseInfo.老師 }, function (rates) {
                         var sweet = 0;
-                        var hard = 0;
-                        var recommand = 0;
+                        var cold = 0;
+                        var got = 0;
                         var rate_count = 0;
                         if (rates.length > 0) {
                             for (var i in rates) {
                                 sweet += rates[i].sweet;
-                                hard += rates[i].hard;
-                                recommand += rates[i].recommand;
+                                cold += rates[i].cold;
+                                got += rates[i].got;
                             }
                             sweet /= rates.length;
-                            hard /= rates.length;
-                            recommand /= rates.length;
+                            cold /= rates.length;
+                            got /= rates.length;
                             rate_count = rates.length;
                         }
                         var data = {
-                            'recommand': recommand,
-                            'hard': hard,
+                            'got': got,
+                            'cold': cold,
                             'sweet': sweet,
                             'rate_count': rate_count,
                             'courseInfo': courseInfo,

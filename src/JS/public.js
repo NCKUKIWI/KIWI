@@ -30,6 +30,7 @@
         user_photo: 'dist/images/course/sad_hugecat.png',
         user_department: '無',
         user_grade: '無',
+        user_email: '',
         now_wishlist: [],
         now_table: []
     }
@@ -60,13 +61,18 @@
 
     // 抓取登入資料
     axios.get('/user/info').then(function(res){
-        toTab( 'course' );
-        pageStatus.loggedIn = true;  
+        if (res.data.department == '無' || res.data.grade == '無' || res.data.email == '無'){
+            toTab( pageStatus.initial_tab );
+            return; // 沒有填完資料的話還是停留在註冊頁
+        }
+        toTab('course');
+        pageStatus.loggedIn = true;
         userData.user_name = res.data.user.name;
         userData.user_id = res.data.user.id;
         userData.user_department = res.data.user.department;
         userData.user_grade = res.data.user.grade;
         userData.user_photo = "http://graph.facebook.com/" + res.data.user.fb_id + "/picture?type=normal";
+        userData.user_email = res.data.user.email;
         getWishlistTable();
     }).catch(function(err){
         pageStatus.loggedIn = false; 

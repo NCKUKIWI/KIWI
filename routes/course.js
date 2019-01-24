@@ -25,21 +25,17 @@ router.get('/', function (req, res) {
     var dt = new Date();
     console.log(dt);
     console.log('\n' + 'GET /course');
-    let col = ['id', '系號', '選課序號', '課程名稱', '老師', '時間', '學分', '選必修', '系所名稱', 'comment_num', '課程碼'];
+    let col = ['*'];
     db.GetColumn('course_new', col , { 'column': 'id', 'order': 'DESC' }, function (courses) {
-        all_courses = courses;
-        for(var i in all_courses){
-        	all_courses[i]['選課序號'] = all_courses[i]['選課序號'].replace(all_courses[i]['系號'], '');
-            var new_name = all_courses[i]['系所名稱'].replace(/[a-zA-Z]/g, ""); // 把系所的英文名稱拿掉（但是要避免全英文的系所）
+        for(var i in courses){
+         courses[i]['選課序號'] = courses[i]['選課序號'].replace(courses[i]['系號'], '');
+            var new_name = courses[i]['系所名稱'].replace(/[a-zA-Z]/g, ""); // 把系所的英文名稱拿掉（但是要避免全英文的系所）
             if(new_name != ""){
-                all_courses[i]['系所名稱'] = new_name;
+                courses[i]['系所名稱'] = new_name;
             }
         }
-        console.log("登入時的使用者資料: " + req.user);
         res.send({
-            'courses': all_courses,
-            'user_data': req.user,
-            'carts': null, //沒登入 選課清單為null
+            'courses': courses,
         });
     });
 });

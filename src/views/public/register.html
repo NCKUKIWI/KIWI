@@ -12,7 +12,7 @@
       </div>
       <div class="rectangle-btn rectangle-btn--register__login" @click="old_user_login()">
         <img src="./dist/images/register/fb_icon_blue.svg">
-        <p class="text_24">現有帳號登入</p>
+        <a href="/user/fblogin"><p class="text_24">現有帳號登入</p></a>
       </div>
     </div>
   </div>
@@ -27,7 +27,7 @@
         <div class="round-btn" id="register_fb_btn" @click="turnGrey()" :class="{roundBtnClicked : btn_clicked}">
           <img v-if="!btn_clicked" src="./dist/images/register/fb_icon.svg">
           <img v-if="btn_clicked" src="./dist/images/register/fb_icon_disabled.svg" alt="">
-          <p class="text_20--register">連接 facebook</p>
+          <a href="/user/fblogin"><p class="text_20--register">連接 facebook</p></a>
         </div>
       </div>
       <div class="register__block__right__steps">

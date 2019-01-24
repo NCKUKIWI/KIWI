@@ -40,7 +40,7 @@
                 </div>
             </div>
             <div v-show="user_data.user_id != 0" class="hub_navbar__profile__dropdown__goto" @click="open_helper()" >開通小幫手</div>
-            <a v-show="user_data.user_id == 0" href='/user/fblogin'><div class="hub_navbar__profile__dropdown__goto" @click="switchTo('profile')" >立即登入 / 註冊</div></a>
+            <a v-show="user_data.user_id == 0"><div class="hub_navbar__profile__dropdown__goto" @click="switchTo('register')" >立即登入 / 註冊</div></a>
             <div class="hub_navbar__profile__dropdown__links">
                 <!-- <a>關於 NCKU HUB</a> -->
                 <a href="https://www.facebook.com/nckuhub" target="_blank">粉絲專頁</a>

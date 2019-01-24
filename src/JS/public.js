@@ -38,7 +38,7 @@
     // 頁面顯示狀態
 
     var pageStatus = {
-        initial_tab: 'register',
+        initial_tab: 'course',
         now_tab: '',
         windows: {
             add_review: false,

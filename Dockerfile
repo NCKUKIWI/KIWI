@@ -9,11 +9,14 @@ COPY . .
 
 # Install package
 RUN apk update && apk upgrade
-RUN apk add --no-cache bash git openssh vim
+RUN apk add --no-cache bash git openssh vim tzdata
+
+# Set timezone
+RUN ln -snf /usr/share/zoneinfo/Asia/Taipei /etc/localtime
+
+# Install dependency
 RUN npm install --production
-
 RUN npm install -g pm2
-
 
 # Open 3000 Port
 EXPOSE 3000

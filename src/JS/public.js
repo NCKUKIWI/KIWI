@@ -119,7 +119,7 @@
     // 開啟或關閉視窗
 
     function setWindow( window, status ) {
-        // status = open 開啟視窗, cloose 關閉視窗
+        // status = open 開啟視窗, close 關閉視窗
         if ( status == 'open' ) { pageStatus.windows[ window ] = true ; }
         if ( status == 'close' ) { pageStatus.windows[ window ] = false ; }
     }

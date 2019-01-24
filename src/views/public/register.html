@@ -36,11 +36,10 @@
           <div class="register__block__right__steps__inputs__line1">
             <input type="text" placeholder="輸入系號(ex. H3 工資系)" id="enter_dept" disabled="disabled">
             <div class="register__dropdown">
-              <div class="register__dropdown__dept" v-for="grade in grades">
-                <p>{{grade}}</p>
+              <div class="register__dropdown__dept">
               </div>
             </div>
-            <input type="text" placeholder="輸入年級(ex. 大四)" id="enter_grade" disabled="disabled">
+            <input type="text" placeholder="選擇年級" id="enter_grade" disabled="disabled">
             <div class="register__dropdown">
               <div class="register__dropdown__dept" v-for="grade in grades">
                 <p>{{grade}}</p>
@@ -67,7 +66,7 @@
           <br>
           <p class="text_20">若遇到任何問題，歡迎 <a href="">私訊我們反應</a>。</p>
         </div>
-        <a href="#">
+        <a href="/">
           <div class="rectangle-btn">
             <img src="./dist/images/register/goback_icon.svg" alt="">
             <p class="text_26">返回 NCKU HUB</p>

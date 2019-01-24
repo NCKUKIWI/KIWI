@@ -86,10 +86,10 @@
             course_db = response.data.courses;
             console.log ( '課程資料庫: 抓取資料成功！' ) ;
             // 檢查資料是否皆合格（看這裡）
-            // userData.now_wishlist = checkValid( userData.now_wishlist );
-            // userData.now_table = checkValid( userData.now_table );
-            // wishlistUpload();
-            // tableUpload();
+            userData.now_wishlist = checkValid( userData.now_wishlist );
+            userData.now_table = checkValid( userData.now_table );
+            wishlistUpload();
+            tableUpload();
             // 將 course_db 放入
 	        for (var i = 0; i < 200; i++) {
 	            vue_course_item.course_data.push(vue_course_item.course_data_db()[i]);

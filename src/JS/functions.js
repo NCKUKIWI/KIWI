@@ -117,7 +117,8 @@
             }
             console.log( temp_list );
             return temp_list ; 
-        }else{
+        }
+        else {
             return list_to_check;
         }
     }

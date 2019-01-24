@@ -38,7 +38,7 @@
     // 頁面顯示狀態
 
     var pageStatus = {
-        initial_tab: 'course',
+        initial_tab: 'register',
         now_tab: '',
         windows: {
             add_review: false,
@@ -103,6 +103,11 @@
     axios.get ( '/course/allDpmt' )
         .then ( function ( response ) {
 	        vue_courseFilter.dept = response.data;
+          for(var i in vue_courseFilter.dept) {
+            if (!vue_courseFilter.dept[i].DepPrefix.match("A")){
+              vue_register.depts.push(vue_courseFilter.dept[i].DepPrefix);
+            }
+          }
         })
         .catch ( function ( error ) {
             console.log (  'axios error:' + error ) ;

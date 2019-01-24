@@ -19,7 +19,7 @@ var vue_register = new Vue ({
         document.getElementById("enter_dept").disabled = false;
         document.getElementById("enter_grade").disabled = false;
         document.getElementById("enter_email").disabled = false;
-
+        console.log(vue_register.depts);
         console.log(document.getElementById("enter_dept").disabled);
     },
     submit_data: function() {
@@ -35,10 +35,9 @@ var vue_register = new Vue ({
       document.getElementById("register__block__par2").innerHTML = "請完成基本資料的填寫";
     }
   },
-  computed: {
-    dept_result: function() {
-    },
-  },
+  watch: {
+    
+  }
 });
 
 document.addEventListener("input", function() {
@@ -46,10 +45,18 @@ document.addEventListener("input", function() {
 || document.getElementById("enter_email").value.length==0){
     vue_register.finish_register = false;
   } else {
-    if(!vue_register.email_keyword.match("@") || !vue_register.email_keyword.match(".com") || vue_register.email_keyword.length<10) {
+    if(!vue_register.email_keyword.match("@")) {
       vue_register.email_qualified = false;
     } else {
       vue_register.email_qualified = true;
+    }
+    for(var i in vue_register.depts) {
+      if(vue_register.dept_keyword.toUpperCase().match(vue_register.depts[i])){
+        vue_register.dept_qualified = true;
+        break;
+      } else {
+        vue_register.dept_qualified = false;
+      }
     }
   }
 
@@ -60,13 +67,3 @@ document.addEventListener("input", function() {
   }
 }
 });
-
-// document.addEventListener("input", function() {
-//   if(document.getElementById("enter_dept").value.length!=0 && document.getElementById("enter_grade").value!=0
-// && document.getElementById("enter_email").value.length!=0){
-//     vue_register.finish_register = true;
-//   } else if (document.getElementById("enter_dept").value.length==0 || document.getElementById("enter_grade").value==0
-// || document.getElementById("enter_email").value.length==0) {
-//     vue_register.finish_register = false;
-//   }
-// });

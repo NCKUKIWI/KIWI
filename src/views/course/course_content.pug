@@ -62,7 +62,7 @@ div#courseContent(v-show="isShow" @click.self="hideContent()")
         div.block_title
           p 課程心得 ({{comment_data.length}})
         div.courseFeedback
-          div(v-if="course_data.comment_num == 0").courseFeedback__single.courseFeedback__single--default
+          div(v-if="course_data.length == 0").courseFeedback__single.courseFeedback__single--default
             div.courseFeedback__msg
               p 本課程暫時沒有心得，歡迎你成為第一個提供者：）
           div.courseFeedback__single(v-for="comment in comment_data")

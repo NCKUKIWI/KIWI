@@ -1,6 +1,6 @@
 
-<div id="courseContent" v-show="isShow" @click.self="showContent()">
-  <div class="content_nextpage"><img style="cursor: pointer;" src="./dist/images/course/left-btn.svg"/><img style="cursor: pointer;" src="./dist/images/course/right-btn.svg"/></div>
+<div id="courseContent" v-show="isShow" @click.self="hideContent()">
+  <div class="content_nextpage" style="display:none;"><img style="cursor: pointer;" src="./dist/images/course/left-btn.svg"/><img style="cursor: pointer;" src="./dist/images/course/right-btn.svg"/></div>
   <div class="courseContentBody">
     <div class="courseContentBody__left"><span class="courseSerial">{{course_data.系號}}{{course_data.選課序號}}</span>
       <h2>{{course_data.課程名稱}}</h2>
@@ -69,7 +69,7 @@
           <p>課程心得 ({{comment_data.length}})</p>
         </div>
         <div class="courseFeedback">
-          <div class="courseFeedback__single courseFeedback__single--default" v-if="course_data.comment_num == 0">
+          <div class="courseFeedback__single courseFeedback__single--default" v-if="course_data.length == 0">
             <div class="courseFeedback__msg">
               <p>本課程暫時沒有心得，歡迎你成為第一個提供者：）</p>
             </div>
@@ -140,7 +140,7 @@
   <div class="flex-container courseList__sideList">
     <div class="card courseList__sideList__itemBox" id="courseList">
       <div id="course_item" v-on:scroll="handleScroll">
-        <div class="list_course_item" @click="courseLink(index)" v-for="(course, index) in course_data">
+        <div class="list_course_item" @click="openCoursePage(course.id)" v-for="(course, index) in course_data">
           <div class="list_course_item_left">
             <p class="list_course_item_category text_white text_20" :class="course.系號">{{course_circle(course.系號,course.系所名稱)}}</p>
           </div>
@@ -153,7 +153,8 @@
               <p class="text_14 text_dark" style="margin-right:15px">{{course.comment_num}}</p>
             </div>
             <div class="large_right--circle">
-              <div class="circle--img" @click.stop="addCourse(index)"><img src="./dist/images/course/heart.svg"/></div>
+              <div class="circle--img" @click.stop="setCourse(index)" v-show="!userData.now_wishlist.includes(course.id)"><img src="./dist/images/course/heart.svg"/></div>
+              <div class="circle--img" @click.stop="setCourse(index)" v-show="userData.now_wishlist.includes(course.id)"><img src="./dist/images/course/heart_red.svg"/></div>
             </div>
           </div>
         </div>

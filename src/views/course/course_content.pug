@@ -1,5 +1,5 @@
-div#courseContent(v-show="isShow" @click.self="showContent()")
-  div.content_nextpage
+div#courseContent(v-show="isShow" @click.self="hideContent()")
+  div.content_nextpage(style="display:none;")
     img(style="cursor: pointer;" src="./dist/images/course/left-btn.svg")
     img(style="cursor: pointer;" src="./dist/images/course/right-btn.svg")
   div.courseContentBody
@@ -62,7 +62,7 @@ div#courseContent(v-show="isShow" @click.self="showContent()")
         div.block_title
           p 課程心得 ({{comment_data.length}})
         div.courseFeedback
-          div(v-if="course_data.comment_num == 0").courseFeedback__single.courseFeedback__single--default
+          div(v-if="course_data.length == 0").courseFeedback__single.courseFeedback__single--default
             div.courseFeedback__msg
               p 本課程暫時沒有心得，歡迎你成為第一個提供者：）
           div.courseFeedback__single(v-for="comment in comment_data")
@@ -109,7 +109,7 @@ div.course__whole
   div.flex-container.courseList__sideList
     div.card.courseList__sideList__itemBox#courseList
       div#course_item(v-on:scroll="handleScroll")
-        div.list_course_item(@click="courseLink(index)" v-for="(course, index) in course_data")
+        div.list_course_item(@click="openCoursePage(course.id)" v-for="(course, index) in course_data")
           div.list_course_item_left
             p.list_course_item_category.text_white.text_20(:class="course.系號") {{course_circle(course.系號,course.系所名稱)}}
           div.list_course_item_mid
@@ -120,6 +120,8 @@ div.course__whole
               img(src="./dist/images/course/comment_num.svg")
               p.text_14.text_dark(style="margin-right:15px") {{course.comment_num}}
             div.large_right--circle
-              div.circle--img(@click.stop="addCourse(index)")
+              div.circle--img(@click.stop="setCourse(index)" v-show="!userData.now_wishlist.includes(course.id)")
                 img(src="./dist/images/course/heart.svg")
+              div.circle--img(@click.stop="setCourse(index)" v-show="userData.now_wishlist.includes(course.id)")
+                img(src="./dist/images/course/heart_red.svg")
             

@@ -41,7 +41,6 @@ var vue_nav_bar = new Vue({
 		},
 		openCourse: function(id) {
 			toTab('course');
-			vue_courseContent.isShow = true;
 			vue_course_item.openCoursePage(id);
 			vue_nav_bar.search_keyword = "";
 		},

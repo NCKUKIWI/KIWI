@@ -46,8 +46,7 @@ router.get("/fbcheck", middleware.checkLogin(1), function (req, res) {
                             'department': '無',
                             'grade': '無',
                             'check_key': check_key,
-                            'licensing': Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15),
-                            'validation': 0
+                            'email': ""
                         }, function (err, result) {
                             if (err) console.log(err);
                             res.cookie("isLogin", 1, {

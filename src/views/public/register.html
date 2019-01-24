@@ -24,14 +24,14 @@
       </div>
       <div class="register__block__right__steps">
         <p class="text_20--register">STEP 1：以現有帳號快速註冊</p>
-        <div class="round-btn" id="register_fb_btn" @click="new_user_login()" :class="{roundBtnClicked : btn_clicked || old_user_register}">
-          <img v-if="!btn_clicked && !old_user_register" src="./dist/images/register/fb_icon.svg">
-          <img v-if="btn_clicked || old_user_register" src="./dist/images/register/fb_icon_disabled.svg" alt="">
+        <div class="round-btn" id="register_fb_btn" @click="new_user_login()" :class="{roundBtnClicked : registerBtn.new_register || registerBtn.old_user_register}">
+          <img v-if="!registerBtn.new_register && !registerBtn.old_user_register" src="./dist/images/register/fb_icon.svg">
+          <img v-if="registerBtn.new_register || registerBtn.old_user_register" src="./dist/images/register/fb_icon_disabled.svg" alt="">
           <p class="text_20--register">連接 facebook</p>
         </div>
       </div>
       <div class="register__block__right__steps">
-        <p class="text_20--register" :class="{disabled_text : !btn_clicked && !old_user_register}">STEP 2：輸入您的個人基本資訊</p>
+        <p class="text_20--register" :class="{disabled_text : !registerBtn.new_register && !registerBtn.old_user_register}">STEP 2：輸入您的個人基本資訊</p>
         <div class="register__block__right__steps__inputs">
           <div class="register__block__right__steps__inputs__line1" :class="{input_error: !dept_qualified}">
             <div class="input_block">
@@ -49,9 +49,9 @@
           </div>
         </div>
       </div>
-      <div class="rectangle-btn rectangle-btn--register__finishRegist" :class="{disabled_text : !finish_register}" @click="submit_data()">
-        <img v-if="finish_register" src="./dist/images/register/arrange.svg">
-        <img v-if="!finish_register" src="./dist/images/register/arrange_disabled.svg">
+      <div class="rectangle-btn rectangle-btn--register__finishRegist" :class="{disabled_text : !registerBtn.finish_register}" @click="submit_data()">
+        <img v-if="registerBtn.finish_register" src="./dist/images/register/arrange.svg">
+        <img v-if="!registerBtn.finish_register" src="./dist/images/register/arrange_disabled.svg">
         <p class="text_20">完成註冊程序</p>
       </div>
     </div>

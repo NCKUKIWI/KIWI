@@ -1,9 +1,11 @@
 var vue_register = new Vue ({
   el: "#register__content",
   data: {
-    old_user_register: false,
-    btn_clicked: false,
-    finish_register: false,
+    registerBtn : {
+      old_user_register: false,
+      new_register: false,
+      finish_register: false,
+    },
     grades: ["大一","大二","大三","大四","大五","大六"],
     grade_selected: "",
     depts: [],
@@ -36,7 +38,7 @@ var vue_register = new Vue ({
     }
   },
   watch: {
-    
+
   }
 });
 

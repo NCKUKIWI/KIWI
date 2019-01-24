@@ -38,7 +38,7 @@
     // 頁面顯示狀態
 
     var pageStatus = {
-        initial_tab: 'course',
+        initial_tab: 'register',
         now_tab: '',
         windows: {
             add_review: false,
@@ -61,8 +61,9 @@
 
     // 抓取登入資料
     axios.get('/user/info').then(function(res){
-        if (res.data.department == '無' || res.data.grade == '無' || res.data.email == '無'){
-            return; // 沒有填完資料的話還是停留在註冊頁
+        if (res.data.user.department == '無' || res.data.user.grade == '無' || res.data.user.email == '無'){
+            toTab('register');
+            return; // 登入後沒有填完資料的話還是停留在註冊頁
         }
         toTab( pageStatus.initial_tab );
         pageStatus.loggedIn = true;
@@ -74,7 +75,7 @@
         userData.user_email = res.data.user.email;
         getWishlistTable();
     }).catch(function(err){
-        pageStatus.loggedIn = false; 
+        pageStatus.loggedIn = false;
         console.log(err.response.data);
     })
 
@@ -102,6 +103,11 @@
     axios.get ( '/course/allDpmt' )
         .then ( function ( response ) {
 	        vue_courseFilter.dept = response.data;
+          for(var i in vue_courseFilter.dept) {
+            if (!vue_courseFilter.dept[i].DepPrefix.match("A")){
+              vue_register.depts.push(vue_courseFilter.dept[i].DepPrefix);
+            }
+          }
         })
         .catch ( function ( error ) {
             console.log (  'axios error:' + error ) ;
@@ -126,7 +132,7 @@
     // 開啟或關閉視窗
 
     function setWindow( window, status ) {
-        // status = open 開啟視窗, cloose 關閉視窗
+        // status = open 開啟視窗, close 關閉視窗
         if ( status == 'open' ) { pageStatus.windows[ window ] = true ; }
         if ( status == 'close' ) { pageStatus.windows[ window ] = false ; }
     }

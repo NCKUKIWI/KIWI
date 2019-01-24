@@ -353,29 +353,27 @@ router.post('/setWish/:userID', function (req, res) {
     else{
     	wishList.push(req.body['now_wishlist']);
     }
-    
     console.log(wishList)
-        db.FindbyColumn('user', ['name'], {'id':userID}, function(rs){
-            if(rs.length === 0){
-                res.send('wrong user')
-            }else{
-
+    db.FindbyColumn('user', ['name'], {'id':userID}, function(rs){
+        if(rs.length === 0){
+            res.send('wrong user')
+        }else{
+            db.DeleteByColumn('wishList', {'userID':userID}, function (err) {
+                if(err) console.log(err);
                 for (let w in wishList){
                     let data = {
                         'userID':userID,
                         'courseID':wishList[w]
                     }
-                    db.DeleteByColumn('wishList', {'userID':userID}, function (err) {
-                        if(err) console.log(err);
-                        db.Insert('wishList',data,function(err,results){
-                            if(err)console.log(err)                
-                        })
-                    });
+                    db.Insert('wishList',data,function(err,results){
+                        if(err)console.log(err)                
+                    })
                 }
                 res.send('success');
-            }
-        })
-    });
+            });   
+        }
+    })
+});
 
 router.post('/setTable/:userID', function (req, res) {
     var userID = parseInt(req.params.userID);
@@ -393,17 +391,18 @@ router.post('/setTable/:userID', function (req, res) {
         if(rs.length === 0){
             res.send('wrong user')
         }else{
-            res.send('success')
-            for (let t in tableList){
-                let data = {
-                    'userID':userID,
-                    'courseID':tableList[t],
-                    'userName':rs[0]['name']
-                }
-                db.DeleteByColumn('tableList', {'userID':userID}, function (err) {
+            db.DeleteByColumn('tableList', {'userID':userID}, function (err) {
+                if(err) console.log(err);
+                for (let t in tableList){
+                    let data = {
+                        'userID':userID,
+                        'courseID':tableList[t],
+                        'userName':rs[0]['name']
+                    }
                     db.Insert('tableList',data,function(err,results){})
-                });
-            }
+                }
+                res.send('success')
+            });
         }
     })
 });

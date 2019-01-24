@@ -38,7 +38,7 @@
     // 頁面顯示狀態
 
     var pageStatus = {
-        initial_tab: 'register',
+        initial_tab: 'course',
         now_tab: '',
         windows: {
             add_review: false,
@@ -61,7 +61,7 @@
 
     // 抓取登入資料
     axios.get('/user/info').then(function(res){
-        if (res.data.department == '無' || res.data.grade == '無' || res.data.email == '無'){
+        if (res.data.user.department == '無' || res.data.user.grade == '無' || res.data.user.email == '無'){
             toTab('register');
             return; // 登入後沒有填完資料的話還是停留在註冊頁
         }

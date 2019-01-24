@@ -25,21 +25,17 @@ router.get('/', function (req, res) {
     var dt = new Date();
     console.log(dt);
     console.log('\n' + 'GET /course');
-    let col = ['id', '系號', '選課序號', '課程名稱', '老師', '時間', '學分', '選必修', '系所名稱', 'comment_num', '課程碼'];
+    let col = ['*'];
     db.GetColumn('course_new', col , { 'column': 'id', 'order': 'DESC' }, function (courses) {
-        all_courses = courses;
-        for(var i in all_courses){
-        	all_courses[i]['選課序號'] = all_courses[i]['選課序號'].replace(all_courses[i]['系號'], '');
-            var new_name = all_courses[i]['系所名稱'].replace(/[a-zA-Z]/g, ""); // 把系所的英文名稱拿掉（但是要避免全英文的系所）
+        for(var i in courses){
+         courses[i]['選課序號'] = courses[i]['選課序號'].replace(courses[i]['系號'], '');
+            var new_name = courses[i]['系所名稱'].replace(/[a-zA-Z]/g, ""); // 把系所的英文名稱拿掉（但是要避免全英文的系所）
             if(new_name != ""){
-                all_courses[i]['系所名稱'] = new_name;
+                courses[i]['系所名稱'] = new_name;
             }
         }
-        console.log("登入時的使用者資料: " + req.user);
         res.send({
-            'courses': all_courses,
-            'user_data': req.user,
-            'carts': null, //沒登入 選課清單為null
+            'courses': courses,
         });
     });
 });
@@ -135,23 +131,23 @@ router.get('/:id', function (req, res) {
                     }
                     db.FindbyColumn('course_rate', ["*"], { course_name: courseInfo.課程名稱, teacher: courseInfo.老師 }, function (rates) {
                         var sweet = 0;
-                        var hard = 0;
-                        var recommand = 0;
+                        var cold = 0;
+                        var got = 0;
                         var rate_count = 0;
                         if (rates.length > 0) {
                             for (var i in rates) {
                                 sweet += rates[i].sweet;
-                                hard += rates[i].hard;
-                                recommand += rates[i].recommand;
+                                cold += rates[i].cold;
+                                got += rates[i].got;
                             }
                             sweet /= rates.length;
-                            hard /= rates.length;
-                            recommand /= rates.length;
+                            cold /= rates.length;
+                            got /= rates.length;
                             rate_count = rates.length;
                         }
                         var data = {
-                            'recommand': recommand,
-                            'hard': hard,
+                            'got': got,
+                            'cold': cold,
                             'sweet': sweet,
                             'rate_count': rate_count,
                             'courseInfo': courseInfo,

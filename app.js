@@ -35,7 +35,7 @@ app.use("/dist", express.static("dist", {
 app.use(cookieParser("secretString"));
 app.use(session({
     cookie: {
-        maxAge: 1000 * 60 * 60 * 12
+        maxAge: 1000 * 60 * 60 * 12 * 2 * 30 // 一個月時間
     },
     secret: "secret",
     saveUninitialized: true,

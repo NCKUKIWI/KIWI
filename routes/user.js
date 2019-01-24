@@ -28,10 +28,10 @@ router.get("/fbcheck", middleware.checkLogin(1), function (req, res) {
                 }, function (user) {
                     if (user.length > 0) {
                         res.cookie("isLogin", 1, {
-                            maxAge: 60 * 60 * 1000
+                            maxAge: 1000 * 60 * 60 * 12 * 2 * 30
                         });
                         res.cookie("id", user[0].check_key, {
-                            maxAge: 60 * 60 * 1000
+                            maxAge: 1000 * 60 * 60 * 12 * 2 * 30
                         });
                         console.log("======user======");
                         console.log(user);
@@ -51,14 +51,13 @@ router.get("/fbcheck", middleware.checkLogin(1), function (req, res) {
                         }, function (err, result) {
                             if (err) console.log(err);
                             res.cookie("isLogin", 1, {
-                                maxAge: 60 * 60 * 1000
+                                maxAge: 1000 * 60 * 60 * 12 * 2 * 30
                             });
                             res.cookie("id", check_key, {
-                                maxAge: 60 * 60 * 1000
+                                maxAge: 1000 * 60 * 60 * 12 * 2 * 30
                             });
                             console.log("======create user======");
                             console.log(result);
-                            // res.send(result);
                             res.redirect('/');
                         })
                     }
@@ -157,6 +156,17 @@ router.post('/update', middleware.checkLogin(), function (req, res) {
     }, function (results) {
         res.send('success');
     });
+});
+
+router.get('/info', function (req, res) {
+    console.log('\n' + 'GET /user/info');
+    if (req.user === undefined){
+        res.status(404).send('not longin');
+    }
+    else{
+        res.send({user: req.user});    
+    }
+    
 });
 
 module.exports = router;

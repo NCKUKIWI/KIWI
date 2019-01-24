@@ -62,7 +62,8 @@
     // 抓取登入資料
     axios.get('/user/info').then(function(res){
         if (res.data.department == '無' || res.data.grade == '無' || res.data.email == '無'){
-            return; // 沒有填完資料的話還是停留在註冊頁
+            toTab('register');
+            return; // 登入後沒有填完資料的話還是停留在註冊頁
         }
         toTab( pageStatus.initial_tab );
         pageStatus.loggedIn = true;

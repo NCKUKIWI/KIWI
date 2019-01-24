@@ -58,8 +58,20 @@
     // 開啟或關閉視窗
     // setWindow( 'not_login', 'open' );
 
-
-
+    // 抓取登入資料
+    axios.get('/user/info').then(function(res){
+        toTab( 'course' );
+        pageStatus.loggedIn = true;  
+        userData.user_name = res.data.user.name;
+        userData.user_id = res.data.user.id;
+        userData.user_department = res.data.user.department;
+        userData.user_grade = res.data.user.grade;
+        userData.user_photo = "http://graph.facebook.com/" + res.data.user.fb_id + "/picture?type=normal";
+        getWishlistTable();
+    }).catch(function(err){
+        pageStatus.loggedIn = false; 
+        console.log(err.response.data);
+    })
 
 
 
@@ -67,19 +79,6 @@
         .then ( function ( response ) {
             course_db = response.data.courses;
             console.log ( '課程資料庫: 抓取資料成功！' ) ;
-            // todo: 這邊之後可以移出來？
-            if( response.data.user_data !== undefined ) { 
-                pageStatus.loggedIn = true;  
-            	userData.user_name = response.data.user_data.name;
-                userData.user_id = response.data.user_data.id;
-                userData.user_department = response.data.user_data.department;
-                userData.user_grade = response.data.user_data.grade;
-                userData.user_photo = "http://graph.facebook.com/" + response.data.user_data.fb_id + "/picture?type=normal";
-                getWishlistTable();
-            }
-            else {
-                pageStatus.loggedIn = false;  
-            }
             // 將 course_db 放入
 	        for (var i = 0; i < 200; i++) {
 	            vue_course_item.course_data.push(vue_course_item.course_data_db()[i]);

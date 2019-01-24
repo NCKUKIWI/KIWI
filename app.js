@@ -36,7 +36,7 @@ app.use("/assets", express.static("assets", {
 app.use(cookieParser(config.secret.cookie));
 app.use(session({
     cookie: {
-        maxAge: 1000 * 60 * 60 * 12
+        maxAge: 1000 * 60 * 60 * 12 * 2 * 30
     },
     secret: config.secret.session,
     saveUninitialized: true,

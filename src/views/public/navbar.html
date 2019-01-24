@@ -4,7 +4,6 @@
     <div id="navbar" class="hub_navbar">
       <div class="hub_navbar__right_area">
           <a class="hub_navbar__logo" href="/"></a>
-          <!-- todo: 新增「查無結果」的顯示（所有搜尋處都要） -->
           <input class="hub_navbar__search" type="text" v-model="search_keyword" placeholder="搜尋「課程名」或「教師名」" ><br>
           <div v-if="search_keyword.replace(' ','') != ''" class="hub_navbar__search__dropdown">
               <div v-for="item in result_cont" class="list_course_item" @click="openCourse(item.id)">
@@ -29,8 +28,8 @@
             <div class="hub_navbar__profile__dropdown__info">
                 <img class="hub_navbar__profile__dropdown__info__photo" :src="user_data.user_photo">
                 <div class="hub_navbar__profile__dropdown__info__detail">
-                    <!-- todo: 若有開通權限則在 nav_profile_name 添加 vip class  -->
-                    <div class="nav_profile_name vip">{{user_data.user_name}}</div>
+                    <!-- todo: nav_profile_name 加入 vip class 旁邊就會出現星星唷！ -->
+                    <div class="nav_profile_name">{{user_data.user_name}}</div>
                     <div v-show="user_data.user_id == 0" class="nav_profile_dept">請登入網站，</div>
                     <div v-show="user_data.user_id == 0" class="nav_profile_grade">以使用完整功能！</div>
                     <div v-show="user_data.user_department != '無'" class="nav_profile_dept">{{user_data.user_department}}</div>

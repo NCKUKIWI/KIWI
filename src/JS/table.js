@@ -130,7 +130,6 @@
             },
             addToTable: function () {
                 if ( checkConflict ( this.class_item, vue_classtable ) ) {
-                    // todo: 按下加入後從清單裡消失( 像 wishlist 那樣)（改成標記）
                     vue_classtable.tableTempAdd( this.class_item.id );
                     vue_classtable.clearFilterCell();
                 }
@@ -163,7 +162,7 @@
     			this.result_cont = [];
                 this.result_cont.length = 0;
                 if ( this.keyword ) {
-                    for ( var i = 0 ; i < course_db.length ; i ++ ) {           // todo: 讓已經在 table 或 wishlist 的課程不顯示
+                    for ( var i = 0 ; i < course_db.length ; i ++ ) {
                         if ( course_db[i].課程名稱.match ( this.keyword ) || course_db[i].老師.match ( this.keyword ) ) {
                             var class_item = getClassObject ( course_db, course_db[i].id ) ;
                             if ( getTimeObject ( class_item ) ) {
@@ -266,7 +265,7 @@
 
     // Class Table
 
-    var vue_classtable = new Vue ({         // todo: 篩選中願望清單文字改為「符合此時段」，若為空則需顯示提示文字
+    var vue_classtable = new Vue ({
         el: '#class_table',
         data: {
             monday: [],

@@ -285,7 +285,7 @@
         height: auto;
         max-height: 210px;
         // width: 100%;
-        width: calc( 100% - 5vw - 10px );           // todo: 這怎麼算的？怪怪ㄉ // 另外高度有點被陰影擋住太多（應該讓中間沒有陰影）
+        width: calc( 100% - 5vw - 10px ); 
         border: $light_2 1px solid;
         box-sizing: border-box;
         background: $white;

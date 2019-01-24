@@ -128,6 +128,9 @@
     methods: {
       showContent: function() {
         vue_courseContent.isShow = false;
+        vue_courseContent.course_data = [];
+        vue_courseContent.score_data = [];
+        vue_courseContent.comment_data = [];
         //if click outside then hide
       },
       minusRate: function(rate_name) {

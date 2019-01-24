@@ -28,10 +28,10 @@ router.get("/fbcheck", middleware.checkLogin(1), function (req, res) {
                 }, function (user) {
                     if (user.length > 0) {
                         res.cookie("isLogin", 1, {
-                            maxAge: 60 * 60 * 1000
+                            maxAge: 1000 * 60 * 60 * 12 * 2 * 30
                         });
                         res.cookie("id", user[0].check_key, {
-                            maxAge: 60 * 60 * 1000
+                            maxAge: 1000 * 60 * 60 * 12 * 2 * 30
                         });
                         console.log("======user======");
                         console.log(user);
@@ -46,19 +46,17 @@ router.get("/fbcheck", middleware.checkLogin(1), function (req, res) {
                             'department': '無',
                             'grade': '無',
                             'check_key': check_key,
-                            'licensing': Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15),
-                            'validation': 0
+                            'email': ""
                         }, function (err, result) {
                             if (err) console.log(err);
                             res.cookie("isLogin", 1, {
-                                maxAge: 60 * 60 * 1000
+                                maxAge: 1000 * 60 * 60 * 12 * 2 * 30
                             });
                             res.cookie("id", check_key, {
-                                maxAge: 60 * 60 * 1000
+                                maxAge: 1000 * 60 * 60 * 12 * 2 * 30
                             });
                             console.log("======create user======");
                             console.log(result);
-                            // res.send(result);
                             res.redirect('/');
                         })
                     }
@@ -93,24 +91,33 @@ router.get('/getList/:userID', function (req, res) {
     }else{
         db.Query('SELECT userName, courseID FROM `tableList` WHERE userID='+userID ,function(name_table){
             db.Query('SELECT courseID FROM `wishList` WHERE userID='+userID,function(wish){
-                console.log(name_table)
-                if(name_table.length === 0){
-                    db.FindbyColumn('user', ['name'], {'id' :userID}, function(name){
-                        console.log(name)
-                        data = {'name': name, 'now_wishlist':[], 'now_table':[], 'photo':[]}
-                        res.json(data)
-                    })
-                }else{
-                    data = {'name': name_table[0]['userName'], 'now_wishlist':[], 'now_table':[], 'photo':[]}
-                    for (let n in name_table){
-                        console.log(name_table[n])
-                        data['now_table'].push(name_table[n]['courseID'])
-                    }
-                    for (let w in wish){
-                        data['now_wishlist'].push(wish[w]['courseID'])
-                    }
-                    res.json(data)
-                }      
+                data = {'now_wishlist':[], 'now_table':[]}
+                for (let n in name_table){
+                    console.log(name_table[n])
+                    data['now_table'].push(name_table[n]['courseID'])
+                }
+                for (let w in wish){
+                    data['now_wishlist'].push(wish[w]['courseID'])
+                }
+                res.json(data);
+                // console.log(name_table)
+                // if(name_table.length === 0){
+                //     db.FindbyColumn('user', ['name'], {'id' :userID}, function(name){
+                //         console.log(name)
+                //         data = {'name': name, 'now_wishlist':[], 'now_table':[], 'photo':[]}
+                //         res.json(data)
+                //     })
+                // }else{
+                //     data = {'name': name_table[0]['userName'], 'now_wishlist':[], 'now_table':[], 'photo':[]}
+                //     for (let n in name_table){
+                //         console.log(name_table[n])
+                //         data['now_table'].push(name_table[n]['courseID'])
+                //     }
+                //     for (let w in wish){
+                //         data['now_wishlist'].push(wish[w]['courseID'])
+                //     }
+                //     res.json(data)
+                // }      
             })
         
         })
@@ -157,6 +164,17 @@ router.post('/update', middleware.checkLogin(), function (req, res) {
     }, function (results) {
         res.send('success');
     });
+});
+
+router.get('/info', function (req, res) {
+    console.log('\n' + 'GET /user/info');
+    if (req.user === undefined){
+        res.status(404).send('not longin');
+    }
+    else{
+        res.send({user: req.user});    
+    }
+    
 });
 
 module.exports = router;

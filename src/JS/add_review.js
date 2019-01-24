@@ -54,6 +54,22 @@ var vue_add_review = new Vue({
 		}
 	},
     methods: {
+		clearFilled: function() {
+			this.course_title = '';
+			this.course_semester = '選擇學期';
+			this.course_teacher = '選擇開課教師';
+			this.course_review = '';
+			this.course_rate.gain = 8;
+			this.course_rate.sweet = 8;
+			this.course_rate.cold = 8;
+			this.course_title_suggestion.length = 0;
+			this.course_title_filled = '';
+			this.course_semester_suggestion.length = 0;
+			this.isChoosingSemester = false;
+			this.course_teacher_suggestion.length = 0;
+			this.isChoosingTeacher = false;
+			console.log( "清乾淨啦～" );
+		},
 		chooseSemester: function () {
 			if ( this.isChoosingSemester ) {
 				this.isChoosingSemester = false ;
@@ -171,8 +187,8 @@ var vue_add_review = new Vue({
 				})
 				.then ( function ( response ) {
 					console.log ( '送出心得: success' ) ;
-					// 新增成功の顯示
-					setWindow( 'add_review', 'close' );
+					setWindow( 'add_review_success', 'open' );
+					vue_add_review.closeWindow();
 				})
 				.catch ( function ( error ) {
 					console.log (  '送出心得: ' + error ) ;
@@ -180,11 +196,16 @@ var vue_add_review = new Vue({
 			}
 		},
 		giveUpReview: function () {
-			this.closeWindow();
-			// todo: 清除自動儲存的內容
+			if ( this.course_title_filled && this.course_semester != '選擇學期' && this.course_teacher != '選擇開課教師' ) {
+				setWindow( 'add_review_give_up', 'open' );
+			}
+			else {
+				this.closeWindow();
+			}
 		},
 		closeWindow: function () {
 			setWindow( 'add_review', 'close' );
+			this.clearFilled();
 		},
 	}
 })

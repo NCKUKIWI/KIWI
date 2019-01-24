@@ -30,6 +30,7 @@
         user_photo: 'dist/images/course/sad_hugecat.png',
         user_department: '無',
         user_grade: '無',
+        user_email: '',
         now_wishlist: [],
         now_table: []
     }
@@ -43,8 +44,8 @@
             add_review: false,
             helper: false,
             not_login: false,
-            // add_review_success: false,
-            // add_review_give_up: false,
+            add_review_success: false,
+            add_review_give_up: false,
             // 新的視窗加在這裡
         },
         table_locked: true,                     // 課表鎖定狀態
@@ -58,8 +59,25 @@
     // 開啟或關閉視窗
     // setWindow( 'not_login', 'open' );
 
-
-
+    // 抓取登入資料
+    axios.get('/user/info').then(function(res){
+        if (res.data.department == '無' || res.data.grade == '無' || res.data.email == '無'){
+            toTab('register');
+            return; // 登入後沒有填完資料的話還是停留在註冊頁
+        }
+        toTab( pageStatus.initial_tab );
+        pageStatus.loggedIn = true;
+        userData.user_name = res.data.user.name;
+        userData.user_id = res.data.user.id;
+        userData.user_department = res.data.user.department;
+        userData.user_grade = res.data.user.grade;
+        userData.user_photo = "http://graph.facebook.com/" + res.data.user.fb_id + "/picture?type=normal";
+        userData.user_email = res.data.user.email;
+        getWishlistTable();
+    }).catch(function(err){
+        pageStatus.loggedIn = false;
+        console.log(err.response.data);
+    })
 
 
 
@@ -67,19 +85,6 @@
         .then ( function ( response ) {
             course_db = response.data.courses;
             console.log ( '課程資料庫: 抓取資料成功！' ) ;
-            // todo: 這邊之後可以移出來？
-            if( response.data.user_data !== undefined ) { 
-                pageStatus.loggedIn = true;  
-            	userData.user_name = response.data.user_data.name;
-                userData.user_id = response.data.user_data.id;
-                userData.user_department = response.data.user_data.department;
-                userData.user_grade = response.data.user_data.grade;
-                userData.user_photo = "http://graph.facebook.com/" + response.data.user_data.fb_id + "/picture?type=normal";
-                getWishlistTable();
-            }
-            else {
-                pageStatus.loggedIn = false;  
-            }
             // 將 course_db 放入
 	        for (var i = 0; i < 200; i++) {
 	            vue_course_item.course_data.push(vue_course_item.course_data_db()[i]);
@@ -166,10 +171,12 @@
     // 課程加入願望清單
 
     function wishlistAdd ( target_id ) {
-        userData.now_wishlist.push( target_id );
-        vue_wishlist.refresh();
-        vue_courseFilter.refresh();
-        return wishlistUpload();
+        if ( ! userData.now_wishlist.find( function(i){ return i == target_id }) ){
+            userData.now_wishlist.push( target_id );
+            vue_wishlist.refresh();
+            vue_courseFilter.refresh();
+            return wishlistUpload();
+        }
     }
 
 

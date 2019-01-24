@@ -25,8 +25,8 @@ router.get('/', function (req, res) {
     var dt = new Date();
     console.log(dt);
     console.log('\n' + 'GET /course');
-    let col = ['*'];
-    db.GetColumn('course_new', col , { 'column': 'id', 'order': 'DESC' }, function (courses) {
+    let col = ['id', '系號', '選課序號', '課程名稱', '老師', '時間', '學分', '選必修', '系所名稱', 'comment_num', '課程碼'];
+    db.GetColumn('course_new', col , { 'column': 'comment_num', 'order': 'DESC' }, function (courses) {
         for(var i in courses){
          courses[i]['選課序號'] = courses[i]['選課序號'].replace(courses[i]['系號'], '');
             var new_name = courses[i]['系所名稱'].replace(/[a-zA-Z]/g, ""); // 把系所的英文名稱拿掉（但是要避免全英文的系所）
@@ -146,9 +146,9 @@ router.get('/:id', function (req, res) {
                             rate_count = rates.length;
                         }
                         var data = {
-                            'got': got,
-                            'cold': cold,
-                            'sweet': sweet,
+                            'got': got.toFixed(1),
+                            'cold': cold.toFixed(1),
+                            'sweet': sweet.toFixed(1),
                             'rate_count': rate_count,
                             'courseInfo': courseInfo,
                             'comment': comment,

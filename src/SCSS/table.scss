@@ -407,29 +407,61 @@
     }
     &_cont {
         position: relative;
-        display: flex;
-        flex-direction: row;
+        // display: flex;
+        // flex-direction: column;
         overflow-x: hidden;
         overflow-y: scroll;
         height: calc(100% - 44px);
         width: 100%;
         background: $white;
+        &__normal {
+            position: relative;
+            display: flex;
+            flex-direction: row;
+            height: auto;
+            width: 100%;
+            background: $white;
+        }
+        &__other {
+            position: relative;
+            display: flex;
+            flex-direction: row;
+            height: auto;
+            width: 100%;
+            background: $white;
+        }
         &_row {
             height: 100%;
             width: calc( (100% - 70px) / 5);
             &.left {
                 width: 70px;
             }
+            &.right_full {
+                width: calc( 100% - 70px );
+                background: blue;
+            }
         }
         &_cell {
             @include flex_center_top();
             position: relative;
-            height: calc(100% / 9);
+            height: calc( (82vh - 44px) / 10);
             min-height: 50px;
             width: 100%;
             border: $light_2 1px solid;
             padding: 0 10%;
             background: $white;
+            &.other {
+                @include flex_center_top();
+                position: relative;
+                height: calc( ((82vh - 44px)/5) - 10px );
+                min-height: 100px;
+                width: calc( (100%/5) - 10px );
+                border: $light_2 1px solid;
+                padding: 0 2%;
+                margin: 5px;
+                // background: $white;
+                // background: yellow;
+            }
             &.class_cell:hover {
                 background: $light_2;
                 opacity: 0.4;
@@ -622,6 +654,15 @@
                 width: 30px;
                 border-radius: 100%;
             }
+        }
+        &_row.left > .class_table_cont_cell.other {
+            @include flex_center();
+            background: $light_1;
+            height: calc( (82vh - 44px) / 5 );
+            min-height: 100px;
+            width: 100%;
+            border: $light_2 1px solid;
+            margin: 0;
         }
     }
 }

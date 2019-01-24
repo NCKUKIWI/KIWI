@@ -38,7 +38,7 @@
     // 頁面顯示狀態
 
     var pageStatus = {
-        initial_tab: 'course',
+        initial_tab: 'table',
         now_tab: '',
         windows: {
             add_review: false,
@@ -62,7 +62,7 @@
     // 抓取登入資料
     axios.get('/user/info').then(function(res){
         if (res.data.user.department == '無' || res.data.user.grade == '無' || res.data.user.email == '無'){
-            toTab('register');
+            // toTab('register');
             return; // 登入後沒有填完資料的話還是停留在註冊頁
         }
         toTab( pageStatus.initial_tab );
@@ -85,6 +85,11 @@
         .then ( function ( response ) {
             course_db = response.data.courses;
             console.log ( '課程資料庫: 抓取資料成功！' ) ;
+            // 檢查資料是否皆合格（看這裡）
+            userData.now_wishlist = checkValid( userData.now_wishlist );
+            userData.now_table = checkValid( userData.now_table );
+            wishlistUpload();
+            tableUpload();
             // 將 course_db 放入
 	        for (var i = 0; i < 200; i++) {
 	            vue_course_item.course_data.push(vue_course_item.course_data_db()[i]);
@@ -202,6 +207,7 @@
             "now_wishlist": userData.now_wishlist
         })
         .then ( function ( response ) {
+            // alert( '等等！有人在動清單！' );
             console.log ( '更新願望清單: 更新成功！' ) ;
         })
         .catch ( function ( error ) {
@@ -217,6 +223,7 @@
             "now_table": userData.now_table
         })
         .then ( function ( response ) {
+            // alert( '等等！有人在動課表！' );
             console.log ( '更新課表: 更新成功！' ) ;
         })
         .catch ( function ( error ) {

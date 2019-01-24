@@ -42,37 +42,58 @@
 			<div class="class_table_title_cell"><p class="text_18">Fri</p></div>
 		</div>
 		<div class="class_table_cont">
-			<div class="class_table_cont_row left">
-				<div class="class_table_cont_cell"><p class="text_18 round">1</p></div>
-				<div class="class_table_cont_cell"><p class="text_18 round">2</p></div>
-				<div class="class_table_cont_cell"><p class="text_18 round">3</p></div>
-				<div class="class_table_cont_cell"><p class="text_18 round">4</p></div>
-				<div class="class_table_cont_cell"><p class="text_18 round">N</p></div>
-				<div class="class_table_cont_cell"><p class="text_18 round">5</p></div>
-				<div class="class_table_cont_cell"><p class="text_18 round">6</p></div>
-				<div class="class_table_cont_cell"><p class="text_18 round">7</p></div>
-				<div class="class_table_cont_cell"><p class="text_18 round">8</p></div>
-				<div class="class_table_cont_cell"><p class="text_18 round">9</p></div>
-				<div class="class_table_cont_cell"><p class="text_18 round">A</p></div>
-				<div class="class_table_cont_cell"><p class="text_18 round">B</p></div>
-				<div class="class_table_cont_cell"><p class="text_18 round">C</p></div>
-				<div class="class_table_cont_cell"><p class="text_18 round">D</p></div>
-				<div class="class_table_cont_cell"><p class="text_18">其他</p></div>
+			<div class="class_table_cont__normal">
+				<div class="class_table_cont_row left">
+					<div class="class_table_cont_cell"><p class="text_18 round">1</p></div>
+					<div class="class_table_cont_cell"><p class="text_18 round">2</p></div>
+					<div class="class_table_cont_cell"><p class="text_18 round">3</p></div>
+					<div class="class_table_cont_cell"><p class="text_18 round">4</p></div>
+					<div class="class_table_cont_cell"><p class="text_18 round">N</p></div>
+					<div class="class_table_cont_cell"><p class="text_18 round">5</p></div>
+					<div class="class_table_cont_cell"><p class="text_18 round">6</p></div>
+					<div class="class_table_cont_cell"><p class="text_18 round">7</p></div>
+					<div class="class_table_cont_cell"><p class="text_18 round">8</p></div>
+					<div class="class_table_cont_cell"><p class="text_18 round">9</p></div>
+					<div class="class_table_cont_cell"><p class="text_18 round">A</p></div>
+					<div class="class_table_cont_cell"><p class="text_18 round">B</p></div>
+					<div class="class_table_cont_cell"><p class="text_18 round">C</p></div>
+					<div class="class_table_cont_cell"><p class="text_18 round">D</p></div>
+				</div>
+				<div class="class_table_cont_row">
+					<class-table-cell v-for="item in monday" :cell_data="item" :day="'monday'"></class-table-cell>
+				</div>
+				<div class="class_table_cont_row">
+					<class-table-cell v-for="item in tuesday" :cell_data="item" :day="'tuesday'"></class-table-cell>
+				</div>
+				<div class="class_table_cont_row">
+					<class-table-cell v-for="item in wednesday" :cell_data="item" :day="'wednesday'"></class-table-cell>
+				</div>
+				<div class="class_table_cont_row">
+					<class-table-cell v-for="item in thursday" :cell_data="item" :day="'thursday'"></class-table-cell>
+				</div>
+				<div class="class_table_cont_row">
+					<class-table-cell v-for="item in friday" :cell_data="item" :day="'friday'"></class-table-cell>
+				</div>
 			</div>
-			<div class="class_table_cont_row">
-				<class-table-cell v-for="item in monday" :cell_data="item" :day="'monday'"></class-table-cell>
-			</div>
-			<div class="class_table_cont_row">
-				<class-table-cell v-for="item in tuesday" :cell_data="item" :day="'tuesday'"></class-table-cell>
-			</div>
-			<div class="class_table_cont_row">
-				<class-table-cell v-for="item in wednesday" :cell_data="item" :day="'wednesday'"></class-table-cell>
-			</div>
-			<div class="class_table_cont_row">
-				<class-table-cell v-for="item in thursday" :cell_data="item" :day="'thursday'"></class-table-cell>
-			</div>
-			<div class="class_table_cont_row">
-				<class-table-cell v-for="item in friday" :cell_data="item" :day="'friday'"></class-table-cell>
+			<div class="class_table_cont__other">
+				<div class="class_table_cont_row left">
+					<div class="class_table_cont_cell other"><p class="text_18">其他</p></div>
+				</div>
+				<div class="class_table_cont_row right_full">
+					<!-- <div class="class_table_cont_cell class_cell" :style="getHeight()" :class="getClass()" >
+						<div class="class_table_cont_cell_button" @click="deleteItem"></div>
+						<p class="class_table_cont_cell_id text_12" :class="[{ previewing: cell_data.ifPreview }]"> {{ cell_data.cell_status_title }} </p>
+						<p class="class_table_cont_cell_title text_16 text_bold"> {{ cell_data.cell_status_text }} </p>
+						<p class="class_table_cont_cell_description text_14 text_dark"> {{ cell_data.class_item.teacher }} </p>
+					</div> -->
+					<div class="class_table_cont_cell other class_cell A9">
+						<div class="class_table_cont_cell_button other"></div>
+						<p class="class_table_cont_cell_id other text_12">H3-005 </p>
+						<p class="class_table_cont_cell_title other text_16 text_bold">微積分（一）</p>
+						<p class="class_table_cont_cell_description other text_14 text_dark">嚕嚕米</p>
+						<p class="class_table_cont_cell_description other text_14 text_dark">時段未定</p>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

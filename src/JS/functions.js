@@ -103,19 +103,21 @@
     // 輸入 now_wishlist / now_table，將不重複或找不到課程的，刪去後傳回
     
     function checkValid ( list_to_check ) {
-        var temp_list = [];
-        for ( var i = 0; i < list_to_check.length; i ++ ) {
-            if ( getClassObject ( course_db, list_to_check[i] ) ) {
-                var ifRepeated = temp_list.find( function ( item ) {
-                    return item == list_to_check[i]
-                });
-                if ( ! ifRepeated ) {
-                    temp_list.push( list_to_check[i] );
+        if ( ! course_db.length ) {
+            var temp_list = [];
+            for ( var i = 0; i < list_to_check.length; i ++ ) {
+                if ( getClassObject ( course_db, list_to_check[i] ) ) {
+                    var ifRepeated = temp_list.find( function ( item ) {
+                        return item == list_to_check[i]
+                    });
+                    if ( ! ifRepeated ) {
+                        temp_list.push( list_to_check[i] );
+                    }
                 }
             }
+            console.log( temp_list );
+            return temp_list ; 
         }
-        console.log( temp_list );
-        return temp_list ; 
     }
 
 

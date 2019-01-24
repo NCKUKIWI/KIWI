@@ -217,7 +217,7 @@
                 var style = '';
                 // 計算該課程要佔據幾格
                 if ( this.cell_data.status > 0 ) {
-                    style += 'height: ' + this.cell_data.status * ( 100 / 9 ) + '%';
+                    style += 'height: calc (( 82vh - 44px )/10) * ' + this.cell_data.status + ')';
                 }
                 else if ( this.cell_data.status < 0 ) {
                     style += 'display: none';
@@ -286,7 +286,7 @@
             for ( var i = 1 ; i <= 5 ; i ++ ) {
                 day = dayTransText(i);
                 this[day].length = 0;
-                for ( var j = 1 ; j <= 15 ; j ++ ) {
+                for ( var j = 1 ; j <= 14 ; j ++ ) {
                     time = timeTransText(j).toString();
                     this[day].push( { time: time, status: 0, class_item: '', ifFilterTime: false, cell_status_title: '篩選課程', cell_status_text:'選擇此時段' } ); 
                     // status： 1 以上 - 該課程佔據節次數、 0 - 該節次無課程、 (-1) - 該節次已被上方課程佔據
@@ -364,7 +364,7 @@
                 for ( var i = 1 ; i <= 5 ; i ++ ) {
                     day = dayTransText(i);
                     this[day].length = 0;
-                    for ( var j = 1 ; j <= 15 ; j ++ ) {
+                    for ( var j = 1 ; j <= 14 ; j ++ ) {
                         time = timeTransText(j).toString();
                         this[day].push( { time: time, status: 0, class_item: '', ifFilterTime: false, cell_status_title: '篩選課程', cell_status_text:'選擇此時段' } ); 
                         // status： 1 以上 - 該課程佔據節次數、 0 - 該節次無課程、 (-1) - 該節次已被上方課程佔據
@@ -409,7 +409,7 @@
                 var day, time, now_cell ;
                 for ( var i = 1 ; i <= 5 ; i ++ ) {
                     day = dayTransText(i);
-                    for ( var j = 1 ; j <= 15 ; j ++ ) {
+                    for ( var j = 1 ; j <= 14 ; j ++ ) {
                         time = timeTransText(j).toString();
                         now_cell = this[day].find( function ( item ) {
                             return item.time == time

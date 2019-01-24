@@ -1,12 +1,12 @@
 div#courseContent(v-show="isShow" @click.self="showContent()")
   div.content_nextpage
-    img(style="cursor: pointer;")(src="./dist/images/course/left-btn.svg")
-    img(style="cursor: pointer;")(src="./dist/images/course/right-btn.svg")
+    img(style="cursor: pointer;" src="./dist/images/course/left-btn.svg")
+    img(style="cursor: pointer;" src="./dist/images/course/right-btn.svg")
   div.courseContentBody
     div.courseContentBody__left
       span.courseSerial {{course_data.系號}}{{course_data.選課序號}}
       h2 {{course_data.課程名稱}}
-      div(style="margin-top:30px").flex-container.icon-span(@click="openOutline(course_data.系號,course_data.課程碼)")
+      div.flex-container.icon-span(style="margin-top:30px" @click="openOutline(course_data.系號,course_data.課程碼)")
         div.content-icon.see_clip
         span 檢視課程大綱
       div.flex-container.icon-span(@click="content_addtowishlist(course_data.id)")

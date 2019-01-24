@@ -164,7 +164,7 @@ var cache = require('gulp-cache');
 
 gulp.task('sass', function () {
     return gulp.src('src/SASS/*.sass')
-        .pipe(changed('dist/CSS', {extension:'.css'}))
+        // .pipe(changed('dist/CSS', {extension:'.css'}))
         .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
         .pipe(gulp.dest('dist/CSS'))
         .pipe(browserSync.stream())
@@ -175,7 +175,7 @@ gulp.task('sass', function () {
 
 gulp.task('scss', function () {
     return gulp.src('src/SCSS/*.scss')
-        .pipe(changed('dist/CSS', {extension:'.css'}))
+        // .pipe(changed('dist/CSS', {extension:'.css'}))
         .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
         .pipe(gulp.dest('dist/CSS'))
         .pipe(browserSync.stream())
@@ -187,7 +187,7 @@ gulp.task('scss', function () {
 
 gulp.task('js', function() {
 	return gulp.src('src/JS/*.js')
-        .pipe(changed('dist/JS'))
+        // .pipe(changed('dist/JS'))
         .pipe(gulp.dest('dist/JS'))
         .pipe(browserSync.stream())
         .on("error", notify.onError(function (error) {
@@ -210,7 +210,6 @@ gulp.task('compresspug', function buildHTML() {
 
 gulp.task('combine_html', ['compresspug'], function () {
     return gulp.src('src/views/index.html')
-        // .pipe(changed('./'))
         .pipe(fileinclude())
         .pipe(gulp.dest('./'))
         .pipe(browserSync.stream())
@@ -221,7 +220,7 @@ gulp.task('combine_html', ['compresspug'], function () {
 
 gulp.task('assets', function() {
 	return gulp.src('src/{images,music}/**')
-		.pipe(changed('dist'))
+		// .pipe(changed('dist'))
 		.pipe(gulp.dest('dist'))
         .pipe(browserSync.stream())
         .on("error", notify.onError(function (error) {
@@ -235,13 +234,13 @@ gulp.task('clearCache', function() {
 
 
 
-gulp.task('compile', ['sass','scss', 'js', 'compresspug', 'combine_html', 'assets']);
+gulp.task('compile', ['sass','scss', 'js', 'compresspug', 'combine_html', 'assets', 'clearCache']);
 
 gulp.task('watch', ['compile'], function() {
 	browserSync.init({
         port: 8000,
         proxy: 'http://localhost:3000/',
-        reloadDelay: 500,
+        reloadDelay: 1000,
 		// server: {
 		// 	baseDir: './'
 		// },

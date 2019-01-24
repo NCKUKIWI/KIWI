@@ -7,15 +7,18 @@
 
 body {
     background: $bg_color;
-    font-family: 'Noto Sans', helvetica, Microsoft JhengHei, serif, sans-serif, monospace;
-    color: $black;
-    font-size: 14px;
-    line-height: 150%;        
     overflow: hidden;
 }
 
 div {
     box-sizing: border-box;
+}
+
+body, div, p, a, span {
+    font-family: 'Noto Sans', helvetica, Microsoft JhengHei, serif, sans-serif, monospace;
+    font-size: 14px;
+    line-height: 150%;
+    color: $black;
 }
 
 a {

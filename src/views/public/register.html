@@ -20,18 +20,18 @@
     <div id="register__right__content">
       <div class="register__block__right__head">
         <p class="text_34--register">第一次使用？</p>
-        <p class="text_20--register">若您為第一次使用，請依下列步驟完成註冊。</p>
+        <p class="text_16">若您為第一次使用，請依下列步驟完成註冊。</p>
       </div>
       <div class="register__block__right__steps">
-        <p class="text_20--register">STEP 1：以現有帳號快速註冊</p>
+        <p class="text_16">STEP 1：以現有帳號快速註冊</p>
         <div class="round-btn" id="register_fb_btn" @click="turnGrey()" :class="{roundBtnClicked : btn_clicked}">
           <img v-if="!btn_clicked" src="./dist/images/register/fb_icon.svg">
           <img v-if="btn_clicked" src="./dist/images/register/fb_icon_disabled.svg" alt="">
-          <a href="/user/fblogin"><p class="text_20--register">連接 facebook</p></a>
+          <a href="/user/fblogin"><p class="text_16 fb_btn">連接 facebook</p></a>
         </div>
       </div>
       <div class="register__block__right__steps">
-        <p class="text_20--register" :class="{disabled_text : !btn_clicked}">STEP 2：輸入您的個人基本資訊</p>
+        <p class="text_16" :class="{disabled_text : !btn_clicked}">STEP 2：輸入您的個人基本資訊</p>
         <div class="register__block__right__steps__inputs">
           <div class="register__block__right__steps__inputs__line1">
             <input type="text" placeholder="輸入系號(ex. H3 工資系)" id="enter_dept" disabled="disabled">

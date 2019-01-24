@@ -217,7 +217,7 @@
                 var style = '';
                 // 計算該課程要佔據幾格
                 if ( this.cell_data.status > 0 ) {
-                    style += 'height: calc (( 82vh - 44px )/10) * ' + this.cell_data.status + ')';
+                    style += 'height: calc ((( 82vh - 44px )/10) * ' + this.cell_data.status + ')';
                 }
                 else if ( this.cell_data.status < 0 ) {
                     style += 'display: none';

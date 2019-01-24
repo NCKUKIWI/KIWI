@@ -59,25 +59,6 @@
     // 開啟或關閉視窗
     // setWindow( 'not_login', 'open' );
 
-    // 抓取登入資料
-    axios.get('/user/info').then(function(res){
-        if (res.data.user.department == '無' || res.data.user.grade == '無' || res.data.user.email == '無'){
-            // toTab('register');
-            return; // 登入後沒有填完資料的話還是停留在註冊頁
-        }
-        toTab( pageStatus.initial_tab );
-        pageStatus.loggedIn = true;
-        userData.user_name = res.data.user.name;
-        userData.user_id = res.data.user.id;
-        userData.user_department = res.data.user.department;
-        userData.user_grade = res.data.user.grade;
-        userData.user_photo = "http://graph.facebook.com/" + res.data.user.fb_id + "/picture?type=normal";
-        userData.user_email = res.data.user.email;
-        getWishlistTable();
-    }).catch(function(err){
-        pageStatus.loggedIn = false;
-        console.log(err.response.data);
-    })
 
 
 
@@ -85,11 +66,7 @@
         .then ( function ( response ) {
             course_db = response.data.courses;
             console.log ( '課程資料庫: 抓取資料成功！' ) ;
-            // 檢查資料是否皆合格（看這裡）
-            userData.now_wishlist = checkValid( userData.now_wishlist );
-            userData.now_table = checkValid( userData.now_table );
-            wishlistUpload();
-            tableUpload();
+            getUserInfo ();
             // 將 course_db 放入
 	        for (var i = 0; i < 200; i++) {
 	            vue_course_item.course_data.push(vue_course_item.course_data_db()[i]);
@@ -155,6 +132,29 @@
         }
     }
 
+
+    // 抓取登入資料
+
+    function getUserInfo () {
+        axios.get('/user/info').then(function(res){
+            if (res.data.user.department == '無' || res.data.user.grade == '無' || res.data.user.email == '無'){
+                // toTab('register');
+                return; // 登入後沒有填完資料的話還是停留在註冊頁
+            }
+            toTab( pageStatus.initial_tab );
+            pageStatus.loggedIn = true;
+            userData.user_name = res.data.user.name;
+            userData.user_id = res.data.user.id;
+            userData.user_department = res.data.user.department;
+            userData.user_grade = res.data.user.grade;
+            userData.user_photo = "http://graph.facebook.com/" + res.data.user.fb_id + "/picture?type=normal";
+            userData.user_email = res.data.user.email;
+            getWishlistTable();
+        }).catch(function(err){
+            pageStatus.loggedIn = false;
+            console.log(err.response.data);
+        })
+    }
 
 
     // 取得使用者課表、願望清單資訊

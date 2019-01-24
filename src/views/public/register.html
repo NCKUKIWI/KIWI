@@ -12,64 +12,62 @@
       </div>
       <div class="rectangle-btn rectangle-btn--register__login" @click="old_user_login()">
         <img src="./dist/images/register/fb_icon_blue.svg">
-        <p class="text_24">現有帳號登入</p>
+        <p class="text_20">現有帳號登入</p>
       </div>
     </div>
   </div>
   <div class="register__block register__block__right">
     <div id="register__right__content">
       <div class="register__block__right__head">
-        <p class="text_34--register">第一次使用？</p>
-        <p class="text_20--register">若您為第一次使用，請依下列步驟完成註冊。</p>
+        <p class="text_34--register" id="register__block__par1">第一次使用？</p>
+        <p class="text_20--register" id="register__block__par2">若您為第一次使用，請依下列步驟完成註冊。</p>
       </div>
       <div class="register__block__right__steps">
         <p class="text_20--register">STEP 1：以現有帳號快速註冊</p>
-        <div class="round-btn" id="register_fb_btn" @click="turnGrey()" :class="{roundBtnClicked : btn_clicked}">
-          <img v-if="!btn_clicked" src="./dist/images/register/fb_icon.svg">
-          <img v-if="btn_clicked" src="./dist/images/register/fb_icon_disabled.svg" alt="">
+        <div class="round-btn" id="register_fb_btn" @click="new_user_login()" :class="{roundBtnClicked : btn_clicked || old_user_register}">
+          <img v-if="!btn_clicked && !old_user_register" src="./dist/images/register/fb_icon.svg">
+          <img v-if="btn_clicked || old_user_register" src="./dist/images/register/fb_icon_disabled.svg" alt="">
           <p class="text_20--register">連接 facebook</p>
         </div>
       </div>
       <div class="register__block__right__steps">
-        <p class="text_20--register" :class="{disabled_text : !btn_clicked}">STEP 2：輸入您的個人基本資訊</p>
+        <p class="text_20--register" :class="{disabled_text : !btn_clicked && !old_user_register}">STEP 2：輸入您的個人基本資訊</p>
         <div class="register__block__right__steps__inputs">
-          <div class="register__block__right__steps__inputs__line1">
-            <input type="text" placeholder="輸入系號(ex. H3 工資系)" id="enter_dept" disabled="disabled">
-            <div class="register__dropdown">
-              <div class="register__dropdown__dept">
-              </div>
+          <div class="register__block__right__steps__inputs__line1" :class="{input_error: !dept_qualified}">
+            <div class="input_block">
+              <input type="text" placeholder="輸入英文系號(ex. H3)" id="enter_dept" v-model="dept_keyword" maxlength="2" disabled="disabled">
+              <p v-if="!dept_qualified" class="error_text">無效的系號</p>
             </div>
-            <input type="text" placeholder="選擇年級" id="enter_grade" disabled="disabled">
-            <div class="register__dropdown">
-              <div class="register__dropdown__dept" v-for="grade in grades">
-                <p>{{grade}}</p>
-              </div>
-            </div>
+            <select placeholder="" id="enter_grade" disabled>
+              <option value="0">選擇年級</option>
+              <option value="1" v-for="grade in grades">{{grade}}</option>
+            </select>
           </div>
-          <div class="register__block__right__steps__inputs__line2">
-            <input type="text" placeholder="常用信箱" id="enter_email" disabled="disabled">
+          <div :class="{input_error: !email_qualified}">
+            <input type="text" placeholder="常用信箱" id="enter_email" disabled="disabled" v-model="email_keyword" style="width:100%">
+            <p v-if="!email_qualified" class="error_text">無效的信箱</p>
           </div>
         </div>
       </div>
       <div class="rectangle-btn rectangle-btn--register__finishRegist" :class="{disabled_text : !finish_register}" @click="submit_data()">
         <img v-if="finish_register" src="./dist/images/register/arrange.svg">
         <img v-if="!finish_register" src="./dist/images/register/arrange_disabled.svg">
-        <p class="text_24">完成註冊程序</p>
+        <p class="text_20">完成註冊程序</p>
       </div>
     </div>
     <div id="register__right__submited">
       <div>
         <p class="text_34">註冊已完成！</p>
         <div class="register__right__submited__content">
-          <p class="text_20">請至您的信箱 <a href="">davin135@gmail.com</a> 收認證信，</p>
-          <p class="text_20">以完成在 NCKU HUB 的帳號啟用。</p>
+          <p class="text_18">請至您的信箱 <a href="">davin135@gmail.com</a> 收認證信，</p>
+          <p class="text_18">以完成在 NCKU HUB 的帳號啟用。</p>
           <br>
-          <p class="text_20">若遇到任何問題，歡迎 <a href="">私訊我們反應</a>。</p>
+          <p class="text_18">若遇到任何問題，歡迎 <a href="">私訊我們反應</a>。</p>
         </div>
         <a href="/">
           <div class="rectangle-btn">
             <img src="./dist/images/register/goback_icon.svg" alt="">
-            <p class="text_24">返回 NCKU HUB</p>
+            <p class="text_20">返回 NCKU HUB</p>
           </div>
         </a>
       </div>

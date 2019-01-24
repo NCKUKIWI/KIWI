@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js & gulp",
+    "start": "gulp & nodemon app.js",
     "dev": "NODE_ENV=production node ./node_modules/nodemon/bin/nodemon -e '.js .ejs .css .html' app.js -V"
   },
   "author": "KIWI",

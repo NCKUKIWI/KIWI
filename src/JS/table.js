@@ -444,26 +444,3 @@
             }
         }
     }) 
-
-
-
-    /* todos
-    
-    ( bugs )
-    1. 幹細胞技術、航空運輸管理：禮拜六上課 / 時段未定 / 「天次」跟「節次」不在合理範圍者，需安排至「其他」
-    2. 幹細胞生物學：無法正確顯示預覽（實際上是衝堂但卻沒有顯示衝堂）- 似乎因為衝堂並不是衝第一堂，衝堂檢查須再修正
-    3. 習醫之道：共有四個，前三個不知為何不會正常顯示（實際時段是啥？調查一下）
-    4. 篩選時段 - 加入課表 - wishlist 不會回復原狀？
-    5. hover wishlist - 產生衝堂 - 刪除 wishlist item - 衝堂不會消失？
-    6. 放棄課表的話，wishlist 不會回復到原樣。
-    7. 讓所有搜尋不會區分大小寫＆刪去所有空格。
-
-    ( ui / ux )
-    1. 課表空空時的文字提示
-    2. wishlist, result_list 在 item 消失時可以淡出或滑行ㄇ
-    3. quick_search 下拉選單會讓 wishlist 很難閱讀，是否淡化處理背景？
-    4. 課表 locked - unlocked 的中斷感消除（transition）
-    5. 從課表左移回到 wishlist，是否該讓他自動滑到最下方已顯示課程？
-        https://cn.vuejs.org/v2/guide/transitions.html
-
-    */

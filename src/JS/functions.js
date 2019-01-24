@@ -55,7 +55,7 @@
         // 檢查是否為合理值
         if (!text.match(re_style2)) {
             console.log('getTime: 無效的時間 ');
-            return 0;                                       // todo: return 0 的話應該要自動放到「其他」而非不顯示
+            return 0;
         }
         // 將上課時間分段存入陣列
         var time_split = [];

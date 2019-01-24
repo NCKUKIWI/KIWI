@@ -43,8 +43,8 @@
             add_review: false,
             helper: false,
             not_login: false,
-            // add_review_success: false,
-            // add_review_give_up: false,
+            add_review_success: false,
+            add_review_give_up: false,
             // 新的視窗加在這裡
         },
         table_locked: true,                     // 課表鎖定狀態
@@ -166,10 +166,12 @@
     // 課程加入願望清單
 
     function wishlistAdd ( target_id ) {
-        userData.now_wishlist.push( target_id );
-        vue_wishlist.refresh();
-        vue_courseFilter.refresh();
-        return wishlistUpload();
+        if ( ! userData.now_wishlist.find( function(i){ return i == target_id }) ){
+            userData.now_wishlist.push( target_id );
+            vue_wishlist.refresh();
+            vue_courseFilter.refresh();
+            return wishlistUpload();
+        }
     }
 
 

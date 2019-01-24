@@ -171,11 +171,11 @@ router.post('/create', function (req, res) {
                 if (err) throw err;
                 console.log(results);
                 var rate = {
-                    sweet: parseInt(req.body.sweet.replace(/\'|\#|\/\*/g, "")), // 課程甜度
-                    cold: parseInt(req.body.cold.replace(/\'|\#|\/\*/g, "")), // 課程涼度
+                    sweet: parseInt(req.body.sweet), // 課程甜度
+                    cold: parseInt(req.body.cold), // 課程涼度
                     // recommand: parseInt(req.body.recommand.replace(/\'|\#|\/\*/g, "")),
                     // give: parseInt(req.body.give.replace(/\'|\#|\/\*/g, "")),
-                    got: parseInt(req.body.got.replace(/\'|\#|\/\*/g, "")), // 課程收穫
+                    got: parseInt(req.body.got), // 課程收穫
                     course_name: req.body.course_name.replace(/\'|\#|\/\*/g, ""),
                     teacher: req.body.teacher.replace(/\'|\#|\/\*/g, ""),
                     user_id: userid,

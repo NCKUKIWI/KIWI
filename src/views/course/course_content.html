@@ -47,7 +47,7 @@
         </div>
         <div class="flex-container score-btn--all">
           <div class="score-btn"><span>收穫 </span>
-            <div class="arrow-left" @click="minusRate('recom_rate')"></div><span class="score_span">{{score_data.recommand}}</span>
+            <div class="arrow-left" @click="minusRate('recom_rate')"></div><span class="score_span">{{score_data.got}}</span>
             <input class="score_input" id="recom_rate" type="number" value="5" min="1" max="10"/>
             <div class="arrow-right" @click="addRate('recom_rate')"></div>
           </div>
@@ -57,7 +57,7 @@
             <div class="arrow-right" @click="addRate('sweet_rate')"></div>
           </div>
           <div class="score-btn"><span>涼度 </span>
-            <div class="arrow-left" @click="minusRate('hard_rate')"></div><span class="score_span">{{score_data.hard}}</span>
+            <div class="arrow-left" @click="minusRate('hard_rate')"></div><span class="score_span">{{score_data.cold}}</span>
             <input class="score_input" id="hard_rate" type="number" value="5" min="1" max="10"/>
             <div class="arrow-right" @click="addRate('hard_rate')"></div>
           </div>
@@ -71,8 +71,7 @@
         <div class="courseFeedback">
           <div class="courseFeedback__single courseFeedback__single--default" v-if="course_data.comment_num == 0">
             <div class="courseFeedback__msg">
-              <p>點擊按鈕，立即提供課程心得，</p>
-              <p>幫助 480 位對這門課有興趣的同學！</p>
+              <p>本課程暫時沒有心得，歡迎你成為第一個提供者：）</p>
             </div>
           </div>
           <div class="courseFeedback__single" v-for="comment in comment_data">

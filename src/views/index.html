@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="zh-Hant-TW">
+<html lang="zh-TW">
 
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" id="viewport" name="viewport">
     <title>NCKU HUB｜資訊改善校園</title>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <link rel="stylesheet" href="dist/CSS/public.css">
     <link rel="stylesheet" href="dist/CSS/course.css">
     <link rel="stylesheet" href="dist/CSS/helper.css">
     <!-- <link rel="stylesheet" href="dist/CSS/course/course.css"> -->
@@ -13,15 +14,17 @@
     <link rel="stylesheet" href="dist/CSS/table.css">
     <link rel="stylesheet" href="dist/CSS/navbar.css">
     <link rel="stylesheet" href="dist/CSS/button.css">
+    <link rel="stylesheet" href="dist/CSS/windows.css">
     <link rel="stylesheet" href="dist/CSS/add_review.css">
     <link rel="stylesheet" href="dist/CSS/register.css">
     <!-- <script src="dist/JS/profile/init2.js"></script> -->
 	<!-- <link rel="stylesheet" type="text/css" href="./dist/CSS/profile/profile.css "> -->
     <body>
+        
         <!-- 視窗 -->
         <div class="window_div"> @@include('public/add_review.html') </div>
         <div class="window_div">  @@include('public/helper.html')  </div>
-        <!-- <div class="window_div"> @@include('public/windows.html') </div> -->
+        <div class="window_div"> @@include('public/windows.html') </div>
 
         <!-- 基本 -->
         <div class="basic_div"> @@include('public/navbar.html')  </div>
@@ -46,5 +49,6 @@
 <script src="dist/JS/helper.js"></script>
 <script src="dist/JS/register.js"></script>
 <script src="dist/JS/add_review.js"></script>
+<script src="dist/JS/windows.js"></script>
 <!-- <script src="dist/JS/profile/profile.js "></script> -->
 </html>

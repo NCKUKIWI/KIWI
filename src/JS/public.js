@@ -30,7 +30,6 @@
         user_photo: 'dist/images/course/sad_hugecat.png',
         user_department: '無',
         user_grade: '無',
-        credit_count: 9,                                    // todo: 讓他可以用計算ㄉ
         now_wishlist: [],
         now_table: []
     }
@@ -43,9 +42,13 @@
         windows: {
             add_review: false,
             helper: false,
+            not_login: false,
+            // add_review_success: false,
+            // add_review_give_up: false,
             // 新的視窗加在這裡
         },
-        table_locked: true,
+        table_locked: true,                     // 課表鎖定狀態
+        nav_profile_dropdown: false,           // 個人選單下拉狀態
         loggedIn: false,
     }
 
@@ -53,7 +56,7 @@
     toTab( pageStatus.initial_tab );
 
     // 開啟或關閉視窗
-    // setWindow( 'add_review', 'open' );
+    // setWindow( 'not_login', 'open' );
 
 
 
@@ -64,14 +67,18 @@
         .then ( function ( response ) {
             course_db = response.data.courses;
             console.log ( '課程資料庫: 抓取資料成功！' ) ;
-            if(response.data.user_data !== undefined) {
-                pageStatus.loggedIn = true;
+            // todo: 這邊之後可以移出來？
+            if( response.data.user_data !== undefined ) { 
+                pageStatus.loggedIn = true;  
             	userData.user_name = response.data.user_data.name;
                 userData.user_id = response.data.user_data.id;
                 userData.user_department = response.data.user_data.department;
                 userData.user_grade = response.data.user_data.grade;
                 userData.user_photo = "http://graph.facebook.com/" + response.data.user_data.fb_id + "/picture?type=normal";
                 getWishlistTable();
+            }
+            else {
+                pageStatus.loggedIn = false;  
             }
             // 將 course_db 放入
 	        for (var i = 0; i < 200; i++) {
@@ -103,16 +110,12 @@
     // 切換顯示中頁面
 
     function toTab( tab ) {
-        pageStatus.now_tab = tab ;
         // 切換頁面
         $( ".tab_div" ).hide();
         $( ".tab_div[name='" + tab + "']" ).show();
-        // 切換 Navbar 顯示
-        $( ".nav_link" ).removeClass( "on" );
-        $( ".nav_link[name='" + tab + "']" ).addClass( "on" );
-        // 取消個人選單顯示
-        $( ".nav_link[name='profile']" ).removeClass( "on" );
-        $( ".hub_navbar__profile__dropdown" ).removeClass( "on" );
+        pageStatus.now_tab = tab ;
+        // 收起下拉選單
+		pageStatus.nav_profile_dropdown = false;
     }
 
 
@@ -123,6 +126,21 @@
         if ( status == 'open' ) { pageStatus.windows[ window ] = true ; }
         if ( status == 'close' ) { pageStatus.windows[ window ] = false ; }
     }
+
+
+    // 檢查是否已登入，並跳出登入提示框
+
+    function checkLoggedIn () {
+        if ( pageStatus.loggedIn ) {
+            return 1;
+        }
+        else {
+            setWindow( 'not_login', 'open' );
+            return 0;
+        }
+    }
+
+
 
     // 取得使用者課表、願望清單資訊
 

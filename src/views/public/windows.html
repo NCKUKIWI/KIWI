@@ -1,12 +1,31 @@
 
-<div class="window">
-    <div class="window__self">
-        <div class="window__self__title">已送出心得</div>
-        <div class="window__self__detail">感謝您熱心提供課程心得，幫助了所有對這門課有興趣的同學， 在 NCKU HUB 上更加認識了課程！</div>
-        <div class="window__self__button_area">
-            <div class="window__self__button_area__button">返回頁面</div>
-            <div class="window__self__button_area__button">再填一份</div>
+
+<div id="all_windows">
+
+    <div class="window not_login" v-if="page_status.windows.not_login" >
+        <div class="window__background">
+            <div class="window__self">
+                <div class="window__self__title text_bold text_26">請先登入</div>
+                <div class="window__self__detail">本功能僅限登入後使用，請註冊或登入現有帳號後繼續。</div>
+                <div class="window__self__button_area ">
+                    <a @click="closeWindow('not_login')" class="window__self__button_area__button">返回頁面</a>
+                    <a href='/user/fblogin' class="window__self__button_area__button text_deep_blue">登入帳號</a>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="window__background"></div>
+
+    <!-- <div class="window add_review_success" v-if="page_status.windows.add_review_success" >
+        <div class="window__self">
+            <div class="window__self__title">已送出心得</div>
+            <div class="window__self__detail">感謝您熱心提供課程心得，幫助了所有對這門課有興趣的同學， 在 NCKU HUB 上更加認識了課程！</div>
+            <div class="window__self__button_area">
+                <div class="window__self__button_area__button">返回頁面</div>
+                <div class="window__self__button_area__button">再填一份</div>
+            </div>
+        </div>
+        <div class="window__background"></div>
+    </div> -->
+
+
 </div>

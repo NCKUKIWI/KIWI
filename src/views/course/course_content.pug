@@ -4,7 +4,7 @@ div#courseContent(v-show="isShow" @click.self="hideContent()")
     img(style="cursor: pointer;" src="./dist/images/course/right-btn.svg")
   div.courseContentBody
     div.courseContentBody__left
-      span.courseSerial {{course_data.系號}}{{course_data.選課序號}}
+      span.courseSerial {{course_data.選課序號}}
       h2 {{course_data.課程名稱}}
       div.flex-container.icon-span(style="margin-top:30px" @click="openOutline(course_data.系號,course_data.課程碼)")
         div.content-icon.see_clip
@@ -62,7 +62,7 @@ div#courseContent(v-show="isShow" @click.self="hideContent()")
         div.block_title
           p 課程心得 ({{comment_data.length}})
         div.courseFeedback
-          div(v-if="course_data.length == 0").courseFeedback__single.courseFeedback__single--default
+          div(v-if="comment_data.length == 0").courseFeedback__single.courseFeedback__single--default
             div.courseFeedback__msg
               p 本課程暫時沒有心得，歡迎你成為第一個提供者：）
           div.courseFeedback__single(v-for="comment in comment_data")

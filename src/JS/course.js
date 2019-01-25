@@ -1,38 +1,4 @@
-//Get data from APIs-------
 
-// $.ajax({
-//   type: "GET",
-//   url: "/course/",
-//   success: function (response) {
-//         vue_course_item.course_data_db() = response.courses;
-
-//         console.log(vue_course_item.course_data_db()[0]);
-
-//         for(var i=0;i<200;i++){
-//           vue_course_item.course_data.push(vue_course_item.course_data_db()[i]);
-//         }
-
-//         for( var i in vue_course_item.course_data_db()) {
-//           if(vue_course_item.course_data_db()[i].comment_num>0) {
-//             vue_course_item.course_with_comment.push(vue_course_item.course_data_db()[i]);
-//           }
-//         }
-//   }
-
-// });
-
-// $.ajax({
-//   type: "GET",
-//   url: "/course/allDpmt",
-//   success: function(response) {
-//     vue_courseFilter.dept = response;
-//   }
-// });
-
-// end --------------------------/
-
-
-// vue functions -----------------------
   var vue_course_item = new Vue({
     el: '#course_item',
     data: {
@@ -108,7 +74,7 @@
         else{
           wishlistAdd(chooseCourse_id);
         }
-        
+
         vue_courseFilter.wishList = userData.now_wishlist;
       },
       handleScroll: function() {

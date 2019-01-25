@@ -1,8 +1,8 @@
-<div v-if="page_status.windows.helper" class="helper_background" id="helper_background">
+<div v-if="page_status.windows.helper" class="helper_background" id="helper_background" @click.self="close_helper()">
   <div class="helper_content" id="helper_content">
-    <div class="close-btn" @click="close_helper()">
+    <!-- <div class="close-btn" @click="close_helper()">
       <img src="./dist/images/helper/closebtn.svg">
-    </div>
+    </div> -->
     <p class="text_34 bold_text">選課小幫手</p>
     <div class="helper_para underline">
       <p class="text_16">NCKU HUB 的選課小幫手，是全台灣第一個課程餘額追蹤機器人，幫助學生節省在電腦前盯哨的時間，精準選到想上的課程！</p>

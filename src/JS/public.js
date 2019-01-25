@@ -32,7 +32,9 @@
         user_grade: '無',
         user_email: '',
         now_wishlist: [],
-        now_table: []
+        now_table: [],
+        now_comment: [],
+        now_messenger_code: ""
     }
 
     // 頁面顯示狀態

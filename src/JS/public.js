@@ -157,7 +157,13 @@
     function getUserInfo () {
         axios.get('/user/info').then(function(res){
             if (res.data.user.department == '無' || res.data.user.grade == '無' || res.data.user.email == '無'){
-                // toTab('register');
+                toTab('register');
+                vue_register.old_user_login();
+                return; // 登入後沒有填完資料的話還是停留在註冊頁
+            }
+            if (res.data.user.department == 'new' || res.data.user.grade == 'new' || res.data.user.email == 'new'){
+                toTab('register');
+                vue_register.new_user_login();
                 return; // 登入後沒有填完資料的話還是停留在註冊頁
             }
             pageStatus.loggedIn = true;

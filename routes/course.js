@@ -112,22 +112,23 @@ router.get('/:id', function (req, res) {
             } else {
                 /* 尋找課程的資訊 */
                 db.query_post2(id, function (courseInfo, comment) {
+                    for (var i in comment) {
+                        var buf = comment[i];
+                        for (var j in comment[i]) {
+                            // console.log(buf[j])
+                            if (buf[j] == "無" || buf[j] == "" || !buf[j]) {
+                                delete buf[j];
+                                continue;
+                            }
+                            courseInfo[j]++;
+                        }
+                    }
                     courseInfo = courseInfo[0];
                     courseInfo.comment = 0;
                     courseInfo.course_style = 0;
                     courseInfo.report_hw = 0;
                     courseInfo.score_style = 0;
-                    // for (var i in comment) {
-                    //     var buf = comment[i];
-                    //     for (var j in comment[i]) {
-                    //         // console.log(buf[j])
-                    //         if (buf[j] == "無" || buf[j] == "" || !buf[j]) {
-                    //             delete buf[j];
-                    //             continue;
-                    //         }
-                    //         courseInfo[j]++;
-                    //     }
-                    // }
+
                     db.FindbyColumn('course_rate', ["*"], { course_name: courseInfo.課程名稱, teacher: courseInfo.老師.split(/\s|\*/g)[0] }, function (rates) {
                         var sweet = 0;
                         var cold = 0;

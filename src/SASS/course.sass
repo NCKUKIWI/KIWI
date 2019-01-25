@@ -8,7 +8,6 @@ $colorBlack4: #bdbdbd
 $colorBlack5: #e0e0e0
 $colorBlack6: #eeeeee
 $colorgrey250: rgb(250,250,250)
-$colorRed: rgb(241,91,94)
 
 
 /* for helper.html ----------
@@ -99,7 +98,7 @@ input[type=checkbox]:focus
 
 .quick_search_custom .fucking_checkmark:after
   left: 24px
-  top: 16px
+  top: 17px
   width: 5px
   height: 10px
   border: solid #fff
@@ -153,6 +152,7 @@ h4
 .quick_search_dropdown--course
   max-height: 20vh
   overflow-y: scroll
+  box-shadow: 0 0 14px 0 rgba(0,0,0,0.10)
 
 .search_result--course
   padding: 16px 15px 16px 50px
@@ -332,6 +332,11 @@ section
   height: 40px
   width: 40px
   z-index: 20
+  transition: .3s cubic-bezier(0.0, 0.0, 0.2, 1)
+  &:hover
+    filter: brightness(95%)
+  &:active
+    filter: brightness(90%)
   img
     height: 40px
     width: 40px
@@ -458,7 +463,7 @@ section
 
 .courseSerial
   padding: 4px 10px
-  background-color: $colorRed
+  background-color: #F35A5A
   color: #fff
   font-size: 7px
   border-radius: 15px
@@ -498,10 +503,6 @@ section
   .block_title
     color: #9b9b9b
 
-.score-btn--all
-  margin: 5vh 0px
-  width: 100%
-  justify-content: space-between
 .score-btn
   display: inline-block
   background-color: #eee
@@ -514,6 +515,13 @@ section
   padding: 10px 2.5vw
   text-align: center
   border: none
+  &--all
+    margin: 5vh 0px
+    width: 100%
+    justify-content: space-between
+    &--default
+      display: inline-flex
+      align-items: center
 
   span
     height: 20px

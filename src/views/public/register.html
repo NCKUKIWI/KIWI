@@ -27,7 +27,7 @@
         <div class="round-btn" id="register_fb_btn" @click="new_user_login()" :class="{roundBtnClicked : registerBtn.new_register || registerBtn.old_user_register}">
           <img v-if="!registerBtn.new_register && !registerBtn.old_user_register" src="./dist/images/register/fb_icon.svg">
           <img v-if="registerBtn.new_register || registerBtn.old_user_register" src="./dist/images/register/fb_icon_disabled.svg" alt="">
-          <p class="text_18">連接 facebook</p>
+          <a href="/user/fblogin"><p class="text_18">連接 facebook</p></a>
         </div>
       </div>
       <div class="register__block__right__steps">

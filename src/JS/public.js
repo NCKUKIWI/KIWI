@@ -38,14 +38,16 @@
     // 頁面顯示狀態
 
     var pageStatus = {
-        initial_tab: 'table',
+        initial_tab: 'course',
         now_tab: '',
+        next_tab: '',                           // 若需暫停則暫存
         windows: {
             add_review: false,
             helper: false,
             not_login: false,
             add_review_success: false,
             add_review_give_up: false,
+            edit_table_give_up: false,
             // 新的視窗加在這裡
         },
         table_locked: true,                     // 課表鎖定狀態
@@ -57,7 +59,7 @@
     toTab( pageStatus.initial_tab );
 
     // 開啟或關閉視窗
-    // setWindow( 'not_login', 'open' );
+    // setWindow( 'add_review_success', 'open' );
 
 
 
@@ -102,7 +104,19 @@
     // 切換顯示中頁面
 
     function toTab( tab ) {
-        // 切換頁面
+        // 若未登入則無法進入頁面
+        if ( tab == 'table' ) {
+            if ( ! checkLoggedIn() ) {
+                return 0 ;
+            } 
+        }
+        // 若課表正在編輯中
+        if ( tab != 'table' && ! pageStatus.table_locked ) {
+            pageStatus.next_tab = tab ;
+            setWindow( 'edit_table_give_up', 'open' );
+            return 0 ;
+        }
+        // 切換至目標頁面
         $( ".tab_div" ).hide();
         $( ".tab_div[name='" + tab + "']" ).show();
         pageStatus.now_tab = tab ;
@@ -114,6 +128,12 @@
     // 開啟或關閉視窗
 
     function setWindow( window, status ) {
+        // 若未登入則無法進入頁面
+        if ( window == 'add_review' ) {
+            if ( ! checkLoggedIn() ) {
+                return 0 ;
+            } 
+        }
         // status = open 開啟視窗, close 關閉視窗
         if ( status == 'open' ) { pageStatus.windows[ window ] = true ; }
         if ( status == 'close' ) { pageStatus.windows[ window ] = false ; }
@@ -141,7 +161,6 @@
                 // toTab('register');
                 return; // 登入後沒有填完資料的話還是停留在註冊頁
             }
-            toTab( pageStatus.initial_tab );
             pageStatus.loggedIn = true;
             userData.user_name = res.data.user.name;
             userData.user_id = res.data.user.id;
@@ -149,6 +168,8 @@
             userData.user_grade = res.data.user.grade;
             userData.user_photo = "http://graph.facebook.com/" + res.data.user.fb_id + "/picture?type=normal";
             userData.user_email = res.data.user.email;
+            toTab( pageStatus.initial_tab );
+            setWindow ( 'not_login', 'close' );
             getWishlistTable();
         }).catch(function(err){
             pageStatus.loggedIn = false;
@@ -181,11 +202,13 @@
     // 課程加入願望清單
 
     function wishlistAdd ( target_id ) {
-        if ( ! userData.now_wishlist.find( function(i){ return i == target_id }) ){
-            userData.now_wishlist.push( target_id );
-            vue_wishlist.refresh();
-            vue_courseFilter.refresh();
-            return wishlistUpload();
+        if ( checkLoggedIn() ) {
+            if ( ! userData.now_wishlist.find( function(i){ return i == target_id }) ){
+                userData.now_wishlist.push( target_id );
+                vue_wishlist.refresh();
+                vue_courseFilter.refresh();
+                return wishlistUpload();
+            }
         }
     }
 
@@ -193,11 +216,13 @@
     // 課程移出願望清單
 
     function wishlistRemove ( target_id ) {
-        var index = userData.now_wishlist.indexOf( target_id );
-        userData.now_wishlist.splice( index, 1 );
-        vue_wishlist.wishlist_cont.splice( index, 1 );
-        vue_courseFilter.wishlist_cont.splice( index, 1 );
-        return wishlistUpload();
+        if ( checkLoggedIn() ) {
+            var index = userData.now_wishlist.indexOf( target_id );
+            userData.now_wishlist.splice( index, 1 );
+            vue_wishlist.wishlist_cont.splice( index, 1 );
+            vue_courseFilter.wishlist_cont.splice( index, 1 );
+            return wishlistUpload();
+        }
     }
 
     // 願望清單傳回資料庫

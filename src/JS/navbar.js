@@ -27,14 +27,7 @@ var vue_nav_bar = new Vue({
 	},
     methods: {
 		switchTo: function ( tab ) {
-			if ( tab == 'table' ) {
-				if ( checkLoggedIn() ) {
-					toTab( tab );
-				}
-			}
-			else {
-				toTab( tab );
-			}
+			toTab( tab );
 		},
 		switchProfileWindow: function() {
 			pageStatus.nav_profile_dropdown = ! pageStatus.nav_profile_dropdown;

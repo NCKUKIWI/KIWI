@@ -282,7 +282,8 @@
                 time: ''
             },
             page_status: pageStatus,
-            temp_table: []
+            temp_table: [],
+            temp_wishlist: [],
         },
         created: function() {
             // 產生空白表格
@@ -431,7 +432,14 @@
                 this.temp_table.splice( index, 1 );
                 this.refresh();
             },
-            tableConfirm: function () {;
+            tableStartEdit: function() {
+                // 將目前願望清單暫存進來，之後若放棄時可存回
+                this.temp_wishlist.length = 0;
+                for ( var i = 0 ; i < userData.now_wishlist.length ; i ++ ) {
+                    this.temp_wishlist.push( userData.now_wishlist[i] );
+                }
+            },
+            tableConfirm: function () {
                 userData.now_table.length = 0;
                 for ( var i = 0 ; i < this.temp_table.length ; i ++ ) {
                     userData.now_table.push( this.temp_table[i] );
@@ -439,12 +447,21 @@
                 tableUpload();
             },
             tableGiveUp: function () {
+                // 將先前暫存的願望清單存回
+                userData.now_wishlist.length = 0;
+                for ( var i = 0 ; i < this.temp_wishlist.length ; i ++ ) {
+                    userData.now_wishlist.push( this.temp_wishlist[i] );
+                }
+                wishlistUpload();
+                vue_wishlist.refresh();
+                vue_courseFilter.refresh();
+                // 將課表返回原樣
                 this.initialize();
                 this.refresh();
             },
             deleteItem: function( id ) {
                 // 因為只有時段為「其他」者會用到所以寫得很簡陋
-                wishlistAdd( id );
+                wishlistAdd( id ); 
                 vue_classtable.tableTempRemove( id );
             }
         }

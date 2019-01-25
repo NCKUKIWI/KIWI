@@ -177,4 +177,43 @@ router.get('/info', function (req, res) {
     
 });
 
+router.get('/getHelperService/:uid', function (req, res) {
+    uid = req.params.uid;
+    var data = {
+        'messenger_code': 0,
+        'comment_num': 0
+    }
+    db.Query('SELECT COUNT(id) as post_num FROM post WHERE user_id =' + uid, function(query){
+        data.comment_num = query[0].post_num;
+        if(query[0].post_num >= 3){
+            db.Query('select * from messenger_code where user_id =' + uid, function(messenger_code){
+                if(messenger_code.length == 0){
+                    res.send(data);    
+                }
+                else data.messenger_code = messenger_code[0].code
+                res.send(data);
+            })
+        }
+        else{
+            res.send(data);
+        }
+    })
+});
+
+router.post('/setHelperService/', function (req, res) {
+    uid = req.body.user_id;
+    db.Query('SELECT COUNT(id) as post_num FROM post WHERE user_id =' + uid, function(query){
+        if(query[0].post_num >= 3){
+            db.Query('update messenger_code set user_id = ' + uid + ' where user_id = 0 limit 1', function(){
+                db.Query('select * from messenger_code where user_id =' + uid, function(messenger_code){
+                    res.send({'messenger_code': messenger_code[0].code});
+                })
+            })
+        }
+        else{
+            res.send({'post_num': query[0].post_num})
+        }
+    })
+});
+
 module.exports = router;

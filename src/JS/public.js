@@ -42,6 +42,7 @@
         now_tab: '',
         next_tab: '',                           // 若需暫停則暫存
         windows: {
+            // notification: false,
             add_review: false,
             helper: false,
             not_login: false,
@@ -144,6 +145,18 @@
     }
 
 
+    // 設定通知訊息
+
+    function setNotification( text, color ) {
+        // color 預設為 'blue', 可填寫 'red' 或 'black'
+        vue_notification.list.push( { text: text, status: 0, color: color } );
+        var this_item = vue_notification.list[vue_notification.list.length-1];
+        setTimeout( function(){ this_item.status = 1 ;  },   100 );
+        setTimeout( function(){ this_item.status = 0 ;  },  1000 );
+        setTimeout( function(){ this_item.status = -1 ; },  1900 );
+    }
+
+
     // 檢查是否已登入，並跳出登入提示框
 
     function checkLoggedIn () {
@@ -214,10 +227,19 @@
     function wishlistAdd ( target_id ) {
         if ( checkLoggedIn() ) {
             if ( ! userData.now_wishlist.find( function(i){ return i == target_id }) ){
-                userData.now_wishlist.push( target_id );
-                vue_wishlist.refresh();
-                vue_courseFilter.refresh();
-                return wishlistUpload();
+                if ( ! userData.now_table.find( function(i){ return i == target_id }) ){
+                    userData.now_wishlist.push( target_id );
+                    vue_wishlist.refresh();
+                    vue_courseFilter.refresh();
+                    setNotification ( '成功加入願望清單！', 'blue' );
+                    return wishlistUpload();
+                }
+                else {
+                    setNotification ( '此課程已在你的課表內！', 'red' );
+                }
+            }
+            else {
+                setNotification ( '此課程已在願望清單內！', 'red' );
             }
         }
     }
@@ -231,6 +253,7 @@
             userData.now_wishlist.splice( index, 1 );
             vue_wishlist.wishlist_cont.splice( index, 1 );
             vue_courseFilter.wishlist_cont.splice( index, 1 );
+            // setNotification ( '成功移出願望清單！' );
             return wishlistUpload();
         }
     }
@@ -242,7 +265,6 @@
             "now_wishlist": userData.now_wishlist
         })
         .then ( function ( response ) {
-            // alert( '等等！有人在動清單！' );
             console.log ( '更新願望清單: 更新成功！' ) ;
         })
         .catch ( function ( error ) {
@@ -258,7 +280,6 @@
             "now_table": userData.now_table
         })
         .then ( function ( response ) {
-            // alert( '等等！有人在動課表！' );
             console.log ( '更新課表: 更新成功！' ) ;
         })
         .catch ( function ( error ) {

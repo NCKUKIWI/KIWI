@@ -40,10 +40,10 @@
             },
             addToTable: function () {
                 if ( checkConflict ( this.class_item, vue_classtable ) ) {
+                    setNotification ( '成功加入課表！', 'blue' );
                     wishlistRemove( this.class_item.id );
                     vue_classtable.tableTempAdd( this.class_item.id );
                     vue_quick_search.clearFilter();
-                    setNotification ( '成功加入課表！', 'blue' );                
                 }
             },
             deleteItem: function () {
@@ -248,9 +248,9 @@
             },
             deleteItem: function() {
                 if ( this.cell_data.status > 0 ) {
+                    // setNotification ( '成功移出課表！' );
                     wishlistAdd( this.cell_data.class_item.id );
                     vue_classtable.tableTempRemove( this.cell_data.class_item.id );
-                    setNotification ( '成功移出課表！' );                
                 }
             },
             startFilterTIme: function() {
@@ -464,7 +464,7 @@
             },
             deleteItem: function( id ) {
                 // 因為只有時段為「其他」者會用到所以寫得很簡陋
-                setNotification ( '成功移出課表！' );
+                // setNotification ( '成功移出課表！' );
                 wishlistAdd( id ); 
                 vue_classtable.tableTempRemove( id );
             }

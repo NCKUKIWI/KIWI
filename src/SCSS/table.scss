@@ -252,7 +252,8 @@
         &.locked {
             filter: grayscale(100%);
             opacity: 0.6;
-            cursor: not-allowed !important;
+            // cursor: not-allowed !important;
+            cursor: default !important;
             &:hover {
                 box-shadow: 0 0 14px 0 rgba(0,0,0,0.06) !important;
             }
@@ -285,7 +286,7 @@
         height: auto;
         max-height: 210px;
         // width: 100%;
-        width: calc( 100% - 5vw - 10px );           // todo: 這怎麼算的？怪怪ㄉ // 另外高度有點被陰影擋住太多（應該讓中間沒有陰影）
+        width: calc( 100% - 5vw - 10px ); 
         border: $light_2 1px solid;
         box-sizing: border-box;
         background: $white;
@@ -318,7 +319,8 @@
         &.locked {
             opacity: 0.6;
             overflow: hidden !important;
-            cursor: not-allowed;
+            // cursor: not-allowed;
+            cursor: default;
             &:hover {
                 box-shadow: 0 0 14px 0 rgba(0,0,0,0.06) !important;
             }
@@ -370,10 +372,27 @@
             &:active {
                 opacity: 1 !important;
             }
-            &.occupied {
+            &.occupied, &.occupied.other {
                 background: $light_1 !important;
-                border-top: $default 2px solid;
                 cursor: default !important;
+                &:hover {
+                    border-top: $default 2px solid;
+                }
+                &.A9:hover {
+                    border-top: $red 2px solid ;
+                }
+                &.A6:hover {
+                    border-top: $blue 2px solid ;
+                }
+                &.A7 {
+                    border-top: $pink 2px solid ;
+                }
+                &.A1 {
+                    border-top: $green 2px solid ;
+                }
+                &.A2 {
+                    border-top: $deep_blue 2px solid ;
+                }
                 .class_table_cont_cell_title {
                     opacity: 1 !important;
                 }
@@ -407,29 +426,96 @@
     }
     &_cont {
         position: relative;
-        display: flex;
-        flex-direction: row;
+        // display: flex;
+        // flex-direction: column;
         overflow-x: hidden;
         overflow-y: scroll;
         height: calc(100% - 44px);
         width: 100%;
         background: $white;
+        &__normal {
+            position: relative;
+            display: flex;
+            flex-direction: row;
+            height: auto;
+            width: 100%;
+            background: $white;
+        }
+        &__other {
+            position: relative;
+            display: flex;
+            flex-direction: row;
+            height: auto;
+            width: 100%;
+            background: $light_1;
+        }
         &_row {
             height: 100%;
             width: calc( (100% - 70px) / 5);
             &.left {
                 width: 70px;
             }
+            &.right_full {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;        // ayy
+                // padding: 0 0 4px 4px;
+                width: calc( 100% - 70px );
+                background: $light_1;
+            }
         }
         &_cell {
             @include flex_center_top();
             position: relative;
-            height: calc(100% / 9);
+            height: calc( (82vh - 44px) / 10);
             min-height: 50px;
             width: 100%;
             border: $light_2 1px solid;
             padding: 0 10%;
             background: $white;
+            &_id {
+                opacity: 0;
+                margin-top: 4px;
+                @include ellipsis();
+            }
+            &_title {
+                opacity: 0;
+                margin-bottom: 2px;
+                @include ellipsis();
+            }
+            &_description {
+                line-height: 130%;
+                @include ellipsis();
+            }
+            &_button {
+                opacity: 0;
+                position: absolute;
+                display: block;
+                top: 0;
+                right: 0;
+                margin: 12px 8px;
+                height: 18px;
+                width: 18px;
+                border-radius: 100%;
+                background-image: none;
+                background-color: $dark;
+                background-size: 10px;
+                background-repeat: no-repeat;
+                background-position: center;
+                cursor: pointer;
+            }
+            &.other {
+                @include flex_center_top();
+                position: relative;     // ayy
+                height: calc( ((82vh - 44px) / 10 ) );
+                // height: calc( ((82vh - 44px) / 10 ) - 6px );
+                min-height: 50px;
+                width: calc( (100%/5) );
+                // width: calc( (100%/5) - 4px );
+                border: $light_2 1px solid;
+                padding: 0 2%;
+                // margin: 4px 4px 0 0;
+            }
             &.class_cell:hover {
                 background: $light_2;
                 opacity: 0.4;
@@ -472,32 +558,41 @@
                         background: $default;
                     }
                 }
+                &.other {
+                    & > .class_table_cont_cell_id::before {
+                        margin-left: -2px;
+                        margin-bottom: 0;
+                        margin-right: 0;
+                        height: 0;
+                        width: 0;
+                    }
+                }
                 &.A9 {
-                    border-top: $red 2px solid !important;
+                    border-top: $red 2px solid ;
                     .class_table_cont_cell_id::before {
                         background: $red;
                     }
                 }
                 &.A6 {
-                    border-top: $blue 2px solid !important;
+                    border-top: $blue 2px solid ;
                     .class_table_cont_cell_id::before {
                         background: $blue;
                     }
                 }
                 &.A7 {
-                    border-top: $pink 2px solid !important;
+                    border-top: $pink 2px solid ;
                     .class_table_cont_cell_id::before {
                         background: $pink;
                     }
                 }
                 &.A1 {
-                    border-top: $green 2px solid !important;
+                    border-top: $green 2px solid ;
                     .class_table_cont_cell_id::before {
                         background: $green;
                     }
                 }
                 &.A2 {
-                    border-top: $deep_blue 2px solid !important;
+                    border-top: $deep_blue 2px solid ;
                     .class_table_cont_cell_id::before {
                         background: $deep_blue;
                     }
@@ -564,7 +659,7 @@
             &.class_cell.rush {
                 color: $warning_red;
                 background: $light_2;
-                border-top: $warning_red 2px solid;
+                border-top: $warning_red 2px solid !important;
                 transition: background-color .5s $material_trans;
                 .class_table_cont_cell_button {
                     transition: .5s $material_trans;
@@ -582,35 +677,6 @@
                     }
                 }
             }
-            &_id {
-                opacity: 0;
-                margin-top: 4px;
-                @include ellipsis();
-            }
-            &_title {
-                opacity: 0;
-                @include ellipsis();
-            }
-            &_description {
-                @include ellipsis();
-            }
-            &_button {
-                opacity: 0;
-                position: absolute;
-                display: block;
-                top: 0;
-                right: 0;
-                margin: 12px 8px;
-                height: 18px;
-                width: 18px;
-                border-radius: 100%;
-                background-image: none;
-                background-color: $dark;
-                background-size: 10px;
-                background-repeat: no-repeat;
-                background-position: center;
-                cursor: pointer;
-            }
         }
         &_row.left > .class_table_cont_cell {
             @include flex_center();
@@ -620,6 +686,19 @@
                 background: $white;
                 height: 30px;
                 width: 30px;
+                border-radius: 100%;
+            }
+        }
+        &_row.left > .class_table_cont_cell.other {
+            @include flex_center();
+            min-height: 50px;
+            width: 100%;
+            border: $light_2 1px solid;
+            & > p {
+                @include flex_center();
+                background: $white;
+                height: 40px;
+                width: 40px;
                 border-radius: 100%;
             }
         }

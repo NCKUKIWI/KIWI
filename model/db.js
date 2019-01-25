@@ -378,11 +378,10 @@ exports.query_post2 = function query_post2(id, callback) {
     var sql_1 = "SELECT * FROM course_new WHERE id = " + id;
     connection.query(sql_1, function(err, courseInfo) {
         if (err) throw err;
-        var query_teacher = "%" + courseInfo[0]["老師"].split(/\s/g)[0] + "%"; // 為了某些課有很多個老師，但是不一定每次都是相同人馬，只好先找第一個老師，再加上%來判斷
+        var query_teacher = "%" + courseInfo[0]["老師"].split(/\s|\*/g)[0] + "%"; // 為了某些課有很多個老師，但是不一定每次都是相同人馬，只好先找第一個老師，再加上%來判斷
         var sql_2 = "SELECT id,comment, course_style, course_need, exam_style, semester, score_style, report_hw ";
         sql_2 += "FROM post WHERE teacher like " + "\'" + query_teacher + "\' ";
         sql_2 += "AND course_name = " + "\'" + courseInfo[0]["課程名稱"] + "\'" + " ORDER BY semester DESC";
-
         connection.query(sql_2, function(err, comment) {
             if (err) throw err;
             callback(courseInfo, comment);

@@ -16,9 +16,9 @@ var vue_nav_bar = new Vue({
 				for ( var i = 0 ; i < course_db.length ; i ++ ) { 
 					if ( course_db[i].課程名稱.match ( this.search_keyword ) || course_db[i].老師.match ( this.search_keyword ) ) {
 						var class_item = getClassObject ( course_db, course_db[i].id ) ;
-						if ( getTimeObject ( class_item ) ) {
+						// if ( getTimeObject ( class_item ) ) {
 							this.result_cont.push( class_item );
-						}
+						// }
 					}
 				}
 			}
@@ -27,21 +27,13 @@ var vue_nav_bar = new Vue({
 	},
     methods: {
 		switchTo: function ( tab ) {
-			if ( tab == 'table' ) {
-				if ( checkLoggedIn() ) {
-					toTab( tab );
-				}
-			}
-			else {
-				toTab( tab );
-			}
+			toTab( tab );
 		},
 		switchProfileWindow: function() {
 			pageStatus.nav_profile_dropdown = ! pageStatus.nav_profile_dropdown;
 		},
 		openCourse: function(id) {
 			toTab('course');
-			vue_courseContent.isShow = true;
 			vue_course_item.openCoursePage(id);
 			vue_nav_bar.search_keyword = "";
 		},

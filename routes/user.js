@@ -43,10 +43,10 @@ router.get("/fbcheck", middleware.checkLogin(1), function (req, res) {
                             'name': fb.name,
                             'fb_id': fb.id,
                             'role': 0,
-                            'department': '無',
-                            'grade': '無',
+                            'department': 'new',
+                            'grade': 'new',
                             'check_key': check_key,
-                            'email': ""
+                            'email': "new"
                         }, function (err, result) {
                             if (err) console.log(err);
                             res.cookie("isLogin", 1, {
@@ -155,9 +155,9 @@ router.post('/update', middleware.checkLogin(), function (req, res) {
     console.log('\n' + 'POST /user/update');
     var userid = req.user.id;
     var user = {
-        name: req.body.name,
         department: req.body.department,
-        grade: req.body.grade
+        grade: req.body.grade,
+        email: req.body.email
     }
     db.Update('user', user, {
         'id': parseInt(userid)

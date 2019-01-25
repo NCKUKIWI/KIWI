@@ -46,23 +46,44 @@
       comment_only: false,
       count_height: 1,
       count_index: 0,
+      userData: userData
     },
 
     methods: {
-      courseLink: function(index) {
-        vue_courseContent.isShow = true;
-        vue_courseContent.course_data = vue_course_item.course_data[index];
+      // courseLink: function(index) {
+      //   vue_courseContent.isShow = true;
+      //   vue_courseContent.course_data = vue_course_item.course_data[index];
 
-        var course_id = vue_courseContent.course_data.id;
-        var course_url = "/course/" + course_id;
+      //   var course_id = vue_courseContent.course_data.id;
+      //   var course_url = "/course/" + course_id;
+
+      //   $.ajax({
+      //     type: "GET",
+      //     url: course_url,
+      //     success: function(response) {
+      //       vue_courseContent.score_data = response;
+      //       vue_courseContent.comment_data = response.comment;
+
+      //       if(vue_courseContent.comment_data.length==0){
+      //         $(".courseFeedback__msg--default").css("display","block");
+      //       } else {
+      //         $(".courseFeedback__msg--default").css("display","none");
+      //       }
+      //     }
+      //   });
+      // },
+      openCoursePage: function(id) {
+        console.log("open the page: " + id);
+        var course_url = "/course/" + id;
 
         $.ajax({
           type: "GET",
           url: course_url,
           success: function(response) {
+            vue_courseContent.isShow = true;
             vue_courseContent.score_data = response;
             vue_courseContent.comment_data = response.comment;
-
+            vue_courseContent.course_data = response.courseInfo;
             if(vue_courseContent.comment_data.length==0){
               $(".courseFeedback__msg--default").css("display","block");
             } else {
@@ -70,23 +91,25 @@
             }
           }
         });
+        // for(var i in vue_course_item.course_data_db()){
+        //   if(id == vue_course_item.course_data_db()[i].id){
+        //     vue_course_item.courseLink(i);
+        //     vue_courseContent.course_data = vue_course_item.course_data_db()[i];
+        //   }
+        // }
+        // console.log(vue_courseContent.course_data);
       },
-      openCoursePage: function(id) {
-        console.log("open the page"+id);
-        vue_courseContent.isShow = true;
-        for(var i in vue_course_item.course_data_db()){
-          if(id == vue_course_item.course_data_db()[i].id){
-            vue_courseContent.course_data = vue_course_item.course_data_db()[i];
-          }
-        }
-        console.log(vue_courseContent.course_data);
-      },
-      addCourse: function(index){
+      setCourse: function(index){
         var chooseCourse_id = vue_course_item.course_data[index].id;
         var chooseCourse = vue_course_item.course_data[index];
-        wishlistAdd(chooseCourse_id);
-        vue_courseFilter.wishList.push(chooseCourse);
-        console.log("add");
+        if (userData.now_wishlist.includes(chooseCourse_id)){
+          wishlistRemove(chooseCourse_id);
+        }
+        else{
+          wishlistAdd(chooseCourse_id);
+        }
+        
+        vue_courseFilter.wishList = userData.now_wishlist;
       },
       handleScroll: function() {
         var list_height = $("#course_item").height();
@@ -123,7 +146,7 @@
       comment_data: [],
     },
     methods: {
-      showContent: function() {
+      hideContent: function() {
         vue_courseContent.isShow = false;
         vue_courseContent.course_data = [];
         vue_courseContent.score_data = [];

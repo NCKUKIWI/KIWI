@@ -86,14 +86,19 @@
                 start = time[0];
                 hrs = 1;
             }
-            // 把上課日轉成文字，以對應資料格式
-            day = dayTransText(day);
-            // 轉換為 time_item 
-            time_item.push({
-                day: day,
-                start: start,
-                hrs: hrs
-            });
+            if ( day <= 5 && day >= 1 ) {
+                // 把上課日轉成文字，以對應資料格式
+                day = dayTransText(day);
+                // 轉換為 time_item
+                time_item.push({
+                    day: day,
+                    start: start,
+                    hrs: hrs
+                });
+            }
+            else {
+                return 0;
+            }
         }
         // console.log ( time_item );
         return time_item;
@@ -103,19 +108,24 @@
     // 輸入 now_wishlist / now_table，將不重複或找不到課程的，刪去後傳回
     
     function checkValid ( list_to_check ) {
-        var temp_list = [];
-        for ( var i = 0; i < list_to_check.length; i ++ ) {
-            if ( getClassObject ( course_db, list_to_check[i] ) ) {
-                var ifRepeated = temp_list.find( function ( item ) {
-                    return item == list_to_check[i]
-                });
-                if ( ! ifRepeated ) {
-                    temp_list.push( list_to_check[i] );
+        if ( course_db.length != 0 ) {
+            var temp_list = [];
+            for ( var i = 0; i < list_to_check.length; i ++ ) {
+                if ( getClassObject ( course_db, list_to_check[i] ) ) {
+                    var ifRepeated = temp_list.find( function ( item ) {
+                        return item == list_to_check[i]
+                    });
+                    if ( ! ifRepeated ) {
+                        temp_list.push( list_to_check[i] );
+                    }
                 }
             }
+            console.log( temp_list );
+            return temp_list ; 
         }
-        console.log( temp_list );
-        return temp_list ; 
+        else {
+            return list_to_check;
+        }
     }
 
 
@@ -123,6 +133,10 @@
     
     function checkConflict ( class_item, table_item ) {
         var time_item = getTimeObject ( class_item );
+        console.log ( time_item );
+        if ( time_item == 0 ) {
+            return 1;
+        }
         var day, start, hrs;
         for ( var i = 0 ; i < time_item.length ; i ++ ) {
             day = time_item[i].day;
@@ -143,8 +157,24 @@
                     }
                     else {
                         console.log ( 'checkConflict: 找到衝堂' );
-                        check_cell.cell_status_title = "時段衝堂";
-                        check_cell.ifRush = true;
+                        if ( check_cell.status > 0 ) {
+                            check_cell.cell_status_title = "時段衝堂";
+                            check_cell.ifRush = true;
+                        }
+                        else {
+                            for ( var m = 0 ; m < 15 ; m ++ ) {
+                                var origin_cell = table_item[day].find( function ( item ) {
+                                    return item.time == timeTransText( textTransTime(start) - m )
+                                });
+                                console.log( origin_cell.status );
+                                if ( origin_cell.status > 0 ) {
+                                    origin_cell.cell_status_title = "時段衝堂";
+                                    origin_cell.ifRush = true;
+                                    m = 15 ;
+                                }
+                            }
+                            // todo : 找到源頭那門課
+                        }
                         return 0 ;
                     }
                 }                
@@ -244,8 +274,11 @@
             case 5:
                 realDay = "friday";
                 break;
+            case 6:
+                realDay = "other";
+                break;
             default: 
-                realDay = 'other_day';
+                realDay = "no_day";
         }
         return realDay;
     }
@@ -270,8 +303,11 @@
             case "friday":
                 numDay = 5;
                 break;
+            case "other":
+                numDay = 6;
+                break;
             default: 
-                numDay = 'other_day';
+                numDay = 'no_day';
         }
         return numDay;
     }

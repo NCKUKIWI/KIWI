@@ -45,7 +45,7 @@ app.use(session({
 app.use(function (req, res, next) {
     if (req.cookies.isLogin) {
         redis.get(userCacheKey(req.cookies.id), function (err, result) {
-            if (result) {
+            if (false) {
                 req.user = JSON.parse(result);
                 next();
             } else {
@@ -54,7 +54,7 @@ app.use(function (req, res, next) {
                 }, function (user) {
                     user = user[0];
                     redis.set(userCacheKey(req.cookies.id), JSON.stringify(user));
-                    req.user = user[0];
+                    req.user = user;
                     next();
                 });
             }

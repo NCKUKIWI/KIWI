@@ -6,7 +6,7 @@
 
 .fb_btn:visited
   color: white
-        
+
 
 
 
@@ -54,7 +54,7 @@
       p.text_40
         margin-bottom: 4vh
       &__par
-        margin-bottom: 10vh
+        margin-bottom: 8vh
         p
           margin-bottom: 1vh
   &__right
@@ -110,6 +110,7 @@ input[type=text]:disabled::placeholder
   color: #eee
 .disabled_text
   color: #eee
+  cursor: not-allowed
   p
     color: #eee
 
@@ -125,6 +126,8 @@ input[type=text]:disabled::placeholder
   align-items: center
   margin-top: 3vh
   cursor: pointer
+  p
+    color: #fff
   img
     width: 14px
     height: 14px
@@ -158,9 +161,11 @@ input[type=text]:disabled::placeholder
     margin-right: 16px
   &--register
     &__login
-      color: #1A6CBD
+      p
+        color: #1A6CBD
     &__finishRegist
-      color: #F35A5A
+      p
+        color: #F35A5A
 
 #register__right__submited
   display: none

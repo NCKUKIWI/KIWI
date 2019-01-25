@@ -6,18 +6,34 @@ var vue_register = new Vue ({
       new_register: false,
       finish_register: false,
     },
-    grades: ["大一","大二","大三","大四","大五","大六"],
+    dept: {
+      all_depts: [],
+      dropdown: [],
+      keyword: '',
+      qualified: true,
+    },
+    email: {
+      keyword: '',
+      qualified: true,
+    },
+    grade: {
+      all_grades: ["一","二","三","四","五","六"],
+      selected: '',
+    },
+
+    grades: ["一","二","三","四","五","六"],
     grade_selected: "",
     depts: [],
     dept_dropdown: [],
     dept_keyword: '',
+    dept_selected: "",
     email_keyword: '',
     dept_qualified: true,
     email_qualified: true,
   },
   methods: {
     new_user_login: function() {
-        this.btn_clicked = true;
+        this.registerBtn.new_register = true;
         document.getElementById("enter_dept").disabled = false;
         document.getElementById("enter_grade").disabled = false;
         document.getElementById("enter_email").disabled = false;
@@ -25,16 +41,26 @@ var vue_register = new Vue ({
         console.log(document.getElementById("enter_dept").disabled);
     },
     submit_data: function() {
+      for(var i in vue_courseFilter.dept){
+        if (vue_courseFilter.dept[i].DepPrefix == vue_register.dept_keyword.toUpperCase()){
+          vue_register.dept_selected = vue_courseFilter.dept[i].DepName;
+        }
+      }
+      axios.post('/user/update', {
+        grade: vue_register.grade_selected,
+        department: vue_register.dept_selected,
+        email: vue_register.email_keyword
+      })
       document.getElementById("register__right__content").style.display = "none";
       document.getElementById("register__right__submited").style.display = "flex";
     },
     old_user_login: function() {
-      this.old_user_register = true;
+      this.registerBtn.old_user_register = true;
       document.getElementById("enter_dept").disabled = false;
       document.getElementById("enter_grade").disabled = false;
       document.getElementById("enter_email").disabled = false;
       document.getElementById("register__block__par1").innerHTML = "已使用過NCKU HUB？";
-      document.getElementById("register__block__par2").innerHTML = "請完成基本資料的填寫";
+      document.getElementById("register__block__par2").innerHTML = "請跳至step2完成基本資料的填寫";
     }
   },
   watch: {
@@ -45,7 +71,7 @@ var vue_register = new Vue ({
 document.addEventListener("input", function() {
   if(document.getElementById("enter_dept").value.length==0 || document.getElementById("enter_grade").value==0
 || document.getElementById("enter_email").value.length==0){
-    vue_register.finish_register = false;
+    vue_register.registerBtn.finish_register = false;
   } else {
     if(!vue_register.email_keyword.match("@")) {
       vue_register.email_qualified = false;
@@ -64,8 +90,8 @@ document.addEventListener("input", function() {
 
   if(document.getElementById("enter_dept").value.length!=0 && document.getElementById("enter_grade").value!=0
 && document.getElementById("enter_email").value.length!=0){
-  if(vue_register.dept_qualified == true && vue_register.email_qualified == true && document.getElementById("enter_grade")!=0){
-    vue_register.finish_register = true;
+  if(vue_register.dept_qualified == true && vue_register.email_qualified == true && document.getElementById("enter_grade").value!=0){
+    vue_register.registerBtn.finish_register = true;
   }
 }
 });

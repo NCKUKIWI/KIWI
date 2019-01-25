@@ -19,6 +19,8 @@ body, div, p, a, span {
     font-size: 14px;
     line-height: 150%;
     color: $black;
+    -moz-user-select: none;
+    -webkit-user-select: none; 
 }
 
 a {

@@ -1,0 +1,9 @@
+
+<div id="notification" class="notification_area">
+    <!-- <div class="notification on">
+        <p class="notification__text text_16 text_bold"> 測試一下喔喔 </p>
+    </div> -->
+    <div v-for="item in list" v-if="item.status >= 0" :class="{ on: item.status >= 1 }" class="notification">
+        <p class="notification__text text_16 text_bold" :class="[{ text_deep_blue: item.color == 'blue' }, { text_red: item.color == 'red' }]" > {{ item.text }} </p>
+    </div>
+</div>

@@ -86,9 +86,14 @@
             course_db = response.data.courses;
             console.log ( '課程資料庫: 抓取資料成功！' ) ;
             // 將 course_db 放入
-	        for (var i = 0; i < 200; i++) {
-	            vue_course_item.course_data.push(vue_course_item.course_data_db()[i]);
+          var tmp = [];
+	        // for (var i = 0; i < 200; i++) {
+	        //     vue_course_item.course_data.push(vue_course_item.course_data_db()[i]);
+	        // }
+          for (var i = 0; i < 200; i++) {
+	            tmp.push(vue_course_item.course_data_db()[i]);
 	        }
+          vue_course_item.course_data = tmp.sort(function(a,b){return a-b});
 	        for (var i in vue_course_item.course_data_db()) {
 	            if (vue_course_item.course_data_db()[i].comment_num > 0) {
 	                vue_course_item.course_with_comment.push(vue_course_item.course_data_db()[i]);
@@ -103,6 +108,7 @@
     axios.get ( '/course/allDpmt' )
         .then ( function ( response ) {
 	        vue_courseFilter.dept = response.data;
+          //只要學院的代號，篩掉通識類
           for(var i in vue_courseFilter.dept) {
             if (!vue_courseFilter.dept[i].DepPrefix.match("A")){
               vue_register.depts.push(vue_courseFilter.dept[i].DepPrefix);

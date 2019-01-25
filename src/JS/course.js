@@ -216,7 +216,6 @@
                 vue_course_item.course_data.push(vue_course_item.course_data_db()[i]);
               }
             }
-            console.log("not checked have" + this.keyPrefix);
           }
         }
       },

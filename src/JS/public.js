@@ -31,10 +31,11 @@
         user_department: '無',
         user_grade: '無',
         user_email: '',
+        messenger_code: "",
         now_wishlist: [],
         now_table: [],
         now_comment: [],
-        now_messenger_code: ""
+        
     }
 
     // 頁面顯示狀態
@@ -60,6 +61,9 @@
 
     // 轉換目前頁面
     toTab( pageStatus.initial_tab );
+
+    // 綁定點擊就複製的功能
+    new Clipboard( "#helper_background .text_14" );
 
     // 開啟或關閉視窗
     // setWindow( 'add_review_success', 'open' );
@@ -287,4 +291,13 @@
         .catch ( function ( error ) {
             console.log (  '更新課表:' + error ) ;
         });
+    }
+
+    // 回傳使用者的心得數
+    function getUserComment(){
+        axios.get('/user/getHelperService').
+        then(function(response){
+            userData.now_comment = response.data.comment;
+            userData.messenger_code = response.data.messenger_code;
+        })
     }

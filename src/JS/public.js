@@ -38,7 +38,7 @@
     // 頁面顯示狀態
 
     var pageStatus = {
-        initial_tab: 'register',
+        initial_tab: 'course',
         now_tab: '',
         next_tab: '',                           // 若需暫停則暫存
         windows: {
@@ -161,12 +161,12 @@
 
     function getUserInfo () {
         axios.get('/user/info').then(function(res){
-            if (res.data.user.department == '無' || res.data.user.grade == '無' || res.data.user.email == '無'){
+            if (res.data.user.department == '無' || res.data.user.grade == '無'){
                 toTab('register');
                 vue_register.old_user_login();
                 return; // 登入後沒有填完資料的話還是停留在註冊頁
             }
-            if (res.data.user.department == 'new' || res.data.user.grade == 'new' || res.data.user.email == 'new'){
+            if (res.data.user.department == 'new' || res.data.user.grade == 'new'){
                 toTab('register');
                 vue_register.new_user_login();
                 return; // 登入後沒有填完資料的話還是停留在註冊頁

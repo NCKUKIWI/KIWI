@@ -86,14 +86,19 @@
                 start = time[0];
                 hrs = 1;
             }
-            // 把上課日轉成文字，以對應資料格式
-            day = dayTransText(day);
-            // 轉換為 time_item 
-            time_item.push({
-                day: day,
-                start: start,
-                hrs: hrs
-            });
+            if ( day <= 5 && day >= 1 ) {
+                // 把上課日轉成文字，以對應資料格式
+                day = dayTransText(day);
+                // 轉換為 time_item
+                time_item.push({
+                    day: day,
+                    start: start,
+                    hrs: hrs
+                });
+            }
+            else {
+                return 0;
+            }
         }
         // console.log ( time_item );
         return time_item;
@@ -128,6 +133,10 @@
     
     function checkConflict ( class_item, table_item ) {
         var time_item = getTimeObject ( class_item );
+        console.log ( time_item );
+        if ( time_item == 0 ) {
+            return 1;
+        }
         var day, start, hrs;
         for ( var i = 0 ; i < time_item.length ; i ++ ) {
             day = time_item[i].day;
@@ -148,8 +157,24 @@
                     }
                     else {
                         console.log ( 'checkConflict: 找到衝堂' );
-                        check_cell.cell_status_title = "時段衝堂";
-                        check_cell.ifRush = true;
+                        if ( check_cell.status > 0 ) {
+                            check_cell.cell_status_title = "時段衝堂";
+                            check_cell.ifRush = true;
+                        }
+                        else {
+                            for ( var m = 0 ; m < 15 ; m ++ ) {
+                                var origin_cell = table_item[day].find( function ( item ) {
+                                    return item.time == timeTransText( textTransTime(start) - m )
+                                });
+                                console.log( origin_cell.status );
+                                if ( origin_cell.status > 0 ) {
+                                    origin_cell.cell_status_title = "時段衝堂";
+                                    origin_cell.ifRush = true;
+                                    m = 15 ;
+                                }
+                            }
+                            // todo : 找到源頭那門課
+                        }
                         return 0 ;
                     }
                 }                
@@ -249,8 +274,11 @@
             case 5:
                 realDay = "friday";
                 break;
+            case 6:
+                realDay = "other";
+                break;
             default: 
-                realDay = 'other_day';
+                realDay = "no_day";
         }
         return realDay;
     }
@@ -275,8 +303,11 @@
             case "friday":
                 numDay = 5;
                 break;
+            case "other":
+                numDay = 6;
+                break;
             default: 
-                numDay = 'other_day';
+                numDay = 'no_day';
         }
         return numDay;
     }

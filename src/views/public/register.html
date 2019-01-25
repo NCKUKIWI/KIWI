@@ -12,7 +12,7 @@
       </div>
       <div class="rectangle-btn rectangle-btn--register__login" @click="old_user_login()">
         <img src="./dist/images/register/fb_icon_blue.svg">
-        <a href="/user/fblogin"><p class="text_24">現有帳號登入</p></a>
+        <a href="/user/fblogin"><p class="text_20">現有帳號登入</p></a>
       </div>
     </div>
   </div>
@@ -48,12 +48,16 @@
             <p v-if="!email_qualified" class="error_text">無效的信箱</p>
           </div>
         </div>
+        <div v-if="!registerBtn.finish_register" class="rectangle-btn disabled_text">
+          <img src="./dist/images/register/arrange_disabled.svg">
+          <p class="text_20">完成註冊程序</p>
+        </div>
+        <div v-else class="rectangle-btn rectangle-btn--register__finishRegist" @click="submit_data()">
+          <img src="./dist/images/register/arrange.svg">
+          <p class="text_20">完成註冊程序</p>
+        </div>
       </div>
-      <div class="rectangle-btn rectangle-btn--register__finishRegist" :class="{disabled_text : !registerBtn.finish_register}" @click="submit_data()">
-        <img v-if="registerBtn.finish_register" src="./dist/images/register/arrange.svg">
-        <img v-if="!registerBtn.finish_register" src="./dist/images/register/arrange_disabled.svg">
-        <p class="text_20">完成註冊程序</p>
-      </div>
+
     </div>
     <div id="register__right__submited">
       <div>

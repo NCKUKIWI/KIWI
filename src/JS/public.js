@@ -60,7 +60,6 @@
 
     // 開啟或關閉視窗
     // setWindow( 'add_review_success', 'open' );
-    setWindow('helper', 'open');
 
 
     axios.get ( '/course/' )

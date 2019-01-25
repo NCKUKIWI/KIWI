@@ -13,7 +13,7 @@ var vue_helper_content = new Vue ({
     },
     qualify_helper: function() {
       this.helper_qualified = true;
-      console.log("qualified");
+      // console.log("qualified");
     }
   },
 });

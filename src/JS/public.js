@@ -60,7 +60,7 @@
 
     // 開啟或關閉視窗
     // setWindow( 'add_review_success', 'open' );
-
+    setWindow('helper', 'open');
 
 
     axios.get ( '/course/' )
@@ -113,7 +113,7 @@
         if ( tab == 'table' ) {
             if ( ! checkLoggedIn() ) {
                 return 0 ;
-            } 
+            }
         }
         // 若課表正在編輯中
         if ( tab != 'table' && ! pageStatus.table_locked ) {
@@ -137,7 +137,7 @@
         if ( window == 'add_review' ) {
             if ( ! checkLoggedIn() ) {
                 return 0 ;
-            } 
+            }
         }
         // status = open 開啟視窗, close 關閉視窗
         if ( status == 'open' ) { pageStatus.windows[ window ] = true ; }

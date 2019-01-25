@@ -12,7 +12,7 @@
       </div>
       <div class="rectangle-btn rectangle-btn--register__login" @click="old_user_login()">
         <img src="./dist/images/register/fb_icon_blue.svg">
-        <a href="/user/fblogin"><p class="text_20 text_deep_blue text_bold">現有帳號登入</p></a>
+        <a href="/user/fblogin"><p class="text_24">現有帳號登入</p></a>
       </div>
     </div>
   </div>
@@ -27,7 +27,7 @@
         <div class="round-btn" id="register_fb_btn" @click="new_user_login()" :class="{roundBtnClicked : registerBtn.new_register || registerBtn.old_user_register}">
           <img v-if="!registerBtn.new_register && !registerBtn.old_user_register" src="./dist/images/register/fb_icon.svg">
           <img v-if="registerBtn.new_register || registerBtn.old_user_register" src="./dist/images/register/fb_icon_disabled.svg" alt="">
-          <a href="/user/fblogin"><p class="text_20--register">連接 facebook</p></a>
+          <p class="text_18">連接 facebook</p>
         </div>
       </div>
       <div class="register__block__right__steps">
@@ -38,9 +38,9 @@
               <input type="text" placeholder="輸入英文系號(ex. H3)" id="enter_dept" v-model="dept_keyword" maxlength="2" disabled="disabled">
               <p v-if="!dept_qualified" class="error_text">無效的系號</p>
             </div>
-            <select placeholder="" id="enter_grade" disabled v-model="grade_selected">
-              <option >選擇年級</option>
-              <option v-for="grade in grades">{{grade}}</option>
+            <select placeholder="" id="enter_grade" disabled>
+              <option value="0">選擇年級</option>
+              <option value="1" v-for="grade in grades">{{grade}}</option>
             </select>
           </div>
           <div :class="{input_error: !email_qualified}">
@@ -52,7 +52,7 @@
       <div class="rectangle-btn rectangle-btn--register__finishRegist" :class="{disabled_text : !registerBtn.finish_register}" @click="submit_data()">
         <img v-if="registerBtn.finish_register" src="./dist/images/register/arrange.svg">
         <img v-if="!registerBtn.finish_register" src="./dist/images/register/arrange_disabled.svg">
-        <p class="text_20 text_bold">完成註冊程序</p>
+        <p class="text_20">完成註冊程序</p>
       </div>
     </div>
     <div id="register__right__submited">

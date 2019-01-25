@@ -12,9 +12,12 @@
       <p class="text_16">提供 3 筆課程心得，讓成大更好，兌換一學期使用資格！</p>
       <p class="text_16 text_grey">您可使用的的心得積點：2 點，尚須 1 筆心得。</p>
     </div>
+    <div v-if="helper_qualified" class="helper_para random_text">
+      <p class="text_14">點擊複製開通代碼：YXKAK1083920</p>
+    </div>
     <div class="helper_btn" @click="exchange_success()">
-      <p v-if="false" class="helper_btn--text text_20">前往開通資格</p>
-      <p class="helper_btn--text text_20">課程心得兌換</p>
+      <p v-if="helper_qualified" class="helper_btn--text text_20">前往開通資格</p>
+      <p v-if="!helper_qualified" class="helper_btn--text text_20" @click="qualify_helper()">課程心得兌換</p>
     </div>
   </div>
   <div class="helper_content" id="helper_success">

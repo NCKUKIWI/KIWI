@@ -38,7 +38,7 @@
     // 頁面顯示狀態
 
     var pageStatus = {
-        initial_tab: 'course',
+        initial_tab: 'register',
         now_tab: '',
         next_tab: '',                           // 若需暫停則暫存
         windows: {

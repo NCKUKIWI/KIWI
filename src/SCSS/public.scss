@@ -52,12 +52,16 @@ a {
     }
     &_dark {
         color: $dark;
+        opacity: 0.8;
     }
     &_white {
         color: $white;
     }
     &_deep_blue {
         color: $deep_blue;
+    }
+    &_red {
+        color: $red;
     }
     &_bold {
         font-weight: bold;

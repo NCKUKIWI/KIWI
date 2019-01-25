@@ -16,7 +16,7 @@
 			<div v-if="filter_status" class="quick_search_clear_filter"></div>
 			<input class="quick_search_input" type="text" v-model="keyword" :disabled="filter_status || page_status.table_locked" :class="{ locked: page_status.table_locked }" placeholder="輸入「課程名」或「教師名」" ><br>
 		</div>
-		<div v-if="keyword.replace(' ','') != '' && !filter_status" class="quick_search_dropdown">
+		<div v-if="keyword.replace(' ','') != '' && !filter_status && !page_status.table_locked" class="quick_search_dropdown">
 			<span> {{ result }} </span>
 			<result-list-item v-for="item in result_cont" :class_item="item"></result-list-item>
 		</div>
@@ -75,23 +75,15 @@
 					<class-table-cell v-for="item in friday" :cell_data="item" :day="'friday'"></class-table-cell>
 				</div>
 			</div>
-			<div class="class_table_cont__other">
+			<div v-if="other.length" class="class_table_cont__other">
 				<div class="class_table_cont_row left">
 					<div class="class_table_cont_cell other"><p class="text_18">其他</p></div>
 				</div>
 				<div class="class_table_cont_row right_full">
-					<!-- <div class="class_table_cont_cell class_cell" :style="getHeight()" :class="getClass()" >
-						<div class="class_table_cont_cell_button" @click="deleteItem"></div>
-						<p class="class_table_cont_cell_id text_12" :class="[{ previewing: cell_data.ifPreview }]"> {{ cell_data.cell_status_title }} </p>
-						<p class="class_table_cont_cell_title text_16 text_bold"> {{ cell_data.cell_status_text }} </p>
-						<p class="class_table_cont_cell_description text_14 text_dark"> {{ cell_data.class_item.teacher }} </p>
-					</div> -->
-					<div class="class_table_cont_cell other class_cell A9">
-						<div class="class_table_cont_cell_button other"></div>
-						<p class="class_table_cont_cell_id other text_12">H3-005 </p>
-						<p class="class_table_cont_cell_title other text_16 text_bold">微積分（一）</p>
-						<p class="class_table_cont_cell_description other text_14 text_dark">嚕嚕米</p>
-						<p class="class_table_cont_cell_description other text_14 text_dark">時段未定</p>
+					<div v-for="item in other" class="class_table_cont_cell other class_cell occupied" :class="item.dept_id">
+						<div class="class_table_cont_cell_button other"  @click="deleteItem( item.id )"></div>
+						<p class="class_table_cont_cell_id other text_12"> {{ item.time }}</p>
+						<p class="class_table_cont_cell_title other text_16 text_bold"> {{ item.title }} </p>
 					</div>
 				</div>
 			</div>

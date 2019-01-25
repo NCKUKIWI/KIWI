@@ -15,8 +15,7 @@
     width: 100vw ;
     background: $blue ;
     @include box_shadow_3();
-    overflow: hidden;
-    &__right_area {
+    &__left_area {
         position: absolute;
         display: flex;
         flex-direction: row;
@@ -28,7 +27,7 @@
         height: 100%;
         width: calc( 65vw - 4vw );
     }
-    &__left_area {
+    &__right_area {
         position: absolute;
         display: flex;
         flex-direction: row;
@@ -168,7 +167,6 @@
         }
         &__dropdown {
             position: fixed;
-            display: none;
             top: 0;
             right: 0;
             margin-top: 64px;
@@ -180,9 +178,6 @@
             border-bottom: $blue 4px solid;
             @include box_shadow_2();
             overflow: hidden;
-            &.on {
-                display: block;
-            }
             &__info {
                 position: relative;
                 display: flex;

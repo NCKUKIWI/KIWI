@@ -42,12 +42,14 @@
                 if ( checkConflict ( this.class_item, vue_classtable ) ) {
                     wishlistRemove( this.class_item.id );
                     vue_classtable.tableTempAdd( this.class_item.id );
-                    vue_classtable.clearFilterCell();
+                    vue_quick_search.clearFilter();
                 }
             },
             deleteItem: function () {
                 console.log ( 'wishlist killed: ' +  vue_wishlist.wishlist_cont.indexOf( this.class_item ) + ' (' + this.class_item.title + ')' ); 
                 wishlistRemove( this.class_item.id );
+                vue_quick_search.clearFilter();
+                vue_classtable.refresh();
             },
             mouseoverItem: function () {
                 if ( checkConflict ( this.class_item, vue_classtable ) ) {
@@ -132,6 +134,7 @@
                 if ( checkConflict ( this.class_item, vue_classtable ) ) {
                     vue_classtable.tableTempAdd( this.class_item.id );
                     vue_classtable.clearFilterCell();
+                    vue_wishlist.clearFilter();
                 }
             },
             mouseoverItem: function () {
@@ -165,9 +168,9 @@
                     for ( var i = 0 ; i < course_db.length ; i ++ ) {
                         if ( course_db[i].課程名稱.match ( this.keyword ) || course_db[i].老師.match ( this.keyword ) ) {
                             var class_item = getClassObject ( course_db, course_db[i].id ) ;
-                            if ( getTimeObject ( class_item ) ) {
+                            // if ( getTimeObject ( class_item ) ) {
                                 this.result_cont.push( class_item );
-                            }
+                            // }
                         }
                     }
                 }
@@ -217,7 +220,7 @@
                 var style = '';
                 // 計算該課程要佔據幾格
                 if ( this.cell_data.status > 0 ) {
-                    style += 'height: calc (( 82vh - 44px )/10) * ' + this.cell_data.status + ')';
+                    style += 'height: calc( ( (82vh - 44px) / 10 ) * ' + this.cell_data.status + ' )';
                 }
                 else if ( this.cell_data.status < 0 ) {
                     style += 'display: none';
@@ -273,12 +276,14 @@
             wednesday: [],
             thursday: [],
             friday: [],
+            other: [],
             filtering_now: {
                 day: '',
                 time: ''
             },
             page_status: pageStatus,
-            temp_table: []
+            temp_table: [],
+            temp_wishlist: [],
         },
         created: function() {
             // 產生空白表格
@@ -292,6 +297,7 @@
                     // status： 1 以上 - 該課程佔據節次數、 0 - 該節次無課程、 (-1) - 該節次已被上方課程佔據
                 }
             }
+            this['other'].length = 0;
         },
         methods: {
             initialize: function() {
@@ -308,36 +314,41 @@
                 if ( checkConflict ( class_item, this ) ) {
                     // 計算學分數
                     if ( !ifPreview ) {
-                        console.log( '目前學分：' + vue_user_data.credit_count + '，本課名稱：' + class_item.title + '，本課學分數：' + class_item.credit );
                         vue_user_data.credit_count += class_item.credit;
-                        console.log( '新增後學分：' + vue_user_data.credit_count );
                     }
-                    // 完成填入課表
-                    var day, start, hrs;
-                    for ( var i = 0 ; i < time_item.length ; i ++ ) {
-                        day = time_item[i].day;
-                        start = time_item[i].start;
-                        hrs = time_item[i].hrs;
-                        for ( var j = 0 ; j < hrs ; j ++ ) {
-                            // 在起始時段填入課程資訊
-                            fill_cell = this[day].find( function ( item ) {
-                                return item.time == start 
-                            });
-                            fill_cell.status = hrs ;
-                            fill_cell.class_item = class_item;
-                            fill_cell.cell_status_title = fill_cell.class_item.dept_id + '-' + fill_cell.class_item.class_id ;;
-                            fill_cell.cell_status_text = fill_cell.class_item.title;
-                            if ( ifPreview ) {
-                                fill_cell.ifPreview = true;
-                            }
-                            // 將後續時段的 status 設定為 -1
-                            for ( var k = 1 ; k < hrs ; k ++ ) {
-                                fill_cell =  this[day].find( function ( item ) {
-                                    return item.time == timeTransText( textTransTime(start) + k )
+                    if ( time_item == 0 ) {
+                        // 如果時段未定或週六
+                        this['other'].push( class_item );
+                    }
+                    else {
+                        // 完成填入課表
+                        var day, start, hrs;
+                        for ( var i = 0 ; i < time_item.length ; i ++ ) {
+                            console.log( time_item );
+                            day = time_item[i].day;
+                            start = time_item[i].start;
+                            hrs = time_item[i].hrs;
+                            for ( var j = 0 ; j < hrs ; j ++ ) {
+                                // 在起始時段填入課程資訊
+                                fill_cell = this[day].find( function ( item ) {
+                                    return item.time == start 
                                 });
-                                fill_cell.status = -1;
-                                fill_cell.cell_status_title = '';
-                                fill_cell.cell_status_text = ''; 
+                                fill_cell.status = hrs ;
+                                fill_cell.class_item = class_item;
+                                fill_cell.cell_status_title = fill_cell.class_item.dept_id + '-' + fill_cell.class_item.class_id ;
+                                fill_cell.cell_status_text = fill_cell.class_item.title;
+                                if ( ifPreview ) {
+                                    fill_cell.ifPreview = true;
+                                }
+                                // 將後續時段的 status 設定為 -1
+                                for ( var k = 1 ; k < hrs ; k ++ ) {
+                                    fill_cell =  this[day].find( function ( item ) {
+                                        return item.time == timeTransText( textTransTime(start) + k )
+                                    });
+                                    fill_cell.status = -1;
+                                    fill_cell.cell_status_title = '';
+                                    fill_cell.cell_status_text = ''; 
+                                }
                             }
                         }
                     }
@@ -349,16 +360,6 @@
                 }
             },
             refresh: function ( preview_id ) {
-                var message = '目前課表課程：';
-                for ( var i = 0 ; i < this.temp_table.length ; i ++ ) {
-                    message += this.temp_table[i] + ' ' ;
-                }
-                console.log ( message );
-                var message2 = '線上課表課程：';
-                for ( var i = 0 ; i < userData.now_table.length ; i ++ ) {
-                    message2 += userData.now_table[i] + ' ' ;
-                }
-                console.log ( message2 );
                 // 產生空白表格
                 var day, time ;
                 for ( var i = 1 ; i <= 5 ; i ++ ) {
@@ -370,6 +371,7 @@
                         // status： 1 以上 - 該課程佔據節次數、 0 - 該節次無課程、 (-1) - 該節次已被上方課程佔據
                     }
                 }
+                this['other'].length = 0;
                 // 加入目前課表
                 vue_user_data.credit_count = 0;
                 for ( var i = 0 ; i < this.temp_table.length ; i ++ ) {
@@ -430,7 +432,14 @@
                 this.temp_table.splice( index, 1 );
                 this.refresh();
             },
-            tableConfirm: function () {;
+            tableStartEdit: function() {
+                // 將目前願望清單暫存進來，之後若放棄時可存回
+                this.temp_wishlist.length = 0;
+                for ( var i = 0 ; i < userData.now_wishlist.length ; i ++ ) {
+                    this.temp_wishlist.push( userData.now_wishlist[i] );
+                }
+            },
+            tableConfirm: function () {
                 userData.now_table.length = 0;
                 for ( var i = 0 ; i < this.temp_table.length ; i ++ ) {
                     userData.now_table.push( this.temp_table[i] );
@@ -438,8 +447,22 @@
                 tableUpload();
             },
             tableGiveUp: function () {
+                // 將先前暫存的願望清單存回
+                userData.now_wishlist.length = 0;
+                for ( var i = 0 ; i < this.temp_wishlist.length ; i ++ ) {
+                    userData.now_wishlist.push( this.temp_wishlist[i] );
+                }
+                wishlistUpload();
+                vue_wishlist.refresh();
+                vue_courseFilter.refresh();
+                // 將課表返回原樣
                 this.initialize();
                 this.refresh();
+            },
+            deleteItem: function( id ) {
+                // 因為只有時段為「其他」者會用到所以寫得很簡陋
+                wishlistAdd( id ); 
+                vue_classtable.tableTempRemove( id );
             }
         }
     }) 

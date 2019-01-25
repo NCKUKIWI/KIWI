@@ -2,7 +2,7 @@
 
 <nav>
     <div id="navbar" class="hub_navbar">
-      <div class="hub_navbar__right_area">
+      <div class="hub_navbar__left_area">
           <a class="hub_navbar__logo" href="/"></a>
           <input class="hub_navbar__search" type="text" v-model="search_keyword" placeholder="搜尋「課程名」或「教師名」" ><br>
           <div v-if="search_keyword.replace(' ','') != ''" class="hub_navbar__search__dropdown">
@@ -19,12 +19,12 @@
               </div>
               <span> {{ result }} </span>
           </div>
-      </div>
-      <div class="hub_navbar__left_area">
-          <div :class="{ on: page_status.now_tab == 'course' }" class="hub_navbar__link" @click="switchTo('course')">找課程</div>
-          <div :class="{ on: page_status.now_tab == 'table' }" class="hub_navbar__link" @click="switchTo('table')">排課表 <span class="wishlist_count">{{ user_data.now_wishlist.length }}</span></div>
-          <img :class="{ on: page_status.nav_profile_dropdown || page_status.now_tab == 'profile' }" class="hub_navbar__profile" @click="switchProfileWindow()" :src="user_data.user_photo">
-          <div :class="{ on: page_status.nav_profile_dropdown } " class="hub_navbar__profile__dropdown">
+    </div>
+    <div class="hub_navbar__right_area">
+        <div :class="{ on: page_status.now_tab == 'course' }" class="hub_navbar__link" @click="switchTo('course')">找課程</div>
+        <div :class="{ on: page_status.now_tab == 'table' }" class="hub_navbar__link" @click="switchTo('table')">排課表 <span class="wishlist_count">{{ user_data.now_wishlist.length }}</span></div>
+        <img :class="{ on: page_status.nav_profile_dropdown || page_status.now_tab == 'profile' }" class="hub_navbar__profile" @click="switchProfileWindow()" :src="user_data.user_photo">
+        <div v-if="page_status.nav_profile_dropdown" class="hub_navbar__profile__dropdown on">
             <div class="hub_navbar__profile__dropdown__info">
                 <img class="hub_navbar__profile__dropdown__info__photo" :src="user_data.user_photo">
                 <div class="hub_navbar__profile__dropdown__info__detail">

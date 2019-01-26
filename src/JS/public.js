@@ -67,10 +67,10 @@
     // 開啟或關閉視窗
     // setWindow( 'add_review_success', 'open' );
 
-    // 設定載入畫面
-    window.onload = function () {
-        vue_loading.turnoff();
-    }
+    // // 設定載入畫面
+    // window.onload = function () {
+    //     vue_loading.turnoff();
+    // }
     
 
 
@@ -185,6 +185,7 @@
 
     function getUserInfo () {
         axios.get('/user/info').then(function(res){
+            vue_loading.turnoff();
             if (res.data.user.department == '無' || res.data.user.grade == '無'){
                 toTab('register');
                 vue_register.old_user_login();
@@ -205,7 +206,9 @@
             toTab( pageStatus.initial_tab );
             setWindow ( 'not_login', 'close' );
             getWishlistTable();
+            getUserComment();
         }).catch(function(err){
+            vue_loading.turnoff();
             pageStatus.loggedIn = false;
             console.log(err.response.data);
         })

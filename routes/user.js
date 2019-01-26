@@ -39,6 +39,7 @@ router.get("/fbcheck", middleware.checkLogin(1), function (req, res) {
                         res.redirect('/');
                     } else {
                     	var check_key = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+                        var code = 'nckuhub' + Math.random().toString(36).substring(2, 15);
                         db.Insert('user', {
                             'name': fb.name,
                             'fb_id': fb.id,
@@ -49,15 +50,21 @@ router.get("/fbcheck", middleware.checkLogin(1), function (req, res) {
                             'email': "new"
                         }, function (err, result) {
                             if (err) console.log(err);
-                            res.cookie("isLogin", 1, {
-                                maxAge: 1000 * 60 * 60 * 12 * 2 * 30
-                            });
-                            res.cookie("id", check_key, {
-                                maxAge: 1000 * 60 * 60 * 12 * 2 * 30
-                            });
-                            console.log("======create user======");
-                            console.log(result);
-                            res.redirect('/');
+                            db.Insert('messenger_code', {
+                                'code': code,
+                                'user_id': result.insertId
+                            }, function(err, result){
+                                if (err) console.log(err);
+                                res.cookie("isLogin", 1, {
+                                    maxAge: 1000 * 60 * 60 * 12 * 2 * 30
+                                });
+                                res.cookie("id", check_key, {
+                                    maxAge: 1000 * 60 * 60 * 12 * 2 * 30
+                                });
+                                console.log("======create user======");
+                                console.log(result);
+                                res.redirect('/');
+                            })
                         })
                     }
                 });
@@ -175,6 +182,29 @@ router.get('/info', function (req, res) {
         res.send({user: req.user});    
     }
     
+});
+
+router.get('/getHelperService/', function (req, res) {
+    uid = req.user.id
+    var data = {
+        'messenger_code': 0,
+        'comment': []
+    }
+    db.Query('SELECT * FROM post WHERE user_id =' + uid, function(query){
+        data.comment = query;
+        if(data.comment.length  >= 3){
+            db.Query('select * from messenger_code where user_id =' + uid, function(messenger_code){
+                if(messenger_code.length == 0){
+                    res.send(data);    
+                }
+                else data.messenger_code = messenger_code[0].code
+                res.send(data);
+            })
+        }
+        else{
+            res.send(data);
+        }
+    })
 });
 
 module.exports = router;

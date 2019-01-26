@@ -3,6 +3,7 @@ var vue_helper_content = new Vue ({
   data: {
     page_status: pageStatus,
     helper_qualified: false,
+    userData: userData
   },
   methods: {
     exchange_success: function() {
@@ -13,7 +14,14 @@ var vue_helper_content = new Vue ({
     },
     qualify_helper: function() {
       this.helper_qualified = true;
-      console.log("qualified");
+      // console.log("qualified");
+    },
+    copy_code: function(){
+      // // var text = document.getElementById("text").innerText;
+      // var input = document.getElementById("input");
+      // input.value = text; // 修改文本框的内容
+      // input.select(); // 选中文本
+      // document.execCommand("copy")
     }
   },
 });

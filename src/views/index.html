@@ -16,12 +16,15 @@
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="msapplication-config" content="dist/images/favicon/browserconfig.xml">
     <meta name="theme-color" content="#ffffff">
+    <!-- detect_device -->
+    <script src="dist/JS/detect_device.js"></script>
     <!-- CSS -->
     <link rel="stylesheet" href="dist/CSS/public.css">
     <link rel="stylesheet" href="dist/CSS/course.css">
     <link rel="stylesheet" href="dist/CSS/helper.css">
     <!-- <link rel="stylesheet" href="dist/CSS/course/course.css"> -->
     <link rel="stylesheet" href="dist/CSS/reset.css">
+    <link rel="stylesheet" href="dist/CSS/loading.css">
     <link rel="stylesheet" href="dist/CSS/table.css">
     <link rel="stylesheet" href="dist/CSS/navbar.css">
     <link rel="stylesheet" href="dist/CSS/button.css">
@@ -35,6 +38,7 @@
     <body>
 
         <!-- 視窗 -->
+    	<div class="window_div">  @@include('public/loading.html')  </div>
         <div class="window_div"> @@include('public/windows.html') </div>
         <div class="window_div"> @@include('public/notification.html') </div>
         <div class="window_div">  @@include('public/helper.html')  </div>
@@ -46,9 +50,9 @@
         <div class="basic_div"> @@include('public/button.html')  </div>
 
         <!-- 分頁 -->
-    	<div class="tab_div" name="course">  @@include('course/course_content.html')  </div>
-        <div class="tab_div" name="table">  @@include('table/table.html')  </div>
-        <div class="tab_div" name="register">  @@include('public/register.html')  </div>
+    	<div class="tab_div" name="course" style="display:none">  @@include('course/course_content.html')  </div>
+        <div class="tab_div" name="table" style="display:none">  @@include('table/table.html')  </div>
+        <div class="tab_div" name="register" style="display:none">  @@include('public/register.html')  </div>
     	<!-- <div class="tab_div" name="profile">  @@include('profile/profile.html')  </div> -->
 
     </body>
@@ -56,8 +60,10 @@
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17/vue.js"> </script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js"></script>
 <script src="dist/JS/functions.js"></script>
 <script src="dist/JS/public.js"></script>
+<script src="dist/JS/loading.js"></script>
 <script src="dist/JS/navbar.js"></script>
 <script src="dist/JS/button.js"></script>
 <script src="dist/JS/course.js"></script>

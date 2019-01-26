@@ -87,6 +87,12 @@
             overflow: scroll;
             background: white;
             @include box_shadow_1();
+            &__no_result {
+                display: flex;
+                height: 40px;
+                padding: 0 20px;
+                align-items: center;
+            }
         }
     }
     &__link {

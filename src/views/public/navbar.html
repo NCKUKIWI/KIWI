@@ -6,6 +6,7 @@
           <a class="hub_navbar__logo" href="/"></a>
           <input class="hub_navbar__search" type="text" v-model="search_keyword" placeholder="搜尋「課程名」或「教師名」" ><br>
           <div v-if="search_keyword.replace(' ','') != ''" class="hub_navbar__search__dropdown">
+              <p v-if="!result_cont.length" class="hub_navbar__search__dropdown__no_result text_dark">查無此關鍵字結果。</p>
               <div v-for="item in result_cont" class="list_course_item" @click="openCourse(item.id)">
                 <div class="list_course_item_left">
                   <p class="list_course_item_category text_20 text_white" :class="item.dept_id"> {{ item.category }} </p>
@@ -44,7 +45,7 @@
                 <!-- <a>關於 NCKU HUB</a> -->
                 <a href="https://www.facebook.com/nckuhub" target="_blank">粉絲專頁</a>
                 <a href="https://www.messenger.com/t/nckuhub" target="_blank">回報問題</a>
-                <a>返回舊版</a>
+                <a href="https://old.nckuhub.com">返回舊版</a>
                 <a v-show="user_data.user_id != 0" href='/user/logout'>登出帳戶</a>
             </div>
           </div>

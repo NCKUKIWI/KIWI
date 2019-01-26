@@ -42,6 +42,7 @@ var vue_nav_bar = new Vue({
 		},
 		open_helper: function() {
 			setWindow('helper','open');
+			getUserComment();
 			// document.getElementById("helper_background").style.display = "block";
 		}
 	}

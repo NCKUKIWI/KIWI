@@ -31,8 +31,11 @@
         user_department: '無',
         user_grade: '無',
         user_email: '',
+        messenger_code: "",
         now_wishlist: [],
-        now_table: []
+        now_table: [],
+        now_comment: [],
+        
     }
 
     // 頁面顯示狀態
@@ -42,7 +45,6 @@
         now_tab: '',
         next_tab: '',                           // 若需暫停則暫存
         windows: {
-            // notification: false,
             add_review: false,
             helper: false,
             not_login: false,
@@ -60,8 +62,17 @@
     // 轉換目前頁面
     toTab( pageStatus.initial_tab );
 
+    // 綁定點擊就複製的功能
+    new Clipboard( "#helper_background .text_14" );
+
     // 開啟或關閉視窗
     // setWindow( 'add_review_success', 'open' );
+
+    // // 設定載入畫面
+    // window.onload = function () {
+    //     vue_loading.turnoff();
+    // }
+    
 
 
     axios.get ( '/course/' )
@@ -70,14 +81,14 @@
             console.log ( '課程資料庫: 抓取資料成功！' ) ;
             getUserInfo ();
             // 將 course_db 放入
-          var tmp = [];
+            var tmp = [];
 	        // for (var i = 0; i < 200; i++) {
 	        //     vue_course_item.course_data.push(vue_course_item.course_data_db()[i]);
 	        // }
-          for (var i = 0; i < 200; i++) {
+            for (var i = 0; i < 200; i++) {
 	            tmp.push(vue_course_item.course_data_db()[i]);
 	        }
-          vue_course_item.course_data = tmp.sort(function(a,b){return a-b});
+            vue_course_item.course_data = tmp.sort(function(a,b){return a-b});
 	        for (var i in vue_course_item.course_data_db()) {
 	            if (vue_course_item.course_data_db()[i].comment_num > 0) {
 	                vue_course_item.course_with_comment.push(vue_course_item.course_data_db()[i]);
@@ -175,6 +186,7 @@
 
     function getUserInfo () {
         axios.get('/user/info').then(function(res){
+            vue_loading.turnoff();
             if (res.data.user.department == '無' || res.data.user.grade == '無'){
                 toTab('register');
                 vue_register.old_user_login();
@@ -190,12 +202,15 @@
             userData.user_id = res.data.user.id;
             userData.user_department = res.data.user.department;
             userData.user_grade = res.data.user.grade;
-            userData.user_photo = "http://graph.facebook.com/" + res.data.user.fb_id + "/picture?type=normal";
+            userData.user_photo = "https://graph.facebook.com/" + res.data.user.fb_id + "/picture?type=normal";
             userData.user_email = res.data.user.email;
+            
             toTab( pageStatus.initial_tab );
             setWindow ( 'not_login', 'close' );
             getWishlistTable();
+            getUserComment();
         }).catch(function(err){
+            vue_loading.turnoff();
             pageStatus.loggedIn = false;
             console.log(err.response.data);
         })
@@ -228,16 +243,16 @@
     function wishlistAdd ( target_id ) {
         if ( checkLoggedIn() ) {
             if ( ! userData.now_wishlist.find( function(i){ return i == target_id }) ){
-                if ( ! userData.now_table.find( function(i){ return i == target_id }) ){
+                // if ( ! userData.now_table.find( function(i){ return i == target_id }) ){
                     userData.now_wishlist.push( target_id );
                     vue_wishlist.refresh();
                     vue_courseFilter.refresh();
                     setNotification ( '成功加入願望清單！', 'blue' );
                     return wishlistUpload();
-                }
-                else {
-                    setNotification ( '此課程已在你的課表內！', 'red' );
-                }
+                // }
+                // else {
+                    // setNotification ( '此課程已在你的課表內！', 'red' );
+                // } 
             }
             else {
                 setNotification ( '此課程已在願望清單內！', 'red' );
@@ -286,4 +301,13 @@
         .catch ( function ( error ) {
             console.log (  '更新課表:' + error ) ;
         });
+    }
+
+    // 回傳使用者的心得數
+    function getUserComment(){
+        axios.get('/user/getHelperService').
+        then(function(response){
+            userData.now_comment = response.data.comment;
+            userData.messenger_code = response.data.messenger_code;
+        })
     }

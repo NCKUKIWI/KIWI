@@ -10,9 +10,11 @@ div#courseContent(v-show="isShow" @click.self="hideContent()")
       div.flex-container.icon-span(style="margin-top:30px" @click="openOutline(course_data.系號,course_data.課程碼)")
         div.content-icon.see_clip
         span 檢視課程大綱
-      div.flex-container.icon-span(@click="content_addtowishlist(course_data.id)")
-        div.content-icon.add_wishlist
-        span 加入願望清單
+      div.flex-container.icon-span(@click="content_setWishlist(course_data.id)")
+        div(v-show="!userData.now_wishlist.includes(course_data.id)").content-icon.add_wishlist
+        span(v-show="!userData.now_wishlist.includes(course_data.id)") 加入願望清單
+        div(v-show="userData.now_wishlist.includes(course_data.id)").content-icon.already_add_wishlist
+        span(v-show="userData.now_wishlist.includes(course_data.id)" style="color: #F35A5A") 移除願望清單
       div.courseUnit
         div.block_title
           p.text_14 開課單位
@@ -85,8 +87,9 @@ div.course__whole
       div.block_title
         p.text_18 開課單位
       div.quick_search_area(style="z-index:300")
-        input#dpmtFilter(type="text" v-model="keyword" placeholder="選擇「開課單位」" class="quick_search_input") 
-        div.quick_search_dropdown--course
+        input#dpmtFilter.quick_search_input(type="text" v-model="keyword" placeholder="選擇「開課單位」") 
+        div.quick_search_dropdown--course(v-if="keyword.replace(' ','') != ''")
+          p.quick_search_dropdown--course__no_result.text_dark(v-if="!search_result.length") 查無此關鍵字結果。
           div(v-for="(result, index) in search_result").search_result--course
             div(@click="result_click(index)")
               p {{result.prefix}} {{result.name}}
@@ -103,6 +106,7 @@ div.course__whole
       div.block_title
         p.text_18 願望清單（{{ wishlist_cont.length }}）
       div.wishlist_cont
+        p.wishlist_cont__no_result.text_dark(v-if="!wishlist_cont.length") 尚未新增任何課程進入願望清單。
         div.list_course_item(v-for="item in wishlist_cont" style="justify-content:none")
           div.list_course_item_left
             p.list_course_item_category.text_20.text_white.clickable(:class="item.dept_id" @click="deleteItem(item.id)") {{ item.category }}
@@ -126,9 +130,9 @@ div.course__whole
             div.list_course_item_right--courseList
               img(src="./dist/images/course/comment_num.svg")
               p.text_14.text_dark(style="margin-right:15px") {{course.comment_num}}
-            div.large_right--circle
-              div.circle--img(@click.stop="setCourse(index)" v-show="!userData.now_wishlist.includes(course.id)")
+            div.large_right--circle(@click.stop="setCourse(index)" )
+              div.circle--img(v-show="!userData.now_wishlist.includes(course.id)")
                 img(src="./dist/images/course/heart.svg")
-              div.circle--img(@click.stop="setCourse(index)" v-show="userData.now_wishlist.includes(course.id)")
+              div.circle--img(v-show="userData.now_wishlist.includes(course.id)")
                 img(src="./dist/images/course/heart_red.svg")
             

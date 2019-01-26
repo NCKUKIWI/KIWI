@@ -283,7 +283,7 @@
     &_dropdown {
         position: absolute;
         z-index: 100;
-        top: calc( 85px + 10vh + 3vh + 55px );
+        top:calc( 9vh - 30px + 85px + 2.5vh + 94px );
         height: auto;
         max-height: 210px;
         // width: 100%;
@@ -294,6 +294,12 @@
         overflow: scroll;
         // border: $light_2 1px solid;
         @include box_shadow_1();
+        &__no_result {
+            display: flex;
+            height: 40px;
+            padding: 0 20px;
+            align-items: center;
+        }
     }
 }
 
@@ -317,6 +323,11 @@
         border: $light_2 1px solid;
         @include box_shadow_1();
         @include box_shadow_1_hover();
+        &__no_result {
+            display: flex;
+            padding: 22px;
+            align-items: center;
+        }
         &.locked {
             opacity: 0.6;
             overflow: hidden !important;
@@ -352,6 +363,33 @@
     border: $light_2 1px solid;
     @include box_shadow_2();
     @include box_shadow_1_hover();
+    &__empty_hint {
+        position: absolute;
+        z-index: 100;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        width: 100%;
+        &__text {
+            display: flex;
+            cursor: pointer;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-color: white;
+            border: $light_2 5px solid;
+            margin-bottom: 20px;
+            transition: .3s $material_trans;
+            &:hover {
+                color: $deep_blue;
+                border-color: $deep_blue;
+            }
+            &:active {
+                filter: brightness(99%);
+            }
+        }
+    }
     &.locked {
         cursor: default;
         &:hover {

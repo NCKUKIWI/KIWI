@@ -71,6 +71,8 @@
         data: {
             wishlist_cont: [],
             page_status: pageStatus,
+            filter_status: false,
+            filter_item_count: 0,
         },
         methods: {
             refresh: function () { 
@@ -91,12 +93,14 @@
             filterItemTIme: function ( filter_day, filter_time ) {
                 // 篩選出不符合條件的 item 設為不可見
                 filter_time = textTransTime( filter_time );
+                this.filter_item_count = 0 ;
                 for ( var i = 0 ; i < this.wishlist_cont.length ; i ++ ) {
                     var wishlist_item_day = getTimeObject(this.wishlist_cont[i])[0].day ;
                     var wishlist_item_start = getTimeObject(this.wishlist_cont[i])[0].start ;
                     wishlist_item_start = textTransTime( wishlist_item_start );
                     var wishlist_item_end = parseInt(wishlist_item_start) + getTimeObject(this.wishlist_cont[i])[0].hrs - 1 ;
                     if ( filter_day == wishlist_item_day && filter_time >= wishlist_item_start && filter_time <= wishlist_item_end ) {
+                        this.filter_item_count ++ ;
                     }
                     else {
                         this.wishlist_cont[i].isSeen = false ;
@@ -183,12 +187,15 @@
             filterMode: function ( command, filter_day, filter_time ) {
                 if ( command == 'on' ) {
                     this.keyword = '正在篩選：[' + textTransDay(filter_day) + ']' + filter_time ;
-                    this.filter_status = true ;
+                    vue_quick_search.filter_status = true ;
+                    vue_wishlist.filter_status = true ;
                     this.title_text = '篩選時段';
                 }
                 else if ( command == 'off' ) {
                     this.keyword = '';
-                    this.filter_status = false ;
+                    vue_quick_search.filter_status = false ;
+                    vue_wishlist.filter_status = false ;
+                    vue_wishlist.filter_item_count = 0 ;
                     this.title_text = '快速添加';
                 }
             },
@@ -467,6 +474,9 @@
                 // setNotification ( '成功移出課表！' );
                 wishlistAdd( id ); 
                 vue_classtable.tableTempRemove( id );
-            }
+            },
+            switchToEdit: function () {
+                vue_fixed_button.switchLockStatus();
+            },
         }
     }) 

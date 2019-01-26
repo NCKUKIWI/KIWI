@@ -33,13 +33,15 @@
 				}
 			},
             switchLockStatus: function () {
-                pageStatus.table_locked = ! pageStatus.table_locked ;
+				pageStatus.table_locked = ! pageStatus.table_locked ;
+				// 課表已鎖定狀態
                 if ( pageStatus.table_locked == true ) {
-					// 鎖定狀態，擅自關閉不會跳警告
-                    window.onbeforeunload = null;
-                }
+					window.onbeforeunload = null;
+					vue_quick_search.clearFilter();
+					vue_classtable.refresh();
+				}
+				// 課表未鎖定狀態
                 else {
-					// 編輯狀態，擅自關閉會跳警告
                     window.onbeforeunload = function() {
                         return '課表尚未儲存。您要放棄目前變更並且離開此頁嗎？';
 					}

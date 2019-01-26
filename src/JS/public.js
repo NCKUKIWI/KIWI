@@ -201,7 +201,7 @@
             userData.user_id = res.data.user.id;
             userData.user_department = res.data.user.department;
             userData.user_grade = res.data.user.grade;
-            userData.user_photo = "http://graph.facebook.com/" + res.data.user.fb_id + "/picture?type=normal";
+            userData.user_photo = "https://graph.facebook.com/" + res.data.user.fb_id + "/picture?type=normal";
             userData.user_email = res.data.user.email;
             
             toTab( pageStatus.initial_tab );

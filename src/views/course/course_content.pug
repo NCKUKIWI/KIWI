@@ -1,86 +1,3 @@
-div#courseContent(v-show="isShow" @click.self="hideContent()")
-  div.content_nextpage(style="display:none;")
-    img(style="cursor: pointer;" src="./dist/images/course/left-btn.svg")
-    img(style="cursor: pointer;" src="./dist/images/course/right-btn.svg")
-  div.courseContentBody
-    div.courseContentBody__left
-      span.courseSerial(v-if="course_data.選課序號!=''") {{course_data.選課序號}}
-      span.courseSerial(v-else) 未定
-      h2 {{course_data.課程名稱}}
-      div.flex-container.icon-span(style="margin-top:30px" @click="openOutline(course_data.系號,course_data.課程碼)")
-        div.content-icon.see_clip
-        span 檢視課程大綱
-      div.flex-container.icon-span(@click="content_setWishlist(course_data.id)")
-        div(v-show="!userData.now_wishlist.includes(course_data.id)").content-icon.add_wishlist
-        span(v-show="!userData.now_wishlist.includes(course_data.id)") 加入願望清單
-        div(v-show="userData.now_wishlist.includes(course_data.id)").content-icon.already_add_wishlist
-        span(v-show="userData.now_wishlist.includes(course_data.id)" style="color: #F35A5A") 移除願望清單
-      div.courseUnit
-        div.block_title
-          p.text_14 開課單位
-        p.text_16 {{course_data.系所名稱}}
-      div.courseUnit
-        div.block_title
-          p.text_14 開課老師
-        p.text_16 {{course_data.老師}}
-      div.courseUnit
-        div.block_title
-          p.text_14 開課時段
-        p.text_16 {{course_data.時間}}
-      //div.courseUnit
-        div.block_title
-          p.text_14 教學方法
-        p.text_16 course_data.lecture
-      //div.courseUnit
-        div.block_title
-          p.text_14 評量方法
-        p.text_16 course_data.score
-      br
-    div.courseContentBody__right
-      div.courseContentBody__right__score
-        div.block_title
-          p(v-if="score_data.rates != undefined") 課程評分 ({{score_data.rates.length}})
-          p(v-if="score_data.rates == undefined") 課程評分 (0)
-        div.score-btn--all.score-btn--all--default(v-if="score_data.rates == 0 || score_data.rates == undefined")
-          div.container-rectangle--md
-            p 成為第一個評分者，幫大家找到想上的課！
-          div.btn-rectangle--sm(@click="open_addreview()")
-            span 評分
-        div.flex-container.score-btn--all(v-else)
-          div.score-btn
-            span 收穫 
-            div.arrow-left(@click="minusRate('recom_rate')")
-            span.score_span {{score_data.got}}
-            input#recom_rate.score_input(type="number" value="5" min="1" max="10")
-            div.arrow-right(@click="addRate('recom_rate')")
-          div.score-btn
-            span 甜度
-            div.arrow-left(@click="minusRate('sweet_rate')")
-            span.score_span {{score_data.sweet}}
-            input#sweet_rate.score_input(type="number" value="5" min="1" max="10")
-            div.arrow-right(@click="addRate('sweet_rate')")
-          div.score-btn
-            span 涼度 
-            div.arrow-left(@click="minusRate('hard_rate')")
-            span.score_span {{score_data.cold}}
-            input#hard_rate.score_input(type="number" value="5" min="1" max="10")
-            div.arrow-right(@click="addRate('hard_rate')")
-          //button.score-btn.score-btn__submit#score_input(type="submit" @click="submit_score()") 評分
-      div.courseContentBody__right__comment
-        div.block_title
-          p 課程心得 ({{comment_data.length}})
-        div.courseFeedback
-          div(v-if="comment_data.length == 0").courseFeedback__single.courseFeedback__single--default
-            div.courseFeedback__msg
-              p 本課程暫時沒有心得，歡迎你成為第一個提供者：）
-          div#commentBody
-            div.courseFeedback__single(v-for="comment in comment_data")
-              div.courseFeedback__msg
-                p(v-html='comment.comment') {{comment.comment}}
-            //  div.flex-container.courseFeedback__func
-                div.arrow-up
-                input(type="number" min="0" value="0").score_input
-                div.arrow-down
 div.course__whole         
   div.courseList__sidenav#courseFilter
     div.courseList__sidenav__deptChoose
@@ -101,7 +18,6 @@ div.course__whole
           input#commentCheck(type="checkbox" @click="comment_filter()")
           span.fucking_checkmark
           span 僅顯示有心得之課程
-
     div.wishlist.courseList__sidenav__wishList.in_course
       div.block_title
         p.text_18 願望清單（{{ wishlist_cont.length }}）

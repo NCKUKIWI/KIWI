@@ -39,16 +39,21 @@
       //   });
       // },
       openCoursePage: function(id) {
+        vue_courseContent.course_data = vue_course_item.course_data[index];
         console.log("open the page: " + id);
         var course_url = "/course/" + id;
-
+        for(var i in this.course_data_db){
+          if(this.course_data_db[i].id==id){
+            console.log(this.course_data_db[i]);
+          }
+        }
 
         $.ajax({
           type: "GET",
           url: course_url,
           success: function(response) {
             // vue_courseContent.isShow = true;
-            console.log(document.getElementById("commentBody").scrollTop);
+            // console.log(document.getElementById("commentBody").scrollTop);
             vue_courseContent.score_data = response;
             vue_courseContent.comment_data = response.comment;
             vue_courseContent.course_data = response.courseInfo;
@@ -108,7 +113,7 @@
   var vue_courseContent = new Vue ({
     el: '#courseContent',
     data: {
-      isShow: false,
+      // isShow: false,
       course_data: [],
       score_data: [],
       comment_data: [],
@@ -116,7 +121,8 @@
     },
     methods: {
       hideContent: function() {
-        vue_courseContent.isShow = false;
+        console.log(page_status.windows.course_page);
+        setWindow('course_page', 'close');
         vue_courseContent.course_data = [];
         vue_courseContent.score_data = [];
         vue_courseContent.comment_data = [];
@@ -164,8 +170,6 @@
         vue_courseFilter.wishList = userData.now_wishlist;
       },
       openOutline: function(dept,dept_serial) {
-        // let dept = 'H3';
-        // let dept_serial = 'H345100';
         let url = 'http://course-query.acad.ncku.edu.tw/crm/course_map/course.php?dept=' + dept + '&cono=' + dept_serial;
         window.open(url, '_blank');
       },

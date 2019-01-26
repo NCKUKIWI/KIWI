@@ -35,7 +35,7 @@
         now_wishlist: [],
         now_table: [],
         now_comment: [],
-        
+
     }
 
     // 頁面顯示狀態
@@ -67,12 +67,13 @@
 
     // 開啟或關閉視窗
     // setWindow( 'add_review_success', 'open' );
+    setWindow('course_page', 'close');
 
     // // 設定載入畫面
     // window.onload = function () {
     //     vue_loading.turnoff();
     // }
-    
+
 
 
     axios.get ( '/course/' )
@@ -204,7 +205,7 @@
             userData.user_grade = res.data.user.grade;
             userData.user_photo = "https://graph.facebook.com/" + res.data.user.fb_id + "/picture?type=normal";
             userData.user_email = res.data.user.email;
-            
+
             toTab( pageStatus.initial_tab );
             setWindow ( 'not_login', 'close' );
             getWishlistTable();
@@ -252,7 +253,7 @@
                 // }
                 // else {
                     // setNotification ( '此課程已在你的課表內！', 'red' );
-                // } 
+                // }
             }
             else {
                 setNotification ( '此課程已在願望清單內！', 'red' );

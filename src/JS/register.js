@@ -61,6 +61,9 @@ var vue_register = new Vue ({
       document.getElementById("enter_email").disabled = false;
       document.getElementById("register__block__par1").innerHTML = "已使用過NCKU HUB？";
       document.getElementById("register__block__par2").innerHTML = "請跳至step2完成基本資料的填寫";
+    },
+    back_course_page: function(){
+      toTab( 'course' );
     }
   },
   watch: {
@@ -69,7 +72,7 @@ var vue_register = new Vue ({
 });
 
 document.addEventListener("input", function() {
-  if(document.getElementById("enter_dept").value.length==0 || document.getElementById("enter_grade").value==0
+  if(document.getElementById("enter_dept").value.length==0 || document.getElementById("enter_grade").value==''
 || document.getElementById("enter_email").value.length==0){
     vue_register.registerBtn.finish_register = false;
   } else {

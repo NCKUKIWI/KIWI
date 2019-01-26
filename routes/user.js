@@ -39,6 +39,7 @@ router.get("/fbcheck", middleware.checkLogin(1), function (req, res) {
                         res.redirect('/');
                     } else {
                     	var check_key = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+                        var code = 'nckuhub' + Math.random().toString(36).substring(2, 15);
                         db.Insert('user', {
                             'name': fb.name,
                             'fb_id': fb.id,
@@ -49,15 +50,21 @@ router.get("/fbcheck", middleware.checkLogin(1), function (req, res) {
                             'email': "new"
                         }, function (err, result) {
                             if (err) console.log(err);
-                            res.cookie("isLogin", 1, {
-                                maxAge: 1000 * 60 * 60 * 12 * 2 * 30
-                            });
-                            res.cookie("id", check_key, {
-                                maxAge: 1000 * 60 * 60 * 12 * 2 * 30
-                            });
-                            console.log("======create user======");
-                            console.log(result);
-                            res.redirect('/');
+                            db.Insert('messenger_code', {
+                                'code': code,
+                                'user_id': result.insertId
+                            }, function(err, result){
+                                if (err) console.log(err);
+                                res.cookie("isLogin", 1, {
+                                    maxAge: 1000 * 60 * 60 * 12 * 2 * 30
+                                });
+                                res.cookie("id", check_key, {
+                                    maxAge: 1000 * 60 * 60 * 12 * 2 * 30
+                                });
+                                console.log("======create user======");
+                                console.log(result);
+                                res.redirect('/');
+                            })
                         })
                     }
                 });
@@ -199,21 +206,5 @@ router.get('/getHelperService/', function (req, res) {
         }
     })
 });
-
-// router.post('/setHelperService/', function (req, res) {
-//     uid = req.user.id
-//     db.Query('SELECT COUNT(id) as post_num FROM post WHERE user_id =' + uid, function(query){
-//         if(query[0].post_num >= 3){
-//             db.Query('update messenger_code set user_id = ' + uid + ' where user_id = 0 limit 1', function(){
-//                 db.Query('select * from messenger_code where user_id =' + uid, function(messenger_code){
-//                     res.send({'messenger_code': messenger_code[0].code});
-//                 })
-//             })
-//         }
-//         else{
-//             res.send({'post_num': query[0].post_num})
-//         }
-//     })
-// });
 
 module.exports = router;

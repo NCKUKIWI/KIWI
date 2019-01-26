@@ -58,7 +58,23 @@ input[type=checkbox]:focus
   display: flex
   align-items: center
   cursor: pointer
+  transition: .2s cubic-bezier(0.0, 0.0, 0.2, 1), padding .3s cubic-bezier(0.0, 0.0, 0.2, 1)
+  &:hover 
+    box-shadow: 0 0 28px 0 rgba(0,0,0,0.10)
+  &--btn:hover
+    padding: 14px 50px 14px 24px
+    & p
+      color: #F35A5A
+      font-weight: bold
+      padding-left: 12px
+  &--btn:active
+    filter: brightness(99%)
+
+  img 
+    width: 17px
+    height: auto
   p
+    transition: .2s cubic-bezier(0.0, 0.0, 0.2, 1)
     padding-left: 14px
   input
     position: absolute
@@ -150,9 +166,20 @@ h4
   font-weight: 500
 
 .quick_search_dropdown--course
+  z-index: 100
+  height: auto
   max-height: 20vh
+  border: #EEEEEE 1px solid
+  box-sizing: border-box
+  background: white
   overflow-y: scroll
-  box-shadow: 0 0 14px 0 rgba(0,0,0,0.10)
+  box-shadow: 0 0 14px 0 rgba(0,0,0,0.06)
+  margin-top: 1px
+  &__no_result 
+    display: flex
+    height: 40px
+    padding: 0 20px
+    align-items: center
 
 .search_result--course
   padding: 16px 15px 16px 50px
@@ -278,6 +305,9 @@ section
       box-shadow: 0 0 14px 0 rgba(0,0,0,0.10)
       border: #eee 1px solid
       background: white
+      transition: box-shadow .2s cubic-bezier(0.0, 0.0, 0.2, 1)
+      &:hover 
+        box-shadow: 0 0 28px 0 rgba(0,0,0,0.10)
       &__item
         width: 100%
         padding: 10px 20px
@@ -316,8 +346,15 @@ section
   justify-content: space-between!important
   &--circle
     display: inline-flex
-    padding-left: 20px
     border-left: 1px solid #eeeeee
+    padding: 0 20px
+    margin-right: -20px
+    &:hover 
+      .circle--img
+        filter: brightness(90%)
+    &:active
+      .circle--img
+        filter: brightness(85%)
 
 //course item in wishlist
 .circle
@@ -332,11 +369,11 @@ section
   height: 40px
   width: 40px
   z-index: 20
-  transition: .3s cubic-bezier(0.0, 0.0, 0.2, 1)
+  transition: .2s cubic-bezier(0.0, 0.0, 0.2, 1)
   &:hover
-    filter: brightness(95%)
-  &:active
     filter: brightness(90%)
+  &:active
+    filter: brightness(85%)
   img
     height: 40px
     width: 40px
@@ -390,6 +427,7 @@ section
   margin: 0 auto
   background-color: rgba(255,255,255,1)
   width: 70%
+  min-width: 800px
   z-index: 300
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5)
   transition: -webkit-box-shadow .25s
@@ -473,11 +511,16 @@ section
   background-color: #fff
   border-radius: 15px
   color: $colorBlack66
-  width: 60%
+  width: 150px
+  cursor: pointer
   margin-bottom: 10px
   font-size: 10px
   justify-content: center
   align-items: center
+  &:hover 
+    background-color: #FAFAFA
+  &:active
+    filter: brightness(98%)
 
 .content-icon
   background-repeat: no-repeat
@@ -490,10 +533,6 @@ section
   background-image: url('../images/course/add_wish.svg')
 .see_clip
   background-image: url('../images/course/clipboard.svg')
-
-.icon-span:hover
-  // box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.2)
-  background-color: $colorBlack5
 
 
 .material-icons

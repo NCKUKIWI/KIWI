@@ -10,7 +10,8 @@
           <div class="content-icon see_clip"></div><span>檢視課程大綱</span>
         </div>
         <div class="flex-container icon-span" @click="content_setWishlist(course_data.id)">
-          <div class="content-icon add_wishlist"></div><span>加入願望清單</span>
+          <div class="content-icon add_wishlist" v-show="!userData.now_wishlist.includes(course_data.id)"></div><span v-show="!userData.now_wishlist.includes(course_data.id)">加入願望清單</span>
+          <div class="content-icon already_add_wishlist" v-show="userData.now_wishlist.includes(course_data.id)"></div><span v-show="userData.now_wishlist.includes(course_data.id)" style="color: #F35A5A">移除願望清單</span>
         </div>
         <div class="courseUnit">
           <div class="block_title">

@@ -42,11 +42,13 @@
         console.log("open the page: " + id);
         var course_url = "/course/" + id;
 
+
         $.ajax({
           type: "GET",
           url: course_url,
           success: function(response) {
-            vue_courseContent.isShow = true;
+            // vue_courseContent.isShow = true;
+            console.log(document.getElementById("commentBody").scrollTop);
             vue_courseContent.score_data = response;
             vue_courseContent.comment_data = response.comment;
             vue_courseContent.course_data = response.courseInfo;
@@ -99,7 +101,7 @@
       //   this.handleScroll();
       // });
 
-    }
+    },
   });
 
 
@@ -157,6 +159,9 @@
         // let dept_serial = 'H345100';
         let url = 'http://course-query.acad.ncku.edu.tw/crm/course_map/course.php?dept=' + dept + '&cono=' + dept_serial;
         window.open(url, '_blank');
+      },
+      open_addreview: function() {
+        setWindow('add_review', 'open');
       }
     }
   });

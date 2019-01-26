@@ -42,7 +42,7 @@ div#courseContent(v-show="isShow" @click.self="hideContent()")
         div.score-btn--all.score-btn--all--default(v-if="score_data.rates == 0 || score_data.rates == undefined")
           div.container-rectangle--md
             p 成為第一個評分者，幫大家找到想上的課！
-          div.btn-rectangle--sm
+          div.btn-rectangle--sm(@click="open_addreview()")
             span 評分
         div.flex-container.score-btn--all(v-else)
           div.score-btn
@@ -71,13 +71,14 @@ div#courseContent(v-show="isShow" @click.self="hideContent()")
           div(v-if="comment_data.length == 0").courseFeedback__single.courseFeedback__single--default
             div.courseFeedback__msg
               p 本課程暫時沒有心得，歡迎你成為第一個提供者：）
-          div.courseFeedback__single(v-for="comment in comment_data")
-            div.courseFeedback__msg
-              p(v-html='comment.comment') {{comment.comment}}
-          //  div.flex-container.courseFeedback__func
-              div.arrow-up
-              input(type="number" min="0" value="0").score_input
-              div.arrow-down
+          div#commentBody
+            div.courseFeedback__single(v-for="comment in comment_data")
+              div.courseFeedback__msg
+                p(v-html='comment.comment') {{comment.comment}}
+            //  div.flex-container.courseFeedback__func
+                div.arrow-up
+                input(type="number" min="0" value="0").score_input
+                div.arrow-down
 div.course__whole         
   div.courseList__sidenav#courseFilter
     div.courseList__sidenav__deptChoose

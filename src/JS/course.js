@@ -110,6 +110,7 @@
       course_data: [],
       score_data: [],
       comment_data: [],
+      userData: userData
     },
     methods: {
       hideContent: function() {
@@ -149,8 +150,16 @@
           // document.getElementById("score_input").innerHTML = "寫心得";
 
       },
-      content_addtowishlist: function(id) {
-        wishlistAdd(id);
+      content_setWishlist: function(id) {
+        var chooseCourse_id = id;
+        if (userData.now_wishlist.includes(chooseCourse_id)){
+          wishlistRemove(chooseCourse_id);
+        }
+        else{
+          wishlistAdd(chooseCourse_id);
+        }
+
+        vue_courseFilter.wishList = userData.now_wishlist;
       },
       openOutline: function(dept,dept_serial) {
         // let dept = 'H3';

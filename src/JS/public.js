@@ -185,7 +185,7 @@
 
     function getUserInfo () {
         axios.get('/user/info').then(function(res){
-            vue_loading.turnoff();
+            
             if (res.data.user.department == '無' || res.data.user.grade == '無'){
                 toTab('register');
                 vue_register.old_user_login();
@@ -203,6 +203,8 @@
             userData.user_grade = res.data.user.grade;
             userData.user_photo = "http://graph.facebook.com/" + res.data.user.fb_id + "/picture?type=normal";
             userData.user_email = res.data.user.email;
+            vue_loading.turnoff();
+
             toTab( pageStatus.initial_tab );
             setWindow ( 'not_login', 'close' );
             getWishlistTable();

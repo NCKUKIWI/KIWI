@@ -10,9 +10,11 @@ div#courseContent(v-show="isShow" @click.self="hideContent()")
       div.flex-container.icon-span(style="margin-top:30px" @click="openOutline(course_data.系號,course_data.課程碼)")
         div.content-icon.see_clip
         span 檢視課程大綱
-      div.flex-container.icon-span(@click="content_addtowishlist(course_data.id)")
-        div.content-icon.add_wishlist
-        span 加入願望清單
+      div.flex-container.icon-span(@click="content_setWishlist(course_data.id)")
+        div(v-show="!userData.now_wishlist.includes(course_data.id)").content-icon.add_wishlist
+        span(v-show="!userData.now_wishlist.includes(course_data.id)") 加入願望清單
+        div(v-show="userData.now_wishlist.includes(course_data.id)").content-icon.already_add_wishlist
+        span(v-show="userData.now_wishlist.includes(course_data.id)" style="color: #F35A5A") 移除願望清單
       div.courseUnit
         div.block_title
           p.text_14 開課單位

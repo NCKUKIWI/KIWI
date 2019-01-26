@@ -110,7 +110,8 @@
       course_data: [],
       score_data: [],
       comment_data: [],
-      userData: userData
+      userData: userData,
+      pageStatus: pageStatus
     },
     methods: {
       hideContent: function() {
@@ -166,6 +167,11 @@
         // let dept_serial = 'H345100';
         let url = 'http://course-query.acad.ncku.edu.tw/crm/course_map/course.php?dept=' + dept + '&cono=' + dept_serial;
         window.open(url, '_blank');
+      },
+      openReviewWindow: function(){
+        console.log('ef');
+        vue_courseContent.isShow = false;
+        vue_fixed_button.majorBtnClicked();
       }
     }
   });

@@ -44,7 +44,7 @@ div#courseContent(v-show="isShow" @click.self="hideContent()")
         div.score-btn--all.score-btn--all--default(v-if="score_data.rates == 0 || score_data.rates == undefined")
           div.container-rectangle--md
             p 成為第一個評分者，幫大家找到想上的課！
-          div.btn-rectangle--sm
+          div.btn-rectangle--sm(@click="openReviewWindow()")
             span 評分
         div.flex-container.score-btn--all(v-else)
           div.score-btn

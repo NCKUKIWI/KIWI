@@ -36,7 +36,7 @@ div.course__whole
   div.flex-container.courseList__sideList
     div.card.courseList__sideList__itemBox#courseList
       div#course_item(v-on:scroll="handleScroll")
-        div.list_course_item(@click="openCoursePage(course.id)" v-for="(course, index) in course_data")
+        div.list_course_item(@click="openCoursePage(course.id)" v-for="course in course_data")
           div.list_course_item_left
             p.list_course_item_category.text_white.text_20(:class="course.系號") {{course_circle(course.系號,course.系所名稱)}}
           div.list_course_item_mid

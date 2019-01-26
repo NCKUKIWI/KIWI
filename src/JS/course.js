@@ -39,14 +39,9 @@
       //   });
       // },
       openCoursePage: function(id) {
-        vue_courseContent.course_data = vue_course_item.course_data[index];
         console.log("open the page: " + id);
+        setWindow('course_page','open');
         var course_url = "/course/" + id;
-        for(var i in this.course_data_db){
-          if(this.course_data_db[i].id==id){
-            console.log(this.course_data_db[i]);
-          }
-        }
 
         $.ajax({
           type: "GET",
@@ -114,15 +109,14 @@
     el: '#courseContent',
     data: {
       // isShow: false,
+      page_status: pageStatus,
       course_data: [],
       score_data: [],
       comment_data: [],
       userData: userData,
-      pageStatus: pageStatus
     },
     methods: {
       hideContent: function() {
-        console.log(page_status.windows.course_page);
         setWindow('course_page', 'close');
         vue_courseContent.course_data = [];
         vue_courseContent.score_data = [];

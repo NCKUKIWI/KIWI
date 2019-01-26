@@ -64,7 +64,7 @@
             <div class="list_course_item_right--courseList"><img src="./dist/images/course/comment_num.svg"/>
               <p class="text_14 text_dark" style="margin-right:15px">{{course.comment_num}}</p>
             </div>
-            <div class="large_right--circle" @click.stop="setCourse(index)">
+            <div class="large_right--circle" @click.stop="setCourse(course.id)">
               <div class="circle--img" v-show="!userData.now_wishlist.includes(course.id)"><img src="./dist/images/course/heart.svg"/></div>
               <div class="circle--img" v-show="userData.now_wishlist.includes(course.id)"><img src="./dist/images/course/heart_red.svg"/></div>
             </div>

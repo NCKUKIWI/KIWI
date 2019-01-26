@@ -46,7 +46,7 @@ div.course__whole
             div.list_course_item_right--courseList
               img(src="./dist/images/course/comment_num.svg")
               p.text_14.text_dark(style="margin-right:15px") {{course.comment_num}}
-            div.large_right--circle(@click.stop="setCourse(index)" )
+            div.large_right--circle(@click.stop="setCourse(course.id)" )
               div.circle--img(v-show="!userData.now_wishlist.includes(course.id)")
                 img(src="./dist/images/course/heart.svg")
               div.circle--img(v-show="userData.now_wishlist.includes(course.id)")

@@ -67,9 +67,8 @@
         // }
         // console.log(vue_courseContent.course_data);
       },
-      setCourse: function(index){
-        var chooseCourse_id = vue_course_item.course_data[index].id;
-        var chooseCourse = vue_course_item.course_data[index];
+      setCourse: function(id){
+        var chooseCourse_id = id; 
         if (userData.now_wishlist.includes(chooseCourse_id)){
           wishlistRemove(chooseCourse_id);
         }

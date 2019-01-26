@@ -7,6 +7,7 @@ var axios = require('axios')
 var bot = require('./bot');
 var cache = require('../helper/cache');
 var courseCacheKey = cache.courseCacheKey;
+var middleware = require('../middleware');
 
 /* index  */
 router.get('/', function (req, res) {
@@ -343,7 +344,7 @@ router.post('/report/:id', function (req, res) {
 });
 
 /*report post */
-router.post('/setWish/:userID', function (req, res) {
+router.post('/setWish/:userID',middleware.checkLogin(), function (req, res) {
     var userID = parseInt(req.params.userID);
     console.log('\n' + 'POST /post/setWish/' + userID);
     let wishList = [];
@@ -375,7 +376,7 @@ router.post('/setWish/:userID', function (req, res) {
     })
 });
 
-router.post('/setTable/:userID', function (req, res) {
+router.post('/setTable/:userID', middleware.checkLogin(), function (req, res) {
     var userID = parseInt(req.params.userID);
     console.log('\n' + 'POST /post/setTable/' + userID);
     let tableList = [];

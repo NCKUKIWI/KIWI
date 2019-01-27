@@ -166,7 +166,7 @@ router.post('/create', function (req, res) {
                 teacher: req.body.teacher.replace(/\'|\#|\/\*/g, ""),
                 semester: req.body.semester.replace(/\'|\#|\/\*/g, ""),
                 catalog: req.body.catalog.replace(/\'|\#|\/\*/g, ""),
-                comment: req.body.comment.replace(/\'|\#|\/\*/g, ""),
+                comment: req.body.comment.replace(/\'|\#|\/\*|\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F]/g, ""),
                 // report_hw: req.body.report_hw.replace(/\'|\#|\/\*/g, ""),
                 // course_style: req.body.course_style.replace(/\'|\#|\/\*/g, ""),
                 user_id: userid

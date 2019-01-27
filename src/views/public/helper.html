@@ -8,7 +8,7 @@
     <div class="window__self__title text_26">免費使用</div>
     <div class="window__self__detail text_16">
       <p>提供 3 筆課程心得，讓成大更好，兌換一學期使用資格！</p>
-      <p class="color_grey9b">您可使用的的心得積點：{{userData.now_comment.length}} 點，尚須 {{3 - userData.now_comment.length}} 筆心得。</p>
+      <p class="color_grey9b">您可使用的的心得積點：{{userData.now_comment.length}} 點，尚須 {{(3 - userData.now_comment.length) > 0 : 3 - userData.now_comment.length > 0 ? 0}} 筆心得。</p>
     </div>
     <div v-if="helper_qualified" class="window__self__detail random_text">
       <p class="text_14" style="cursor: pointer;" v-bind:data-clipboard-text="userData.messenger_code">點擊複製開通代碼：{{userData.messenger_code}}</p>

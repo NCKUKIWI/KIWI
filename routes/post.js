@@ -143,9 +143,12 @@ router.post('/create', function (req, res) {
         req.checkBody('course_name', '課程名稱不可為空').notEmpty();
         req.checkBody('comment', '修課心得不可為空').notEmpty();
         var errors = req.validationErrors();
+        console.log('comment length: '+req.body.comment.length)
         if (errors) {
             console.log("Error " + errors);
             res.send(errors);
+        } else if(req.body.comment.length < 50){ 
+            res.send('cmt<50')
         } else {
             for (var aContent in req.body) {
                 sanitizeHtml(req.body[aContent], {
@@ -157,7 +160,6 @@ router.post('/create', function (req, res) {
                     allowProtocolRelative: true
                 });
             }
-            console.log(req.body.course_name);
             var post = {
                 course_name: req.body.course_name.replace(/\'|\#|\/\*/g, ""),
                 teacher: req.body.teacher.replace(/\'|\#|\/\*/g, ""),

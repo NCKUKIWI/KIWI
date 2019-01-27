@@ -194,7 +194,6 @@ router.post('/create', function (req, res) {
                                 });
                             }
                             ////////////////
-                            res.send("success");
                             db.query_post2(DbSearch[0].id, function (courseInfo, comment) {
                                 courseInfo = courseInfo[0];
                                 courseInfo.comment = 0;
@@ -213,36 +212,37 @@ router.post('/create', function (req, res) {
                                         courseInfo[j]++;
                                     }
                                 }
-                            db.FindbyColumn('course_rate', ["*"], { course_name: req.body.course_name, teacher: req.body.teacher }, function (rates) {
-                                var sweet = 0;
-                                var cold = 0;
-                                var got = 0;
-                                var rate_count = 0;
-                                if (rates.length > 0) {
-                                    for (var i in rates) {
-                                        sweet += rates[i].sweet;
-                                        cold += rates[i].cold;
-                                        got += rates[i].got;
+                                db.FindbyColumn('course_rate', ["*"], { course_name: req.body.course_name, teacher: req.body.teacher }, function (rates) {
+                                    var sweet = 0;
+                                    var cold = 0;
+                                    var got = 0;
+                                    var rate_count = 0;
+                                    if (rates.length > 0) {
+                                        for (var i in rates) {
+                                            sweet += rates[i].sweet;
+                                            cold += rates[i].cold;
+                                            got += rates[i].got;
+                                        }
+                                        sweet /= rates.length;
+                                        cold /= rates.length;
+                                        got /= rates.length;
+                                        rate_count = rates.length;
                                     }
-                                    sweet /= rates.length;
-                                    cold /= rates.length;
-                                    got /= rates.length;
-                                    rate_count = rates.length;
-                                }
-                                var data = {
-                                    'got': got,
-                                    'cold': cold,
-                                    'sweet': sweet,
-                                    'rate_count': rate_count,
-                                    'courseInfo': courseInfo,
-                                    'comment': comment,
-                                    'rates': rates
-                                };
-                                for(var d in DbSearch){
-                                    redis.set(courseCacheKey(DbSearch[d].id), JSON.stringify(data));
-                                }
-                            })
-                        });
+                                    var data = {
+                                        'got': got,
+                                        'cold': cold,
+                                        'sweet': sweet,
+                                        'rate_count': rate_count,
+                                        'courseInfo': courseInfo,
+                                        'comment': comment,
+                                        'rates': rates
+                                    };
+                                    for(var d in DbSearch){
+                                        redis.set(courseCacheKey(DbSearch[d].id), JSON.stringify(data));
+                                    }
+                                    res.send("success");
+                                })
+                            });
                         }else{ // 沒找到這門課, 不做任何事
                             res.send("success");
                         }

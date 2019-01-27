@@ -8,6 +8,7 @@ var vue_add_review = new Vue({
 		course_semester: '選擇學期',
 		course_teacher: '選擇開課教師',
 		course_review: '',
+		course_dept: '',
 		course_rate: {
 			gain: "",
 			sweet: "",
@@ -19,6 +20,7 @@ var vue_add_review = new Vue({
 		isChoosingSemester: false,
 		course_teacher_suggestion: [],
 		isChoosingTeacher: false,
+		course_dept_suggestion: [],
 		window_status: '心得最低需求 50 字，請填寫完畢後按下送出。'
 	},
 	watch: {
@@ -62,11 +64,13 @@ var vue_add_review = new Vue({
 			this.course_rate.gain = '';
 			this.course_rate.sweet = '';
 			this.course_rate.cold = '';
+			this.course_dept = '';
 			this.course_title_suggestion.length = 0;
 			this.course_title_filled = '';
 			this.course_semester_suggestion.length = 0;
 			this.isChoosingSemester = false;
 			this.course_teacher_suggestion.length = 0;
+			this.course_dept_suggestion.length = 0;
 			this.isChoosingTeacher = false;
 			console.log( "清乾淨啦～" );
 		},
@@ -121,10 +125,12 @@ var vue_add_review = new Vue({
 							}
 							if ( ! ifRepeated ) {
 								this.course_teacher_suggestion.push( course_prev_db[i].老師 );
+								this.course_dept_suggestion.push( course_prev_db[i].系號 );
 							}
 						}
 						else {
 							this.course_teacher_suggestion.push( course_prev_db[i].老師 );
+							this.course_dept_suggestion.push( course_prev_db[i].系號 );
 						}
 					}
 				}
@@ -144,9 +150,10 @@ var vue_add_review = new Vue({
 				this.course_teacher = '選擇開課教師';
 			}
 		},
-		fillTeacher: function ( val ) {
+		fillTeacher: function ( val, index ) {
 			this.isChoosingTeacher = false ;
 			this.course_teacher = val;
+			this.course_dept = this.course_dept_suggestion[index];
 		},
 		giveRate: function ( item, value ) {
 			if(this.course_rate[item] == "") this.course_rate[item] = 5;
@@ -188,6 +195,7 @@ var vue_add_review = new Vue({
 					'sweet': this.course_rate.sweet,
 					'cold': this.course_rate.cold,
 					'got': this.course_rate.gain,
+					'catalog': this.course_dept
 				})
 				.then ( function ( response ) {
 					if(response.data == 'success'){

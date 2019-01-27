@@ -24,7 +24,7 @@
                         <p v-for="item in course_semester_suggestion" @click="fillSemester(item)"> {{ item }} </p>
                     </div>
                     <div :class="{ visible: isChoosingTeacher }"  class="add_review_dropdown teacher text_16">
-                        <p v-for="item in course_teacher_suggestion" @click="fillTeacher(item)"> {{ item }} </p>
+                        <p v-for="item, index in course_teacher_suggestion" @click="fillTeacher(item, index)"> {{ item }} </p>
                     </div>
                 </div>
             </div>

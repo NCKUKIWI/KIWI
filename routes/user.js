@@ -40,6 +40,9 @@ router.get("/fbcheck", middleware.checkLogin(1), function (req, res) {
                     } else {
                     	var check_key = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
                         var code = 'nckuhub' + Math.random().toString(36).substring(2, 15);
+                        while (code.length != 20){
+                            code = 'nckuhub' + Math.random().toString(36).substring(2, 15);
+                        }
                         db.Insert('user', {
                             'name': fb.name,
                             'fb_id': fb.id,

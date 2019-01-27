@@ -63,6 +63,7 @@ var vue_register = new Vue ({
       document.getElementById("register__block__par2").innerHTML = "感謝你使用NCKU HUB, 請填寫以下資料";
     },
     back_course_page: function(){
+      getUserInfo ();
       toTab( 'course' );
     }
   },
@@ -72,7 +73,7 @@ var vue_register = new Vue ({
 });
 
 document.addEventListener("input", function() {
-  if(document.getElementById("enter_dept").value.length==0 || document.getElementById("enter_grade").value==''
+  if(document.getElementById("enter_dept").value.length==0 || document.getElementById("enter_grade").value.length==0
 || document.getElementById("enter_email").value.length==0){
     vue_register.registerBtn.finish_register = false;
   } else {

@@ -198,27 +198,27 @@ router.get('/Info/:courseID', function (req, res) {
     } 
 });
 
-function check_Login(req, res, all_courses, custom_courses) {
-    if (req.user) {
-        var userid = parseInt(req.user.id);
-        var colmuns = ['course_id'];
-        /* 有登入 抓取用戶的選課清單 */
-        db.FindbyColumn('cart', ['course_id'], { 'user_id': userid }, function (carts) {
-            res.json({
-                'courses': all_courses,
-                'custom_courses': custom_courses,
-                'user': req.user,
-                'carts': carts
-            });
-        });
-    } else {
-        res.json({
-            'courses': all_courses,
-            'custom_courses': custom_courses,
-            'user': req.user,
-            'carts': null //沒登入 選課清單為null
-        });
-    }
-}
+// function check_Login(req, res, all_courses, custom_courses) {
+//     if (req.user) {
+//         var userid = parseInt(req.user.id);
+//         var colmuns = ['course_id'];
+//         /* 有登入 抓取用戶的選課清單 */
+//         db.FindbyColumn('cart', ['course_id'], { 'user_id': userid }, function (carts) {
+//             res.json({
+//                 'courses': all_courses,
+//                 'custom_courses': custom_courses,
+//                 'user': req.user,
+//                 'carts': carts
+//             });
+//         });
+//     } else {
+//         res.json({
+//             'courses': all_courses,
+//             'custom_courses': custom_courses,
+//             'user': req.user,
+//             'carts': null //沒登入 選課清單為null
+//         });
+//     }
+// }
 
 module.exports = router;

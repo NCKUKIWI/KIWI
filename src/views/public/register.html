@@ -10,10 +10,12 @@
         <p class="text_20">NCKU HUB 是由成大生自主發起，</p>
         <p class="text_20">以解決校園問題為目標的資訊平台。</p>
       </div>
-      <div class="rectangle-btn rectangle-btn--register__login">
-        <img src="./dist/images/register/fb_icon_blue.svg">
-        <a href="/user/fblogin"><p class="text_20">現有帳號登入</p></a>
-      </div>
+      <a href="/user/fblogin">
+        <div class="rectangle-btn rectangle-btn--register__login">
+          <img src="./dist/images/register/fb_icon_blue.svg">
+          <p class="text_20">現有帳號登入</p>
+        </div>
+      </a>
     </div>
   </div>
   <div class="register__block register__block__right">
@@ -24,11 +26,13 @@
       </div>
       <div class="register__block__right__steps">
         <p class="text_20--register" :class="{disabled_text : registerBtn.new_register || registerBtn.old_user_register}">STEP 1：以現有帳號快速註冊</p>
-        <div class="round-btn" id="register_fb_btn" @click="new_user_login()" :class="{roundBtnClicked : registerBtn.new_register || registerBtn.old_user_register}">
-          <img v-if="!registerBtn.new_register && !registerBtn.old_user_register" src="./dist/images/register/fb_icon.svg">
-          <img v-if="registerBtn.new_register || registerBtn.old_user_register" src="./dist/images/register/fb_icon_disabled.svg" alt="">
-          <a href="/user/fblogin"><p class="text_18">連接 facebook</p></a>
-        </div>
+        <a href="/user/fblogin">
+          <div class="round-btn" id="register_fb_btn" @click="new_user_login()" :class="{roundBtnClicked : registerBtn.new_register || registerBtn.old_user_register}">
+            <img v-if="!registerBtn.new_register && !registerBtn.old_user_register" src="./dist/images/register/fb_icon.svg">
+            <img v-if="registerBtn.new_register || registerBtn.old_user_register" src="./dist/images/register/fb_icon_disabled.svg" alt="">
+            <p class="text_18">連接 facebook</p>
+          </div>
+        </a>
       </div>
       <div class="register__block__right__steps">
         <p class="text_20--register" :class="{disabled_text : !registerBtn.new_register && !registerBtn.old_user_register}">STEP 2：輸入您的個人基本資訊</p>
@@ -38,9 +42,9 @@
               <input type="text" placeholder="輸入英文系號(ex. H3)" id="enter_dept" v-model="dept_keyword" maxlength="2" disabled="disabled">
               <p v-if="!dept_qualified" class="error_text">無效的系號</p>
             </div>
-            <select placeholder="選擇年級" id="enter_grade" disabled v-model="grade_selected">
-              <option value='' disabled>選擇年級</option>
-              <option v-for="grade in grades">{{grade}}</option>
+            <select placeholder="" id="enter_grade" v-model="grade_selected">
+              <option value='' disabled>下拉選擇年級</option>
+              <option v-bind:value='grade' v-for="grade in grades">{{grade}}</option>
             </select>
           </div>
           <div :class="{input_error: !email_qualified}">

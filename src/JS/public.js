@@ -188,7 +188,7 @@
     function getUserInfo () {
         axios.get('/user/info').then(function(res){
             vue_loading.turnoff();
-            if (res.data.user.department == '無' || res.data.user.grade == '無'){
+            if (res.data.user.department == '無' || res.data.user.grade == ''){
                 toTab('register');
                 vue_register.old_user_login();
                 return; // 登入後沒有填完資料的話還是停留在註冊頁

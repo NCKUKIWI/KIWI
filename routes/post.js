@@ -142,13 +142,14 @@ router.post('/create', function (req, res) {
         console.log('User_id: ' + req.user.id + ' User_name: ' + req.user.name);
         req.checkBody('course_name', '課程名稱不可為空').notEmpty();
         req.checkBody('comment', '修課心得不可為空').notEmpty();
+        req.checkBody('comment', '長度須大於50').isLength({ min: 50});
+        req.checkBody('got', '收穫不可為空').notEmpty();
+        req.checkBody('sweet', '甜度不可為空').notEmpty();
+        req.checkBody('cold', '涼度不可為空').notEmpty();
         var errors = req.validationErrors();
-        console.log('comment length: '+req.body.comment.length)
         if (errors) {
             console.log("Error " + errors);
             res.send(errors);
-        } else if(req.body.comment.length < 50){ 
-            res.send('cmt<50')
         } else {
             for (var aContent in req.body) {
                 sanitizeHtml(req.body[aContent], {

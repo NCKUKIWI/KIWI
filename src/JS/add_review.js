@@ -9,9 +9,9 @@ var vue_add_review = new Vue({
 		course_teacher: '選擇開課教師',
 		course_review: '',
 		course_rate: {
-			gain: 8,
-			sweet: 8,
-			cold: 8
+			gain: "",
+			sweet: "",
+			cold: ""
 		},
 		course_title_suggestion: [],
 		course_title_filled: '',
@@ -19,7 +19,7 @@ var vue_add_review = new Vue({
 		isChoosingSemester: false,
 		course_teacher_suggestion: [],
 		isChoosingTeacher: false,
-		window_status: '您的心得不會自動儲存，請確認送出後再關閉視窗。'
+		window_status: '心得最低需求 50 字，請填寫完畢後按下送出。'
 	},
 	watch: {
 		course_title: function () {
@@ -59,9 +59,9 @@ var vue_add_review = new Vue({
 			this.course_semester = '選擇學期';
 			this.course_teacher = '選擇開課教師';
 			this.course_review = '';
-			this.course_rate.gain = 8;
-			this.course_rate.sweet = 8;
-			this.course_rate.cold = 8;
+			this.course_rate.gain = '';
+			this.course_rate.sweet = '';
+			this.course_rate.cold = '';
 			this.course_title_suggestion.length = 0;
 			this.course_title_filled = '';
 			this.course_semester_suggestion.length = 0;
@@ -149,6 +149,7 @@ var vue_add_review = new Vue({
 			this.course_teacher = val;
 		},
 		giveRate: function ( item, value ) {
+			if(this.course_rate[item] == "") this.course_rate[item] = 5;
 			value =  parseInt( value );
 			if ( this.course_title_filled && this.course_semester != '選擇學期' && this.course_teacher != '選擇開課教師' ) {
 				if ( !( value > 0 && this.course_rate[item] == 10 ) && !( value < 0 && this.course_rate[item] == 1 ) ) {
@@ -173,6 +174,9 @@ var vue_add_review = new Vue({
 			if ( command == 'no_save' ) {
 				this.window_status = '您的心得不會自動儲存，請確認送出後再關閉視窗。'
 			}
+			if ( command == 'review' ) {
+				this.window_status = '心得最低需求 50 字，請填寫完畢後按下送出。'
+			}
 		},
 		sendReview: function () {
 			if ( this.course_title_filled && this.course_semester != '選擇學期' && this.course_teacher != '選擇開課教師' ) {
@@ -186,9 +190,12 @@ var vue_add_review = new Vue({
 					'got': this.course_rate.gain,
 				})
 				.then ( function ( response ) {
-					console.log ( '送出心得: success' ) ;
-					setWindow( 'add_review_success', 'open' );
-					vue_add_review.closeWindow();
+					if(response.data == 'success'){
+						setWindow( 'add_review_success', 'open' );
+						vue_add_review.closeWindow();
+					}else{
+						setNotification ( response.data[0].msg, 'red' );
+					}
 				})
 				.catch ( function ( error ) {
 					console.log (  '送出心得: ' + error ) ;

@@ -28,7 +28,7 @@
                     </div>
                 </div>
             </div>
-            <textarea v-model="course_review" class="add_review__window__mid_cont__mid_area add_review_paragraph text_16" placeholder="上課形式、課堂要求、學習內容... 對這門課說些什麼吧！（至少50字）" :disabled=" course_title_filled =='' || course_semester == '選擇學期' || course_teacher == '選擇開課教師' " @click='closeDropdowns'></textarea>
+            <textarea v-model="course_review" @mouseover="changeStatus('review')" class="add_review__window__mid_cont__mid_area add_review_paragraph text_16" placeholder="上課形式、課堂要求、學習內容... 對這門課說些什麼吧！（至少50字）" :disabled=" course_title_filled =='' || course_semester == '選擇學期' || course_teacher == '選擇開課教師' " @click='closeDropdowns'></textarea>
             <div :class="{ enabled: course_title_filled && course_semester != '選擇學期' && course_teacher != '選擇開課教師' }" class="add_review__window__mid_cont__bottom_row" @click='closeDropdowns'>
                 <div class="add_review_rate text_16 gain"  @mouseover="changeStatus('gain')" @mouseout="changeStatus('no_save')">
                     <div class="add_review_rate__left_area">
@@ -68,7 +68,7 @@
             </div>
             <div class="add_review__window__bottom_bar__buttons">
                 <div class="add_review_button give_up text_16 enabled" @click="giveUpReview">放棄</div>
-                <div :class="{ enabled: course_review.length >= 50 }" class="add_review_button send_review text_16" @click="sendReview">送出心得</div>
+                <div :class="{ enabled: course_review.replace(/\s/g, '').length >= 50 }" class="add_review_button send_review text_16" @click="sendReview">送出心得</div>
             </div>
         </div>
     </div>

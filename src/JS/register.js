@@ -59,8 +59,8 @@ var vue_register = new Vue ({
       document.getElementById("enter_dept").disabled = false;
       document.getElementById("enter_grade").disabled = false;
       document.getElementById("enter_email").disabled = false;
-      document.getElementById("register__block__par1").innerHTML = "已使用過NCKU HUB？";
-      document.getElementById("register__block__par2").innerHTML = "請跳至step2完成基本資料的填寫";
+      document.getElementById("register__block__par1").innerHTML = "請完成填寫資料";
+      document.getElementById("register__block__par2").innerHTML = "感謝你使用NCKU HUB, 請填寫以下資料";
     },
     back_course_page: function(){
       toTab( 'course' );

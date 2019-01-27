@@ -168,7 +168,7 @@
         window.open(url, '_blank');
       },
       openReviewWindow: function(){
-        vue_courseContent.isShow = false;
+        vue_courseContent.hideContent();
         vue_fixed_button.majorBtnClicked();
       }
     }

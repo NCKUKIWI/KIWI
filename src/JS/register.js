@@ -92,9 +92,9 @@ document.addEventListener("input", function() {
     }
   }
 
-  if(document.getElementById("enter_dept").value.length!=0 && document.getElementById("enter_grade").value!=0
+  if(document.getElementById("enter_dept").value.length!=0 && document.getElementById("enter_grade").value.length!=0
 && document.getElementById("enter_email").value.length!=0){
-  if(vue_register.dept_qualified == true && vue_register.email_qualified == true && document.getElementById("enter_grade").value!=0){
+  if(vue_register.dept_qualified == true && vue_register.email_qualified == true && document.getElementById("enter_grade").value.length!=0){
     vue_register.registerBtn.finish_register = true;
   }
 }

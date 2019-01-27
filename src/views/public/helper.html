@@ -20,7 +20,7 @@
   </div>
   <div class="window__self" id="helper_success">
     <div class="window__self__title text_26 bold_text">兌換成功！</div>
-    <div class="window__self__detail text_16">您已成功兌換小幫手「一學期使用資格」，目前剩餘心得積點為：{{userData.now_comment.length}} - 3 點。使用資格期限為 107-1 學期選課期間。</div>
+    <div class="window__self__detail text_16">您已成功兌換小幫手「一學期使用資格」，目前剩餘心得積點為：{{userData.now_comment.length  - 3}} 點。使用資格期限為 107-1 學期選課期間。</div>
     <div class="window__self__detail random_text">
       <p class="text_14" style="cursor: pointer;" v-bind:data-clipboard-text="userData.messenger_code">點擊複製開通代碼：{{userData.messenger_code}}</p>
     </div>

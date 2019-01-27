@@ -7,6 +7,7 @@ var vue_helper_content = new Vue ({
   },
   methods: {
     exchange_success: function() {
+      this.helper_qualified = true;
       document.getElementById("helper_success").style.display = "block";
     },
     close_helper: function() {
@@ -17,11 +18,7 @@ var vue_helper_content = new Vue ({
       // console.log("qualified");
     },
     copy_code: function(){
-      // // var text = document.getElementById("text").innerText;
-      // var input = document.getElementById("input");
-      // input.value = text; // 修改文本框的内容
-      // input.select(); // 选中文本
-      // document.execCommand("copy")
+      setNotification ( '成功複製驗證碼！', 'blue' );
     }
   },
 });

@@ -169,7 +169,7 @@
       },
       openReviewWindow: function(){
         vue_courseContent.hideContent();
-        vue_fixed_button.majorBtnClicked();
+        setWindow( 'add_review', 'open' );
       }
     }
   });

@@ -137,6 +137,10 @@ router.post('/create', function (req, res) {
         console.log('User_id: ' + req.session.user.id + ' User_name: ' + req.session.user.name);
         req.checkBody('course_name', '課程名稱不可為空').notEmpty();
         req.checkBody('comment', '修課心得不可為空').notEmpty();
+        req.checkBody('comment', '長度須大於50').isLength({ min: 50});
+        req.checkBody('sweet', "甜度不可為空").notEmpty();;
+        req.checkBody('cold', "涼度不可為空").notEmpty();;
+        req.checkBody('got', "收穫不可為空").notEmpty();;
         var errors = req.validationErrors();
         if (errors) {
             console.log("Error " + errors);
@@ -167,11 +171,11 @@ router.post('/create', function (req, res) {
                 if (err) throw err;
                 console.log(results);
                 var rate = {
-                    sweet: parseInt(req.body.sweet.replace(/\'|\#|\/\*/g, "")),
-                    cold: parseInt(req.body.hard.replace(/\'|\#|\/\*/g, "")),
-                    recommand: parseInt(req.body.recommand.replace(/\'|\#|\/\*/g, "")),
-                    give: parseInt(req.body.give.replace(/\'|\#|\/\*/g, "")),
-                    got: parseInt(req.body.got.replace(/\'|\#|\/\*/g, "")),
+                    sweet: parseInt(req.body.sweet),
+                    cold: parseInt(req.body.cold),
+                    // recommand: parseInt(req.body.recommand.replace(/\'|\#|\/\*/g, "")),
+                    // give: parseInt(req.body.give.replace(/\'|\#|\/\*/g, "")),
+                    got: parseInt(req.body.got),
                     course_name: req.body.course_name.replace(/\'|\#|\/\*/g, ""),
                     teacher: req.body.teacher.replace(/\'|\#|\/\*/g, ""),
                     user_id: userid,

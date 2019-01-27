@@ -29,11 +29,11 @@
             </div>
           </div>
         </div>
-        <input type="hidden" name="recommand" value="1">
-        <input type="hidden" name="hard" value="1">
-        <input type="hidden" name="sweet" value="1">
-        <input type="hidden" name="give" value="1">
-        <input type="hidden" name="got" value="1">
+        <input type="hidden" name="recommand" value="">
+        <input type="hidden" name="cold" value="">
+        <input type="hidden" name="sweet" value="">
+        <input type="hidden" name="give" value="">
+        <input type="hidden" name="got" value="">
         <input type="hidden" name="catalog" value="0">
         <input type="hidden" name="course_name" value="">
         <input type="hidden" name="course_id" value="0">
@@ -41,7 +41,7 @@
         <div class="partB">
           <div class="field">
             <label>收穫程度:</label>
-            <div class="scorebar" id="recommand">
+            <div class="scorebar" id="got">
               <div class="scorebtn" style="border-left:1px solid black;" data-score="1">1</div>
               <div class="scorebtn" data-score="2">2</div>
               <div class="scorebtn" data-score="3">3</div>
@@ -71,7 +71,7 @@
           </div>
           <div class="field">
             <label>課程涼度:</label>
-            <div class="scorebar" id="hard">
+            <div class="scorebar" id="cold">
               <div class="scorebtn" style="border-left:1px solid black;" data-score="1">1</div>
               <div class="scorebtn" data-score="2">2</div>
               <div class="scorebtn" data-score="3">3</div>
@@ -192,17 +192,19 @@ $(document).ready(function(){
       data: data,
       success: function(response) {
         if (response == "success") {
+          toastr.success('新增心得成功!');
           window.location.href = "/";
         }
         else {
-          var errosbox = "<div class='partA' style='padding:10px 25px;'>";
-          for (var i in response) {
-            var dom = "<p style='color:red;'>" + response[i].msg + "</p>";
-            errosbox += dom;
-          }
-          errosbox+="</div>";
-          $('#new .modal-body').prepend(errosbox);
-          $('#new').data('bs.modal').handleUpdate();
+          toastr.warning(response[0].msg);
+          // var errosbox = "<div class='partA' style='padding:10px 25px;'>";
+          // for (var i in response) {
+          //   var dom = "<p style='color:red;'>" + response[i].msg + "</p>";
+          //   errosbox += dom;
+          // }
+          // errosbox+="</div>";
+          // $('#new .modal-body').prepend(errosbox);
+          // $('#new').data('bs.modal').handleUpdate();
         }
       }
     });
@@ -215,11 +217,11 @@ $(document).ready(function(){
     $('input[name=recommand]').val(rate);
   })
 
-  $('#hard .scorebtn').on('click',function(){
-    $('#hard .scorebtn').css('background','white');
+  $('#cold .scorebtn').on('click',function(){
+    $('#cold .scorebtn').css('background','white');
     $(this).css('background','#D8D8D8');
     var rate = this.getAttribute("data-score");
-    $('input[name=hard]').val(rate);
+    $('input[name=cold]').val(rate);
   })
 
   $('#sweet .scorebtn').on('click',function(){

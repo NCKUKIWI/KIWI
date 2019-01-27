@@ -141,8 +141,8 @@ router.post('/create', function (req, res) {
         var userid = parseInt(req.user.id);
         console.log('User_id: ' + req.user.id + ' User_name: ' + req.user.name);
         req.checkBody('course_name', '課程名稱不可為空').notEmpty();
-        req.checkBody('comment', '修課心得不可為空').notEmpty();
-        req.checkBody('comment', '長度須大於50').isLength({ min: 50});
+        req.checkBody('comment', '心得不可為空').notEmpty();
+        req.checkBody('comment', '心得最低需求 50 字').isLength({ min: 50});
         req.checkBody('got', '收穫不可為空').notEmpty();
         req.checkBody('sweet', '甜度不可為空').notEmpty();
         req.checkBody('cold', '涼度不可為空').notEmpty();

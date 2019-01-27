@@ -39,7 +39,8 @@ router.get("/fbcheck", middleware.checkLogin(1), function (req, res) {
                         res.redirect('/');
                     } else {
                     	var check_key = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-                        var code = 'nckuhub' + Math.random().toString(36).substring(2, 15);
+                        var code = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+                        code = 'nckuhub' + code.substring(1, 14);
                         while (code.length != 20){
                             code = 'nckuhub' + Math.random().toString(36).substring(2, 15);
                         }

@@ -143,6 +143,7 @@ router.post('/create', function (req, res) {
         req.checkBody('course_name', '課程名稱不可為空').notEmpty();
         req.checkBody('comment', '修課心得不可為空').notEmpty();
         var errors = req.validationErrors();
+        console.log('comment length: '+req.body.comment.length)
         if (errors) {
             console.log("Error " + errors);
             res.send(errors);

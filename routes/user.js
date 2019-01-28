@@ -18,53 +18,25 @@ router.get("/fbcheck", middleware.checkLogin(1), function (req, res) {
             "code": req.query.code
         }, function (err, result) {
             graph.get(`/me?fields=id,name&access_token=${result.access_token}`, function (err, fb) {
-                db.FindbyColumn('user', ['id', 'check_key', 'fb_id'], {
+                db.FindbyColumn('user', ['id', 'fb_id'], {
                     'fb_id': fb.id
                 }, function (user) {
                     if (user.length > 0) {
-                        res.cookie("isLogin", 1, {
-                            maxAge: 1000 * 60 * 60 * 12 * 2 * 30
-                        });
-                        res.cookie("id", user[0].check_key, {
-                            maxAge: 1000 * 60 * 60 * 12 * 2 * 30
-                        });
-                        console.log("======user======");
                         req.session.isLogin = true;
                         req.session.user = user[0];
                         res.redirect("/");
                     } else {
-                        var check_key = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-                        var code = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-                        code = 'nckuhub' + code.substring(1, 14);
-                        while (code.length != 20){
-                            code = 'nckuhub' + Math.random().toString(36).substring(2, 15);
-                        }
                         db.Insert('user', {
                             'name': fb.name,
                             'fb_id': fb.id,
                             'role': 0,
                             'department': '無',
-                            'grade': '無',
-                            'check_key': check_key
+                            'grade': '無'
                         }, function (err, result) {
                             if (err) return console.log(err);
-                            db.Insert('messenger_code', {
-                                'code': code,
-                                'user_id': result.insertId
-                            }, function(err, result){
-                                if (err) console.log(err);
-                                res.cookie("isLogin", 1, {
-                                    maxAge: 1000 * 60 * 60 * 12 * 2 * 30
-                                });
-                                res.cookie("id", check_key, {
-                                    maxAge: 1000 * 60 * 60 * 12 * 2 * 30
-                                });
-                                console.log("======create user======");
-                                console.log(result);
-                                req.session.isLogin = true;
-                                req.session.user = result;
-                                res.redirect('/');
-                            })
+                            req.session.isLogin = true;
+                            req.session.user = result;
+                            res.redirect("/");
                         })
                     }
                 });

@@ -46,28 +46,6 @@ app.use(session({
     })
 }));
 
-app.use(function (req, res, next) {
-    if (req.cookies.isLogin) {
-        redis.get(userCacheKey(req.cookies.id), function (err, result) {
-            if (false) {
-                req.user = JSON.parse(result);
-                next();
-            } else {
-                db.FindbyColumn("user",  ['id', 'name', 'department', 'email', 'grade', 'fb_id'], {
-                    'check_key': req.cookies.id
-                }, function (user) {
-                    user = user[0];
-                    redis.set(userCacheKey(req.cookies.id), JSON.stringify(user));
-                    req.user = user;
-                    next();
-                });
-            }
-        });
-    } else {
-        next();
-    }
-});
-
 //Route
 app.use("/course", require("./routes/course")); // get "/"時交給routes course
 app.use("/post", require("./routes/post")); // get "/post"時交給routes post處理
@@ -91,7 +69,6 @@ app.use("/admin", function (req, res, next) {
     }
 }, require("./routes/admin"));
 app.use("/*", require("./routes/course"));
-
 
 setInterval(() => require("./script"), 1000 * 60 * 60 * 1); // 更新心得數
 

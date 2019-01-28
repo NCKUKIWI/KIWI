@@ -18,10 +18,17 @@ router.get("/fbcheck", middleware.checkLogin(1), function (req, res) {
             "code": req.query.code
         }, function (err, result) {
             graph.get(`/me?fields=id,name&access_token=${result.access_token}`, function (err, fb) {
-                db.FindbyColumn('user', ['id', 'fb_id'], {
+                db.FindbyColumn('user', ['id', 'check_key', 'fb_id'], {
                     'fb_id': fb.id
                 }, function (user) {
                     if (user.length > 0) {
+                        res.cookie("isLogin", 1, {
+                            maxAge: 1000 * 60 * 60 * 12 * 2 * 30
+                        });
+                        res.cookie("id", user[0].check_key, {
+                            maxAge: 1000 * 60 * 60 * 12 * 2 * 30
+                        });
+                        console.log("======user======");
                         req.session.isLogin = true;
                         req.session.user = user[0];
                         res.redirect("/");

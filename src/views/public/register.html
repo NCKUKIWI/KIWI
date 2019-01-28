@@ -39,7 +39,7 @@
         <div class="register__block__right__steps__inputs">
           <div class="register__block__right__steps__inputs__line1" :class="{input_error: !dept_qualified}">
             <div class="input_block">
-              <input type="text" placeholder="輸入英文系號(ex. H3)" id="enter_dept" v-model="dept_keyword" maxlength="2" disabled="disabled">
+              <input type="text" placeholder="輸入英文系號(學號前兩碼 ex: H3)" id="enter_dept" v-model="dept_keyword" maxlength="2" disabled="disabled">
               <p v-if="!dept_qualified" class="error_text">無效的系號</p>
             </div>
             <select placeholder="" id="enter_grade" v-model="grade_selected">

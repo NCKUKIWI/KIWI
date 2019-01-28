@@ -26,17 +26,34 @@ router.get("/fbcheck", middleware.checkLogin(1), function (req, res) {
                         req.session.user = user[0];
                         res.redirect("/");
                     } else {
+                        var check_key = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
                         db.Insert('user', {
                             'name': fb.name,
                             'fb_id': fb.id,
                             'role': 0,
                             'department': '無',
-                            'grade': '無'
+                            'grade': '無',
+                            'check_key': check_key
                         }, function (err, result) {
                             if (err) return console.log(err);
-                            req.session.isLogin = true;
-                            req.session.user = result;
-                            res.redirect("/");
+                            if (err) console.log(err);
+                            db.Insert('messenger_code', {
+                                'code': code,
+                                'user_id': result.insertId
+                            }, function(err, result){
+                                if (err) console.log(err);
+                                res.cookie("isLogin", 1, {
+                                    maxAge: 1000 * 60 * 60 * 12 * 2 * 30
+                                });
+                                res.cookie("id", check_key, {
+                                    maxAge: 1000 * 60 * 60 * 12 * 2 * 30
+                                });
+                                console.log("======create user======");
+                                console.log(result);
+                                req.session.isLogin = true;
+                                req.session.user = result;
+                                res.redirect('/');
+                            })
                         })
                     }
                 });

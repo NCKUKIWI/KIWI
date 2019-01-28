@@ -92,6 +92,8 @@ router.get('/:id', function (req, res) {
     if (id.match(/\D/g)) {
         res.redirect('/');
     } else {
+        
+        db.Query(`UPDATE course_new SET count = count + 1 WHERE id=${id}`, function(){})
         redis.get(courseCacheKey(id), function (err, reply) {
             if (reply) {
                 var data = JSON.parse(reply);
@@ -123,6 +125,7 @@ router.get('/:id', function (req, res) {
                             courseInfo[j]++;
                         }
                     }
+
                     courseInfo = courseInfo[0];
                     courseInfo.comment = 0;
                     courseInfo.course_style = 0;

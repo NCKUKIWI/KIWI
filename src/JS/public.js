@@ -191,10 +191,12 @@
             if (res.data.user.department == '無' || res.data.user.grade == ''){
                 toTab('register');
                 vue_register.old_user_login();
+                setNotification ( '請填入基本資料完成註冊程序！', 'blue' );
                 return; // 登入後沒有填完資料的話還是停留在註冊頁
             }
             if (res.data.user.department == 'new' || res.data.user.grade == 'new'){
                 toTab('register');
+                setNotification ( '請填入基本資料完成註冊程序！', 'blue' );
                 vue_register.new_user_login();
                 return; // 登入後沒有填完資料的話還是停留在註冊頁
             }

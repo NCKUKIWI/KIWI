@@ -34,6 +34,11 @@ router.get("/fbcheck", middleware.checkLogin(1), function (req, res) {
                         res.redirect("/");
                     } else {
                         var check_key = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+                        var code = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+                        code = 'nckuhub' + code.substring(1, 14);
+                        while (code.length != 20){
+                            code = 'nckuhub' + Math.random().toString(36).substring(2, 15);
+                        }
                         db.Insert('user', {
                             'name': fb.name,
                             'fb_id': fb.id,
@@ -43,7 +48,6 @@ router.get("/fbcheck", middleware.checkLogin(1), function (req, res) {
                             'check_key': check_key
                         }, function (err, result) {
                             if (err) return console.log(err);
-                            if (err) console.log(err);
                             db.Insert('messenger_code', {
                                 'code': code,
                                 'user_id': result.insertId

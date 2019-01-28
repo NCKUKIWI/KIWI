@@ -191,12 +191,12 @@
             if (res.data.user.department == '無' || res.data.user.grade == ''){
                 toTab('register');
                 vue_register.old_user_login();
-                setTimeout(function() { setNotification ( '請填入基本資料！', 'blue' )}, 2000);
+                setTimeout(function() { setNotification ( '請填入基本資料！', 'blue' )}, 3000);
                 return; // 登入後沒有填完資料的話還是停留在註冊頁
             }
             if (res.data.user.department == 'new' || res.data.user.grade == 'new'){
                 toTab('register');
-                setTimeout(function() { setNotification ( '請填入基本資料！', 'blue' )}, 2000);
+                setTimeout(function() { setNotification ( '請填入基本資料！', 'blue' )}, 3000);
                 vue_register.new_user_login();
                 return; // 登入後沒有填完資料的話還是停留在註冊頁
             }

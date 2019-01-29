@@ -50,9 +50,9 @@
             // vue_courseContent.isShow = true;
             // console.log(document.getElementById("commentBody").scrollTop);
             vue_courseContent.score_data = response;
-            vue_courseContent.score_data.got = parseFloat(vue_courseContent.score_data.got).toFixed(1);
-            vue_courseContent.score_data.sweet = parseFloat(vue_courseContent.score_data.sweet).toFixed(1);
-            vue_courseContent.score_data.cold = parseFloat(vue_courseContent.score_data.cold).toFixed(1);
+            // vue_courseContent.score_data.got = Number(vue_courseContent.score_data.got).toFixed(1).toString();
+            // vue_courseContent.score_data.sweet = parseFloat(vue_courseContent.score_data.sweet).toFixed(1);
+            // vue_courseContent.score_data.cold = parseFloat(vue_courseContent.score_data.cold).toFixed(1);
             vue_courseContent.comment_data = response.comment;
             vue_courseContent.course_data = response.courseInfo;
             if(vue_courseContent.comment_data.length==0){
@@ -114,9 +114,9 @@
       page_status: pageStatus,
       course_data: [],
       score_data: {
-        got: [],
-        sweet: [],
-        cold: [],
+        got:[],
+        sweet:[],
+        cold:[],
       },
       comment_data: [],
       userData: userData,
@@ -177,8 +177,14 @@
       openReviewWindow: function(){
         vue_courseContent.hideContent();
         setWindow( 'add_review', 'open' );
-      }
-    }
+      },
+    },
+    filter: {
+      // roundto2: function(value) {
+      //   value = Number(value);
+      //   return value.toFixed(2);
+      // },
+    },
   });
 
   var vue_courseFilter = new Vue ({
@@ -298,6 +304,11 @@
       }
     }
   });
+
+  Vue.filter('roundto2', function(value) {
+    value = Number(value);
+    return value.toFixed(1);
+  })
 //end---------------------
 
 

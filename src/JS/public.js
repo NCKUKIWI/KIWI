@@ -67,7 +67,6 @@
 
     // 開啟或關閉視窗
     // setWindow( 'add_review_success', 'open' );
-    setWindow('course_page', 'close');
 
     // // 設定載入畫面
     // window.onload = function () {

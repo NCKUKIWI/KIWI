@@ -50,6 +50,9 @@
             // vue_courseContent.isShow = true;
             // console.log(document.getElementById("commentBody").scrollTop);
             vue_courseContent.score_data = response;
+            vue_courseContent.score_data.got = parseFloat(vue_courseContent.score_data.got).toFixed(1);
+            vue_courseContent.score_data.sweet = parseFloat(vue_courseContent.score_data.sweet).toFixed(1);
+            vue_courseContent.score_data.cold = parseFloat(vue_courseContent.score_data.cold).toFixed(1);
             vue_courseContent.comment_data = response.comment;
             vue_courseContent.course_data = response.courseInfo;
             if(vue_courseContent.comment_data.length==0){
@@ -68,7 +71,7 @@
         // console.log(vue_courseContent.course_data);
       },
       setCourse: function(id){
-        var chooseCourse_id = id; 
+        var chooseCourse_id = id;
         if (userData.now_wishlist.includes(chooseCourse_id)){
           wishlistRemove(chooseCourse_id);
         }
@@ -110,7 +113,11 @@
       // isShow: false,
       page_status: pageStatus,
       course_data: [],
-      score_data: [],
+      score_data: {
+        got: [],
+        sweet: [],
+        cold: [],
+      },
       comment_data: [],
       userData: userData,
     },
@@ -211,7 +218,6 @@
             for(var i=0;i<100;i++){
               vue_course_item.course_data.push(vue_course_item.course_data_db()[i]);
             }
-            console.log("not checked no dpmt");
           } else if (dpmt_value!=""){
             vue_course_item.course_data = [];
             for(var i in vue_course_item.course_data_db()) {
@@ -287,6 +293,7 @@
             }
           }
         }
+        console.log(this.dept_dropdown);
         return this.dept_dropdown;
 
       }

@@ -33,7 +33,6 @@ var vue_nav_bar = new Vue({
 			pageStatus.nav_profile_dropdown = ! pageStatus.nav_profile_dropdown;
 		},
 		openCourse: function(id) {
-			toTab('course');
 			vue_course_item.openCoursePage(id);
 			vue_nav_bar.search_keyword = "";
 		},

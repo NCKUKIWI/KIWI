@@ -141,7 +141,11 @@ router.post('/create', function (req, res) {
         var userid = parseInt(req.user.id);
         console.log('User_id: ' + req.user.id + ' User_name: ' + req.user.name);
         req.checkBody('course_name', '課程名稱不可為空').notEmpty();
-        req.checkBody('comment', '修課心得不可為空').notEmpty();
+        req.checkBody('comment', '心得不可為空').notEmpty();
+        req.checkBody('comment', '心得最低需求 50 字').isLength({ min: 50});
+        req.checkBody('got', '收穫不可為空').notEmpty();
+        req.checkBody('sweet', '甜度不可為空').notEmpty();
+        req.checkBody('cold', '涼度不可為空').notEmpty();
         var errors = req.validationErrors();
         if (errors) {
             console.log("Error " + errors);
@@ -157,13 +161,12 @@ router.post('/create', function (req, res) {
                     allowProtocolRelative: true
                 });
             }
-            console.log(req.body.course_name);
             var post = {
                 course_name: req.body.course_name.replace(/\'|\#|\/\*/g, ""),
                 teacher: req.body.teacher.replace(/\'|\#|\/\*/g, ""),
                 semester: req.body.semester.replace(/\'|\#|\/\*/g, ""),
-                // catalog: req.body.catalog.replace(/\'|\#|\/\*/g, ""),
-                comment: req.body.comment.replace(/\'|\#|\/\*/g, ""),
+                catalog: req.body.catalog,
+                comment: req.body.comment.replace(/\'|\#|\/\*|\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F]/g, ""),
                 // report_hw: req.body.report_hw.replace(/\'|\#|\/\*/g, ""),
                 // course_style: req.body.course_style.replace(/\'|\#|\/\*/g, ""),
                 user_id: userid
@@ -194,7 +197,6 @@ router.post('/create', function (req, res) {
                                 });
                             }
                             ////////////////
-                            res.send("success");
                             db.query_post2(DbSearch[0].id, function (courseInfo, comment) {
                                 courseInfo = courseInfo[0];
                                 courseInfo.comment = 0;
@@ -213,36 +215,37 @@ router.post('/create', function (req, res) {
                                         courseInfo[j]++;
                                     }
                                 }
-                            db.FindbyColumn('course_rate', ["*"], { course_name: req.body.course_name, teacher: req.body.teacher }, function (rates) {
-                                var sweet = 0;
-                                var cold = 0;
-                                var got = 0;
-                                var rate_count = 0;
-                                if (rates.length > 0) {
-                                    for (var i in rates) {
-                                        sweet += rates[i].sweet;
-                                        cold += rates[i].cold;
-                                        got += rates[i].got;
+                                db.FindbyColumn('course_rate', ["*"], { course_name: req.body.course_name, teacher: req.body.teacher }, function (rates) {
+                                    var sweet = 0;
+                                    var cold = 0;
+                                    var got = 0;
+                                    var rate_count = 0;
+                                    if (rates.length > 0) {
+                                        for (var i in rates) {
+                                            sweet += rates[i].sweet;
+                                            cold += rates[i].cold;
+                                            got += rates[i].got;
+                                        }
+                                        sweet /= rates.length;
+                                        cold /= rates.length;
+                                        got /= rates.length;
+                                        rate_count = rates.length;
                                     }
-                                    sweet /= rates.length;
-                                    cold /= rates.length;
-                                    got /= rates.length;
-                                    rate_count = rates.length;
-                                }
-                                var data = {
-                                    'got': got,
-                                    'cold': cold,
-                                    'sweet': sweet,
-                                    'rate_count': rate_count,
-                                    'courseInfo': courseInfo,
-                                    'comment': comment,
-                                    'rates': rates
-                                };
-                                for(var d in DbSearch){
-                                    redis.set(courseCacheKey(DbSearch[d].id), JSON.stringify(data));
-                                }
-                            })
-                        });
+                                    var data = {
+                                        'got': got,
+                                        'cold': cold,
+                                        'sweet': sweet,
+                                        'rate_count': rate_count,
+                                        'courseInfo': courseInfo,
+                                        'comment': comment,
+                                        'rates': rates
+                                    };
+                                    for(var d in DbSearch){
+                                        redis.set(courseCacheKey(DbSearch[d].id), JSON.stringify(data));
+                                    }
+                                    res.send("success");
+                                })
+                            });
                         }else{ // 沒找到這門課, 不做任何事
                             res.send("success");
                         }

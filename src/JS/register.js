@@ -59,10 +59,11 @@ var vue_register = new Vue ({
       document.getElementById("enter_dept").disabled = false;
       document.getElementById("enter_grade").disabled = false;
       document.getElementById("enter_email").disabled = false;
-      document.getElementById("register__block__par1").innerHTML = "已使用過NCKU HUB？";
-      document.getElementById("register__block__par2").innerHTML = "請跳至step2完成基本資料的填寫";
+      document.getElementById("register__block__par1").innerHTML = "請完成填寫資料";
+      document.getElementById("register__block__par2").innerHTML = "感謝你使用NCKU HUB, 請填寫以下資料";
     },
     back_course_page: function(){
+      getUserInfo ();
       toTab( 'course' );
     }
   },
@@ -72,7 +73,7 @@ var vue_register = new Vue ({
 });
 
 document.addEventListener("input", function() {
-  if(document.getElementById("enter_dept").value.length==0 || document.getElementById("enter_grade").value==''
+  if(document.getElementById("enter_dept").value.length==0 || document.getElementById("enter_grade").value.length==0
 || document.getElementById("enter_email").value.length==0){
     vue_register.registerBtn.finish_register = false;
   } else {
@@ -91,9 +92,9 @@ document.addEventListener("input", function() {
     }
   }
 
-  if(document.getElementById("enter_dept").value.length!=0 && document.getElementById("enter_grade").value!=0
+  if(document.getElementById("enter_dept").value.length!=0 && document.getElementById("enter_grade").value.length!=0
 && document.getElementById("enter_email").value.length!=0){
-  if(vue_register.dept_qualified == true && vue_register.email_qualified == true && document.getElementById("enter_grade").value!=0){
+  if(vue_register.dept_qualified == true && vue_register.email_qualified == true && document.getElementById("enter_grade").value.length!=0){
     vue_register.registerBtn.finish_register = true;
   }
 }

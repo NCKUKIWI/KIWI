@@ -175,9 +175,8 @@
         window.open(url, '_blank');
       },
       openReviewWindow: function(){
-        console.log('ef');
-        vue_courseContent.isShow = false;
-        vue_fixed_button.majorBtnClicked();
+        vue_courseContent.hideContent();
+        setWindow( 'add_review', 'open' );
       }
     }
   });

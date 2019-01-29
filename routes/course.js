@@ -43,7 +43,7 @@ router.get('/', function (req, res) {
 
 /* 傳出歷屆所有課程 the courses all previous */
 router.get('/allCoursePrev', function (req, res) {
-    var columns = ['id', '課程名稱', '老師', 'semester'];
+    var columns = ['id', '課程名稱', '老師', 'semester', '系號'];
     db.GetColumn('course_all', columns, { 'column': 'id', 'order': 'DESC' }, function (courses) {
         res.json(courses)
         // console.log(JSON.stringify(courses))
@@ -92,8 +92,10 @@ router.get('/:id', function (req, res) {
     if (id.match(/\D/g)) {
         res.redirect('/');
     } else {
+        
+        db.Query(`UPDATE course_new SET count = count + 1 WHERE id=${id}`, function(){})
         redis.get(courseCacheKey(id), function (err, reply) {
-            if (0) {
+            if (reply) {
                 var data = JSON.parse(reply);
                 var rates = data.rates;
                 if (req.user && rates.length > 0) {
@@ -123,6 +125,7 @@ router.get('/:id', function (req, res) {
                             courseInfo[j]++;
                         }
                     }
+
                     courseInfo = courseInfo[0];
                     courseInfo.comment = 0;
                     courseInfo.course_style = 0;
@@ -198,27 +201,27 @@ router.get('/Info/:courseID', function (req, res) {
     } 
 });
 
-function check_Login(req, res, all_courses, custom_courses) {
-    if (req.user) {
-        var userid = parseInt(req.user.id);
-        var colmuns = ['course_id'];
-        /* 有登入 抓取用戶的選課清單 */
-        db.FindbyColumn('cart', ['course_id'], { 'user_id': userid }, function (carts) {
-            res.json({
-                'courses': all_courses,
-                'custom_courses': custom_courses,
-                'user': req.user,
-                'carts': carts
-            });
-        });
-    } else {
-        res.json({
-            'courses': all_courses,
-            'custom_courses': custom_courses,
-            'user': req.user,
-            'carts': null //沒登入 選課清單為null
-        });
-    }
-}
+// function check_Login(req, res, all_courses, custom_courses) {
+//     if (req.user) {
+//         var userid = parseInt(req.user.id);
+//         var colmuns = ['course_id'];
+//         /* 有登入 抓取用戶的選課清單 */
+//         db.FindbyColumn('cart', ['course_id'], { 'user_id': userid }, function (carts) {
+//             res.json({
+//                 'courses': all_courses,
+//                 'custom_courses': custom_courses,
+//                 'user': req.user,
+//                 'carts': carts
+//             });
+//         });
+//     } else {
+//         res.json({
+//             'courses': all_courses,
+//             'custom_courses': custom_courses,
+//             'user': req.user,
+//             'carts': null //沒登入 選課清單為null
+//         });
+//     }
+// }
 
 module.exports = router;

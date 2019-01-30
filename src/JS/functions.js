@@ -338,3 +338,17 @@
         }
         return category;
     }
+
+
+    // 文字處理：排除正規表達式的的特殊符號
+
+    function getREValidText ( text ) {
+        var invalid = /[()\[\]{}]+/g;
+        if ( text.match(invalid) ) {
+            text = text.replace(invalid, " ");
+            return text ;
+        }
+        else {
+            return 0;
+        }
+    }

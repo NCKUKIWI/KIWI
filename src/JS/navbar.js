@@ -13,12 +13,19 @@ var vue_nav_bar = new Vue({
 			this.result_cont = [];
 			this.result_cont.length = 0;
 			if ( this.search_keyword ) {
-				for ( var i = 0 ; i < course_db.length ; i ++ ) { 
-					if ( course_db[i].課程名稱.match ( this.search_keyword ) || course_db[i].老師.match ( this.search_keyword ) ) {
+				for ( var i = 0 ; i < course_db.length ; i ++ ) {
+					// 預先排除特殊符號影響正規表達式の判斷
+					var text_to_check_1 = course_db[i].課程名稱 ;
+					var text_to_check_2 = course_db[i].老師 ;
+					var text_to_find = this.search_keyword ;
+					if ( getREValidText( text_to_find ) ) {
+						text_to_check_1 = getREValidText( text_to_check_1 );
+						text_to_check_2 = getREValidText( text_to_check_2 );
+						text_to_find = getREValidText( text_to_find );
+					}
+					if ( String( text_to_check_1 ).match( text_to_find ) || String( text_to_check_2 ).match( text_to_find ) ) {
 						var class_item = getClassObject ( course_db, course_db[i].id ) ;
-						// if ( getTimeObject ( class_item ) ) {
 							this.result_cont.push( class_item );
-						// }
 					}
 				}
 			}

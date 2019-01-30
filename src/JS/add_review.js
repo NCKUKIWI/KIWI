@@ -32,7 +32,7 @@ var vue_add_review = new Vue({
 				this.course_title_suggestion.length = 0;
 				if ( this.course_title ) {
 					for ( var i = 0 ; i < course_prev_db.length ; i ++ ) {
-						if ( course_prev_db[i].課程名稱.match ( this.course_title ) ) {
+						if ( course_prev_db[i].課程名稱.toUpperCase().match ( this.course_title.toUpperCase() ) ) {
 							if ( this.course_title_suggestion.length ) {
 								var ifRepeated = false ;
 								for ( var j = 0 ; j < this.course_title_suggestion.length ; j ++ ) {
@@ -83,7 +83,7 @@ var vue_add_review = new Vue({
 				this.isChoosingTeacher = false ;
 				this.course_semester_suggestion.length = 0;
 				for ( var i = 0 ; i < course_prev_db.length ; i ++ ) {
-					if ( course_prev_db[i].課程名稱.match ( this.course_title ) ) {
+					if ( course_prev_db[i].課程名稱.toUpperCase().match ( this.course_title.toUpperCase() ) ) {
 						if ( this.course_semester_suggestion.length ) {
 							var ifRepeated = false ;
 							for ( var j = 0 ; j < this.course_semester_suggestion.length ; j ++ ) {
@@ -114,7 +114,7 @@ var vue_add_review = new Vue({
 				this.isChoosingSemester = false ;
 				this.course_teacher_suggestion.length = 0;
 				for ( var i = 0 ; i < course_prev_db.length ; i ++ ) {
-					if ( course_prev_db[i].課程名稱.match ( this.course_title ) && course_prev_db[i].semester == this.course_semester ) {
+					if ( course_prev_db[i].課程名稱.toUpperCase().match ( this.course_title.toUpperCase() ) && course_prev_db[i].semester == this.course_semester ) {
 						if ( this.course_teacher_suggestion.length ) {
 							var ifRepeated = false ;
 							for ( var j = 0 ; j < this.course_teacher_suggestion.length ; j ++ ) {
@@ -188,7 +188,7 @@ var vue_add_review = new Vue({
 		sendReview: function () {
 			if ( this.course_title_filled && this.course_semester != '選擇學期' && this.course_teacher != '選擇開課教師' ) {
 				axios.post('/post/create/' , {
-					'course_name': this.course_title, 
+					'course_name': this.course_title,
 					'teacher': this.course_teacher,
 					'semester': this.course_semester,
 					'comment': this.course_review,

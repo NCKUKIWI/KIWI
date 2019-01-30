@@ -23,7 +23,7 @@ var vue_nav_bar = new Vue({
 						text_to_check_2 = getREValidText( text_to_check_2 );
 						text_to_find = getREValidText( text_to_find );
 					}
-					if ( String( text_to_check_1 ).match( text_to_find ) || String( text_to_check_2 ).match( text_to_find ) ) {
+					if ( String( text_to_check_1 ).toUpperCase().match( text_to_find.toUpperCase() ) || String( text_to_check_2 ).match( text_to_find ) ) {
 						var class_item = getClassObject ( course_db, course_db[i].id ) ;
 							this.result_cont.push( class_item );
 					}

@@ -40,7 +40,7 @@ var vue_add_review = new Vue({
 							text_to_check = getREValidText( text_to_check );
 							text_to_find = getREValidText( text_to_find );
 						}
-						if ( String( text_to_check ).match ( text_to_find )) {
+						if ( String( text_to_check ).toUpperCase().match ( text_to_find.toUpperCase() )) {
 							// 檢查本課程名稱是否已顯示在 dropdown
 							if ( this.course_title_suggestion.length ) {
 								var ifRepeated = false ;
@@ -99,7 +99,7 @@ var vue_add_review = new Vue({
 						text_to_check = getREValidText( text_to_check );
 						text_to_find = getREValidText( text_to_find );
 					}
-					if ( String( text_to_check ).match ( text_to_find )) {
+					if ( String( text_to_check ).toUpperCase().match ( text_to_find.toUpperCase() )) {
 						if ( this.course_semester_suggestion.length ) {
 							var ifRepeated = false ;
 							for ( var j = 0 ; j < this.course_semester_suggestion.length ; j ++ ) {
@@ -137,7 +137,7 @@ var vue_add_review = new Vue({
 						text_to_check = getREValidText( text_to_check );
 						text_to_find = getREValidText( text_to_find );
 					}
-					if ( String( text_to_check ).match ( text_to_find ) && course_prev_db[i].semester == this.course_semester ) {
+					if ( String( text_to_check ).toUpperCase().match ( text_to_find.toUpperCase() ) && course_prev_db[i].semester == this.course_semester ) {
 						if ( this.course_teacher_suggestion.length ) {
 							var ifRepeated = false ;
 							for ( var j = 0 ; j < this.course_teacher_suggestion.length ; j ++ ) {
@@ -208,7 +208,7 @@ var vue_add_review = new Vue({
 		sendReview: function () {
 			if ( this.course_title_filled && this.course_semester != '選擇學期' && this.course_teacher != '選擇開課教師' ) {
 				axios.post('/post/create/' , {
-					'course_name': this.course_title, 
+					'course_name': this.course_title,
 					'teacher': this.course_teacher,
 					'semester': this.course_semester,
 					'comment': this.course_review,

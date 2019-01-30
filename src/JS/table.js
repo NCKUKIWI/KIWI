@@ -10,7 +10,7 @@
             user_data: userData,
             credit_count: 0,
         },
-        methods: {   
+        methods: {
         }
     })
 
@@ -47,7 +47,7 @@
                 }
             },
             deleteItem: function () {
-                console.log ( 'wishlist killed: ' +  vue_wishlist.wishlist_cont.indexOf( this.class_item ) + ' (' + this.class_item.title + ')' ); 
+                console.log ( 'wishlist killed: ' +  vue_wishlist.wishlist_cont.indexOf( this.class_item ) + ' (' + this.class_item.title + ')' );
                 wishlistRemove( this.class_item.id );
                 vue_quick_search.clearFilter();
                 vue_classtable.refresh();
@@ -75,7 +75,7 @@
             filter_item_count: 0,
         },
         methods: {
-            refresh: function () { 
+            refresh: function () {
                 this.wishlist_cont.length = 0;
                 for ( var i = 0 ; i < userData.now_wishlist.length ; i ++ ) {
                     var class_item = getClassObject ( course_db, userData.now_wishlist[i] ) ;
@@ -111,7 +111,7 @@
     })
 
 
-    
+
     // Component: result-list-item
 
     Vue.component( 'result-list-item', {
@@ -160,7 +160,7 @@
     var vue_quick_search = new Vue({
         el: '#quick_search',
         data: {
-            keyword: '', 
+            keyword: '',
             result_cont: [],
             filter_status: false,
             title_text: '快速添加',
@@ -181,7 +181,7 @@
                             text_to_check_2 = getREValidText( text_to_check_2 );
                             text_to_find = getREValidText( text_to_find );
                         }
-                        if ( String( text_to_check_1 ).match( text_to_find ) || String( text_to_check_2 ).match( text_to_find ) ) {
+                        if ( String( text_to_check_1 ).toUpperCase().match( text_to_find.toUpperCase() ) || String( text_to_check_2 ).match( text_to_find ) ) {
                             var class_item = getClassObject ( course_db, course_db[i].id ) ;
                                 this.result_cont.push( class_item );
                         }
@@ -310,7 +310,7 @@
                 this[day].length = 0;
                 for ( var j = 1 ; j <= 14 ; j ++ ) {
                     time = timeTransText(j).toString();
-                    this[day].push( { time: time, status: 0, class_item: '', ifFilterTime: false, cell_status_title: '篩選課程', cell_status_text:'選擇此時段' } ); 
+                    this[day].push( { time: time, status: 0, class_item: '', ifFilterTime: false, cell_status_title: '篩選課程', cell_status_text:'選擇此時段' } );
                     // status： 1 以上 - 該課程佔據節次數、 0 - 該節次無課程、 (-1) - 該節次已被上方課程佔據
                 }
             }
@@ -326,7 +326,7 @@
             },
             // 輸入課程 id、課程資料庫，將課程加入課表
             toTable: function ( target_id, course_db, ifPreview ) {
-                var class_item = getClassObject ( course_db, target_id ); 
+                var class_item = getClassObject ( course_db, target_id );
                 var time_item = getTimeObject ( class_item );
                 if ( checkConflict ( class_item, this ) ) {
                     // 計算學分數
@@ -348,7 +348,7 @@
                             for ( var j = 0 ; j < hrs ; j ++ ) {
                                 // 在起始時段填入課程資訊
                                 fill_cell = this[day].find( function ( item ) {
-                                    return item.time == start 
+                                    return item.time == start
                                 });
                                 fill_cell.status = hrs ;
                                 fill_cell.class_item = class_item;
@@ -364,7 +364,7 @@
                                     });
                                     fill_cell.status = -1;
                                     fill_cell.cell_status_title = '';
-                                    fill_cell.cell_status_text = ''; 
+                                    fill_cell.cell_status_text = '';
                                 }
                             }
                         }
@@ -384,7 +384,7 @@
                     this[day].length = 0;
                     for ( var j = 1 ; j <= 14 ; j ++ ) {
                         time = timeTransText(j).toString();
-                        this[day].push( { time: time, status: 0, class_item: '', ifFilterTime: false, cell_status_title: '篩選課程', cell_status_text:'選擇此時段' } ); 
+                        this[day].push( { time: time, status: 0, class_item: '', ifFilterTime: false, cell_status_title: '篩選課程', cell_status_text:'選擇此時段' } );
                         // status： 1 以上 - 該課程佔據節次數、 0 - 該節次無課程、 (-1) - 該節次已被上方課程佔據
                     }
                 }
@@ -395,7 +395,7 @@
                     var target_id = this.temp_table[i];
                     this.toTable ( target_id, course_db );
                 }
-                // 加入預覽中課程（wishlist） 
+                // 加入預覽中課程（wishlist）
                 if ( preview_id ) {
                     this.toTable ( preview_id, course_db, true );
                 }
@@ -479,11 +479,11 @@
             deleteItem: function( id ) {
                 // 因為只有時段為「其他」者會用到所以寫得很簡陋
                 // setNotification ( '成功移出課表！' );
-                wishlistAdd( id ); 
+                wishlistAdd( id );
                 vue_classtable.tableTempRemove( id );
             },
             switchToEdit: function () {
                 vue_fixed_button.switchLockStatus();
             },
         }
-    }) 
+    })

@@ -8,8 +8,6 @@
       	return course_db;
       },
       course_by_depart: [],
-      heartColor: false,
-      comment_only: false,
       count_height: 1,
       count_index: 0,
       userData: userData
@@ -84,12 +82,14 @@
       handleScroll: function() {
         var list_height = $("#course_item").height();
         var scroll_height = $("#course_item").scrollTop();
-        if(scroll_height >= list_height * this.count_height){
-          for(var i = 200 + this.count_index*20; i< 200 + (this.count_index+1)*20;i++){
-            vue_course_item.course_data.push(vue_course_item.course_data_db()[i]);
+        if(vue_courseFilter.comment_only==false && vue_courseFilter.filter_with_dpmt==false) {
+          if(scroll_height >= list_height * this.count_height){
+            for(var i = 200 + this.count_index*20; i< 200 + (this.count_index+1)*20;i++){
+              vue_course_item.course_data.push(vue_course_item.course_data_db()[i]);
+            }
+            this.count_index++;
+            this.count_height++;
           }
-          this.count_index++;
-          this.count_height++;
         }
       },
       course_circle: function(dept, dept_name) {
@@ -198,6 +198,10 @@
       dept_dropdown: [],
       filter_by_dpmt: [],
       keyPrefix: '',
+      comment_only: false,
+      filter_with_dpmt: false,
+      load_more_course: {
+      },
     },
     methods: {
       comment_filter: function() {
@@ -206,58 +210,53 @@
         var dpmt_value = document.getElementById("dpmtFilter").value;
 
         if (cCheck.checked==true) {
-            vue_course_item.course_data = [];
-          if(dpmt_value=="") {
-              vue_course_item.course_data = vue_course_item.course_with_comment;
-          } else if (dpmt_value!="") {
-            for(var i in vue_courseFilter.filter_by_dpmt){
-              if(vue_courseFilter.filter_by_dpmt[i].comment_num>0){
-                vue_course_item.course_data.push(vue_courseFilter.filter_by_dpmt[i]);
-              }
-            }
-          }
+          this.comment_only = true;
 
+            if(this.filter_with_dpmt == true){
+              vue_course_item.course_data = [];
+              for(var i in this.filter_by_dpmt){
+                if(this.filter_by_dpmt[i].comment_num>0){
+                  vue_course_item.course_data.push(this.filter_by_dpmt[i]);
+                }
+              }
+            } else {
+              vue_course_item.course_data = [];
+              vue_course_item.course_data = vue_course_item.course_with_comment;
+            }
         } else {
           vue_course_item.course_data = [];
-          if(dpmt_value==""){
-            for(var i=0;i<100;i++){
-              vue_course_item.course_data.push(vue_course_item.course_data_db()[i]);
-            }
-          } else if (dpmt_value!=""){
-            vue_course_item.course_data = [];
-            for(var i in vue_course_item.course_data_db()) {
-              if(vue_course_item.course_data_db()[i].系號 == this.keyPrefix){
-                vue_course_item.course_data.push(vue_course_item.course_data_db()[i]);
-              }
-            }
+          vue_courseFilter.comment_only = false;
+          for(var i=0;i<100;i++){
+            vue_course_item.course_data.push(vue_course_item.course_data_db()[i]);
           }
+          console.log(vue_course_item.course_data);
         }
       },
       result_click: function(index) {
         var key = document.getElementById("dpmtFilter");
         var key_prefix = vue_courseFilter.dept_dropdown[index].prefix;
         this.keyPrefix = key_prefix;
-        key.value = key_prefix + " " + vue_courseFilter.dept_dropdown[index].name;
         this.filter_by_dpmt = [];
+        key.value = key_prefix + " " + vue_courseFilter.dept_dropdown[index].name;
+        console.log(key.value);
         if(this.keyword) {
-          if (document.getElementById("commentCheck").checked==true) {
-            for(var i in vue_course_item.course_with_comment) {
+          vue_course_item.course_data = [];
+          if(vue_courseFilter.comment_only==true){
+            for(var i in vue_course_item.course_with_comment){
               if(vue_course_item.course_with_comment[i].系號 == key_prefix){
-                this.filter_by_dpmt.push(vue_course_item.course_with_comment[i]);
+                vue_course_item.course_data.push(vue_course_item.course_with_comment[i]);
               }
             }
+
           } else {
             for(var i in vue_course_item.course_data_db()) {
               if(vue_course_item.course_data_db()[i].系號 == key_prefix){
-                this.filter_by_dpmt.push(vue_course_item.course_data_db()[i]);
+                vue_course_item.course_data.push(vue_course_item.course_data_db()[i]);
               }
             }
           }
         }
-
         $(".search_result--course").css("display","none");
-        vue_course_item.course_data = this.filter_by_dpmt;
-        console.log(this.filter_by_dpmt);
       },
       refresh: function () {
         this.wishlist_cont.length = 0;
@@ -272,11 +271,28 @@
       opentabletab: function() {
         toTab('table');
       },
+      handle_input: function($event) {
+        if(!$event.data){
+          this.filter_with_dpmt = false;
+          vue_course_item.course_data = [];
+          if(this.comment_only==true){
+            vue_course_item.course_data = vue_course_item.course_with_comment;
+          } else {
+            for(var i=0;i<100;i++){
+              vue_course_item.course_data.push(vue_course_item.course_data_db()[i]);
+            }
+          }
+        }
+      },
     },
     computed: {
-      search_result: function() {
+      search_result: function(index) {
         this.dept_dropdown = [];
+        vue_course_item.course_data = [];
         if(this.keyword) {
+          // var key = document.getElementById("dpmtFilter");
+          // key.value = this.keyPrefix + " " + vue_courseFilter.dept_dropdown[index].name;
+          this.filter_with_dpmt = true;
           this.keyword = this.keyword.toUpperCase();
           for(var i in this.dept){
             if(this.dept[i].DepPrefix.match(this.keyword) || this.dept[i].DepName.match(this.keyword)) {
@@ -286,19 +302,36 @@
               this.dept_dropdown.push(result_candidate);
             }
           }
-
-        } else if (!this.keyword && vue_course_item.course_data_db().length != 0) {
-          console.log("empty!!");
-          vue_course_item.course_data = [];
-          if (document.getElementById("commentCheck").checked==true) {
-            vue_course_item.course_data = vue_course_item.course_with_comment;
+          if(this.comment_only==true){
+            for(var i in vue_course_item.course_with_comment){
+              if(vue_course_item.course_with_comment[i].系號 == this.keyPrefix){
+                vue_course_item.course_data.push(vue_course_item.course_with_comment[i]);
+              }
+            }
           } else {
-            for(var i=0;i<100;i++){
-              vue_course_item.course_data.push(vue_course_item.course_data_db()[i]);
+            for(var i in vue_course_item.course_data_db()) {
+              if(vue_course_item.course_data_db()[i].系號 == this.keyPrefix){
+                vue_course_item.course_data.push(vue_course_item.course_data_db()[i]);
+              }
             }
           }
+
+
         }
-        console.log(this.dept_dropdown);
+        // if(document.getElementById("commentCheck").checked==true){
+        //
+        // }
+        // else if (!this.keyword && vue_course_item.course_data_db().length != 0) {
+        //   console.log("empty!!");
+        //   vue_course_item.course_data = [];
+        //   if (document.getElementById("commentCheck").checked==true) {
+        //     vue_course_item.course_data = vue_course_item.course_with_comment;
+        //   } else {
+        //     for(var i=0;i<100;i++){
+        //       vue_course_item.course_data.push(vue_course_item.course_data_db()[i]);
+        //     }
+        //   }
+        // }
         return this.dept_dropdown;
 
       }

@@ -360,7 +360,6 @@
     height: 82vh;
     width: 100%;
     background: $bg_color;
-    border: $light_2 1px solid;
     @include box_shadow_2();
     @include box_shadow_1_hover();
     &__empty_hint {

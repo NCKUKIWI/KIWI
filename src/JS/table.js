@@ -173,7 +173,6 @@
                 var text_to_find = search_format( this.keyword );
                 if ( text_to_find ) {
                     for ( var i = 0 ; i < course_db.length ; i ++ ) {
-                        // 預先排除特殊符號影響正規表達式の判斷
                         var text_to_check_1 = search_format( course_db[i].課程名稱 );
                         var text_to_check_2 = search_format( course_db[i].老師 );
                         if ( text_to_check_1.match( text_to_find ) || text_to_check_2.match( text_to_find ) ) {

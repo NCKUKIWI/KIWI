@@ -197,7 +197,7 @@
       wishlist_cont: [],
       dept_dropdown: [],
       filter_by_dpmt: [],
-      keyPrefix: '',
+      keyPrefix: ''
     },
     methods: {
       comment_filter: function() {
@@ -276,29 +276,45 @@
     computed: {
       search_result: function() {
         this.dept_dropdown = [];
-        if(this.keyword) {
-          this.keyword = this.keyword.toUpperCase();
-          for(var i in this.dept){
-            if(this.dept[i].DepPrefix.match(this.keyword) || this.dept[i].DepName.match(this.keyword)) {
-              var result_candidate = [];
-              result_candidate.prefix = this.dept[i].DepPrefix;
-              result_candidate.name = this.dept[i].DepName;
-              this.dept_dropdown.push(result_candidate);
+        this.dept_dropdown.length = 0;
+        var text_to_find = search_format( this.keyword );
+        if ( text_to_find ) {
+          for ( var i = 0 ; i < this.dept.length ; i ++ ) {
+              var text_to_check_1 = this.dept[i].DepPrefix ;
+              var text_to_check_2 = this.dept[i].DepName ;
+              if ( text_to_check_1.match( text_to_find ) || text_to_check_2.match( text_to_find ) ) {
+                var result_candidate = [];
+                result_candidate.prefix = this.dept[i].DepPrefix;
+                result_candidate.name = this.dept[i].DepName;
+                this.dept_dropdown.push(result_candidate);
+              }
             }
           }
+        return this.dept_dropdown ;
+        // this.dept_dropdown = [];
+        // if(this.keyword) {
+        //   this.keyword = this.keyword.toUpperCase();
+        //   for(var i in this.dept){
+        //     if(this.dept[i].DepPrefix.match(this.keyword) || this.dept[i].DepName.match(this.keyword)) {
+        //       var result_candidate = [];
+        //       result_candidate.prefix = this.dept[i].DepPrefix;
+        //       result_candidate.name = this.dept[i].DepName;
+        //       this.dept_dropdown.push(result_candidate);
+        //     }
+        //   }
 
-        } else if (!this.keyword && vue_course_item.course_data_db().length != 0) {
-          console.log("empty!!");
-          vue_course_item.course_data = [];
-          if (document.getElementById("commentCheck").checked==true) {
-            vue_course_item.course_data = vue_course_item.course_with_comment;
-          } else {
-            for(var i=0;i<100;i++){
-              vue_course_item.course_data.push(vue_course_item.course_data_db()[i]);
-            }
-          }
-        }
-        console.log(this.dept_dropdown);
+        // } else if (!this.keyword && vue_course_item.course_data_db().length != 0) {
+        //   console.log("empty!!");
+        //   vue_course_item.course_data = [];
+        //   if (document.getElementById("commentCheck").checked==true) {
+        //     vue_course_item.course_data = vue_course_item.course_with_comment;
+        //   } else {
+        //     for(var i=0;i<100;i++){
+        //       vue_course_item.course_data.push(vue_course_item.course_data_db()[i]);
+        //     }
+        //   }
+        // }
+        // console.log(this.dept_dropdown);
         return this.dept_dropdown;
 
       }

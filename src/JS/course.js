@@ -179,12 +179,6 @@
         setWindow( 'add_review', 'open' );
       },
     },
-    filter: {
-      // roundto2: function(value) {
-      //   value = Number(value);
-      //   return value.toFixed(2);
-      // },
-    },
   });
 
   var vue_courseFilter = new Vue ({
@@ -207,7 +201,6 @@
       comment_filter: function() {
         console.log("check");
         var cCheck = document.getElementById("commentCheck");
-        var dpmt_value = document.getElementById("dpmtFilter").value;
 
         if (cCheck.checked==true) {
           this.comment_only = true;
@@ -237,6 +230,7 @@
         var key_prefix = vue_courseFilter.dept_dropdown[index].prefix;
         this.keyPrefix = key_prefix;
         this.filter_by_dpmt = [];
+        console.log(key.value);
         key.value = key_prefix + " " + vue_courseFilter.dept_dropdown[index].name;
         console.log(key.value);
         if(this.keyword) {
@@ -289,6 +283,9 @@
       search_result: function(index) {
         this.dept_dropdown = [];
         vue_course_item.course_data = [];
+        if(vue_courseFilter.keyword.length<1){
+          console.log("keyword < 1");
+        }
         if(this.keyword) {
           // var key = document.getElementById("dpmtFilter");
           // key.value = this.keyPrefix + " " + vue_courseFilter.dept_dropdown[index].name;

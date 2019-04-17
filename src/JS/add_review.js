@@ -26,13 +26,22 @@ var vue_add_review = new Vue({
 	watch: {
 		course_title: function () {
 			if ( this.course_title != this.course_title_filled ) {
+				// 初始化
 				this.isChoosingSemester = false ;
 				this.isChoosingTeacher = false ;
 				this.course_title_filled = '';
 				this.course_title_suggestion.length = 0;
 				if ( this.course_title ) {
 					for ( var i = 0 ; i < course_prev_db.length ; i ++ ) {
-						if ( course_prev_db[i].課程名稱.toUpperCase().match ( this.course_title.toUpperCase() ) ) {
+						// 預先排除特殊符號影響正規表達式の判斷
+						var text_to_check = course_prev_db[i].課程名稱 ;
+						var text_to_find = this.course_title ;
+						if ( getREValidText( text_to_find ) ) {
+							text_to_check = getREValidText( text_to_check );
+							text_to_find = getREValidText( text_to_find );
+						}
+						if ( String( text_to_check ).toUpperCase().match ( text_to_find.toUpperCase() )) {
+							// 檢查本課程名稱是否已顯示在 dropdown
 							if ( this.course_title_suggestion.length ) {
 								var ifRepeated = false ;
 								for ( var j = 0 ; j < this.course_title_suggestion.length ; j ++ ) {
@@ -83,7 +92,14 @@ var vue_add_review = new Vue({
 				this.isChoosingTeacher = false ;
 				this.course_semester_suggestion.length = 0;
 				for ( var i = 0 ; i < course_prev_db.length ; i ++ ) {
-					if ( course_prev_db[i].課程名稱.toUpperCase().match ( this.course_title.toUpperCase() ) ) {
+					// 預先排除特殊符號影響正規表達式の判斷
+					var text_to_check = course_prev_db[i].課程名稱 ;
+					var text_to_find = this.course_title ;
+					if ( getREValidText( text_to_find ) ) {
+						text_to_check = getREValidText( text_to_check );
+						text_to_find = getREValidText( text_to_find );
+					}
+					if ( String( text_to_check ).toUpperCase().match ( text_to_find.toUpperCase() )) {
 						if ( this.course_semester_suggestion.length ) {
 							var ifRepeated = false ;
 							for ( var j = 0 ; j < this.course_semester_suggestion.length ; j ++ ) {
@@ -114,7 +130,14 @@ var vue_add_review = new Vue({
 				this.isChoosingSemester = false ;
 				this.course_teacher_suggestion.length = 0;
 				for ( var i = 0 ; i < course_prev_db.length ; i ++ ) {
-					if ( course_prev_db[i].課程名稱.toUpperCase().match ( this.course_title.toUpperCase() ) && course_prev_db[i].semester == this.course_semester ) {
+					// 預先排除特殊符號影響正規表達式の判斷
+					var text_to_check = course_prev_db[i].課程名稱 ;
+					var text_to_find = this.course_title ;
+					if ( getREValidText( text_to_find ) ) {
+						text_to_check = getREValidText( text_to_check );
+						text_to_find = getREValidText( text_to_find );
+					}
+					if ( String( text_to_check ).toUpperCase().match ( text_to_find.toUpperCase() ) && course_prev_db[i].semester == this.course_semester ) {
 						if ( this.course_teacher_suggestion.length ) {
 							var ifRepeated = false ;
 							for ( var j = 0 ; j < this.course_teacher_suggestion.length ; j ++ ) {
@@ -178,10 +201,7 @@ var vue_add_review = new Vue({
 			if ( command == 'cold' ) {
 				this.window_status = '可填 1-10 分，高分表示該課程「上課較為輕鬆」。'
 			}
-			if ( command == 'no_save' ) {
-				this.window_status = '您的心得不會自動儲存，請確認送出後再關閉視窗。'
-			}
-			if ( command == 'review' ) {
+			if ( command == 'default' ) {
 				this.window_status = '心得最低需求 50 字，請填寫完畢後按下送出。'
 			}
 		},

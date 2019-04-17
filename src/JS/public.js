@@ -68,12 +68,6 @@
     // 開啟或關閉視窗
     // setWindow( 'add_review_success', 'open' );
 
-    // // 設定載入畫面
-    // window.onload = function () {
-    //     vue_loading.turnoff();
-    // }
-
-
 
     axios.get ( '/course/' )
         .then ( function ( response ) {
@@ -82,9 +76,6 @@
             getUserInfo ();
             // 將 course_db 放入
             var tmp = [];
-	        // for (var i = 0; i < 200; i++) {
-	        //     vue_course_item.course_data.push(vue_course_item.course_data_db()[i]);
-	        // }
             for (var i = 0; i < 200; i++) {
 	            tmp.push(vue_course_item.course_data_db()[i]);
 	        }
@@ -100,18 +91,18 @@
         });
 
 
-    axios.get ( '/course/allDpmt' )
-        .then ( function ( response ) {
-	        vue_courseFilter.dept = response.data;
-          //只要學院的代號，篩掉通識類
-          for(var i in vue_courseFilter.dept) {
-            if (!vue_courseFilter.dept[i].DepPrefix.match("A")){
-              vue_register.depts.push(vue_courseFilter.dept[i].DepPrefix);
+    axios.get('/course/allDpmt')
+        .then(function (response) {
+            vue_courseFilter.dept = response.data;
+            // 只要學院的代號，篩掉通識類
+            for (var i in vue_courseFilter.dept) {
+                if (!vue_courseFilter.dept[i].DepPrefix.match("A")) {
+                    vue_register.depts.push(vue_courseFilter.dept[i].DepPrefix);
+                }
             }
-          }
         })
-        .catch ( function ( error ) {
-            console.log (  'axios error:' + error ) ;
+        .catch(function (error) {
+            console.log('axios error:' + error);
         });
 
 
@@ -187,18 +178,6 @@
     function getUserInfo () {
         axios.get('/user/info').then(function(res){
             vue_loading.turnoff();
-            // if (res.data.user.department == '無' || res.data.user.grade == ''){
-            //     toTab('register');
-            //     vue_register.old_user_login();
-            //     setTimeout(function() { setNotification ( '請填入基本資料！', 'blue' )}, 3000);
-            //     return; // 登入後沒有填完資料的話還是停留在註冊頁
-            // }
-            // if (res.data.user.department == 'new' || res.data.user.grade == 'new'){
-            //     toTab('register');
-            //     setTimeout(function() { setNotification ( '請填入基本資料！', 'blue' )}, 3000);
-            //     vue_register.new_user_login();
-            //     return; // 登入後沒有填完資料的話還是停留在註冊頁
-            // }
             pageStatus.loggedIn = true;
             userData.user_name = res.data.user.name;
             userData.user_id = res.data.user.id;
@@ -206,7 +185,6 @@
             userData.user_grade = res.data.user.grade;
             userData.user_photo = "https://graph.facebook.com/" + res.data.user.fb_id + "/picture?type=normal";
             userData.user_email = res.data.user.email;
-
             toTab( pageStatus.initial_tab );
             setWindow ( 'not_login', 'close' );
             getWishlistTable();
@@ -245,16 +223,11 @@
     function wishlistAdd ( target_id ) {
         if ( checkLoggedIn() ) {
             if ( ! userData.now_wishlist.find( function(i){ return i == target_id }) ){
-                // if ( ! userData.now_table.find( function(i){ return i == target_id }) ){
-                    userData.now_wishlist.push( target_id );
-                    vue_wishlist.refresh();
-                    vue_courseFilter.refresh();
-                    setNotification ( '成功加入願望清單！', 'blue' );
-                    return wishlistUpload();
-                // }
-                // else {
-                    // setNotification ( '此課程已在你的課表內！', 'red' );
-                // }
+                userData.now_wishlist.push( target_id );
+                vue_wishlist.refresh();
+                vue_courseFilter.refresh();
+                setNotification ( '成功加入願望清單！', 'blue' );
+                return wishlistUpload();
             }
             else {
                 setNotification ( '此課程已在願望清單內！', 'red' );
@@ -306,6 +279,7 @@
     }
 
     // 回傳使用者的心得數
+
     function getUserComment(){
         axios.get('/user/getHelperService').
         then(function(response){

@@ -341,7 +341,7 @@
                 z-index: 100;
                 content: '';
                 display: block;
-                height: calc(75vh - 185px - 30px);
+                height: calc(77vh - 185px - 30px);
                 width: calc(27vw - 30px);
                 background: transparent;
             }
@@ -360,7 +360,6 @@
     height: 82vh;
     width: 100%;
     background: $bg_color;
-    border: $light_2 1px solid;
     @include box_shadow_2();
     @include box_shadow_1_hover();
     &__empty_hint {

@@ -338,3 +338,28 @@
         }
         return category;
     }
+
+
+    // 文字處理：排除正規表達式的的特殊符號
+
+    function getREValidText ( text ) {
+        var invalid = /[()\[\]{}]+/g;
+        if ( text.match(invalid) ) {
+            text = text.replace(invalid, "");
+            return text ;
+        }
+        // else {
+        //     return 0;
+        // }
+        return text ;
+    }
+
+
+    // 搜尋功能：輸入關鍵字、搜尋範圍、輸出陣列
+
+    function search_format ( text ) {
+        // 預先排除特殊符號、大小寫因素
+        text = getREValidText( text );
+        text = String( text ).toUpperCase();
+        return text;
+    }

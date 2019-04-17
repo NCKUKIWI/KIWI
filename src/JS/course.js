@@ -226,7 +226,7 @@
         }
       },
       result_click: function(index) {
-        var key = document.getElementById("dpmtFilter");
+        // var key = document.getElementById("dpmtFilter");
         var key_prefix = vue_courseFilter.dept_dropdown[index].prefix;
         this.keyPrefix = key_prefix;
         this.filter_by_dpmt = [];
@@ -286,7 +286,8 @@
         if(vue_courseFilter.keyword.length<1){
           console.log("keyword < 1");
         }
-        if(this.keyword) {
+        if( this.keyword !='' ) {
+          // 自動完成、偵測空值變回全部
           // var key = document.getElementById("dpmtFilter");
           // key.value = this.keyPrefix + " " + vue_courseFilter.dept_dropdown[index].name;
           this.filter_with_dpmt = true;

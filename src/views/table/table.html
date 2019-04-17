@@ -28,7 +28,7 @@
 			<p v-if=" filter_status" class="text_18">願望清單（符合所選時段） </p>
 		</div>
 		<div class="wishlist_cont" :class="{ locked: page_status.table_locked }" >
-			<p v-if="!wishlist_cont.length" class="wishlist_cont__no_result text_dark">尚未新增任何課程進入願望清單。</p>
+			<p v-if="!wishlist_cont.length && !filter_status" class="wishlist_cont__no_result text_dark">尚未新增任何課程進入願望清單。</p>
 			<p v-if="!filter_item_count && filter_status" class="wishlist_cont__no_result text_dark">願望清單內無符合本時段之項目。</p>
 			<wishlist-item v-for="item in wishlist_cont" :class_item="item"></wishlist-item>
 		</div>

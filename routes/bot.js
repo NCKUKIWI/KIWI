@@ -994,11 +994,16 @@ function sendReport(report_post){
 			url: msg_creative_url,
 			json:broadcastBtnMsg(report, buttons)
 		}, creativeMsgCb(target_label_id));
+		// sendPostRequest({
+		// 	url: msg_creative_url,
+		// 	json: broadcastTextMsg('以上這則心得被通過檢舉, 心得已下架！正在發信通知被檢舉人')
+		// }, creativeMsgCb(target_label_id));
 		// sendButtonsMessage(config.bot.test, report, buttons);
 	});
 }
 
 
 // broadcast labelid: https://developers.facebook.com/docs/messenger-platform/send-messages/broadcast-messages/target-broadcasts/?locale=zh_TW
+// user 要記得去訂閱這個粉專 -> 輸入'小幫手我是管理員'
 module.exports = {router, sendReport};
 

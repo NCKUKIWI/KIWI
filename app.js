@@ -71,6 +71,21 @@ app.use("/user", require("./routes/user")); // get "/user"時交給routes user�
 app.use("/schedule", require("./routes/schedule")); // get "/schedule"時交給routes schedule
 app.use("/course_rate", require("./routes/course_rate")); // get "/course_rate"時交給routes course_rate
 app.use("/bot", require("./routes/bot").router);
+app.get("/report", function(req, res) {
+    function unauthorized(res) {
+        res.set('WWW-Authenticate', 'Basic realm=Input User&Password');
+        return res.sendStatus(401);
+    }
+    var user = basicAuth(req);
+    if (!user || !user.name || !user.pass) {
+        return unauthorized(res);
+    }
+    if (user.name === config.basicAuth.username && user.pass === config.basicAuth.pw) {
+        res.send(render('./src/views/report/report.html'))
+    } else {
+        return unauthorized(res);
+    }
+})
 app.use("/admin", function (req, res, next) {
     function unauthorized(res) {
         res.set('WWW-Authenticate', 'Basic realm=Input User&Password');

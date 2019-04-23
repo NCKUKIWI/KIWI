@@ -310,19 +310,7 @@ router.post('/report/:id', function (req, res) {
             } else {
                 /* 區分檢舉原因 */
                 var type = req.body['reason'];
-                var reason = "";
-                switch (type) {
-                    case 'A':
-                        reason = "不實內容";
-                        break;
-                    case 'B':
-                        reason = "辱罵";
-                        break;
-                    default:
-                        reason = "(看前端是否要接這邊)";
-                        break;
-                }
-                console.log("檢舉原因:" + reason);
+                var reason = type;
                 /* 新增檢舉紀錄 */
                 var report_post = {
                     user_id: userid,
@@ -337,7 +325,7 @@ router.post('/report/:id', function (req, res) {
                         res.send('Success');
                     });
                 });
-                bot.sendReport(report_post);
+                // bot.sendReport(report_post);
             }
         });
     } else {

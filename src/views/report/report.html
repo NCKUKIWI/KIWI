@@ -22,6 +22,20 @@
   <script src="https://apis.google.com/js/api:client.js" charset="utf-8"></script>
 </head>
 <style>
+  .pass{
+    background-color: rgba(51, 170, 89, 0.481);
+    width: 60px;
+    text-align: center;
+    border-radius: 5px;
+    margin-left: 10px;
+  }
+  .title_{
+    text-align: center;margin:15px;margin-left: auto;margin-right: auto;
+    background-color: rgba(90, 199, 218, 0.2);
+    width:30%;
+    padding: 6px;
+    border-radius: 10px;
+  }
   .inputcss {
     border-color: rgb(102, 153, 153);
     border-width:  0px 0px 4px 0px;
@@ -80,49 +94,45 @@
           </div>
           <div class="courseContentBody__right__comment" style="width:90%;margin-left: auto;margin-right: auto">
             <h2>{{course_name}}</h2>
-            <div class="block_title" style="padding-top: 20px;">
-              <p>課程心得 </p>
+            <div style="padding-top: 20px;">
+              <h5>課程心得 </h5>
             </div>
             <div class="courseFeedback">
               <div id="commentBody" style="text-align: center">
                 <div class="courseFeedback__single">
-                  <div class="courseFeedback__msg">
+                  <div class="courseFeedback__msg" style="margin-left: auto;margin-right: auto;">
                     {{comment}}
                   </div>
                 </div>
               </div>
             </div>
-            <div class="block_title">
-              <p>檢舉原因 </p>
-            </div>
+            <h5>檢舉原因 </h5>
             <div class="courseFeedback">
               <div id="commentBody" style="text-align: center">
                 <div class="courseFeedback__single">
-                  <div class="courseFeedback__msg">
+                  <div class="courseFeedback__msg" style="margin-left: auto;margin-right: auto;">
                     {{reason}}
                   </div>
                 </div>
               </div>
             </div>
-
-            <h2>審查人 </h2>
+            <h5>審查人 </h5>
             <input v-if="onRead==0;" v-model="reviewer" class="inputcss" type="text" style="margin-top:10px;margin-bottom: 30px;width:150px;">
             <div v-else class="courseFeedback">
               <div id="commentBody">
                 <div class="courseFeedback__single">
-                  <div class="courseFeedback__msg" style="text-align: center">
+                  <div class="courseFeedback__msg" style="margin-left: auto;margin-right: auto;">
                     {{reviewer}}
                   </div>
                 </div>
               </div>
             </div>
-
-            <h2>審查心得 </h2>
+            <h5>審查心得 </h5>
             <input v-if="onRead==0;" v-model="response" class="inputcss" type="text" style="margin-top:10px;margin-bottom: 30px;width:150px">
             <div v-else class="courseFeedback">
               <div id="commentBody">
                 <div class="courseFeedback__single">
-                  <div class="courseFeedback__msg">
+                  <div class="courseFeedback__msg" style="margin-left: auto;margin-right: auto;">
                     {{response}}
                   </div>
                 </div>
@@ -135,39 +145,35 @@
       </div>
     </div>
     <div>
-      <div class="courseList__sideList__itemBox" style="height:200px;width:350px;margin-left: auto;margin-right: auto;margin-top: 50px;"
+      <div class="courseList__sideList__itemBox" style="height:240px;width:350px;margin-left: auto;margin-right: auto;margin-top: 50px;"
         id="courseList">
-        <h4 style="text-align: center;margin: 15px;background-color: rgb(255, 153, 102, 0.2);width:20%;">待審查</h4>
+        <h4 class="title_">待 審 查</h4>
         <div id="course_item" v-on:scroll="handleScroll">
           <div class="list_course_item" @click="getReportComment(data.post_id, 0, data.reason, data.reviewer, data.response);"
             v-for="(idx, data) in datas" v-if="data.onRead==0">
             <div class="list_course_item_mid">
-              <p class="list_course_item_description text_16 text_dark">原因：{{data.reason}}</p>
+              <p class="list_course_item_description text_16 text_dark" style="text-align: center">原因：{{data.reason}}</p>
             </div>
-            <div class="list_course_item_right large_right">
-              <div class="large_right--circle" @click.stop="setCourse(course.id)">
-                <div class="circle--img" v-show="!userData.now_wishlist.includes(course.id)"><img src="./dist/images/course/heart.svg" /></div>
-                <div class="circle--img" v-show="userData.now_wishlist.includes(course.id)"><img src="./dist/images/course/heart_red.svg" /></div>
-              </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="courseList__sideList__itemBox" style="height:200px;width:350px;float: buttom;margin-left: auto;margin-right: auto;margin-top: 50px;"
+      <div class="courseList__sideList__itemBox" style="height:240px;width:350px;margin-left: auto;margin-right: auto;margin-top: 50px;"
         id="courseList">
-        <h4 style="text-align: center;margin: 15px;background-color: rgb(255, 153, 102, 0.2);width:40%;">審查過了</h4>
+        <h4 class="title_">已 審 查</h4>
         <div id="course_item" v-on:scroll="handleScroll">
           <div class="list_course_item" @click="getReportComment(data.post_id, 1, data.reason, data.reviewer, data.response)"
-            v-for="(idx, data) in datas" v-if="data.onRead==1">
-            <div class="list_course_item_mid">
-              <p class="list_course_item_description text_14 text_dark">原因：{{data.reason}}</p>
-              <p class="list_course_item_title text_16">-> {{data.reviewer}}</p>
+            v-for="(idx, data) in datas" v-if="data.onRead==1" >
+            <div v-if="data.pass" class="pass">
+                {{data.reviewer}}
             </div>
-            <div class="list_course_item_right large_right" v-if="data.pass" style="background-color: green">
-              <div class="large_right--circle" @click.stop="setCourse(course.id)">
-                <div class="circle--img" v-show="!userData.now_wishlist.includes(course.id)"><img src="./dist/images/course/heart.svg" /></div>
-                <div class="circle--img" v-show="userData.now_wishlist.includes(course.id)"><img src="./dist/images/course/heart_red.svg" /></div>
-              </div>
+            <div v-else class="pass" style="background: rgba(238, 74, 96, 0.481)">
+                {{data.reviewer}}
+            </div>
+            <div class="list_course_item_mid">
+              <p class="list_course_item_description text_14 text_dark" style="margin-left: auto;margin-right: auto;">原因：{{data.reason}}</p>
+            </div>
+            <div class="pass">
             </div>
           </div>
         </div>

@@ -7,6 +7,7 @@ var vue_nav_bar = new Vue({
 		result_cont: [],
 		user_data: userData,
 		page_status: pageStatus,
+		mobile_status: 'default'
 	},
 	computed: {
 		result: function () {
@@ -64,6 +65,21 @@ var vue_nav_bar = new Vue({
 			setWindow('helper','open');
 			getUserComment();
 			// document.getElementById("helper_background").style.display = "block";
+		},
+		mobileNavStatus: function( status ) {
+			if ( status == 'search') {
+				this.mobile_status = 'search';
+			}
+			if ( status == 'drop' ) {
+				vue_courseFilter.mobileNavStatus( 'drop' );
+				vue_courseDarkScreen.mobileNavStatus( 'drop' );
+				if ( this.mobile_status == 'drop' ) {
+					this.mobile_status = 'default';
+				}
+				else {
+					this.mobile_status = 'drop';
+				}
+			}
 		}
 	}
 })

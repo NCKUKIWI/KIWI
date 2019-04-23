@@ -1,6 +1,6 @@
 
 <div class="course__whole">        
-  <div class="courseList__sidenav" id="courseFilter">
+  <div class="courseList__sidenav" id="courseFilter" v-if="mobile_status == 'drop'">
     <div class="courseList__sidenav__deptChoose">
       <div class="block_title">
         <p class="text_18">開課單位</p>
@@ -19,7 +19,8 @@
     </div>
     <div class="courseList__sidenav__courseType" id="courseArrange">
       <div class="block_title">
-        <p class="text_18">檢視選項</p>
+        <p class="text_18 desktop_only">檢視選項</p>
+        <p class="text_16 mobile_only">檢視</p>
       </div>
       <div class="quick_search_area">
         <label class="quick_search_custom"> 
@@ -49,9 +50,11 @@
       </div>
     </div>
   </div>
+  <div class="flex-container dark_screen mobile_only" id="courseDarkScreen" v-if="mobile_status == 'drop'"></div>
   <div class="flex-container courseList__sideList">
     <div class="card courseList__sideList__itemBox" id="courseList">
       <div id="course_item" v-on:scroll="handleScroll">
+        <div class="list_course_item blank_for_mobile mobile_only"></div>
         <div class="list_course_item" @click="openCoursePage(course.id)" v-for="course in course_data">
           <div class="list_course_item_left">
             <p class="list_course_item_category text_white text_20" :class="course.系號">{{course_circle(course.系號,course.系所名稱)}}</p>
@@ -71,6 +74,9 @@
           </div>
         </div>
       </div>
+    </div>
+    <div class="fixed_button_area">
+      <div class="major_button red_add mobile_only"></div>
     </div>
   </div>
 </div>

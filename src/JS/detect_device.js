@@ -7,5 +7,5 @@ function isMobile() {
 }
 
 if(isMobile()){
-	document.location.href="https://old.nckuhub.com";
+	// document.location.href="https://old.nckuhub.com";
 }

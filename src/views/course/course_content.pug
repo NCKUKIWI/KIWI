@@ -1,5 +1,5 @@
 div.course__whole         
-  div.courseList__sidenav#courseFilter
+  div.courseList__sidenav#courseFilter(v-if="mobile_status == 'drop'")
     div.courseList__sidenav__deptChoose
       div.block_title
         p.text_18 開課單位
@@ -12,7 +12,8 @@ div.course__whole
               p {{result.prefix}} {{result.name}}
     div#courseArrange.courseList__sidenav__courseType
       div.block_title
-        p.text_18 檢視選項
+        p.text_18.desktop_only 檢視選項
+        p.text_16.mobile_only 檢視
       div.quick_search_area
         label.quick_search_custom 
           input#commentCheck(type="checkbox" @click="comment_filter()")
@@ -33,9 +34,11 @@ div.course__whole
       div.quick_search_custom.quick_search_custom--btn(@click="opentabletab()")
         img(src="./dist/images/course/arrange.svg")
         p 加入完成，開始安排課表！
+  div#courseDarkScreen.flex-container.dark_screen.mobile_only(v-if="mobile_status == 'drop'")
   div.flex-container.courseList__sideList
     div.card.courseList__sideList__itemBox#courseList
       div#course_item(v-on:scroll="handleScroll")
+        div.list_course_item.blank_for_mobile.mobile_only
         div.list_course_item(@click="openCoursePage(course.id)" v-for="course in course_data")
           div.list_course_item_left
             p.list_course_item_category.text_white.text_20(:class="course.系號") {{course_circle(course.系號,course.系所名稱)}}
@@ -51,4 +54,9 @@ div.course__whole
                 img(src="./dist/images/course/heart.svg")
               div.circle--img(v-show="userData.now_wishlist.includes(course.id)")
                 img(src="./dist/images/course/heart_red.svg")
+    div.fixed_button_area
+      div.major_button.red_add.mobile_only
+
+
+
             

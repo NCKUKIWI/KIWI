@@ -196,12 +196,12 @@
       filter_with_dpmt: false,
       load_more_course: {
       },
+      mobile_status: 'default'
     },
     methods: {
       comment_filter: function() {
         console.log("check");
         var cCheck = document.getElementById("commentCheck");
-
         if (cCheck.checked==true) {
           this.comment_only = true;
 
@@ -278,6 +278,16 @@
           }
         }
       },
+      mobileNavStatus: function( status ) {
+        if ( status == 'drop' ) {
+          if ( this.mobile_status == 'drop' ) {
+            this.mobile_status = 'default';
+          }
+          else {
+            this.mobile_status = 'drop';
+          }
+        }
+      }
     },
     computed: {
       search_result: function(index) {
@@ -339,9 +349,23 @@
   Vue.filter('roundto2', function(value) {
     value = Number(value);
     return value.toFixed(1);
-  })
-//end---------------------
+  });
 
-
-
-// });
+  var vue_courseDarkScreen = new Vue ({
+    el: '#courseDarkScreen',
+    data: {
+      mobile_status: 'default'
+    },
+    methods: {
+      mobileNavStatus: function( status ) {
+        if ( status == 'drop' ) {
+          if ( this.mobile_status == 'drop' ) {
+            this.mobile_status = 'default';
+          }
+          else {
+            this.mobile_status = 'drop';
+          }
+        }
+      }
+    }
+  });

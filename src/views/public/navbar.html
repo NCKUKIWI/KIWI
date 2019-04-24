@@ -2,7 +2,13 @@
 
 <nav>
     <div id="navbar" class="hub_navbar">
-      <div class="hub_navbar__left_area">
+      <div v-if="mobile_status != 'search'" class="hub_navbar__mobile mobile_only">
+        <div class="hub_navbar__mobile__menu_icon"></div>
+        <p class="hub_navbar__mobile__title_text text_24">課程列表</p>
+        <div class="hub_navbar__mobile__drop_icon" :class="{ on: mobile_status == 'drop' }" @click="mobileNavStatus('drop')"></div>
+        <div class="hub_navbar__mobile__search_icon" @click="mobileNavStatus('search')"></div>
+      </div>
+      <div class="hub_navbar__left_area" :class="{ mobile_on: mobile_status == 'search' }">
           <a class="hub_navbar__logo" href="/"></a>
           <input class="hub_navbar__search" type="text" v-model="search_keyword" placeholder="搜尋「課程名」或「教師名」" autocomplete="off"><br>
           <div v-if="search_keyword.replace(' ','') != ''" class="hub_navbar__search__dropdown">

@@ -1,5 +1,5 @@
 div.course__whole         
-  div.courseList__sidenav#courseFilter(v-if="mobile_status == 'drop'")
+  div.courseList__sidenav#courseFilter(:class="{ on: mobile_status == 'drop' }")
     div.courseList__sidenav__deptChoose
       div.block_title
         p.text_18 開課單位

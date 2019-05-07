@@ -188,15 +188,8 @@ router.post('/create', function (req, res) {
                 db.Insert('course_rate', rate, function (err, results) {
                     if (err) throw err;
                     column = ['id'];
-                    db.FindbyColumn('course_new', column, { '課程名稱': req.body.course_name, '老師': req.body.teacher }, function (DbSearch) {
+                    db.Query(`SELECT id FROM course_new WHERE 課程名稱="${req.body.course_name}" AND 老師="${req.body.teacher}"`, function (DbSearch) {
                         if(DbSearch.length!=0){  // 有在course_new找到這門課, 則清掉該課程對應到的key就好
-                            for(var d in DbSearch){
-                                Delete_Id = "course_"+DbSearch[d].id;
-                                console.log("Remove Redis Key: course_"+Delete_Id);
-                                redis.del(Delete_Id, function(err, result){
-                                });
-                            }
-                            ////////////////
                             db.query_post2(DbSearch[0].id, function (courseInfo, comment) {
                                 courseInfo = courseInfo[0];
                                 courseInfo.comment = 0;

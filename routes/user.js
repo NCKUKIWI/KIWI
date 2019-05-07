@@ -148,7 +148,7 @@ router.post('/setDraft/:uid', function (req, res) {
     if(data['courseID']!=null){
         redis.set(cache.userCourseKey(uid, data['courseID']), JSON.stringify(data));
         res.send('done');
-    }else{
+    }else{// 表示還沒有選擇課程準備填入，所以就不放入 redis
         res.send('Empty course ID');
     }
 })

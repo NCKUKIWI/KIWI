@@ -27,9 +27,14 @@ function userCourseKey(uid, cid) {
     return "user_" + uid + "_"+cid;
 }
 
+function draftKey(course, teacher, uid) {
+    return course+"_"+teacher+"_"+uid;
+}
+
 module.exports = {
     redis: client,
     courseCacheKey: courseCacheKey,
     userCacheKey: userCacheKey,
-    userCourseKey: userCourseKey
+    userCourseKey: userCourseKey,
+    draftKey: draftKey
 };

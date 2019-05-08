@@ -135,28 +135,27 @@ router.get('/getList/:userID', function (req, res) {
     }   
 });
 
-router.get('/getDraft', function (req, res) {
-    redis.get(cache.userCourseKey(req.query['userID'], req.query['courseID']),function (err, result) {
+router.get('/getDraft/:uid', function (req, res) {
+    uid = req.params.uid;
+    teacher = req.query.teacher;
+    course = req.query.course;
+    redis.get(cache.draftKey(course, teacher, uid),function (err, result) {
         res.send(result)
     });
-    
 });
 
 router.post('/setDraft/:uid', function (req, res) {
     uid = req.params.uid;
     let data = req.body;
-    if(data['courseID']!=null){
-        redis.set(cache.userCourseKey(uid, data['courseID']), JSON.stringify(data));
-        res.send('done');
-    }else{// 表示還沒有選擇課程準備填入，所以就不放入 redis
-        res.send('Empty course ID');
-    }
+    redis.set(cache.draftKey(data["course"], data["teacher"], uid), JSON.stringify(data));
+    res.send('done');
 })
 
 
 router.post('/delDraft/:uid', function (req, res) {
     uid = req.params.uid
-    redis.del(cache.userCourseKey(uid, req.body['courseID']),function (error, result) {
+    let data = req.body;
+    redis.del(cache.draftKey(data["course"], data["teacher"], uid),function (error, result) {
         res.send('done')
     });
 });

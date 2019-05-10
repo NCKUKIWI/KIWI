@@ -85,6 +85,14 @@
             </div>
             <div id="commentBody">
               <div class="courseFeedback__single" v-for="comment in comment_data">
+                <div class="courseFeedback__icons">
+                  <div class="icon-span"><span>107-1學期</span></div>
+                  <div>
+                    <img src="./dist/images/course/thumbs_up.png"/><span>10</span>
+                    <img src="./dist/images/course/thumbs_down.png"/><span>10</span>
+                    <img src="./dist/images/course/more.png" height="3px"/>
+                  </div>
+                </div>
                 <div class="courseFeedback__msg">
                   <p v-html="comment.comment">{{comment.comment}}</p>
                 </div>

@@ -3,7 +3,7 @@
 <nav>
     <div id="navbar" class="hub_navbar">
       <div v-if="mobile_status != 'search'" class="hub_navbar__mobile mobile_only">
-        <div class="hub_navbar__mobile__menu_icon"></div>
+        <div class="hub_navbar__mobile__menu_icon" @click="switchProfileWindow()"></div>
         <p class="hub_navbar__mobile__title_text text_24">課程列表</p>
         <div class="hub_navbar__mobile__drop_icon" :class="{ on: mobile_status == 'drop' }" @click="mobileNavStatus('drop')"></div>
         <div class="hub_navbar__mobile__search_icon" @click="mobileNavStatus('search')"></div>
@@ -32,29 +32,31 @@
         <div :class="{ on: page_status.now_tab == 'table' }" class="hub_navbar__link" @click="switchTo('table')">排課表 <span class="wishlist_count">{{ user_data.now_wishlist.length }}</span></div>
         <img :class="{ on: page_status.nav_profile_dropdown || page_status.now_tab == 'profile' }" class="hub_navbar__profile" @click="switchProfileWindow()" :src="user_data.user_photo">
         <div v-if="page_status.nav_profile_dropdown" class="hub_navbar__profile__dropdown on">
-            <div class="hub_navbar__profile__dropdown__info">
-                <img class="hub_navbar__profile__dropdown__info__photo" :src="user_data.user_photo">
-                <div class="hub_navbar__profile__dropdown__info__detail">
-                    <!-- todo: nav_profile_name 加入 vip class 旁邊就會出現星星唷！ -->
-                    <div class="nav_profile_name">{{user_data.user_name}}</div>
-                    <!-- <div v-show="user_data.user_id == 0" class="nav_profile_dept">請登入網站，</div> -->
-                    <!-- <div v-show="user_data.user_id == 0" class="nav_profile_grade">以使用完整功能！</div> -->
-                    <!-- <div v-show="user_data.user_department != '無'" class="nav_profile_dept">{{user_data.user_department}}</div> -->
-                    <!-- <div v-show="user_data.user_grade != '無'" class="nav_profile_grade">{{user_data.user_grade}}年級</div> -->
-                    <!-- <div v-show="user_data.user_id != 0 && user_data.user_department == '無'" class="nav_profile_dept">尚未輸入系所資料</div> -->
-                    <!-- <div v-show="user_data.user_id != 0 && user_data.user_grade == '無'" class="nav_profile_grade">尚未輸入年級資料</div> -->
-                </div>
-            </div>
-            <div v-show="user_data.user_id != 0" class="hub_navbar__profile__dropdown__goto" @click="open_helper()" >開通小幫手</div>
-            <a href="/user/fblogin" v-show="user_data.user_id == 0"><div class="hub_navbar__profile__dropdown__goto">立即登入 / 註冊</div></a>
-            <div class="hub_navbar__profile__dropdown__links">
-                <!-- <a>關於 NCKU HUB</a> -->
-                <a href="https://www.facebook.com/nckuhub" target="_blank">粉絲專頁</a>
-                <a href="https://www.messenger.com/t/nckuhub" target="_blank">回報問題</a>
-                <a href="https://old.nckuhub.com">返回舊版</a>
-                <a v-show="user_data.user_id != 0" href='/user/logout'>登出帳戶</a>
+          <div class="hub_navbar__profile__dropdown__info" :class="{ not_login: user_data.user_id == 0 }">
+            <img class="hub_navbar__profile__dropdown__info__photo" :src="user_data.user_photo">
+            <div class="hub_navbar__profile__dropdown__info__detail">
+              <!-- todo: nav_profile_name 加入 class ".vip" 旁邊就會出現星星唷！ -->
+              <div class="nav_profile_name">{{user_data.user_name}}</div>
+              <div v-show="user_data.user_id == 0" class="nav_profile_dept">請登入網站，</div>
+              <div v-show="user_data.user_id == 0" class="nav_profile_grade">以使用完整功能！</div>
+              <!-- <div v-show="user_data.user_department != '無'" class="nav_profile_dept">{{user_data.user_department}}</div> -->
+              <!-- <div v-show="user_data.user_grade != '無'" class="nav_profile_grade">{{user_data.user_grade}}年級</div> -->
+              <!-- <div v-show="user_data.user_id != 0 && user_data.user_department == '無'" class="nav_profile_dept">尚未輸入系所資料</div> -->
+              <!-- <div v-show="user_data.user_id != 0 && user_data.user_grade == '無'" class="nav_profile_grade">尚未輸入年級資料</div> -->
             </div>
           </div>
-      </div>
+          <div v-show="user_data.user_id != 0" class="hub_navbar__profile__dropdown__goto" @click="open_helper()" >開通小幫手</div>
+          <a href="/user/fblogin" v-show="user_data.user_id == 0"><div class="hub_navbar__profile__dropdown__goto">立即登入 / 註冊</div></a>
+          <div class="hub_navbar__profile__dropdown__links">
+            <!-- <a>關於 NCKU HUB</a> -->
+            <a v-show="user_data.user_id == 0" class="mobile_only" href="/user/fblogin">登入網站</a>
+            <a href="https://www.facebook.com/nckuhub" target="_blank">粉絲專頁</a>
+            <a href="https://www.messenger.com/t/nckuhub" target="_blank">回報問題</a>
+            <a href="https://old.nckuhub.com">返回舊版</a>
+            <a v-show="user_data.user_id != 0" href='/user/logout'>登出帳戶</a>
+          </div>
+        </div>
+        <div class="dark_screen mobile_only" v-if="page_status.nav_profile_dropdown" @click="switchProfileWindow()"></div>
     </div>
+  </div>
 </nav>

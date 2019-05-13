@@ -5,7 +5,7 @@
 }
 
 @media only screen and (max-width: 965px) { 
-    .hub_navbar__right_area {
+    .hub_navbar__link, .hub_navbar__profile {
         display: none;
     }
     .hub_navbar__logo {
@@ -79,5 +79,52 @@
             background-position: center;
             cursor: pointer;
         }
+    }
+    .hub_navbar__profile__dropdown {
+        position: fixed;
+        z-index: 10;
+        height: 100vh;
+        left: 0;
+        margin-top: 0;
+        border-bottom: none;
+        padding: 0px;
+        border: none;
+        @include box_shadow_2();
+        &__info {
+            background: $blue;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 20px;
+            padding-top: 30px;
+            background-image: url("../images/table/nav_logo_pure.svg");
+            background-size: 30px;
+            background-repeat: no-repeat;
+            background-position: 92% 14%;
+            &.not_login {
+                background: $dark;
+            }
+            &__photo {
+                border: none;
+            }
+            &__detail {
+                margin-top: 10px;
+                margin-left: 5px;
+                .nav_profile_name, .nav_profile_dept, .nav_profile_grade {
+                    color: $white;
+                }
+                .nav_profile_name {
+                    font-size: 18px;
+                    line-height: 32px;
+                }
+            }
+        }
+        &__links > a {
+            width: calc(100% - 50px);
+            left: 0px;
+            padding: 0 25px;
+        }
+    }
+    .hub_navbar__profile__dropdown__goto {
+        display: none;
     }
 }

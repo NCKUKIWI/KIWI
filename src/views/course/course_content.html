@@ -1,6 +1,6 @@
 
 <div class="course__whole">        
-  <div class="courseList__sidenav" id="courseFilter" v-if="mobile_status == 'drop'">
+  <div class="courseList__sidenav" id="courseFilter" :class="{ on: mobile_status == 'drop' }">
     <div class="courseList__sidenav__deptChoose">
       <div class="block_title">
         <p class="text_18">開課單位</p>

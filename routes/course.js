@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var middleware = require('../middleware');
 var cache = require('../helper/cache');
+var gmailSend = require('./gmailSend/gmailSend')
 var redis = cache.redis;
 var courseCacheKey = cache.courseCacheKey;
 var db = require('../model/db');
@@ -84,6 +85,65 @@ router.get('/CourseByKeywords', function (req, res) {
     }
 });
 
+router.get('/getReportData', function (req, res) {
+    db.GetColumn('report_post', ['id','course_name', 'user_id', 'post_id', 'reason', 'onRead', 'reviewer', 'pass', 'response'], { 'column': 'id', 'order': 'DESC' }, function(result){
+        res.send(JSON.stringify(result))
+    })
+})
+
+router.get('/getReportComment/:id', function (req, res) {
+    let id = req.params.id;
+    let table = req.query.table
+    if(table === 'post'){ 
+        db.FindbyID(table, id, function(result){
+            res.json(result)
+        })
+    }else{ // table = report_post
+        column = ['comment', 'reason', 'reviewer', 'response', 'course_name'];
+        db.FindbyColumn(table, column,{"post_id":id}, function(result){
+            res.json(result[0])
+        })
+    }
+})
+
+router.post( '/sendReport', function (req, res){
+    let pass = req.body.pass
+    let postid = req.body.postid
+    let response = req.body.response
+    let reviewer = req.body.reviewer
+    db.FindbyColumn('report_post',['onRead'],{'post_id':postid} ,function(result){
+        if(result[0]['onRead'] == 0){ // the report isn't read
+            db.Update('report_post', {'onRead':1, 'reviewer':reviewer, 'response':response}, {'post_id':postid} ,function(){})
+            if(pass){
+                db.Update('report_post', {'pass':1}, {'post_id':postid} ,function(){})
+                gmailSend.sendMail('nckuhub@gmail.com', 'TO 檢舉人： 你的檢舉通過囉')
+                db.Query(`SELECT * FROM post WHERE id=${postid}`, function(result){
+                    uid = result[0].user_id;
+                    data = JSON.stringify(result[0])
+                    if(uid!=0){ // which means this post is written by the user instead of other website.
+                        gmailSend.sendMail('nckuhub@gmail.com', 'TO 被檢舉人： 有人檢舉你的心得，且通過我們審核了，你的心得將會GG喔')	 
+                        redis.set(cache.draftKey(result[0].course_name, result[0].teacher, uid), data, function(){
+                            db.DeleteByColumn('post', {'id':postid}, function(){})
+                        });
+                    }
+                    db.FindbyColumn('course_new',['id'], {'課程名稱': result[0].course_name, '老師': result[0].teacher.split(/\s|\*/g)[0]}, function(res){
+                        for(let d in res){
+                            let course_id = res[d]["id"]
+                            redis.del(courseCacheKey(course_id));
+                        }
+                    })
+                })
+            }else{
+                db.Update('report_post', {'pass':0}, {'post_id':postid} ,function(){})
+                gmailSend.sendMail('nckuhub@gmail.com', 'TO 檢舉人： 你的檢舉並沒有通過')	 
+            }
+        }else{
+            console.log('it has been read.')
+        }
+        res.send('success')
+    })
+}
+)
 
 /* show */
 router.get('/:id', function (req, res) {
@@ -95,7 +155,7 @@ router.get('/:id', function (req, res) {
         
         db.Query(`UPDATE course_new SET count = count + 1 WHERE id=${id}`, function(){})
         redis.get(courseCacheKey(id), function (err, reply) {
-            if (false) {
+            if (reply) {
                 var data = JSON.parse(reply);
                 var rates = data.rates;
                 if (req.user && rates.length > 0) {

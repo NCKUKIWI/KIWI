@@ -155,7 +155,7 @@
         id="courseList">
         <h4 class="title_">待 審 查</h4>
         <div id="course_item" v-on:scroll="handleScroll">
-          <div class="list_course_item" @click="getReportComment(data.post_id, 0, data.reason, data.reviewer, data.response);"
+          <div class="list_course_item" @click="getReportComment(data.post_id, 0, data.reason, data.reviewer, data.response, 'post');"
             v-for="(idx, data) in datas" v-if="data.onRead==0">
             <div class="list_course_item_mid">
               <p class="list_course_item_description text_16 text_dark" style="text-align: center">原因：{{data.reason}}</p>
@@ -168,7 +168,7 @@
         id="courseList">
         <h4 class="title_">已 審 查</h4>
         <div id="course_item" v-on:scroll="handleScroll">
-          <div class="list_course_item" @click="getReportComment(data.post_id, 1, data.reason, data.reviewer, data.response)"
+          <div class="list_course_item" @click="getReportComment(data.post_id, 1, data.reason, data.reviewer, data.response, 'report_post')"
             v-for="(idx, data) in datas" v-if="data.onRead==1" >
             <div v-if="data.pass" class="pass">
                 {{data.reviewer}}

@@ -160,8 +160,7 @@ const creativeMsgCb = target_label_id => resBody => {
 		}
 	});
 };
-router.post('/broadd',function(req, res){
-
+router.post('/broadtest',function(req, res){
 	var broadcastType = 'broad';
 	var target_label_id = broadcast_label[(broadcastType === "broad" ? "tester" : "all_user")];
 	console.log(target_label_id)
@@ -170,20 +169,6 @@ router.post('/broadd',function(req, res){
 		url: msg_creative_url,
 		json: broadcastTextMsg('好巧喔比巧克力還巧 測試一下')
 	}, creativeMsgCb(target_label_id));
-	// let report = '明天早餐吃什麼'
-	// 	let buttons = [{
-	// 		"type": "postback",
-	// 		"title": "A",
-	// 		"payload": "reportPass_"
-	// 	}, {
-	// 		"type": "postback",
-	// 		"title": "D",
-	// 		"payload": "reportFail_"
-	// 	}];
-	// 	sendPostRequest({
-	// 		url: msg_creative_url,
-	// 		json:broadcastBtnMsg(report, buttons)
-	// 	}, creativeMsgCb(target_label_id));
 })
 router.post('/sendmsg', function (req, res) {
 	console.log(req.body)
@@ -974,32 +959,13 @@ function sendRequest(option, cb) {
 	});
 }
 
-function sendReport(report_post){
+function sendReport(){
 	var broadcastType = 'test';
 	var target_label_id = broadcast_label[(broadcastType === "test" ? "tester" : "all_user")]; // 正式版
-	// var target_label_id = broadcast_label[(broadcastType === "test" ? "broad" : "all_user")];
-
-	DB.FindbyColumn('post', ['comment'], { "id": report_post['post_id'] }, function (data) {
-		let report = '測試中建議關掉通知ＱＱ \n\n'+'檢舉文章: \n\n'+data[0]['comment']+'\n\n'+'檢舉原因: \n\n'+report_post['reason']
-		let buttons = [{
-			"type": "postback",
-			"title": "給過",
-			"payload": "reportPass_"+report_post['post_id']
-		}, {
-			"type": "postback",
-			"title": "理由偏爛",
-			"payload": "reportFail_"+report_post['post_id']
-		}];
-		sendPostRequest({
-			url: msg_creative_url,
-			json:broadcastBtnMsg(report, buttons)
-		}, creativeMsgCb(target_label_id));
-		// sendPostRequest({
-		// 	url: msg_creative_url,
-		// 	json: broadcastTextMsg('以上這則心得被通過檢舉, 心得已下架！正在發信通知被檢舉人')
-		// }, creativeMsgCb(target_label_id));
-		// sendButtonsMessage(config.bot.test, report, buttons);
-	});
+	sendPostRequest({
+		url: msg_creative_url,
+		json: broadcastTextMsg('HI 😊 有人檢舉心得唷！請測試人員速速前往以下網址 \n\n ➡️ https://nckuhub.com/report')
+	}, creativeMsgCb(target_label_id));
 }
 
 

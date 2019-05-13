@@ -92,10 +92,18 @@ router.get('/getReportData', function (req, res) {
 })
 
 router.get('/getReportComment/:id', function (req, res) {
-    var id = req.params.id;
-    db.FindbyID('post', id, function(result){
-        res.json(result)
-    })
+    let id = req.params.id;
+    let table = req.query.table
+    if(table === 'post'){ 
+        db.FindbyID(table, id, function(result){
+            res.json(result)
+        })
+    }else{ // table = report_post
+        column = ['comment', 'reason', 'reviewer', 'response'];
+        db.FindbyColumn(table, column,{"post_id":id}, function(result){
+            res.json(result[0])
+        })
+    }
 })
 
 router.post( '/sendReport', function (req, res){
@@ -106,20 +114,24 @@ router.post( '/sendReport', function (req, res){
     db.FindbyColumn('report_post',['onRead'],{'post_id':postid} ,function(result){
         if(result[0]['onRead'] == 0){ // the report isn't read
             db.Update('report_post', {'onRead':1, 'reviewer':reviewer, 'response':response}, {'post_id':postid} ,function(){})
-            // Q: If I remove the cb function , it would cause error 'callback isn't a function', WHY?
             if(pass){
                 db.Update('report_post', {'pass':1}, {'post_id':postid} ,function(){})
                 gmailSend.sendMail('nckuhub@gmail.com', 'TO 檢舉人： 你的檢舉通過囉')
-                gmailSend.sendMail('nckuhub@gmail.com', 'TO 被檢舉人： 有人檢舉你的心得，且通過我們審核了，你的心得將會GG喔')	 
-                // sendTextMessage(config.bot.test, 'ok！這則心得被通過檢舉, 心得已下架！正在發信通知被檢舉人');
                 db.Query(`SELECT * FROM post WHERE id=${postid}`, function(result){
                     uid = result[0].user_id;
                     data = JSON.stringify(result[0])
-                    if(uid!=0){
-                        redis.set(cache.userCourseKey(uid, postid), data,function(){
-                            db.DeleteByColumn('post', {'id':postid}, function(){} )
-                        })
+                    if(uid!=0){ // which means this post is written by the user instead of other website.
+                        gmailSend.sendMail('nckuhub@gmail.com', 'TO 被檢舉人： 有人檢舉你的心得，且通過我們審核了，你的心得將會GG喔')	 
+                        redis.set(cache.draftKey(result[0].course_name, result[0].teacher, uid), data, function(){
+                            db.DeleteByColumn('post', {'id':postid}, function(){})
+                        });
                     }
+                    db.FindbyColumn('course_new',['id'], {'課程名稱': result[0].course_name, '老師': result[0].teacher.split(/\s|\*/g)[0]}, function(res){
+                        for(let d in res){
+                            let course_id = res[d]["id"]
+                            redis.del(courseCacheKey(course_id));
+                        }
+                    })
                 })
             }else{
                 db.Update('report_post', {'pass':0}, {'post_id':postid} ,function(){})

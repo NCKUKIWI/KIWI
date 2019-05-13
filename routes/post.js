@@ -292,6 +292,10 @@ router.post('/report/:id', function (req, res) {
     var report_post;
     let sql = "SELECT * FROM post WHERE id = "+postid;
     db.Query(sql, function(data) {
+        if(data.length == 0){
+            res.send("The post has been deleted.")
+            return 1;
+        }
         report_post = data[0]
         report_post['post_id'] = data[0].id
         delete report_post.id;
@@ -299,20 +303,17 @@ router.post('/report/:id', function (req, res) {
         /* 檢查用戶是否登入 */
         var reporter_id = req.body['reporter_id'];
         if (reporter_id !== undefined) {
-            /* 檢查是否檢舉過 依照user_id及post_id去尋找 */
+            /* 檢查是否檢舉過 依照post_id去尋找 */
             db.FindbyColumn('report_post', ["id"], {
                 'post_id': postid,
             }, function (reports) {
                 if (reports.length > 0) {
                     res.send('Already report');
                 } else {
-                    /* 區分檢舉原因 */
-                    bot.sendReport();
-                    var type = req.body['reason'];
-                    var reason = type;
-                    /* 新增檢舉紀錄 */
+                    // bot.sendReport(); // For broadcast the /report URL.
+                    // var reason = req.body['reason'];
+                    // report_post['reason'] = reason
                     report_post['reporter_id'] = reporter_id
-                    report_post['reason'] = reason
                     db.Insert('report_post', report_post, function (err, results) {
                         if (err) throw err;
                         console.log('Report post ' + postid + ' success');

@@ -86,7 +86,7 @@ router.get('/CourseByKeywords', function (req, res) {
 });
 
 router.get('/getReportData', function (req, res) {
-    db.GetColumn('report_post', ['id', 'user_id', 'post_id', 'reason', 'onRead', 'reviewer', 'pass', 'response'], { 'column': 'id', 'order': 'DESC' }, function(result){
+    db.GetColumn('report_post', ['id','course_name', 'user_id', 'post_id', 'reason', 'onRead', 'reviewer', 'pass', 'response'], { 'column': 'id', 'order': 'DESC' }, function(result){
         res.send(JSON.stringify(result))
     })
 })
@@ -99,7 +99,7 @@ router.get('/getReportComment/:id', function (req, res) {
             res.json(result)
         })
     }else{ // table = report_post
-        column = ['comment', 'reason', 'reviewer', 'response'];
+        column = ['comment', 'reason', 'reviewer', 'response', 'course_name'];
         db.FindbyColumn(table, column,{"post_id":id}, function(result){
             res.json(result[0])
         })

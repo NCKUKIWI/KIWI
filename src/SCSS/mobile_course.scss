@@ -1,0 +1,99 @@
+
+@import "import";
+
+@media only screen and (min-width: 966px) {
+    .mobile_only {
+        display: none !important;
+    }
+}
+
+@media only screen and (max-width: 965px) { 
+    .desktop_only {
+        display: none !important;
+    }
+    .dark_screen {
+        position: fixed;
+        display: block;
+        left: 0;
+        top: 0;
+        height: 100vh;
+        width: 100vw;
+        background: rgba(0,0,0,0.15);
+        z-index: 5;
+    }
+    .quick_search_custom--btn {
+        display: none;
+    }
+    .courseList__sidenav__deptChoose {
+        display: none;
+    }
+    .wishlist {
+        display: none;
+    }
+    .courseList__sidenav {
+        display: none;
+        &.on {
+            z-index: 10;
+            position: fixed;
+            display: block;
+            height: auto;
+            width: 100vw;
+            margin-top: 60px;
+            background: $white;
+            padding: 4vh 8vw;
+            box-shadow: 0 0 14px 0 rgba(0,0,0,0.10);
+            .quick_search_area {
+                height: auto;
+            }
+            .quick_search_custom {
+                padding: 0;
+                box-shadow: none;
+                border: none;
+                & span:nth-child(3) {
+                    padding-left: 0;
+                    font-size: 16px;
+                }
+            }
+            .block_title > p {
+                color: $deep_blue;
+            }
+            .block_title>p::after {
+                display: none;
+            }
+            .checkmark {
+                position: absolute;
+                right: 2px;
+                &::after {
+                    left: 5px;
+                    top: 0px;
+                }
+            }
+            .courseList__sidenav__courseType {
+                height: auto;
+            }
+        }
+    }
+    .courseList__sideList {
+        width: 100vw;
+        height: calc( 100vh - 64px);
+        padding: 0;
+    }
+    .courseList__sideList__itemBox {
+        height: 100%;
+        .list_course_item.blank_for_mobile {
+            height: 20px;
+            background: $bg_color;
+        }
+    }
+    .major_button {
+        bottom: 20px !important;
+        right: 20px !important;
+    }
+    
+    .list_course_item_right {
+        padding: 0;
+        .large_right--circle {
+            display: none;
+        }
+    }
+}

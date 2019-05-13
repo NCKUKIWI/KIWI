@@ -1,0 +1,697 @@
+<% layout('../public/layout') %>
+<div class="ui stackable grid">
+    <div class="four wide column">
+      <% include ./sidebar %>
+    </div>
+    <div class="twelve wide column">
+      <div id="content">
+        <div class="ui toggle checkbox" id="filter_haspost" style="margin-bottom: 10px">
+          <input type="checkbox">
+          <label >僅顯示有心得之課程</label>
+        </div>
+        <table class="table" id="course-table">
+          <tr>
+            <!--
+            <th>加入</th>
+            -->
+            <th class="course_name">課程名稱</th>
+            <th class="department_name" >開課系所</th>
+            <th class="teacher" >開課老師</th>
+            <th class="class_time">時間</th>
+          </tr>
+
+        </table>
+      </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="course-modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+    </div>
+  </div>
+</div>
+
+<script>
+  var rawCourses = <%- JSON.stringify(courses) %>; //所有課程的資料 (移出document.ready為了使其他script可以全域使用此資料)
+  var nowCourse = <%- JSON.stringify(custom_courses) %>; // 用來裝目前query的系所課程（未用時間表篩選過的）
+  var nowCourse_hasComment = []; // 裝nowCourse的有comment的課程
+  var courses_Department = {}; // 用來分類所有系所，下面使用object property的方式逐一分類
+
+  var now_index = 0 // 全部課程起始值50筆
+
+  if (nowCourse.length != 0){
+    now_index = nowCourse.length;
+    var hasCustomSearchCourses = true; // 代表有使用者客製化條件的課程
+    changeCourse(); // 放入課表
+  }
+  for(var i in rawCourses){
+    if(hasCustomSearchCourses === undefined) nowCourse.push(rawCourses[i]);
+    if(courses_Department.hasOwnProperty(rawCourses[i].系號)){
+      courses_Department[rawCourses[i].系號].push(rawCourses[i]);
+    }
+    else{
+      courses_Department[rawCourses[i].系號] = [];
+      courses_Department[rawCourses[i].系號].push(rawCourses[i]);
+    }
+  }
+  refreshNowCourse_hasComment();
+
+  // var max_index = nowCourse.length;
+  var showempty = 0;
+  $(document).ready(function(){
+    /* 辨別目前用戶的清單中有哪些課程 並將該課程按鈕由加變減 */
+    var carts = <%- JSON.stringify(carts) %>;
+    if(carts != null ){
+      for(var i in carts){
+        $('#'+carts[i].course_id).removeClass('plus addcoursebtn').addClass('minus delcoursebtn');
+      }
+    }
+
+    /* 先加入<=50筆的課程數進去course */
+    for(var maxCourse = nowCourse.length; now_index < 50; now_index++ ){
+      if(i == maxCourse){
+        now_index = maxCourse;
+        break; // 大於query課程數就不在新增
+      }
+      $('#course-table').append(courseTransforToDom(nowCourse[now_index]));
+    }
+
+    /* 往下滑動至底如果有資料繼續新增 */
+    $(window).scroll(function(){
+      if(showempty==0){
+        var bottomHeight = $(document).height()-$(window).height(); // 計算置底的值
+        if(bottomHeight - $(window).scrollTop() < 1  && now_index <= nowCourse.length){
+          for(var i = now_index, maxCourse = nowCourse.length; now_index - i < 50; now_index++ ){
+            if(i == maxCourse){
+              now_index = maxCourse;
+              break; // 大於query課程數就不在新增
+            }
+            // $('#course-table').append(nowCourseDom[i]);
+            if (nowCourse[now_index])
+              $('#course-table').append(courseTransforToDom(nowCourse[now_index]));
+          }
+          /* 將先加入的課程中用戶已選過的課符號變為減號 */
+          if(carts != null ){
+            for(var i in carts){
+              $('#'+carts[i].course_id).removeClass('plus addcoursebtn').addClass('minus delcoursebtn');
+            }
+          }
+          addCourseEventlistener();
+        }
+      }
+    });
+
+    /* 如果用戶勾選只顯示有心得的課程 則將無心得的課程隱藏起來*/
+    $('#filter_haspost').checkbox({
+      onChecked: function() {
+        var originalText = '<tr><th class="course_name">課程名稱</th><th class="department_name" >開課系所</th><th class="teacher" >開課老師</th><th class="class_time">時間</th></tr>';
+        $("#course-table").html(originalText);
+        for(var i in nowCourse_hasComment){
+          $('#course-table').append(courseTransforToDom(nowCourse_hasComment[i]));
+        }
+        now_index = nowCourse.length;
+        localStorage.setItem("check_filter_haspost", true);
+        // showempty = 1;
+        // $('.course-row').hide();
+        // for(var i in nowCourse){
+        //  if(nowCourse[i].comment_num != 0)$('#course-table').append(courseTransforToDom(nowCourse[i]));
+        // }
+        // showempty=1;
+        addCourseEventlistener();
+      },
+      onUnchecked: function() {
+        var originalText = '<tr><th class="course_name">課程名稱</th><th class="department_name" >開課系所</th><th class="teacher" >開課老師</th><th class="class_time">時間</th></tr>';
+        $("#course-table").html(originalText);
+        for(var i = 0; i < nowCourse.length && i < 50; i++ ){
+          $('#course-table').append(courseTransforToDom(nowCourse[i]));
+        }
+        now_index = nowCourse.length > 50 ? 50 : nowCourse.length;
+        localStorage.setItem("check_filter_haspost", false);
+        addCourseEventlistener();
+        // $('.course-row').show();
+        // $('.notempty').remove();
+        // showempty=0;
+      }
+    });
+    /* 搜尋欄的的設定 */
+    $('.ui.search').search({
+       source: rawCourses,
+       error : {
+          source      : 'Cannot search. No source used, and Semantic API module was not included',
+          noResults   : '目前沒有此\"老師\"或是\"課程\"的心得',
+          logging     : 'Error in debug logging, exiting.',
+          noTemplate  : 'A valid template name was not specified.',
+          serverError : 'There was an issue with querying the server.',
+          maxResults  : 'Results must be an array to use maxResults setting',
+          method      : 'The method you called is not defined.'
+      },
+      maxResults: 100,// 最多一次顯示100筆
+      onSelect: function(result, response){
+        getCourseByKeywords('course_id', result["id"]);
+      },
+      searchFields:['課程名稱', '老師'],
+      fields: {
+        categories      : 'results',     // array of categories (category view)
+        categoryName    : 'name',        // name of category (category view)
+        categoryResults : 'results',     // array of results (category view)
+        description     : '老師', // result description
+        image           : 'image',       // result image
+        price           : 'price',       // result price
+        results         : 'results',     // array of results (standard)
+        title           : '課程名稱',       // result title
+        action          : 'action',      // "view more" object name
+        actionText      : 'text',        // "view more" text
+        actionURL       : 'url'          // "view more" url
+      }
+    });
+
+    // Got enter in query input
+    var last;
+    $(".query").keyup(function (e) {
+       if (e.keyCode == 13 && last == 13) {
+          var query = $('.query').val();
+          // window.location.href = "/course?queryw="+query.replace(/\\/g, "");
+          getCourseByKeywords('queryw', query);
+          $('.ui.search').search('hide results');
+       }
+       last = e.keyCode;
+    });
+
+    // 設定如果沒有選擇篩選條件的話，關閉時預設全選
+    $('.chooseCourse').modal({
+      onHide: function(){
+        if($('.chooseCourse .ui.inverted.button.mini.active').length == 0){
+          $($('.hotKeyAll')[0]).trigger('click'); // 點選左邊快捷全部課程
+        }
+      }
+    });
+
+    // 設定如果沒有選擇篩選條件的話，關閉時預設全選
+    $('.timeTable').modal({
+      onHide: function(){
+        if($('.timeTable .mini.button.active').length == 0){
+          $('#tableSelect').trigger('click');
+          // $($('.hotKeyAll')[0]).trigger('click'); // 點選左邊快捷全部課程
+        }
+      }
+    });
+
+    // 開啟篩選系所課程的浮動視窗
+    $('.course').on('click', function(){
+      toastr.info('可按各院來快速選擇', {"timeout": 1000});
+      if($('.chooseCourse .ui.inverted.button.mini.active').length == 143){
+        $('.chooseCourse .ui.inverted.button.mini').removeClass('active'); 
+        // 全選的話，一開始點進去都先把active弄消失（但是選擇狀態不變，方便她們篩選下一次的）
+      }
+      $('.chooseCourse').modal('show'); 
+    });
+
+    // 開啟篩選時間的浮動視窗
+    $('.tables').on('click', function(){
+      toastr.info('可按星期一～星期五來快速選擇', {"timeout": 1000});
+      if($('.timeTable .mini.button.active').length == 55){
+        $('.timeTable .ui.inverted.button.mini').removeClass('active');  
+        // 全選的話，一開始點進去都先把active弄消失（但是選擇狀態不變，方便她們篩選下一次的）
+      }
+      $('.timeTable').modal('show');
+    });
+    $('.ui.inverted.button.mini').on('click', function(){
+      if($(this).hasClass('active')){
+        $(this).removeClass('active');
+      }
+      else{
+        $(this).addClass('active');
+      }
+    });
+    // 大學部、研究所按鈕清除or全選
+    $('#courseSelect').on('click', function(){
+      if ($('.chooseCourse .ui.inverted.button.mini.active').length == 0){
+        $('.chooseCourse .ui.inverted.button.mini').addClass('active');
+      }
+      else $('.chooseCourse .ui.inverted.button.mini.active').removeClass('active');
+      startQuery();
+    });
+    // 課表按鈕清除or全選
+    $('#tableSelect').on('click', function(){
+      if($('.timeTable .mini.button.active').length == 0) $('.timeTable .mini.button').addClass('active');
+      else $('.timeTable .mini.button.active').removeClass('active');
+      startQuery();
+    });
+    // 切換大學部、研究所
+    $('.button.Tiny.master').on('click', function(){
+      $('.button.Tiny.master').addClass('active');
+      $('.button.Tiny.bachelor').removeClass('active');
+      $('.bachelor')[1].style.display = 'none';
+      $('.master')[1].style.display = 'flex';
+    });
+    $('.button.Tiny.bachelor').on('click', function(){
+      $('.button.Tiny.bachelor').addClass('active');
+      $('.button.Tiny.master').removeClass('active');
+      $('.master')[1].style.display = 'none';
+      $('.bachelor')[1].style.display = 'flex';
+    });
+    // 送出時間表查詢
+    $('#sendTable').on('click', function(){
+      $('.timeTable').modal('hide');
+    });
+
+    // 按鈕綁定
+    $('.timeTable p, .chooseCourse p').on('click', function(){
+      if(this.parentNode.getElementsByClassName('button active').length == 0){
+        $(this.parentNode.getElementsByClassName('button')).addClass('active');
+        if($(this)[0].textContent == '工學院')  // 因為工學院有兩條
+          $(this.parentNode.nextElementSibling.getElementsByClassName('button')).addClass('active');
+      }
+      else {
+        $(this.parentNode.getElementsByClassName('button')).removeClass('active');
+        if($(this)[0].textContent == '工學院')
+          $(this.parentNode.nextElementSibling.getElementsByClassName('button')).removeClass('active');
+      }
+      startQuery(); // 每次點擊玩會開始query
+    }); // 選擇大項目可以整條"被選" ex: 『理學院 』、『星期一』
+    $('#courseQuery').on('click', function(){
+      $('.chooseCourse').modal('hide');
+    });
+    // 前面五個快捷系所的listener
+    $('.hotKey').on('click', function(){
+      var catalog = this.text;
+      $('.chooseCourse .ui.inverted.button.mini').removeClass('active');
+      if($(this).hasClass('active')){
+        $(this).removeClass('active');
+        $(this).css('background', '#dadada');
+
+        // 如果都沒有按快捷鍵，則按全選
+        if($('.hotKey.active').length == 0){
+        	$('.hotKeyAll').click();
+        }
+      }
+      else {
+        $(this).addClass('active');
+        $(this).css('background', 'rgba(0,0,0,0.3)');
+
+        // 把全選的按下的樣式取消
+        $('.hotKeyAll').css('background', '#dadada');
+      }
+      // 找出目前被選的
+      var catagoryArr = $('.hotKey.active');
+      for(var i = 0; i < catagoryArr.length; i++){
+        var department_id = catagoryArr[i].text[0] + catagoryArr[i].text[1];
+        $("div[departId = " + department_id + "]").addClass('active')
+      }
+      $("input.prompt.query").val('');
+      startQuery();
+      checkHaspostFilter();
+    });
+
+    // 綁定左方快捷鍵按鈕
+    $('.hotKeyAll').on('click', function(){
+      $('.hotKey').removeClass('active');
+      $('.hotKey').css('background', '#dadada');
+      $('.chooseCourse .ui.inverted.button.mini').removeClass('active');
+      $('#courseSelect').click();
+      $(this).css('background', 'rgba(0,0,0,0.3)');
+      $("input.prompt.query").val('');
+      startQuery();
+      checkHaspostFilter();
+    });
+
+    // 先預設他們看通識中心
+    $($('.hotKey')[0]).trigger('click');
+
+    // 為了讓每次點擊背後的課程自動篩選
+    $('.chooseCourse .ui.inverted.button.mini').on('click', function(){
+      $('.hotKey').removeClass('active');
+      $('.hotKey').css('background', '#dadada');
+      $('.hotKeyAll').css('background', '#dadada');
+      startQuery();
+    });
+    // 為了讓每次點擊背後的時間表自動篩選
+    $('.timeTable .ui.inverted.button.mini').on('click', function(){
+      startQuery();
+    });
+
+    addCourseEventlistener(); // 最後綁定課程事件
+    checkHaspostFilter();
+  });
+
+  /* query的整體流程 */
+  function startQuery(){
+      queryCourseDepartment(); // query出使用者目前想要搜集的系所
+      filterCourseByTimetable(); // 將選出來的系所課程用使用者客製化的時間去篩選
+      changeCourse(); // 將篩選完的課顯示於網頁上
+      addCourseEventlistener(); // 將click事件綁定在課程上面
+  }
+  /* query出使用者目前想要搜集的系所 */
+  function queryCourseDepartment(){
+    var chooseCourse = $('.chooseCourse  div div .active');
+    var selectDepart = [];
+    for(var i = 1; i < chooseCourse.length; i++){
+      selectDepart.push(chooseCourse[i].getAttribute('departId'));
+    }
+    nowCourse.length = 0; // 清空資料
+    for(var i in selectDepart){
+      for(var j in courses_Department[selectDepart[i]]){
+        nowCourse.push(courses_Department[selectDepart[i]][j]);
+      }
+    }
+  }
+  /* 將選出來的系所課程用使用者客製化的時間去篩選 */
+  function filterCourseByTimetable(){
+    chooseTable = $('.timeTable  div div .active');
+    var table = {};
+    for(var i = 0; i < chooseTable.length; i++){
+      var time = chooseTable[i].getAttribute('tableid').split("-");
+      if(table.hasOwnProperty(time[0])) table[time[0]] += time[1];
+      else table[time[0]] = time[1];
+    }
+    var chooseWeeks = mergeArr(table); // 製作第一階段的篩選：week
+    var filterCourse = []; // 過濾後的課程
+    for(var i = 0; i < nowCourse.length; i++){
+      time = nowCourse[i].時間;
+      if(time == "未定"){ // 待討論，是否每次都要過濾未定，因為全選也包含未定
+        if(nowCourse[i].系號 == "A6"){ // 服務學習時間有些是未定，還是得挑出來
+          time = "";
+        }else continue;
+      }
+      time = time.split("[");
+      time.shift();
+      var buffer = time;
+      time = {}; // 重新排列time
+      for(var j in buffer){
+        afterSplit = buffer[j].split("]");
+        if(afterSplit[1].match("~")){
+          var num = afterSplit[1].replace("~", "");
+          if(num[0] == "N") num[0] = "4";
+          if(num[1] == "N") num[1] = "5";
+          afterSplit[1] = num[0];
+          for(var k = 1; k < num[1] - num[0]; k++){
+            afterSplit[1] += (Number(num[0]) + Number(k));
+          }
+          afterSplit[1] += num[1] ;
+        }
+        if(time.hasOwnProperty(afterSplit[0])) time[afterSplit[0]] += afterSplit[1];
+        else time[afterSplit[0]] = afterSplit[1];
+      }
+      var courseWeek = mergeArr(time);
+      if(matchFind(chooseWeeks, courseWeek)){
+        var isChoose = true;
+        for(var j in time){
+          if(!matchFind(table[j], time[j])){
+            isChoose = false;
+            break;
+          }
+        }
+        if(isChoose) filterCourse.push(nowCourse[i]);
+      }
+    }
+    nowCourse = filterCourse;
+
+    refreshNowCourse_hasComment();
+  }
+  /* 將篩選完的課顯示於網頁上 */
+  function changeCourse(){
+    var originalText = '<tr><th class="course_name">課程名稱</th><th class="department_name" >開課系所</th><th class="teacher" >開課老師</th><th class="class_time">時間</th></tr>';
+    $("#course-table").html(originalText);
+    now_index = 0;
+    for(var i = 0 ;i < nowCourse.length && i < 50; i++){
+      $("#course-table").append(courseTransforToDom(nowCourse[i]));
+      now_index++;
+    }
+
+    // 檢查是否有心得篩選條件
+    if($('.ui.checkbox').hasClass('checked')){
+      $('#filter_haspost').checkbox('uncheck');
+      $('#filter_haspost').checkbox('check');
+    }
+
+  }
+  function mergeArr(arr){
+    var chooseWeeks = Object.keys(arr).sort();
+    chooseWeeks = chooseWeeks.join().replace(/\,/g, "");
+    return chooseWeeks
+  }
+  /* 利用字串比對出[課程時間]和[使用者空堂時間] */
+  function matchFind(choose, course){
+    course = course.split("");
+    for(var i in course){
+      if(!choose.match(course[i])) return false;
+    } // 為了避免課程24沒被[234]的搜尋找到，所以把課程2, 4拆開去match
+    return true;
+  }
+  /* 轉換成html來方便加入網頁 */
+  function courseTransforToDom(course){
+    if(course.comment_num == 0){
+      var dom = "<tr id='course-" + course.id + "' class='course-row' data-toggle='modal' data-target='#course-modal' data-id='" + course.id + "'><td class='course_name' > " + course.課程名稱 + "</td><td> " + course.系所名稱 + "</td><td>" + course.老師 + "</td><td> " + course.時間 + "</td></tr>";
+    }
+    else{
+      var dom = "<tr id='course-" + course.id + "' class='notempty' data-toggle='modal' data-target='#course-modal' data-id='" + course.id + "'><td class='course_name'> " + course.課程名稱 + " <span class='badge'>" + course.comment_num + "</span>" + "</td><td> " + course.系所名稱 + "</td><td>" + course.老師 + "</td><td> " + course.時間 + "</td></tr>";
+    }
+    return dom;
+  }
+  /* Ajax show course */
+  function ajaxshowcourse(id){
+    var ajaxurl = '/course/'+ id;
+    $.ajax({
+      url:ajaxurl,
+      type: 'GET',
+      success: function(response) {
+        $('#course-modal .modal-content').prepend(response);
+        $('#course-modal').data('bs.modal').handleUpdate();
+      }
+    });
+  }
+  /* Ajax choose course */
+  function addcourse(courseid,btn){
+    var ajaxurl = '/course/addcourse/'+ courseid;
+    $.ajax({
+      url:ajaxurl,
+      type: 'POST',
+      success: function(response) {
+        if(response=='No login'){
+          toastr.warning('<a href="/user/auth/facebook">請先登入</a>');
+        }
+        else if(response=='Already choose'){
+          toastr.warning('已經選過囉!');
+        }
+        else{
+          btn.removeClass('plus addcoursebtn').addClass('minus delcoursebtn');
+          btn.off();
+          btn.on('click',function(){
+            var courseid = this.getAttribute("data-id");
+            var btn = $(this);
+            delcourse(courseid,btn);
+          });
+          /* 將新選的課加入用戶清單中 */
+          carts.push({"course_id":parseInt(courseid)});
+          toastr.success('選課成功!');
+        }
+      }
+    });
+  }
+  /* Ajax del course */
+  function delcourse(courseid,btn){
+    var ajaxurl = '/course/delcourse/'+ courseid;
+    $.ajax({
+      url:ajaxurl,
+      type: 'POST',
+      success: function(response){
+        btn.removeClass('minus delcoursebtn').addClass('plus addcoursebtn');
+        btn.off();
+        btn.on('click',function(){
+          var courseid = this.getAttribute("data-id");
+          var btn = $(this);
+          addcourse(courseid,btn);
+        });
+        /* 將課程移出用戶清單 */
+        for(var i in carts){
+          if(carts[i].course_id==courseid){
+            carts[i].course_id=null;
+          }
+        }
+        toastr.success('移除成功!');
+      }
+    });
+  }
+
+  function addCourseEventlistener(){
+    /* 清除事件避免重複綁定 */
+    $('.course-row').unbind('click');
+    $('.notempty').unbind('click');
+
+    /* 綁定Ajaxshowcourse function */
+    $('.course-row').on('click',function(){
+      var courseid= this.getAttribute("data-id");
+      ajaxshowcourse(courseid);
+    });
+
+    /* 綁定Ajaxshowcourse function（no comment) */
+    $('.notempty').on('click',function(){
+      var courseid = this.getAttribute("data-id");
+      ajaxshowcourse(courseid);
+    });
+
+    /* modal 打開時執行 */
+    $('#course-modal').on('shown.bs.modal', function () {
+        /* Ajax choose course */
+        function showaddcourse(courseid,btn){
+          var ajaxurl = '/course/addcourse/'+ courseid;
+          $.ajax({
+            url:ajaxurl,
+            type: 'POST',
+            success: function(response) {
+              if(response=='No login'){
+                toastr.warning('<a href="/user/auth/facebook">請先登入</a>');
+              }
+              else if(response=='Already choose'){
+                toastr.warning('已經選過囉!');
+              }
+              else{
+                btn.removeClass('showaddcoursebtn').addClass('showdelcoursebtn').html("移除課程");
+                btn.off();
+                btn.on('click',function(){
+                  var courseid = this.getAttribute("data-id");
+                  var btn = $(this);
+                  showdelcourse(courseid,btn);
+                });
+                var btn2=$('#'+courseid);
+                btn2.removeClass('plus addcoursebtn').addClass('minus delcoursebtn');
+                btn2.off();
+                btn2.on('click',function(){
+                  var courseid = btn2.getAttribute("data-id");
+                  delcourse(courseid,btn2);
+                });
+                /* 將新選的課加入用戶清單中 */
+                carts.push({"course_id":courseid});
+                toastr.success('選課成功!');
+              }
+            }
+          });
+        }
+        /* Ajax del course */
+        function showdelcourse(courseid,btn){
+          var ajaxurl = '/course/delcourse/'+ courseid;
+          $.ajax({
+            url:ajaxurl,
+            type: 'POST',
+            success: function(response){
+              btn.removeClass('showdelcoursebtn').addClass('showaddcoursebtn').html("加入課程");
+              btn.off();
+              btn.on('click',function(){
+                var courseid = this.getAttribute("data-id");
+                var btn = $(this);
+                showaddcourse(courseid,btn);
+              });
+              var btn2 = $('#'+courseid);
+              btn2.removeClass('minus delcoursebtn').addClass('plus addcoursebtn');
+              btn2.off();
+              btn2.on('click',function(){
+                var courseid = btn2.getAttribute("data-id");
+                addcourse(courseid,btn2);
+              });
+              /* 將課程移出用戶清單 */
+              for(var i in carts){
+                if(carts[i].course_id==courseid){
+                  carts[i].course_id=null;
+                }
+              }
+              toastr.success('移除成功!');
+            }
+          });
+        }
+        setTimeout(function() {
+          /* modal中的加入課程按鈕綁定選課的事件 */
+          $('.showaddcoursebtn').on('click',function(){
+            var courseid = this.getAttribute("data-id");
+            var btn = $(this);
+            showaddcourse(courseid,btn);
+          });
+          /* modal中的移除課程按鈕綁定移除課程的事件 */
+          $('.showdelcoursebtn').on('click',function(){
+            var courseid = this.getAttribute("data-id");
+            var btn = $(this);
+            showdelcourse(courseid,btn);
+          });
+        },2000);
+    });
+    
+    /* modal 關閉時清空 modal 內容 */
+    $('#course-modal').on('hidden.bs.modal', function () {
+      $('#course-modal .modal-content').empty();
+      // $.fn.fullpage.destroy('all');
+    });
+    /* 在加號上綁定選課的事件 */
+    $('.addcoursebtn').on('click',function(){
+      var courseid = this.getAttribute("data-id");
+      var btn = $(this);
+      addcourse(courseid,btn);
+    });
+    /* 在減號上綁定移除課程的事件 */
+    $('.delcoursebtn').on('click',function(){
+      var courseid = this.getAttribute("data-id");
+      var btn = $(this);
+      delcourse(courseid,btn);
+    });
+
+    // 如果課程只有一筆，直接顯示出來 (第0是column)
+    if($('#course-table > tbody > tr').length == 2){
+    	$('#course-table > tbody > tr')[1].click(); 
+    }
+      
+  }
+
+  /* Ajax to get All course */
+  function getAllcourse(){
+    var ajaxurl = '/course/allCourse';
+    $.ajax({
+      url:ajaxurl,
+      type: 'GET',
+      success: function(response) {
+        console.log(response);
+      }
+    });
+  }
+
+  /* 重新製作有心得的nowCourse_hasComment */
+  function refreshNowCourse_hasComment(){
+    nowCourse_hasComment.length = 0;
+    for(var i in nowCourse){
+      if(nowCourse[i].comment_num != 0){
+        nowCourse_hasComment.push(nowCourse[i]);
+      }
+    }
+  }
+
+  /* Ajax to get course by Keyword */
+  function getCourseByKeywords(catagory, keyword){
+    var ajaxurl = '/course/CourseByKeywords?' + catagory + "=" + keyword;
+    $.ajax({
+      url:ajaxurl,
+      type: 'GET',
+      success: function(response) {
+        $($('.hotKeyAll')[0]).trigger('click');
+        nowCourse = response;
+        refreshNowCourse_hasComment();
+        changeCourse();
+        addCourseEventlistener();
+        if($('#filter_haspost').hasClass('checked')){
+          $('#filter_haspost').trigger('click');
+          localStorage.setItem("resume_filter_haspost", true);
+        } // 避免用關鍵字搜尋後，因為一開始選擇“僅顯示有心得課程”所造成沒看到自己搜尋的課程
+        if(keyword === "")
+          checkHaspostFilter()
+      }
+    });
+  }
+
+  function checkHaspostFilter(){
+    if (localStorage.getItem("check_filter_haspost")===null || localStorage.getItem("resume_filter_haspost")==="true"){
+      localStorage.setItem("resume_filter_haspost",false);
+      $('#filter_haspost').trigger('click'); // 一開始進來首頁先選取『顯示心得課程』
+    } else if ((localStorage.getItem("check_filter_haspost")==="false" && $('#filter_haspost').hasClass('checked')) ||
+      localStorage.getItem("check_filter_haspost")==="true" && !$('#filter_haspost').hasClass('checked')){
+      $('#filter_haspost').trigger('click'); // 一開始進來首頁先取消『顯示心得課程』
+    }
+  }
+</script>

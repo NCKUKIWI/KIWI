@@ -1,0 +1,225 @@
+.text_40
+  font-size: 29px
+.text_34--register
+  font-size: 24px
+  margin-bottom: 3vh
+
+.fb_btn:visited
+  color: white
+
+
+
+
+//modify
+
+.dropdown
+  position: absolute
+  background-color: #fff
+  box-shadow: 0 0 14px 0 rgba(0,0,0,0.06)
+  margin-top: -5px
+  overflow-y: scroll
+  &__result
+    padding: 10px 10px 10px 30px
+    border-bottom: 1px solid #eee
+.dropdown--register
+  width: 180px
+  max-height: 100px
+
+//-----
+
+.register__content
+  background-color: #fafafa
+  height: 100vh
+  width: 100vw
+  padding: 15vh 2vw 5vh 2vw
+  display: flex
+  flex-direction: row
+
+.register__block
+  width: 50%
+  height: 100%
+  background-color: #fff
+  margin: 10px
+  &__left
+    padding: 5vh 3vw
+    display: flex
+    padding: 2vh 0px
+    flex-direction: column
+    align-items: center
+    background-color: transparent
+    &--mods
+      display: flex
+      flex-direction: column
+      align-items: flex-start
+      p.text_40
+        margin-bottom: 4vh
+      &__par
+        margin-bottom: 8vh
+        p
+          margin-bottom: 1vh
+  &__right
+    padding: 5vh 3vw
+    width: 45%
+    height: 95%
+    box-shadow: 0 0 14px 0 rgba(0,0,0,0.06)
+    &__head
+      padding-bottom: 5vh
+      border-bottom: 1px solid #eee
+      margin-bottom: 3vh
+      p.text_34
+        margin-bottom: 2vh
+    &__steps
+      padding: 3vh 0px
+      margin-bottom: 2vh
+      select
+        -webkit-appearance: none
+        color: #4a4a4a
+        border: none
+        background-color: transparent
+        width: 40%
+        margin-bottom: 3vh
+        // margin-left: 10px
+        border-bottom: 1px solid #eee
+        font-size: 14px
+        border-radius: 0px
+      select:focus
+        outline: none
+        border-bottom: 1px solid #1A6CBD
+      select:disabled
+        color: #eee
+      &__inputs
+        width: 80%
+        margin-top: 3vh
+        input
+          -webkit-appearance: none
+          border-bottom: 1px solid #eee
+          margin-bottom: 3vh
+          font-size: 14px
+        input:nth-child(2)
+          width: 100%
+        input:focus
+          outline: none
+          border-bottom: 1px solid #1A6CBD
+        &__line1
+          display: inline-flex
+          justify-content: space-between
+          align-items: center
+          width: 100%
+
+input[type=text]:disabled::placeholder
+  color: #eee
+.disabled_text
+  color: #eee
+  cursor: not-allowed
+  p
+    color: #eee
+
+
+.round-btn
+  width: 176px
+  height: 42px
+  border-radius: 21px
+  background-color: #3B5998
+  color: #fff
+  display: flex
+  justify-content: center
+  align-items: center
+  margin-top: 3vh
+  cursor: pointer
+  p
+    color: #fff
+  img
+    width: 14px
+    height: 14px
+    margin-right: 10px
+
+.roundBtnClicked
+  background-color: #eee
+  opacity: 0.5
+  cursor: default
+
+.logo__circle
+  margin-bottom: 7vh
+  img
+    width: 200px
+    height: 200px
+    border-radius: 100px
+    box-shadow: 0 0 14px 0 rgba(0,0,0,0.06)
+
+.rectangle-btn
+  background-color: #fff
+  height: 43px
+  box-shadow: 0 0 14px 0 rgba(0,0,0,0.06)
+  width: 190px
+  display: flex
+  align-items: center
+  padding-left: 16px
+  cursor: pointer
+  img
+    width: 19px
+    height: 19px
+    margin-right: 16px
+  &--register
+    &__login
+      p
+        color: #1A6CBD
+    &__finishRegist
+      p
+        color: #F35A5A
+
+#register__right__submited
+  display: none
+  justify-content: center
+  align-items: center
+  height: 100%
+  .rectangle-btn
+    box-shadow: none
+    border: 1px solid #1A6CBD
+    color: #1A6CBD
+    p
+      color: #1A6CBD
+  a
+    color: #1A6CBD
+  a:visited
+    color: #1A6CBD
+
+.register__right__submited__content
+  margin: 5vh 0px
+  img
+    width: 15px
+    height: 15px
+  p
+    margin-bottom: 1vh
+.register__dropdown
+  max-height: 10vh
+  overflow-y: scroll
+  position: absolute
+  left: 74%
+  top: 70%
+  background-color: #fff
+  box-shadow: 0 0 14px 0 rgba(0,0,0,0.06)
+  display: flex
+  align-items: center
+  flex-direction: column
+  cursor: pointer
+  &__dept
+    height: 50px
+    width: 200px
+    padding: 10px 8px
+    border-bottom: 1px solid #eee
+
+.input_error
+  input
+    border-bottom: 1px solid #F35A5A
+  input:focus
+    border-bottom: 1px solid #F35A5A
+  p
+    position: absolute
+    // display: none
+    color: #F35A5A
+    margin-top: -2vh
+    font-size: 8px
+.input_block
+  width: 100%
+  input
+    width: 95%

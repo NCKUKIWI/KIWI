@@ -1,0 +1,11 @@
+<script>
+  $(document).ready(function(){
+    <% if ( messages.success ){ %>
+        toastr.success('<%= messages.success %>');
+    <% }else if(messages.error){ %>
+
+    <% }else if(messages.warning){ %>
+
+    <% } %>
+  });
+</script>

@@ -1,0 +1,32 @@
+<div v-if="page_status.windows.helper" class="window__background" id="helper_background" @click.self="close_helper()">
+  <div class="window__self">
+    <!-- <div class="close-btn" @click="close_helper()">
+      <img src="./dist/images/helper/closebtn.svg">
+    </div> -->
+    <div class="window__self__title text_34 text_bold">選課小幫手</div>
+    <div class="window__self__detail underline">NCKU HUB 的選課小幫手，是全台灣第一個課程餘額追蹤機器人，幫助學生節省在電腦前盯哨的時間，精準選到想上的課程！</div>
+    <div class="window__self__title text_26">免費使用</div>
+    <div class="window__self__detail text_16">
+      <p>提供 3 筆課程心得，讓成大更好，兌換一學期使用資格！</p>
+      <p class="color_grey9b">您可使用的的心得積點：{{userData.now_comment.length}} 點，尚須 {{3 - userData.now_comment.length > 0 ? 3 - userData.now_comment.length : 0}} 筆心得。</p>
+    </div>
+    <div v-if="helper_qualified" class="window__self__detail random_text" @click="copy_code">
+      <p class="text_14" style="cursor: pointer;" v-bind:data-clipboard-text="userData.messenger_code">點擊複製開通代碼：{{userData.messenger_code}}</p>
+    </div>
+    <div v-show="userData.now_comment.length >= 3" class="helper_btn">
+      <a v-if="helper_qualified" href="https://www.facebook.com/nckuhub/" target="_blank"><p class="helper_btn--text text_20">前往開通資格</p></a>
+      <p v-if="!helper_qualified" class="helper_btn--text text_20" @click="exchange_success()">課程心得兌換</p>
+    </div>
+  </div>
+  <div class="window__self" id="helper_success">
+    <div class="window__self__title text_26 bold_text">兌換成功！</div>
+    <div class="window__self__detail text_16">您已成功兌換小幫手「一學期使用資格」，目前剩餘心得積點為：{{userData.now_comment.length  - 3}} 點。使用資格期限為 107-1 學期選課期間。</div>
+    <div class="window__self__detail random_text"  @click="copy_code">
+      <p class="text_14" style="cursor: pointer;" v-bind:data-clipboard-text="userData.messenger_code">點擊複製開通代碼：{{userData.messenger_code}}</p>
+    </div>
+    <div class="window__self__button_area">
+      <a @click="close_helper()" class="window__self__button_area__button text_14">返回網頁</a>
+      <a href="https://www.facebook.com/nckuhub/" target="_blank" class="window__self__button_area__button text_14" style="color:#1A6CBD">前往開通</a>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,132 @@
+<% layout('../public/layout') %>
+  <div class="ui stackable grid">
+      <div class="four wide column">
+        <% include ./sidebar %>
+      </div>
+      <div class="twelve wide column">
+        <div id="content">
+          <table class="table" id="post-table">
+            <tr>
+              <th class="course_name orderbtn" data-name="course_name">課程名稱<i class='sort descending icon'></i></th>
+              <th class="catalog orderbtn" data-name="catalog">類別</th>
+              <th class="teacher orderbtn" data-name="teacher">開課老師</th>
+              <th class="semester orderbtn" data-name="semester">學期</th>
+            </tr>
+            <% if(posts.length == 0 ){ %>
+              <tr>
+                <th class="h3 text-center" colspan="4">查無資料</th>
+              </tr>
+            <% }else{ %>
+              <% for(var i in posts){ %>
+                <tr id="post-<%= posts[i].id %>" class="post-row" data-toggle="modal" data-target="#post-modal" data-id="<%= posts[i].id %>">
+                  <td class="course_name">
+                    <% if(user && (user.id == posts[i].user_id) ){ %>
+                      <span class="ui red horizontal label">My post</span>
+                    <%  } %>
+                    <%- posts[i].course_name %>
+                  </td>
+                  <td class="catalog">
+                    <%- posts[i].catalog %>
+                  </td>
+                  <td class="teacher">
+                    <%- posts[i].teacher %>
+                  </td>
+                  <td class="semester">
+                    <%- posts[i].semester %>
+                  </td>
+                </tr>
+              <% } %>
+            <% } %>
+          </table>
+        </div>
+      </div>
+  </div>
+
+  <div class="modal fade" id="post-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+      </div>
+    </div>
+  </div>
+
+<script>
+$(document).ready(function(){
+
+  toastr.info('新功能上線!歡迎點選課程查詢！');
+  //Parse URL
+  var url = window.location.href;
+  var urlObj = urlObject({'url':url});
+
+  //Ajax Order
+  $('.orderbtn').on('click',function(){
+    var order = this.getAttribute("data-name");
+    if(urlObj.parameters.course_name || urlObj.parameters.catalog || urlObj.parameters.queryw || urlObj.parameters.teacher || urlObj.parameters.order){
+      if(urlObj.parameters.order){
+        var searchword="?";
+        for(var i in urlObj.parameters){
+          if(i!="order"){
+            searchword= searchword+i+"="+urlObj.parameters[i]+"&";
+          }
+        }
+        var ajaxurl = "/" + searchword + "order=" + order;
+      }
+      else{
+        var searchword="?";
+        for(var i in urlObj.parameters){
+          if(i!="order"){
+            searchword= searchword+i+"="+urlObj.parameters[i]+"&";
+          }
+        }
+        var ajaxurl = "/" + searchword + "&order=" + order;
+      }
+    }
+    else{
+      var ajaxurl = "/" + "?order=" + order;
+    }
+    $.ajax({
+      url: ajaxurl,
+      type: 'GET',
+      success: function(response) {
+        $('.post-row').fadeOut().remove();
+        for(var i in response){
+          var dom ="<tr id='post-"+response[i].id+"' class='post-row' data-toggle='modal' data-target='#post-modal' data-id='"+response[i].id+"'><td class='course_name'>"+response[i].course_name+"</td><td class='catalog'>"+response[i].catalog+"</td><td class='teacher'>"+response[i].teacher+"</td><td class='semester'>"+response[i].semester+"</td></tr>";
+          $('#post-table').append(dom);
+        }
+        $('.sort.descending.icon').remove();
+        var icon = "<i class='sort descending icon'></i>";
+        $("th.orderbtn."+order).append(icon);
+        /* 將新的dom 綁定ajaxshow function */
+        $('.post-row').on('click',function(){
+          var postid= $(this).data("id");
+          ajaxshowpost(postid);
+        });
+      }
+    });
+  });
+
+  /* Ajax show post */
+  function ajaxshowpost(id){
+    var ajaxurl = '/post/'+ id;
+    $.ajax({
+      url:ajaxurl,
+      type: 'GET',
+      success: function(response) {
+        $('#post-modal .modal-content').prepend(response);
+        $('#post-modal').data('bs.modal').handleUpdate();
+      }
+    });
+  }
+
+  /* 綁定ajaxshowpost function */
+  $('.post-row').on('click',function(){
+    var postid= this.getAttribute("data-id");
+    ajaxshowpost(postid);
+  });
+
+  /* modal 關閉時清空 modal 內容 */
+  $('#post-modal').on('hidden.bs.modal', function () {
+    $('#post-modal .modal-content').empty();
+  });
+
+});
+</script>

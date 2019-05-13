@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <!-- Bassic -->
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" id="viewport" name="viewport">
+    <!-- Title & Description -->
+    <title>NCKU HUB｜資訊改善校園</title>
+    <meta name="description" content="NCKU HUB 是由成大生自主發起的課程資訊平台。和我們一起尋找課程心得、模擬未來課表，讓選課之路更加便利吧！">
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-80432472-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+    <!-- Favicons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="dist/images/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="dist/images/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="dist/images/favicon/favicon-16x16.png">
+    <link rel="manifest" href="dist/images/favicon/site.webmanifest">
+    <link rel="mask-icon" href="dist/images/favicon/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="shortcut icon" href="dist/images/favicon/favicon.ico">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="msapplication-config" content="dist/images/favicon/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
+    <!-- Facebook Open Graph -->
+    <meta property="og:url" content="https://nckuhub.com">
+    <meta property="og:title" content="NCKU HUB｜資訊改善校園">
+    <meta property="og:description" content="一起尋找課程心得、模擬未來課表，讓選課之路更加便利吧！">
+    <meta property="og:image" content="https://nckuhub.com/dist/images/favicon/og-image.png">
+    <meta property="fb:app_id" content="1409972182658680"/>
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="zh_TW">
+    <!-- detect_device -->
+    <script src="dist/JS/detect_device.js"></script>
+    <!-- CSS -->
+    <link rel="stylesheet" href="dist/CSS/public.css">
+    <link rel="stylesheet" href="dist/CSS/course.css">
+    <link rel="stylesheet" href="dist/CSS/helper.css">
+    <!-- <link rel="stylesheet" href="dist/CSS/course/course.css"> -->
+    <link rel="stylesheet" href="dist/CSS/reset.css">
+    <link rel="stylesheet" href="dist/CSS/loading.css">
+    <link rel="stylesheet" href="dist/CSS/table.css">
+    <link rel="stylesheet" href="dist/CSS/navbar.css">
+    <link rel="stylesheet" href="dist/CSS/button.css">
+    <link rel="stylesheet" href="dist/CSS/windows.css">
+    <link rel="stylesheet" href="dist/CSS/add_review.css">
+    <link rel="stylesheet" href="dist/CSS/register.css">
+    <link rel="stylesheet" href="dist/CSS/public_sas.css">
+    <link rel="stylesheet" href="dist/CSS/notification.css">
+    <link rel="stylesheet" href="dist/CSS/mobile_course.css">
+    <link rel="stylesheet" href="dist/CSS/mobile_navbar.css">
+    <!-- <script src="dist/JS/profile/init2.js"></script> -->
+	<!-- <link rel="stylesheet" type="text/css" href="./dist/CSS/profile/profile.css "> -->
+    <body>
+
+        <!-- 視窗 -->
+    	<div class="window_div">  @@include('public/loading.html')  </div>
+        <div class="window_div"> @@include('public/windows.html') </div>
+        <div class="window_div"> @@include('public/notification.html') </div>
+        <div class="window_div">  @@include('public/helper.html')  </div>
+        <div class="window_div"> @@include('public/add_review.html') </div>
+        <div class="window_div"> @@include('public/course_page.html')</div>
+
+        <!-- 基本 -->
+        <div class="basic_div"> @@include('public/navbar.html')  </div>
+        <div class="basic_div"> @@include('public/button.html')  </div>
+
+        <!-- 分頁 -->
+    	<div class="tab_div" name="course" style="display:none">  @@include('course/course_content.html')  </div>
+        <div class="tab_div" name="table" style="display:none">  @@include('table/table.html')  </div>
+        <div class="tab_div" name="register" style="display:none">  @@include('public/register.html')  </div>
+    	<!-- <div class="tab_div" name="profile">  @@include('profile/profile.html')  </div> -->
+
+    </body>
+</head>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17/vue.js"> </script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js"></script>
+<script src="dist/JS/functions.js"></script>
+<script src="dist/JS/public.js"></script>
+<script src="dist/JS/loading.js"></script>
+<script src="dist/JS/navbar.js"></script>
+<script src="dist/JS/button.js"></script>
+<script src="dist/JS/course.js"></script>
+<script src="dist/JS/table.js"></script>
+<script src="dist/JS/helper.js"></script>
+<script src="dist/JS/register.js"></script>
+<script src="dist/JS/add_review.js"></script>
+<script src="dist/JS/windows.js"></script>
+<script src="dist/JS/notification.js"></script>
+<!-- <script src="dist/JS/profile/profile.js "></script> -->
+</html>

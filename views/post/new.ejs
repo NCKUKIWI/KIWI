@@ -1,0 +1,243 @@
+<% layout('../public/layout') %>
+<div class="ui stackable grid centered">
+  <div class="ten wide column">
+    <br>
+    <h1 style="text-align:center;font-size:2em;font-weight:bold;">提供心得</h1>
+      <form class="ui form" id="createform">
+        <div class="partA">
+          <div class="fields">
+            <div class="thirteen wide field">
+              <label>課程名稱:</label>
+              <div class="ui search">
+                <div class="ui input">
+                  <input class="prompt" type="text" name="course">
+                </div>
+                <div class="results"></div>
+              </div>
+            </div>
+            <div class="three wide field">
+              <label>學期:</label>
+              <select name="semester" form="createform" style="height: 42px;" id="semesterSelector">
+              	<option value="106-2">106-2</option>
+                <option value="106-1">106-1</option>
+                <option value="105-2">105-2</option>
+                <option value="105-1">105-1</option>
+                <option value="104-2">104-2</option>
+                <option value="104-1">104-1</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <input type="hidden" name="recommand" value="1">
+        <input type="hidden" name="hard" value="1">
+        <input type="hidden" name="sweet" value="1">
+        <input type="hidden" name="give" value="1">
+        <input type="hidden" name="got" value="1">
+        <input type="hidden" name="catalog" value="0">
+        <input type="hidden" name="course_name" value="">
+        <input type="hidden" name="course_id" value="0">
+        <input type="hidden" name="teacher" value="">
+        <div class="partB">
+          <div class="field">
+            <label>推薦程度:</label>
+            <div class="scorebar" id="recommand">
+              <div class="scorebtn" style="border-left:1px solid black;" data-score="1">1</div>
+              <div class="scorebtn" data-score="2">2</div>
+              <div class="scorebtn" data-score="3">3</div>
+              <div class="scorebtn" data-score="4">4</div>
+              <div class="scorebtn" data-score="5">5</div>
+              <div class="scorebtn" data-score="6">6</div>
+              <div class="scorebtn" data-score="7">7</div>
+              <div class="scorebtn" data-score="8">8</div>
+              <div class="scorebtn" data-score="9">9</div>
+              <div class="scorebtn" data-score="10">10</div>
+            </div>
+          </div>
+          <div class="field">
+            <label>課程硬度:</label>
+            <div class="scorebar" id="hard">
+              <div class="scorebtn" style="border-left:1px solid black;" data-score="1">1</div>
+              <div class="scorebtn" data-score="2">2</div>
+              <div class="scorebtn" data-score="3">3</div>
+              <div class="scorebtn" data-score="4">4</div>
+              <div class="scorebtn" data-score="5">5</div>
+              <div class="scorebtn" data-score="6">6</div>
+              <div class="scorebtn" data-score="7">7</div>
+              <div class="scorebtn" data-score="8">8</div>
+              <div class="scorebtn" data-score="9">9</div>
+              <div class="scorebtn" data-score="10">10</div>
+            </div>
+          </div>
+          <div class="field">
+            <label>分數甜度:</label>
+            <div class="scorebar" id="sweet">
+              <div class="scorebtn" style="border-left:1px solid black;" data-score="1">1</div>
+              <div class="scorebtn" data-score="2">2</div>
+              <div class="scorebtn" data-score="3">3</div>
+              <div class="scorebtn" data-score="4">4</div>
+              <div class="scorebtn" data-score="5">5</div>
+              <div class="scorebtn" data-score="6">6</div>
+              <div class="scorebtn" data-score="7">7</div>
+              <div class="scorebtn" data-score="8">8</div>
+              <div class="scorebtn" data-score="9">9</div>
+              <div class="scorebtn" data-score="10">10</div>
+            </div>
+          </div>
+          <div class="field">
+            <label>付出程度:</label>
+            <div class="scorebar" id="give">
+              <div class="scorebtn" style="border-left:1px solid black;" data-score="1">1</div>
+              <div class="scorebtn" data-score="2">2</div>
+              <div class="scorebtn" data-score="3">3</div>
+              <div class="scorebtn" data-score="4">4</div>
+              <div class="scorebtn" data-score="5">5</div>
+              <div class="scorebtn" data-score="6">6</div>
+              <div class="scorebtn" data-score="7">7</div>
+              <div class="scorebtn" data-score="8">8</div>
+              <div class="scorebtn" data-score="9">9</div>
+              <div class="scorebtn" data-score="10">10</div>
+            </div>
+          </div>
+          <div class="field">
+            <label>收穫程度:</label>
+            <div class="scorebar" id="got">
+              <div class="scorebtn" style="border-left:1px solid black;" data-score="1">1</div>
+              <div class="scorebtn" data-score="2">2</div>
+              <div class="scorebtn" data-score="3">3</div>
+              <div class="scorebtn" data-score="4">4</div>
+              <div class="scorebtn" data-score="5">5</div>
+              <div class="scorebtn" data-score="6">6</div>
+              <div class="scorebtn" data-score="7">7</div>
+              <div class="scorebtn" data-score="8">8</div>
+              <div class="scorebtn" data-score="9">9</div>
+              <div class="scorebtn" data-score="10">10</div>
+            </div>
+          </div>
+        </div>
+        <div class="partA">
+          <div class="field">
+            <label>修課心得:</label>
+            <textarea rows="4" cols="50" name="comment" form="createform" placeholder="這學期修完這堂課的感想"></textarea>
+          </div>
+          <div class="field">
+            <label>上課內容: </label>
+            <textarea rows="4" cols="50" name="course_style" form="createform" placeholder="老師的上課方式、使用的教材與課堂規則"></textarea>
+          </div>
+          <div class="field">
+            <label>作業考試: </label>
+            <textarea rows="4" cols="50" name="report_hw" form="createform" placeholder="這堂課的作業、報告、考試形式以及評分方式"></textarea>
+          </div>
+          <div class="field" style="text-align:center;">
+            <div class="ui button" id="createform-submit">送出</div>
+            <div class="ui button" data-dismiss="modal">返回</div>
+          </div>
+        </div>
+      </form>
+  </div>
+</div>
+<script>
+$(document).ready(function(){
+  if(localStorage.getItem("coursename") && localStorage.getItem("courseid") && localStorage.getItem("courseteacher")){
+    $("input[name=course]").val(localStorage.getItem("coursename"));
+    $("input[name=course_name]").val(localStorage.getItem("coursename"));
+    $("input[name=course_id]").val(localStorage.getItem("courseid"));
+    $("input[name=teacher]").val(localStorage.getItem("courseteacher"));
+    localStorage.removeItem("coursename");
+    localStorage.removeItem("courseid");
+    localStorage.removeItem("courseteacher");
+  }
+  var course = [
+    <% for(var i in course){ %>
+      {
+        title:'<%- course[i].課程名稱 %> - <%- course[i].老師 %>',
+        description:'<%- course[i].時間 %>',
+        coursename:'<%- course[i].課程名稱 %>',
+        teacher:'<%- course[i].老師 %>',
+        category:'<%- course[i].系所名稱 %>',
+        semester:'<%- course[i].semester %>'
+      },
+    <% } %>
+  ];
+
+  var categoryCourse = {
+  	'106-2': course.filter(aCourse => aCourse.semester == '106-2'),
+    '106-1': course.filter(aCourse => aCourse.semester == '106-1'),
+    '105-2': course.filter(aCourse => aCourse.semester == '105-2'),
+    '105-1': course.filter(aCourse => aCourse.semester == '105-1'),
+    '104-2': course.filter(aCourse => aCourse.semester == '104-2'),
+    '104-1': course.filter(aCourse => aCourse.semester == '104-1'),
+  }
+
+  $('#createform .ui.search').search({
+    source:categoryCourse[$("#semesterSelector option:selected").text()],
+    onSelect:function(result, response){
+      $('input[name=teacher]').val(result.teacher);
+      $('input[name=course_name]').val(result.coursename);
+      $('input[name=catalog]').val(result.category);
+    },
+    maxResults: 100,// 最多一次顯示100筆
+  });
+
+  $("#semesterSelector").on('change', function(){
+    $('#createform .ui.search').search('setting', 'source', categoryCourse[$("#semesterSelector option:selected").text()]);
+  });
+
+  $('#createform-submit').on('click', function() {
+    var data = $("#createform").serialize();
+    $.ajax({
+      url: '/post/create',
+      type: 'post',
+      data: data,
+      success: function(response) {
+        if (response == "success") {
+          window.location.href = "/";
+        }
+        else {
+          var errosbox = "<div class='partA' style='padding:10px 25px;'>";
+          for (var i in response) {
+            var dom = "<p style='color:red;'>" + response[i].msg + "</p>";
+            errosbox += dom;
+          }
+          errosbox+="</div>";
+          $('#new .modal-body').prepend(errosbox);
+          $('#new').data('bs.modal').handleUpdate();
+        }
+      }
+    });
+  });
+
+  $('#recommand .scorebtn').on('click',function(){
+    $('#recommand .scorebtn').css('background','white');
+    $(this).css('background','#D8D8D8');
+    var rate = this.getAttribute("data-score");
+    $('input[name=recommand]').val(rate);
+  })
+
+  $('#hard .scorebtn').on('click',function(){
+    $('#hard .scorebtn').css('background','white');
+    $(this).css('background','#D8D8D8');
+    var rate = this.getAttribute("data-score");
+    $('input[name=hard]').val(rate);
+  })
+
+  $('#sweet .scorebtn').on('click',function(){
+    $('#sweet .scorebtn').css('background','white');
+    $(this).css('background','#D8D8D8');
+    var rate = this.getAttribute("data-score");
+    $('input[name=sweet]').val(rate);
+  })
+
+  $('#give .scorebtn').on('click',function(){
+    $('#give .scorebtn').css('background','white');
+    $(this).css('background','#D8D8D8');
+    var rate = this.getAttribute("data-score");
+    $('input[name=give]').val(rate);
+  })
+  $('#got .scorebtn').on('click',function(){
+    $('#got .scorebtn').css('background','white');
+    $(this).css('background','#D8D8D8');
+    var rate = this.getAttribute("data-score");
+    $('input[name=got]').val(rate);
+  })
+});
+</script>

@@ -1,0 +1,63 @@
+
+
+<div id="all_windows">
+
+    <!-- 登入提醒 -->
+    <div class="window not_login" v-if="page_status.windows.not_login" >
+        <div class="window__background">
+            <div class="window__self">
+                <div class="window__self__title text_bold text_26">請先登入</div>
+                <div class="window__self__detail">本功能僅限登入後使用，請註冊或登入現有帳號後繼續。</div>
+                <div class="window__self__button_area ">
+                    <a @click="closeWindow('not_login')" class="window__self__button_area__button text_dark">返回頁面</a>
+                    <a href='/user/fblogin' class="window__self__button_area__button text_deep_blue">登入帳號</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 心得送出成功 -->
+    <div class="window add_review_success" v-if="page_status.windows.add_review_success" >
+        <div class="window__background">
+            <div class="window__self">
+                <div class="window__self__title text_bold text_26">已送出心得！</div>
+                <div class="window__self__detail">感謝您熱心提供課程心得，幫助所有對這門課有興趣的同學，更加認識了課程！</div>
+                <div class="window__self__button_area ">
+                    <a @click="closeWindow('add_review_success')" class="window__self__button_area__button text_dark">返回頁面</a>
+                    <a @click="oneMoreReview()"  class="window__self__button_area__button text_deep_blue">再填一份</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 放棄心得提醒 -->
+    <div class="window add_review_give_up" v-if="page_status.windows.add_review_give_up" >
+        <div class="window__background">
+            <div class="window__self">
+                <div class="window__self__title text_bold text_26">離開頁面？</div>
+                <div class="window__self__detail">心得尚未儲存。您要放棄目前內容並且離開此頁嗎？</div>
+                <div class="window__self__button_area ">
+                    <a @click="closeWindow('add_review_give_up')" class="window__self__button_area__button text_dark">返回填寫</a>
+                    <a @click="giveUpReview()"  class="window__self__button_area__button text_red">放棄內容</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 放棄課表提醒 -->
+    <div class="window edit_table_give_up" v-if="page_status.windows.edit_table_give_up" >
+        <div class="window__background">
+            <div class="window__self">
+                <div class="window__self__title text_bold text_26">離開頁面？</div>
+                <div class="window__self__detail">課表尚未儲存。您要放棄目前變更並且離開此頁嗎？</div>
+                <div class="window__self__button_area ">
+                    <a @click="closeWindow('edit_table_give_up')" class="window__self__button_area__button text_dark">返回填寫</a>
+                    <a @click="giveUpTable()"  class="window__self__button_area__button text_red">放棄變更</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 小幫手 -->
+
+
+</div>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<!-- shift+option+F -->
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimal-ui, maximum-scale=1.0, user-scalable=no">
+  <link rel="shortcut icon" />
+  <link rel="stylesheet" href="dist/CSS/public.css">
+  <link rel="stylesheet" href="dist/CSS/course.css">
+  <link rel="stylesheet" href="dist/CSS/helper.css">
+  <link rel="stylesheet" href="dist/CSS/reset.css">
+  <link rel="stylesheet" href="dist/CSS/loading.css">
+  <link rel="stylesheet" href="dist/CSS/table.css">
+  <link rel="stylesheet" href="dist/CSS/navbar.css">
+  <link rel="stylesheet" href="dist/CSS/button.css">
+  <link rel="stylesheet" href="dist/CSS/windows.css">
+  <link rel="stylesheet" href="dist/CSS/add_review.css">
+  <link rel="stylesheet" href="dist/CSS/register.css">
+  <link rel="stylesheet" href="dist/CSS/public_sas.css">
+  <link rel="stylesheet" href="dist/CSS/notification.css">
+  <script src="https://apis.google.com/js/api:client.js" charset="utf-8"></script>
+</head>
+<style>
+  .pass{
+    background-color: rgba(51, 170, 89, 0.481);
+    width: 60px;
+    text-align: center;
+    border-radius: 5px;
+    margin-left: 10px;
+  }
+  ::-webkit-scrollbar{
+    all: initial;
+  }
+  ::-webkit-scrollbar-thumb{
+    background: rgb(211, 211, 211);
+  }
+  .title_{
+    text-align: center;margin:15px;margin-left: auto;margin-right: auto;
+    background-color: rgba(90, 199, 218, 0.2);
+    width:30%;
+    padding: 6px;
+    border-radius: 10px;
+  }
+  .inputcss {
+    border-color: rgb(102, 153, 153);
+    border-width:  0px 0px 4px 0px;
+    font-family: verdana;
+    font-size: 20px;
+  }
+  .container{
+    height: 100%;
+    width: 250px;
+    margin: 0 auto;
+    text-align: center;
+    background-color: rgb(79, 76, 76, 0.2);
+    border-radius: 15px;
+    border-width: 3px;
+  }
+  .ele{
+    margin: 2%;
+    padding-top: 30px;
+    border-width: 3px;
+    border-color: black;
+    height: 30px;
+    width: 100%;
+  }
+  .input{
+    border-top: 0ch;
+    border-left: 0ch;
+    border-right: 0ch;
+    font-size: 15px;
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    width:50%;margin-right:10%;float:right;border-width: 2px;border-color: black
+  }
+  .btn{
+    margin-top: 8%;
+    font-size: 18px;
+    color:rgb(0, 43, 180);
+  }
+  .courseCont{
+    margin: 0 auto;
+    text-align: center;
+    background-color: rgba(255,255,255,1);
+    min-width: 60%;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+    transition: -webkit-box-shadow .25s;
+    transition: box-shadow .25s;
+    display: flex;
+    height: 100vh;
+  }
+</style>
+
+<body>
+  <div id=report>
+    <div v-show="(show==true)" id="courseContent" @click.self="show=!show" style="top:0">
+      <div class="courseCont" style="margin-top:40px; height: 80%;width:20vw;">
+        <div class="courseContentBody__right" style="padding-top: 15px;width: 200px;overflow-y: scroll">
+          <div class="courseContentBody__right__score" style="width:40px;">
+          </div>
+          <div class="courseContentBody__right__comment" style="width:90%;margin-left: auto;margin-right: auto">
+            <h2>{{course_name}}</h2>
+            <div style="padding-top: 20px;">
+              <h5>課程心得 </h5>
+            </div>
+            <div class="courseFeedback">
+              <div id="commentBody" style="text-align: center">
+                <div class="courseFeedback__single">
+                  <div class="courseFeedback__msg" style="margin-left: auto;margin-right: auto;">
+                    {{comment}}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <h5>檢舉原因 </h5>
+            <div class="courseFeedback">
+              <div id="commentBody" style="text-align: center">
+                <div class="courseFeedback__single">
+                  <div class="courseFeedback__msg" style="margin-left: auto;margin-right: auto;">
+                    {{reason}}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <h5>審查人 </h5>
+            <input v-if="onRead==0;" v-model="reviewer" class="inputcss" type="text" style="margin-top:10px;margin-bottom: 30px;width:150px;">
+            <div v-else class="courseFeedback">
+              <div id="commentBody">
+                <div class="courseFeedback__single">
+                  <div class="courseFeedback__msg" style="margin-left: auto;margin-right: auto;">
+                    {{reviewer}}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <h5>審查心得 </h5>
+            <input v-if="onRead==0;" v-model="response" class="inputcss" type="text" style="margin-top:10px;margin-bottom: 30px;width:150px">
+            <div v-else class="courseFeedback">
+              <div id="commentBody">
+                <div class="courseFeedback__single">
+                  <div class="courseFeedback__msg" style="margin-left: auto;margin-right: auto;">
+                    {{response}}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button v-if="onRead==false;" @click="sendReport(true)">給過！</button>
+          <button v-if="onRead==false;" @click="sendReport(false)">不過！</button>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="courseList__sideList__itemBox" style="height:240px;width:350px;margin-left: auto;margin-right: auto;margin-top: 50px;"
+        id="courseList">
+        <h4 class="title_">待 審 查</h4>
+        <div id="course_item" v-on:scroll="handleScroll">
+          <div class="list_course_item" @click="getReportComment(data.post_id, 0, data.reason, data.reviewer, data.response);"
+            v-for="(idx, data) in datas" v-if="data.onRead==0">
+            <div class="list_course_item_mid">
+              <p class="list_course_item_description text_16 text_dark" style="text-align: center">原因：{{data.reason}}</p>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="courseList__sideList__itemBox" style="height:240px;width:350px;margin-left: auto;margin-right: auto;margin-top: 50px;"
+        id="courseList">
+        <h4 class="title_">已 審 查</h4>
+        <div id="course_item" v-on:scroll="handleScroll">
+          <div class="list_course_item" @click="getReportComment(data.post_id, 1, data.reason, data.reviewer, data.response)"
+            v-for="(idx, data) in datas" v-if="data.onRead==1" >
+            <div v-if="data.pass" class="pass">
+                {{data.reviewer}}
+            </div>
+            <div v-else class="pass" style="background: rgba(238, 74, 96, 0.481)">
+                {{data.reviewer}}
+            </div>
+            <div class="list_course_item_mid">
+              <p class="list_course_item_description text_14 text_dark" style="margin-left: auto;margin-right: auto;">原因：{{data.reason}}</p>
+            </div>
+            <div class="pass">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <div style="margin-top:100px;height:150px;width:100%;text-align:center;" v-if="verified==false;">
+      <div class="container">
+        <div id="dialog">
+          <div class="ele">
+            <h2 style="float:left;width:30%;height: 30px;">帳號 </h2>
+            <input  class="input" id="name" name="name" type="text" v-model="account">
+          </div>
+          <div class="ele">
+            <h2 style="float:left;width:30%;height: 30px;">密碼 </h2>
+            <input class="input" id="name" name="name" type="password" v-model="pwd">
+          </div>
+        </div>
+        <button class="btn" style=" 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        font-weight: bold;" @click="verify">L O G I N</button>
+      </div>
+      </div> -->
+  <!-- <div v-else> -->
+  </div>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.26/vue.min.js"></script>
+  <script src="/dist/JS/reportVue.js"></script>
+</body>
+
+
+
+</html>

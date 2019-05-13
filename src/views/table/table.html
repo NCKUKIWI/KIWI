@@ -1,0 +1,99 @@
+<div class="left_area">
+	<div id="user_data" class="personal_data"> 
+		<div class="personal_data_image">
+			<img :src="user_data.user_photo" >
+		</div>
+		<div class="personal_data_info">
+			<p class="text_24">{{ user_data.user_name }}的課表</p>
+			<p class="text_16 text_dark">目前已排課 {{ credit_count }} 學分</p>		
+		</div>
+	</div>
+	<div id="quick_search" class="quick_search"> 
+		<div class="block_title">
+			<p class="text_18 "> {{ title_text }} </p>
+		</div>
+		<div class="quick_search_area" :class="{ filter_mode: filter_status }"  @click="clearFilter">
+			<div v-if="filter_status" class="quick_search_clear_filter"></div>
+			<input class="quick_search_input" type="text" v-model="keyword" :disabled="filter_status || page_status.table_locked" :class="{ locked: page_status.table_locked }" placeholder="輸入「課程名」或「教師名」" ><br>
+		</div>
+		<div v-if="keyword.replace(' ','') != '' && !filter_status && !page_status.table_locked" class="quick_search_dropdown">
+			<span> {{ result }} </span>
+			<p v-if="!result_cont.length && !filter_status && !page_status.table_locked" class="quick_search_dropdown__no_result text_dark">查無此關鍵字結果。</p>
+			<result-list-item v-for="item in result_cont" :class_item="item"></result-list-item>
+		</div>
+	</div>
+	<div id="wishlist_in_table" class="wishlist in_table">
+		<div class="block_title">
+			<p v-if="!filter_status" class="text_18">願望清單（{{ wishlist_cont.length }}） </p>
+			<p v-if=" filter_status" class="text_18">願望清單（符合所選時段） </p>
+		</div>
+		<div class="wishlist_cont" :class="{ locked: page_status.table_locked }" >
+			<p v-if="!wishlist_cont.length && !filter_status" class="wishlist_cont__no_result text_dark">尚未新增任何課程進入願望清單。</p>
+			<p v-if="!filter_item_count && filter_status" class="wishlist_cont__no_result text_dark">願望清單內無符合本時段之項目。</p>
+			<wishlist-item v-for="item in wishlist_cont" :class_item="item"></wishlist-item>
+		</div>
+	</div>
+</div>
+
+<div class="right_area">
+	<div id="class_table" class="class_table" :class="{ locked: page_status.table_locked }">
+		<div v-if="!temp_table.length && page_status.table_locked" @click="switchToEdit" class="class_table__empty_hint">
+			<p class="class_table__empty_hint__text text_bold">目前課表為空，來安排下學期的課程吧！</p>
+		</div>
+		<div class="class_table_title">
+			<div class="class_table_title_cell left">　</div>
+			<div class="class_table_title_cell"><p class="text_18">Mon</p></div>
+			<div class="class_table_title_cell"><p class="text_18">Tue</p></div>
+			<div class="class_table_title_cell"><p class="text_18">Wed</p></div>
+			<div class="class_table_title_cell"><p class="text_18">Thu</p></div>
+			<div class="class_table_title_cell"><p class="text_18">Fri</p></div>
+		</div>
+		<div class="class_table_cont">
+			<div class="class_table_cont__normal">
+				<div class="class_table_cont_row left">
+					<div class="class_table_cont_cell"><p class="text_18 round">1</p></div>
+					<div class="class_table_cont_cell"><p class="text_18 round">2</p></div>
+					<div class="class_table_cont_cell"><p class="text_18 round">3</p></div>
+					<div class="class_table_cont_cell"><p class="text_18 round">4</p></div>
+					<div class="class_table_cont_cell"><p class="text_18 round">N</p></div>
+					<div class="class_table_cont_cell"><p class="text_18 round">5</p></div>
+					<div class="class_table_cont_cell"><p class="text_18 round">6</p></div>
+					<div class="class_table_cont_cell"><p class="text_18 round">7</p></div>
+					<div class="class_table_cont_cell"><p class="text_18 round">8</p></div>
+					<div class="class_table_cont_cell"><p class="text_18 round">9</p></div>
+					<div class="class_table_cont_cell"><p class="text_18 round">A</p></div>
+					<div class="class_table_cont_cell"><p class="text_18 round">B</p></div>
+					<div class="class_table_cont_cell"><p class="text_18 round">C</p></div>
+					<div class="class_table_cont_cell"><p class="text_18 round">D</p></div>
+				</div>
+				<div class="class_table_cont_row">
+					<class-table-cell v-for="item in monday" :cell_data="item" :day="'monday'"></class-table-cell>
+				</div>
+				<div class="class_table_cont_row">
+					<class-table-cell v-for="item in tuesday" :cell_data="item" :day="'tuesday'"></class-table-cell>
+				</div>
+				<div class="class_table_cont_row">
+					<class-table-cell v-for="item in wednesday" :cell_data="item" :day="'wednesday'"></class-table-cell>
+				</div>
+				<div class="class_table_cont_row">
+					<class-table-cell v-for="item in thursday" :cell_data="item" :day="'thursday'"></class-table-cell>
+				</div>
+				<div class="class_table_cont_row">
+					<class-table-cell v-for="item in friday" :cell_data="item" :day="'friday'"></class-table-cell>
+				</div>
+			</div>
+			<div v-if="other.length" class="class_table_cont__other">
+				<div class="class_table_cont_row left">
+					<div class="class_table_cont_cell other"><p class="text_18">其他</p></div>
+				</div>
+				<div class="class_table_cont_row right_full">
+					<div v-for="item in other" class="class_table_cont_cell other class_cell occupied" :class="item.dept_id">
+						<div class="class_table_cont_cell_button other"  @click="deleteItem( item.id )"></div>
+						<p class="class_table_cont_cell_id other text_12"> {{ item.time }}</p>
+						<p class="class_table_cont_cell_title other text_16 text_bold"> {{ item.title }} </p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

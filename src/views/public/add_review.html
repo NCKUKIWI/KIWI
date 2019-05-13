@@ -1,0 +1,76 @@
+
+<div v-if="page_status.windows.add_review" id="add_review" class="add_review">
+    <div class="add_review__window">
+        <div class="add_review__window__top_bar">
+            <div class="add_review__window__top_bar__title">
+                <p class="add_review_title text_18">提供心得</p>
+            </div>
+            <div class="add_review__window__top_bar__icons">
+                <div class="add_review_icon minimize"></div>
+                <div class="add_review_icon strech"></div>
+                <div class="add_review_icon close" @click="closeWindow"></div>
+            </div>
+        </div>
+        <div class="add_review__window__mid_cont">
+            <div class="add_review__window__mid_cont__top_row">
+                <input v-model="course_title" class="add_review_info title text_16" type="text" placeholder="輸入課程名稱">
+                <div :class="{ enabled: course_title_filled }" class="add_review_info semester text_16" @click="chooseSemester"> {{ course_semester }} </div>
+                <div :class="{ enabled: course_title_filled && course_semester != '選擇學期' }" class="add_review_info teacher text_16" @click="chooseTeacher"> {{ course_teacher }} </div>
+                <div class="add_review_dropdowns">
+                    <div :class="{ visible: course_title_suggestion !='' && course_title_filled =='' && this.course_title !='' }" class="add_review_dropdown title text_16">
+                        <p v-for="item in course_title_suggestion" @click="fillTitle(item)"> {{ item }} </p>
+                    </div>
+                    <div :class="{ visible: isChoosingSemester }" class="add_review_dropdown semester text_16">
+                        <p v-for="item in course_semester_suggestion" @click="fillSemester(item)"> {{ item }} </p>
+                    </div>
+                    <div :class="{ visible: isChoosingTeacher }"  class="add_review_dropdown teacher text_16">
+                        <p v-for="item, index in course_teacher_suggestion" @click="fillTeacher(item, index)"> {{ item }} </p>
+                    </div>
+                </div>
+            </div>
+            <textarea v-model="course_review" class="add_review__window__mid_cont__mid_area add_review_paragraph text_16" placeholder="上課形式、課堂要求、學習內容... 對這門課說些什麼吧！" :disabled=" course_title_filled =='' || course_semester == '選擇學期' || course_teacher == '選擇開課教師' " @click='closeDropdowns'></textarea>
+            <div :class="{ enabled: course_title_filled && course_semester != '選擇學期' && course_teacher != '選擇開課教師' }" class="add_review__window__mid_cont__bottom_row" @click='closeDropdowns'>
+                <div class="add_review_rate text_16 gain"  @mouseover="changeStatus('gain')" @mouseout="changeStatus('default')">
+                    <div class="add_review_rate__left_area">
+                        <p class="add_review_rate__name gain">課堂收穫</p>
+                    </div>
+                    <div class="add_review_rate__right_area">
+                        <div @click="giveRate( 'gain', -1 )" class="add_review_rate__button go_down gain"></div>
+                        <p class="add_review_rate__score gain"> {{ course_rate.gain }} </p>
+                        <div @click="giveRate( 'gain', 1 )" class="add_review_rate__button go_up gain"></div>
+                    </div>
+                </div>
+                <div class="add_review_rate text_16 sweet" @mouseover="changeStatus('sweet')" @mouseout="changeStatus('default')">
+                    <div class="add_review_rate__left_area">
+                        <p class="add_review_rate__name sweet">分數甜度</p>
+                    </div>
+                    <div class="add_review_rate__right_area">
+                        <div @click="giveRate( 'sweet', -1 )" class="add_review_rate__button go_down sweet"></div>
+                        <p class="add_review_rate__score sweet"> {{ course_rate.sweet }} </p>
+                        <div @click="giveRate( 'sweet', 1 )" class="add_review_rate__button go_up sweet"></div>
+                    </div>
+                </div>
+                <div class="add_review_rate text_16 cold" @mouseover="changeStatus('cold')" @mouseout="changeStatus('default')">
+                    <div class="add_review_rate__left_area">
+                        <p class="add_review_rate__name cold">上課涼度</p>
+                    </div>
+                    <div class="add_review_rate__right_area">
+                        <div @click="giveRate( 'cold', -1 )" class="add_review_rate__button go_down cold"></div>
+                        <p class="add_review_rate__score cold"> {{ course_rate.cold }}</p>
+                        <div @click="giveRate( 'cold', 1 )" class="add_review_rate__button go_up cold"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="add_review__window__bottom_bar">
+            <div class="add_review__window__bottom_bar__status">
+                <p class="add_review_status text_14"> {{ window_status }} </p>
+            </div>
+            <div class="add_review__window__bottom_bar__buttons">
+                <div class="add_review_button give_up text_16 enabled" @click="giveUpReview">放棄</div>
+                <div :class="{ enabled: course_review.replace(/\s/g, '').length >= 50 }" class="add_review_button send_review text_16" @click="sendReview">送出心得</div>
+            </div>
+        </div>
+    </div>
+    <div class="add_review__background"></div>
+</div>

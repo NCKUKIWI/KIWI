@@ -1,0 +1,62 @@
+
+
+<nav>
+    <div id="navbar" class="hub_navbar">
+      <div v-if="mobile_status != 'search'" class="hub_navbar__mobile mobile_only">
+        <div class="hub_navbar__mobile__menu_icon" @click="switchProfileWindow()"></div>
+        <p class="hub_navbar__mobile__title_text text_24">課程列表</p>
+        <div class="hub_navbar__mobile__drop_icon" :class="{ on: mobile_status == 'drop' }" @click="mobileNavStatus('drop')"></div>
+        <div class="hub_navbar__mobile__search_icon" @click="mobileNavStatus('search')"></div>
+      </div>
+      <div class="hub_navbar__left_area" :class="{ mobile_on: mobile_status == 'search' }">
+          <a class="hub_navbar__logo" href="/"></a>
+          <input class="hub_navbar__search" type="text" v-model="search_keyword" placeholder="搜尋「課程名」或「教師名」" autocomplete="off"><br>
+          <div v-if="search_keyword.replace(' ','') != ''" class="hub_navbar__search__dropdown">
+              <p v-if="!result_cont.length" class="hub_navbar__search__dropdown__no_result text_dark">查無此關鍵字結果。</p>
+              <div v-for="item in result_cont" class="list_course_item" @click="openCourse(item.id)">
+                <div class="list_course_item_left">
+                  <p class="list_course_item_category text_20 text_white" :class="item.dept_id"> {{ item.category }} </p>
+                </div>
+                <div class="list_course_item_mid">
+                  <p class="list_course_item_title text_16">{{ item.dept_id }}-{{ item.class_id }} {{ item.title }}</p>
+                  <p class="list_course_item_description text_14 text_dark">{{ item.teacher }} — {{ item.time }}</p>
+                </div>
+                <div class="list_course_item_right">
+                </div>
+              </div>
+              <span> {{ result }} </span>
+          </div>
+    </div>
+    <div class="hub_navbar__right_area">
+        <div :class="{ on: page_status.now_tab == 'course' }" class="hub_navbar__link" @click="switchTo('course')">找課程</div>
+        <div :class="{ on: page_status.now_tab == 'table' }" class="hub_navbar__link" @click="switchTo('table')">排課表 <span class="wishlist_count">{{ user_data.now_wishlist.length }}</span></div>
+        <img :class="{ on: page_status.nav_profile_dropdown || page_status.now_tab == 'profile' }" class="hub_navbar__profile" @click="switchProfileWindow()" :src="user_data.user_photo">
+        <div v-if="page_status.nav_profile_dropdown" class="hub_navbar__profile__dropdown on">
+          <div class="hub_navbar__profile__dropdown__info" :class="{ not_login: user_data.user_id == 0 }">
+            <img class="hub_navbar__profile__dropdown__info__photo" :src="user_data.user_photo">
+            <div class="hub_navbar__profile__dropdown__info__detail">
+              <!-- todo: nav_profile_name 加入 class ".vip" 旁邊就會出現星星唷！ -->
+              <div class="nav_profile_name">{{user_data.user_name}}</div>
+              <div v-show="user_data.user_id == 0" class="nav_profile_dept">請登入網站，</div>
+              <div v-show="user_data.user_id == 0" class="nav_profile_grade">以使用完整功能！</div>
+              <!-- <div v-show="user_data.user_department != '無'" class="nav_profile_dept">{{user_data.user_department}}</div> -->
+              <!-- <div v-show="user_data.user_grade != '無'" class="nav_profile_grade">{{user_data.user_grade}}年級</div> -->
+              <!-- <div v-show="user_data.user_id != 0 && user_data.user_department == '無'" class="nav_profile_dept">尚未輸入系所資料</div> -->
+              <!-- <div v-show="user_data.user_id != 0 && user_data.user_grade == '無'" class="nav_profile_grade">尚未輸入年級資料</div> -->
+            </div>
+          </div>
+          <div v-show="user_data.user_id != 0" class="hub_navbar__profile__dropdown__goto" @click="open_helper()" >開通小幫手</div>
+          <a href="/user/fblogin" v-show="user_data.user_id == 0"><div class="hub_navbar__profile__dropdown__goto">立即登入 / 註冊</div></a>
+          <div class="hub_navbar__profile__dropdown__links">
+            <!-- <a>關於 NCKU HUB</a> -->
+            <a v-show="user_data.user_id == 0" class="mobile_only" href="/user/fblogin">登入網站</a>
+            <a href="https://www.facebook.com/nckuhub" target="_blank">粉絲專頁</a>
+            <a href="https://www.messenger.com/t/nckuhub" target="_blank">回報問題</a>
+            <a href="https://old.nckuhub.com">返回舊版</a>
+            <a v-show="user_data.user_id != 0" href='/user/logout'>登出帳戶</a>
+          </div>
+        </div>
+        <div class="dark_screen mobile_only" v-if="page_status.nav_profile_dropdown" @click="switchProfileWindow()"></div>
+    </div>
+  </div>
+</nav>

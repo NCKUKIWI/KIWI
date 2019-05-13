@@ -1,0 +1,5 @@
+
+<div v-if="page_status.now_tab != 'register'" id="fixed_button_table" class="fixed_button_area desktop_only" :class="{ locked: page_status.table_locked }">
+    <div class="major_button" :class="[{ deep_blue_edit: page_status.now_tab == 'table' && page_status.table_locked },{ red_done: page_status.now_tab == 'table' && !page_status.table_locked },{ red_add: page_status.now_tab != 'table' }]" @click="majorBtnClicked"></div>
+    <div v-if="page_status.now_tab == 'table'" class="minor_button dark_cancel" @click="minorBtnClicked"></div>
+</div>

@@ -1,0 +1,84 @@
+<div class="register__content" id="register__content">
+  <div class="register__block register__block__left">
+    <div class="register__block__left--mods">
+      <div class="logo__circle">
+        <!-- <img src="./dist/images/register/LOGO.svg" alt=""> -->
+        <img src="./dist/images/register/LOGO.png" alt="">
+      </div>
+      <p class="text_40">資訊技術改善校園</p>
+      <div class="register__block__left--mods__par">
+        <p class="text_20">NCKU HUB 是由成大生自主發起，</p>
+        <p class="text_20">以解決校園問題為目標的資訊平台。</p>
+      </div>
+      <a href="/user/fblogin" v-show="!registerBtn.new_register && !registerBtn.old_user_register">
+        <div class="rectangle-btn rectangle-btn--register__login">
+          <img src="./dist/images/register/fb_icon_blue.svg">
+          <p class="text_20">現有帳號登入</p>
+        </div>
+      </a>
+    </div>
+  </div>
+  <div class="register__block register__block__right">
+    <div id="register__right__content">
+      <div class="register__block__right__head">
+        <p class="text_34--register" id="register__block__par1">第一次使用？</p>
+        <p class="text_20--register" id="register__block__par2">若您為第一次使用，請依下列步驟完成註冊。</p>
+      </div>
+      <div class="register__block__right__steps">
+        <p class="text_20--register" :class="{disabled_text : registerBtn.new_register || registerBtn.old_user_register}">STEP 1：以現有帳號快速註冊</p>
+        <a href="/user/fblogin">
+          <div class="round-btn" id="register_fb_btn" @click="new_user_login()" :class="{roundBtnClicked : registerBtn.new_register || registerBtn.old_user_register}">
+            <img v-if="!registerBtn.new_register && !registerBtn.old_user_register" src="./dist/images/register/fb_icon.svg">
+            <img v-if="registerBtn.new_register || registerBtn.old_user_register" src="./dist/images/register/fb_icon_disabled.svg" alt="">
+            <p class="text_18">連接 facebook</p>
+          </div>
+        </a>
+      </div>
+      <div class="register__block__right__steps">
+        <p class="text_20--register" :class="{disabled_text : !registerBtn.new_register && !registerBtn.old_user_register}">STEP 2：輸入您的個人基本資訊</p>
+        <div class="register__block__right__steps__inputs">
+          <div class="register__block__right__steps__inputs__line1" :class="{input_error: !dept_qualified}">
+            <div class="input_block">
+              <input type="text" placeholder="輸入英文系號(學號前兩碼 ex: H3)" id="enter_dept" v-model="dept_keyword" maxlength="2" disabled="disabled">
+              <p v-if="!dept_qualified" class="error_text">無效的系號</p>
+            </div>
+            <select placeholder="" id="enter_grade" v-model="grade_selected">
+              <option value='' disabled>下拉選擇年級</option>
+              <option v-bind:value='grade' v-for="grade in grades">{{grade}}</option>
+            </select>
+          </div>
+          <div :class="{input_error: !email_qualified}">
+            <input type="text" placeholder="常用信箱" id="enter_email" disabled="disabled" v-model="email_keyword" style="width:100%">
+            <p v-if="!email_qualified" class="error_text">無效的信箱</p>
+          </div>
+        </div>
+        <div v-if="!registerBtn.finish_register" class="rectangle-btn disabled_text">
+          <img src="./dist/images/register/arrange_disabled.svg">
+          <p class="text_20">完成註冊程序</p>
+        </div>
+        <div v-else class="rectangle-btn rectangle-btn--register__finishRegist" @click="submit_data()">
+          <img src="./dist/images/register/arrange.svg">
+          <p class="text_20">完成註冊程序</p>
+        </div>
+      </div>
+
+    </div>
+    <div id="register__right__submited">
+      <div>
+        <p class="text_34">註冊已完成！</p>
+        <div class="register__right__submited__content">
+          <!-- <p class="text_18">請至您的信箱 <a href="#">davin135@gmail.com</a> 收認證信，</p>
+          <p class="text_18">以完成在 NCKU HUB 的帳號啟用。</p>
+          <br>
+          <p class="text_18">若遇到任何問題，歡迎 <a href="">私訊我們反應</a>。</p> -->
+        </div>
+        <a @click="back_course_page()">
+          <div class="rectangle-btn">
+            <img src="./dist/images/register/goback_icon.svg" alt="">
+            <p class="text_20">返回 NCKU HUB</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

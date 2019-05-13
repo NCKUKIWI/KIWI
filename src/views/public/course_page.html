@@ -87,10 +87,10 @@
               <div class="courseFeedback__single" v-for="comment in comment_data">
                 <div class="courseFeedback__icons">
                   <div class="icon-span"><span>107-1學期</span></div>
-                  <div>
+                  <div class="courseFeedback__icons__icongroup">
                     <img src="./dist/images/course/thumbs_up.png"/><span>10</span>
                     <img src="./dist/images/course/thumbs_down.png"/><span>10</span>
-                    <img src="./dist/images/course/more.png" height="3px"/>
+                    <a @click="openAndmore()"><img src="./dist/images/course/more.png" height="5px" width="17px"/></a>
                   </div>
                 </div>
                 <div class="courseFeedback__msg">

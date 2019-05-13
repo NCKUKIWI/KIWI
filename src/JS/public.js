@@ -52,6 +52,8 @@
             add_review_give_up: false,
             edit_table_give_up: false,
             course_page: false,
+            report: false,
+            andmore: false
             // 新的視窗加在這裡
         },
         table_locked: true,                     // 課表鎖定狀態

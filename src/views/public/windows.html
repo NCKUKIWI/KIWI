@@ -59,5 +59,27 @@
     </div>
     <!-- 小幫手 -->
 
+    <!-- 檢舉選單 -->
+    <div class="window andmore" v-if="page_status.windows.andmore" >
+        <div class="window__background">
+            <div class="window__self">
+                <div @click="">檢舉</div>
+                <div>返回</div>
+            </div>
+        </div>
+    </div>
+    <!-- 檢舉確認 -->
+    <div class="window report" v-if="page_status.windows.report" >
+        <div class="window__background">
+            <div class="window__self">
+                <div class="window__self__title text_bold text_26">檢舉完成</div>
+                <div class="window__self__detail">我們已收到你的檢舉，很抱歉讓您有不愉快的體驗。若有任何疑問，歡迎私訊我們反應</div>
+                <div class="window__self__button_area ">
+                    <a @click="closeWindow('report')" class="window__self__button_area__button text_dark">返回頁面</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 </div>

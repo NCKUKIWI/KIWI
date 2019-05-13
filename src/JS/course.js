@@ -178,6 +178,12 @@
         vue_courseContent.hideContent();
         setWindow( 'add_review', 'open' );
       },
+      openReportWindow: function(){
+        setWindow( 'report', 'open');
+      },
+      openAndmore: function(){
+        setWindow( 'andmore', 'open');
+      }
     },
   });
 

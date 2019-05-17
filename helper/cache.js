@@ -27,9 +27,22 @@ function userCourseKey(uid, cid) {
     return "user_" + uid + "_"+cid;
 }
 
+function draftKey(course, teacher, uid) {
+    course = trimSpace(course)
+    teacher = trimSpace(teacher)
+    let str = course+"_"+teacher+"_"+uid;
+    return str;
+}
+
+function trimSpace(strTmp){
+    strTmp = strTmp.replace(' ','')
+    strTmp = strTmp.replace('  ','')
+    return strTmp;
+}
 module.exports = {
     redis: client,
     courseCacheKey: courseCacheKey,
     userCacheKey: userCacheKey,
-    userCourseKey: userCourseKey
+    userCourseKey: userCourseKey,
+    draftKey: draftKey
 };

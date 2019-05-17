@@ -289,42 +289,48 @@ router.post('/report/:id', function (req, res) {
     /* 要檢舉的文章id*/
     var postid = parseInt(req.params.id);
     console.log('\n' + 'POST /post/report/' + postid);
-    /* 檢查用戶是否登入 */
-    var userid = req.body['user'];
-    if (userid !== undefined) {
-        /* 檢查是否檢舉過 依照user_id及post_id去尋找 */
-        db.FindbyColumn('report_post', ["id"], {
-            'post_id': postid,
-            'user_id': userid
-        }, function (reports) {
-            if (reports.length > 0) {
-                console.log('Already report');
-                res.send('Already report');
-            } else {
-                /* 區分檢舉原因 */
-                var type = req.body['reason'];
-                var reason = type;
-                /* 新增檢舉紀錄 */
-                var report_post = {
-                    user_id: userid,
-                    post_id: postid,
-                    reason: reason
-                }
-                db.Insert('report_post', report_post, function (err, results) {
-                    if (err) throw err;
-                    console.log('Report post ' + postid + ' success');
-                    /* 依照post_id將文章的檢舉次數+1 */
-                    db.UpdatePlusone('post', 'report_count', postid, function (results) {
-                        res.send('Success');
+    var report_post;
+    let sql = "SELECT * FROM post WHERE id = "+postid;
+    db.Query(sql, function(data) {
+        if(data.length == 0){
+            res.send("The post has been deleted.")
+            return 1;
+        }
+        report_post = data[0]
+        report_post['post_id'] = data[0].id
+        delete report_post.id;
+
+        /* 檢查用戶是否登入 */
+        var reporter_id = req.body['reporter_id'];
+        if (reporter_id !== undefined) {
+            /* 檢查是否檢舉過 依照post_id去尋找 */
+            db.FindbyColumn('report_post', ["id"], {
+                'post_id': postid,
+            }, function (reports) {
+                if (reports.length > 0) {
+                    res.send('Already report');
+                } else {
+                    // bot.sendReport(); // For broadcast the /report URL.
+                    // var reason = req.body['reason'];
+                    // report_post['reason'] = reason
+                    report_post['reporter_id'] = reporter_id
+                    db.Insert('report_post', report_post, function (err, results) {
+                        if (err) throw err;
+                        console.log('Report post ' + postid + ' success');
+                        /* 依照post_id將文章的檢舉次數+1 */
+                        db.UpdatePlusone('post', 'report_count', postid, function (results) {
+                            res.send('Success');
+                        });
                     });
-                });
-                // bot.sendReport(report_post);
-            }
-        });
-    } else {
-        console.log('No login');
-        res.send('No Login');
-    }
+                }
+            });
+        } else {
+            console.log('No login');
+            res.send('No Loginn');
+        }
+
+    })
+
 });
 
 /*report post */

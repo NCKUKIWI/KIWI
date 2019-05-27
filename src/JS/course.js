@@ -120,6 +120,7 @@
       },
       comment_data: [],
       userData: userData,
+      open_reportList: false,
     },
     methods: {
       hideContent: function() {
@@ -183,7 +184,10 @@
       },
       openAndmore: function(){
         setWindow( 'andmore', 'open');
-      }
+      },
+      report_list: function(){
+        this.open_reportList = true;
+      },
     },
   });
 

@@ -90,7 +90,10 @@
                   <div class="courseFeedback__icons__icongroup">
                     <img src="./dist/images/course/thumbs_up.png"/><span>10</span>
                     <img src="./dist/images/course/thumbs_down.png"/><span>10</span>
-                    <a @click="openAndmore()"><img src="./dist/images/course/more.png" height="5px" width="17px"/></a>
+                    <a @click="report_list()"><span>...</span></a>
+                    <div v-show="open_reportList">
+                      <div>123aaa</div>
+                    </div>
                   </div>
                 </div>
                 <div class="courseFeedback__msg">

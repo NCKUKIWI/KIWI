@@ -65,6 +65,7 @@
     }
     .courseList__sideList {
         width: 100vw;
+        margin-top: 64px;
         height: calc( 100vh - 64px);
         padding: 0;
     }
@@ -86,4 +87,79 @@
             display: none;
         }
     }
+
+    #courseContent {
+        z-index: 5;
+        height: calc(100vh - 64px);
+        margin-top: 64px;
+        overflow-x: hidden;
+        overflow-y: scroll;
+    }
+
+    .courseContentBody {
+        flex-direction: column;
+        height: auto;
+        width: 100vw;
+        min-width: auto;
+    }
+
+    .courseContentBody__left {
+        height: auto;
+        padding: 40px 30px 0 30px;
+    }
+
+    .icon-span {
+        position: absolute;
+        top: 36px;
+        right: 30px;
+    }
+
+    .courseContentBody__left h2 {
+        margin-top: 16px;
+        line-height: 1.5;
+        margin-bottom: 20px;
+    }
+
+    .courseUnit {
+        margin: 20px 0;
+        & > .block_title {
+            margin-bottom: 6px;
+            & > .text_14 {
+                font-size: 14px;
+            }
+        }
+        & > .text_16 {
+            font-weight: 900;
+        }
+    }
+
+    .courseContentBody__right {
+        padding: 40px 30px 30px 30px;
+        &__score {
+            width: auto;
+        }
+    }
+
+    .score-btn--all {
+        margin: 0 -5px;
+        width: calc(100% + 10px);
+    }
+
+    .score-btn {
+        margin: 0px 5px;
+        width: 100%;
+    }
+
+    .courseFeedback {
+        margin: auto;
+    }
+
+    .courseFeedback__single {
+        margin: 14px 0px;
+    }
+
+    .courseContentBody__right__comment {
+        width: 100%;
+    }
+
 }

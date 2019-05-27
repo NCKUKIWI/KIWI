@@ -35,7 +35,6 @@
         now_wishlist: [],
         now_table: [],
         now_comment: [],
-
     }
 
     // 頁面顯示狀態

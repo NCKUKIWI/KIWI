@@ -4,9 +4,10 @@
     <div id="navbar" class="hub_navbar">
       <div v-if="mobile_status != 'search'" class="hub_navbar__mobile mobile_only">
         <div class="hub_navbar__mobile__menu_icon" @click="switchProfileWindow()"></div>
-        <p class="hub_navbar__mobile__title_text text_24" @click="mobileNavStatus('drop')">課程列表</p>
-        <div class="hub_navbar__mobile__drop_icon" :class="{ on: mobile_status == 'drop' }" @click="mobileNavStatus('drop')"></div>
-        <div class="hub_navbar__mobile__search_icon" @click="mobileNavStatus('search')"></div>
+        <p class="hub_navbar__mobile__title_text text_24" v-if="! page_status.windows.course_page" @click="mobileNavStatus('drop')">課程列表</p>
+        <p class="hub_navbar__mobile__title_text text_24" v-if="page_status.windows.course_page">課程資訊</p>        
+        <div class="hub_navbar__mobile__drop_icon" v-if="! page_status.windows.course_page" :class="{ on: mobile_status == 'drop' }" @click="mobileNavStatus('drop')"></div>
+        <div class="hub_navbar__mobile__search_icon" v-if="! page_status.windows.course_page" @click="mobileNavStatus('search')"></div>
       </div>
       <div class="hub_navbar__left_area" :class="{ mobile_on: mobile_status == 'search' }">
           <a class="hub_navbar__logo" href="/"></a>

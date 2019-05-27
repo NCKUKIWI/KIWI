@@ -40,7 +40,7 @@
         console.log("open the page: " + id);
         setWindow('course_page','open');
         var course_url = "/course/" + id;
-
+        vue_nav_bar.mobile_status = 'course_page';
         $.ajax({
           type: "GET",
           url: course_url,

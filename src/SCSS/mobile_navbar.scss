@@ -69,6 +69,16 @@
             background-position: center;
             cursor: pointer;
         }
+        &__back_icon {
+            display: inline-block;
+            height: 100%;
+            width: 24px;
+            background-image: url("../images/table/icon_back.svg");
+            background-size: 50%;
+            background-repeat: no-repeat;
+            background-position: center;
+            cursor: pointer;
+        }
         &__title_text {
             margin-left: 15px;
             margin-right: 8px;

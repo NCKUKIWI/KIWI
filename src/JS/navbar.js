@@ -88,6 +88,10 @@ var vue_nav_bar = new Vue({
 					this.mobile_status = 'drop';
 				}
 			}
+		},
+		hideCoursePage: function() {
+			vue_courseContent.hideContent();
+			this.mobile_status = 'default';
 		}
 	}
 })

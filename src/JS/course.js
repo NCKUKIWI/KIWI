@@ -120,6 +120,7 @@
       },
       comment_data: [],
       userData: userData,
+      open_reportList: false,
     },
     methods: {
       hideContent: function() {
@@ -177,6 +178,15 @@
       openReviewWindow: function(){
         vue_courseContent.hideContent();
         setWindow( 'add_review', 'open' );
+      },
+      openReportWindow: function(){
+        setWindow( 'report', 'open');
+      },
+      openAndmore: function(){
+        setWindow( 'andmore', 'open');
+      },
+      report_list: function(){
+        this.open_reportList = true;
       },
     },
   });

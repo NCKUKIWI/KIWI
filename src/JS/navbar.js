@@ -67,8 +67,16 @@ var vue_nav_bar = new Vue({
 			// document.getElementById("helper_background").style.display = "block";
 		},
 		mobileNavStatus: function( status ) {
-			if ( status == 'search') {
+			if ( status == 'search' ) {
 				this.mobile_status = 'search';
+			}
+			if ( status == 'cancel_search' ) {
+				if ( this.search_keyword == '' ) {
+					this.mobile_status = 'default';
+				}
+				else {
+					this.search_keyword = '';
+				}
 			}
 			if ( status == 'drop' ) {
 				vue_courseFilter.mobileNavStatus( 'drop' );

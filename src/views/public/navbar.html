@@ -4,13 +4,14 @@
     <div id="navbar" class="hub_navbar">
       <div v-if="mobile_status != 'search'" class="hub_navbar__mobile mobile_only">
         <div class="hub_navbar__mobile__menu_icon" @click="switchProfileWindow()"></div>
-        <p class="hub_navbar__mobile__title_text text_24">課程列表</p>
+        <p class="hub_navbar__mobile__title_text text_24" @click="mobileNavStatus('drop')">課程列表</p>
         <div class="hub_navbar__mobile__drop_icon" :class="{ on: mobile_status == 'drop' }" @click="mobileNavStatus('drop')"></div>
         <div class="hub_navbar__mobile__search_icon" @click="mobileNavStatus('search')"></div>
       </div>
       <div class="hub_navbar__left_area" :class="{ mobile_on: mobile_status == 'search' }">
           <a class="hub_navbar__logo" href="/"></a>
-          <input class="hub_navbar__search" type="text" v-model="search_keyword" placeholder="搜尋「課程名」或「教師名」" autocomplete="off"><br>
+          <input class="hub_navbar__search" type="text" v-model="search_keyword" placeholder="搜尋「課程名」或「教師名」" autocomplete="off" />
+          <div class="hub_navbar__search__cancel"  @click="mobileNavStatus('cancel_search')"></div>
           <div v-if="search_keyword.replace(' ','') != ''" class="hub_navbar__search__dropdown">
               <p v-if="!result_cont.length" class="hub_navbar__search__dropdown__no_result text_dark">查無此關鍵字結果。</p>
               <div v-for="item in result_cont" class="list_course_item" @click="openCourse(item.id)">
@@ -26,6 +27,7 @@
               </div>
               <span> {{ result }} </span>
           </div>
+        <div class="dark_screen mobile_only search" v-if="mobile_status == 'search'"></div>
     </div>
     <div class="hub_navbar__right_area">
         <div :class="{ on: page_status.now_tab == 'course' }" class="hub_navbar__link" @click="switchTo('course')">找課程</div>

@@ -85,6 +85,13 @@ router.get('/CourseByKeywords', function (req, res) {
     }
 });
 
+router.get('/showCourse', function (req, res) {
+    console.log("hi")
+    db.Query('SELECT * FROM courseTest', function(result){
+        res.send(JSON.stringify(result))
+    })
+})
+
 router.get('/getReportData', function (req, res) {
     db.GetColumn('report_post', ['id','course_name', 'user_id', 'post_id', 'reason', 'onRead', 'reviewer', 'pass', 'response'], { 'column': 'id', 'order': 'DESC' }, function(result){
         res.send(JSON.stringify(result))
@@ -260,6 +267,33 @@ router.get('/Info/:courseID', function (req, res) {
         })
     } 
 });
+
+// For front-end study
+
+router.post('/insertCourse', function (req, res) {
+    let data = {'course':req.body['course'], 'courseID':req.body['courseID'], 'grade':req.body['grade'], 'teacher':req.body['teacher']}
+    db.Insert('courseTest', data, function(){
+        res.send("success")
+    })
+})
+
+router.post('/modifyCourse/', function (req, res) {
+    let id = req.body['id']
+    delete req.body.id;
+    let data = req.body;
+    db.Update('courseTest', data, {'id':id}, function(){
+        res.send("success")
+    })
+})
+
+router.post('/deleteCourse/', function (req, res) {
+    let id = req.body['id']
+    db.DeleteById('courseTest', id, function(){
+        res.send("success")
+    })
+})
+
+
 
 // function check_Login(req, res, all_courses, custom_courses) {
 //     if (req.user) {

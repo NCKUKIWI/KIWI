@@ -210,4 +210,54 @@ router.get('/getHelperService/', function (req, res) {
     })
 });
 
+
+router.post('/signup', function (req, res) {
+
+    //var user_account = req.body['account'];
+    //var user_password = req.body['password'];
+    //var user_email = req.body['user_email'];
+    var check_key = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    var data = {
+        'id':config.userId,
+        'account': "hanson0224",//user_account,
+        'password': "Hanson0224",//user_password,
+        'email': "tp6jo4vm4@gmail.com",//user_email
+        'check_key': check_key
+    };
+
+    var url = "nckuhub.com/user/signup_url/"
+
+    console.log(data);
+    //db.Query('user')
+    db.Insert('user', data, function(err, result){
+        
+        if(err) console.log(err);
+        else{
+            gmailSend.sendMail('nckuhub@gmail.com', 'sginup go go go! '+url+data['check_key']);
+        }
+    })
+    res.send("success");
+})
+
+router.get('/signup_url/:check_key', function (req, res) {
+    
+    var user_check_key = req.params.check_key;
+    //var userID = config.userId;
+    var datas = {
+        role: 3
+    };
+    var conditions ={
+        check_key : user_check_key
+    };
+    //console.log('\n' + 'GET /signup_url/' + check_key);
+    //if (check_key.match(/\D/g)) { // if ID isn't the digital.
+    //    res.redirect('/');
+    //}else{
+        db.Update('user',datas,conditions,function(err,results){
+            if(err) console.log(err);
+            res.send('success');
+        })
+    //}
+})
+
 module.exports = router;

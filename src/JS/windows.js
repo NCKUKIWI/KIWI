@@ -5,7 +5,7 @@ var vue_windows = new Vue({
     data: {
 		page_status: pageStatus,
 	},
-    methods: { 
+    methods: {
         closeWindow: function( window ) {
             setWindow( window, 'close' );
             pageStatus.next_tab = '';
@@ -23,6 +23,9 @@ var vue_windows = new Vue({
             setWindow( 'edit_table_give_up', 'close' );
             toTab( pageStatus.next_tab );
             pageStatus.next_tab = '';
-        }
+        },
+				sendReport: function() {
+					$("#report_title").html("檢舉完成");
+				}
     }
 })

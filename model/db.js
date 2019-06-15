@@ -227,6 +227,32 @@ exports.FindbyColumn = function FindbyColumn(table, cols, conditions, callback) 
     });
 }
 
+exports.FindbyColumnClear = function FindbyColumnClear(table, cols, conditions, callback) {
+    var ctr=0
+    var columns = "";
+    for (var i in cols) {
+        columns += cols[i];
+        if (i != cols.length - 1) {
+            columns += ",";
+        }
+    }
+    var condition = "";
+    for (let idx in conditions) {
+        let value = conditions[idx]
+        condition += ` ${idx}=${value} `
+        ctr++
+        if(ctr !=  Object.keys(conditions).length)
+            condition += "AND"
+    };
+
+    var sql = "SELECT " + columns + " FROM " + table + " WHERE" + condition;
+    console.log(sql);
+    connection.query(sql, function(err, results, fields) {
+        if (err) throw err;
+        callback(results);
+    });
+}
+
 exports.FindbyColumnOrder = function FindbyColumnOrder(table, conditions, order, callback) {
     var condition = conditionjoin(conditions);
     var sql = "SELECT * FROM " + table + " WHERE " + condition + " ORDER BY " + order['column'] + " " + order['order'];

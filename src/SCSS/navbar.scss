@@ -257,6 +257,19 @@
                 &:active {
                     filter: brightness(95%);
                 }
+                &.disabled {
+                    color: $dark;
+                    background: $light_2;
+                    box-shadow: none;
+                    cursor: default;
+                    transition: 0s;
+                    &:hover {
+                        background: $light_2;
+                    }
+                    &:active {
+                        filter: brightness(100%);
+                    }
+                }
                 &:link, &:visited {
                     color: $black;
                 }

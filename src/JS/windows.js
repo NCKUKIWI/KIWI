@@ -6,7 +6,7 @@ var vue_windows = new Vue({
         userData: userData,
         page_status: pageStatus,
 	},
-    methods: { 
+    methods: {
         closeWindow: function( window ) {
             setWindow( window, 'close' );
             pageStatus.next_tab = '';
@@ -32,6 +32,9 @@ var vue_windows = new Vue({
         },
         copyCodeDone: function(){
             setNotification ( '成功複製驗證碼！', 'blue' );
-        }
+        },
+		sendReport: function() {
+			$("#report_title").html("檢舉完成");
+		}
     }
 })

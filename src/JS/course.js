@@ -121,6 +121,11 @@
       comment_data: [],
       userData: userData,
       open_reportList: false,
+      thumbs: {
+        up: 0,
+        down: 0,
+        clicked: false,
+      },
     },
     methods: {
       hideContent: function() {
@@ -143,21 +148,20 @@
         }
       },
       submit_score: function(index) {
-          // $(".score_input").each(function() {
-          //   $(".score_input").css("display","inline-block");
-          // });
-          // $(".score_span").each(function() {
-          //   $(".score_span").css("display","none");
-          // });
-          // $(".arrow-left").each(function() {
-          //   $(".arrow-left").css("display","inline-block");
-          // });
-          // $(".arrow-right").each(function() {
-          //   $(".arrow-right").css("display","inline-block");
-          // });
+          $(".score_input").each(function() {
+            $(".score_input").css("display","inline-block");
+          });
+          $(".score_span").each(function() {
+            $(".score_span").css("display","none");
+          });
+          $(".arrow-left").each(function() {
+            $(".arrow-left").css("display","inline-block");
+          });
+          $(".arrow-right").each(function() {
+            $(".arrow-right").css("display","inline-block");
+          });
 
-
-          // document.getElementById("score_input").innerHTML = "寫心得";
+          document.getElementById("score_input").innerHTML = "送出";
 
       },
       content_setWishlist: function(id) {
@@ -187,6 +191,18 @@
       },
       report_list: function(){
         this.open_reportList = true;
+      },
+      thumbs_up: function(){
+        if(!vue_courseContent.thumbs.clicked){
+          vue_courseContent.thumbs.up++;
+          vue_courseContent.thumbs.clicked = true;
+        }
+      },
+      thumbs_down: function(){
+        if(!vue_courseContent.thumbs.clicked){
+          vue_courseContent.thumbs.down++;
+          vue_courseContent.thumbs.clicked = true;
+        }
       },
     },
   });

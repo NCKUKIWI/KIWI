@@ -86,11 +86,11 @@
             <div id="commentBody">
               <div class="courseFeedback__single" v-for="comment in comment_data">
                 <div class="courseFeedback__icons">
-                  <div class="icon-span"><span>107-1學期</span></div>
+                  <div class="icon-span"><span>107-1 學期</span></div>
                   <div class="courseFeedback__icons__icongroup">
                     <img src="./dist/images/course/thumbs_up.png"/><span>10</span>
                     <img src="./dist/images/course/thumbs_down.png"/><span>10</span>
-                    <a @click="report_list()"><span>...</span></a>
+                    <a @click="report_list()"><span>⋯</span></a>
                     <div v-show="open_reportList" class="droplist_report">
                       <div @click="openReportWindow()">檢舉</div>
                       <div @click="open_reportList = false">返回</div>

@@ -61,10 +61,8 @@ var vue_nav_bar = new Vue({
 		logIn: function(){
 			vue_nav_bar.user_name = userData.user_name;
 		},
-		open_helper: function() {
-			setWindow('helper','open');
-			getUserComment();
-			// document.getElementById("helper_background").style.display = "block";
+		openHelper: function() {
+			setWindow( 'helper','open' );		
 		},
 		mobileNavStatus: function( status ) {
 			if ( status == 'search' ) {

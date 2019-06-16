@@ -156,7 +156,13 @@
         }
     }
     .hub_navbar__profile__dropdown__goto {
-        display: none;
+        color: #1A6CBD;
+        background: white;
+        margin-top: 6px;
+        margin-left: 0;
+        margin-bottom: 0;
+        width: 90px;
+        border-radius: 20px;
     }
     .dark_screen {
         position: fixed;
@@ -173,5 +179,8 @@
     }
     .list_course_item_mid {
         padding-right: 20px;
+    }
+    .window__self.big {
+        max-width: 350px;
     }
 }

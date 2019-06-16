@@ -70,7 +70,7 @@
               <input class="score_input" id="hard_rate" type="number" value="5" min="1" max="10" />
               <div class="arrow-right" @click="addRate('hard_rate')"></div>
             </div>
-            <button type="submit" class="score-btn__submit" id="score_input" @click="submit_score()">評分</button>
+            <button type="submit" class="score-btn__submit desktop_only" id="score_input" @click="submit_score()">評分</button>
           </div>
         </div>
         <div class="courseContentBody__right__comment">
@@ -88,8 +88,8 @@
                 <div class="courseFeedback__icons">
                   <div class="icon-span"><span>107-1 學期</span></div>
                   <div class="courseFeedback__icons__icongroup">
-                    <span @click="thumbs_up()"><img src="./dist/images/course/thumbs_up.png"/></span><span>{{thumbs.up}}</span>
-                    <span @click="thumbs_down()"><img src="./dist/images/course/thumbs_down.png"/></span><span>{{thumbs.down}}</span>
+                    <div @click="thumbs_up()"><img src="./dist/images/course/thumbs_up.png"/></span><span>{{thumbs.up}}</div>
+                    <div @click="thumbs_down()"><img src="./dist/images/course/thumbs_down.png"/></span><span>{{thumbs.down}}</div>
                     <a @click="report_list()"><span>⋯</span></a>
                     <div v-show="open_reportList" class="droplist_report">
                       <div @click="openReportWindow()">檢舉</div>

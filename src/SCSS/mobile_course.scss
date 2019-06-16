@@ -163,7 +163,6 @@
     }
 
     .courseFeedback__icons {
-        margin-bottom: 16px;
         & > .icon-span {
             position: relative;
             display: flex;
@@ -175,8 +174,6 @@
             margin-bottom: 0;
         }
         & img {
-            height: 12px;
-            width: auto;
             margin-right: 2px;
             margin-left: 8px;
         }

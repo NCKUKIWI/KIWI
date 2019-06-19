@@ -26,6 +26,9 @@ var vue_windows = new Vue({
         },
 				sendReport: function() {
 					$("#report_title").html("檢舉完成");
+					document.getElementById("report_option").style.display = "none";
+					document.getElementById("submit_report").style.display = "none";
+					document.getElementById("report_option").innerHTML = "<p>我們已經收到您的檢舉，很抱歉讓您有不愉快的體驗。若有任何疑問，歡迎私訊我們反應。</p>";
 				}
     }
 })

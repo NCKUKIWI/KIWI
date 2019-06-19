@@ -21,6 +21,10 @@
         padding: 25px;
         background: $white;
         @include box_shadow_3();
+        &.big {
+            width: auto;
+            max-width: 400px;
+        }
         &__title {
             padding: 0 10px;
             margin-top: 10px;
@@ -29,6 +33,13 @@
         &__detail {
             padding: 0 10px;
             margin-bottom: 15px;
+        }
+        &__random_text {
+            border: 1px solid $light_2;
+            padding: 10px 15px !important;
+            width: calc(100% - 10px);
+            margin: 15px 5px;
+            cursor: pointer;
         }
         &__button_area {
             display: flex;

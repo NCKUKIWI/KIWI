@@ -52,7 +52,9 @@
             edit_table_give_up: false,
             course_page: false,
             report: false,
-            andmore: false
+            andmore: false,
+            helper_free_get_make_sure: false,
+            helper_free_get_success: false,
             // 新的視窗加在這裡
         },
         table_locked: true,                     // 課表鎖定狀態
@@ -62,9 +64,6 @@
 
     // 轉換目前頁面
     toTab( pageStatus.initial_tab );
-
-    // 綁定點擊就複製的功能
-    new Clipboard( "#helper_background .text_14" );
 
     // 開啟或關閉視窗
     // setWindow( 'add_review_success', 'open' );

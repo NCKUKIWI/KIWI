@@ -15,19 +15,34 @@
   padding: 0px 10px 15px 10px!important
   border-bottom: 1px solid #eee
 .helper_btn
-  width: 150px
-  height: 36px
+  padding: 6px 14px
   border-radius: 18px
   border: 1px solid #1A6CBD
   text-align: center
   color: #1A6CBD
-  display: flex
+  font-weight: 600
+  display: inline-flex
   justify-content: center
   align-items: center
-  margin: 2vh 0px
+  margin: 0px 10px
   cursor: pointer
-  p
-    color: #1A6CBD
+  transition: .2s
+  &:hover
+    color: white
+    background-color: #1A6CBD
+  &:active
+    filter: brightness(80%)
+  &.disabled 
+    color: #CBCBCB
+    border: 1px solid #CBCBCB
+    cursor: default
+    transition: 0s
+    &:hover
+      color: #CBCBCB
+      background-color: transparent
+    &:active
+      filter: brightness(100%)
+
 .close-btn
   // background-image: url('../images/helper/closebtn.svg')
   // background-position: center
@@ -42,27 +57,3 @@
   right: 15%
   top: 29%
   cursor: pointer
-
-#helper_success
-  display: none
-  // margin-top: 3vh
-  // padding: 3.5vh 3vw
-  position: absolute
-  z-index: 450
-  // width: 30vw
-  // height: 32vh
-
-.random_text
-  border: 1px solid #eee
-  padding: 5px 20px!important
-  width: 100%
-
-.helper_bot_btn
-  display: inline-flex
-  margin-top: 3.5vh
-  a
-    color: inherit
-    margin-right: 15px
-    cursor: pointer
-  a:visited
-    color: inherit

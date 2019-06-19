@@ -5,19 +5,18 @@ var vue_helper_content = new Vue ({
     helper_qualified: false,
     userData: userData
   },
+  created() {
+    new Clipboard( "#helper_background .text_14" );
+  },
   methods: {
     exchange_success: function() {
-      this.helper_qualified = true;
-      document.getElementById("helper_success").style.display = "block";
+      console.log( 'davin ');
+			setWindow( 'helper_free_get_make_sure', 'open' );
     },
     close_helper: function() {
       setWindow('helper','close');
     },
-    qualify_helper: function() {
-      this.helper_qualified = true;
-      // console.log("qualified");
-    },
-    copy_code: function(){
+    copyCodeDone: function(){
       setNotification ( '成功複製驗證碼！', 'blue' );
     }
   },

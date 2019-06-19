@@ -129,9 +129,45 @@ router.get('/', function (req, res) {
     });
 });
 
+function checkLikeExist(postLikeData) {
+    return new Promise(function(resolve, reject) {
+        db.FindbyColumnClear("post_like", ["id"], {
+                "userId":postLikeData["userId"], "postId":postLikeData["postId"]
+            }, function(existId){
+                resolve(existId)
+            }
+        )
+    });
+}
+router.get("/getPostLike", function(req, res){
+    db.Query("SELECT * FROM post_like", function(results){
+        res.send(results)
+    })
+})
+
+router.post("/setPostLike", function(req, res){
+    let postLikeData = {}
+    postLikeData["userId"]= req.body["userId"]
+    postLikeData["postId"] = req.body["postId"]
+    postLikeData["thumb"] = req.body["thumb"]
+    postLikeData["suck"] = req.body["suck"]
+    let checkLike = checkLikeExist(postLikeData)
+    checkLike.then(existId=>{
+        if(existId.length){
+            db.Update("post_like", postLikeData, {"id" : existId[0]['id']}, ()=>{
+                res.send("success")
+            })
+        }else{
+            db.Insert("post_like", postLikeData, ()=>{
+                res.send("success")
+            })
+        }
+    })
+})
+
 /* create */
 router.post('/create', function (req, res) {
-    console.log('\n' + 'POST /post/create');
+    console.log('\n' + 'POST /po st/create');
     if (req.user == undefined) {
         console.log("Not login");
         res.json([{

@@ -47,10 +47,15 @@
               <!-- <div v-show="user_data.user_grade != '無'" class="nav_profile_grade">{{user_data.user_grade}}年級</div> -->
               <!-- <div v-show="user_data.user_id != 0 && user_data.user_department == '無'" class="nav_profile_dept">尚未輸入系所資料</div> -->
               <!-- <div v-show="user_data.user_id != 0 && user_data.user_grade == '無'" class="nav_profile_grade">尚未輸入年級資料</div> -->
+              <!-- 以下按鈕，小幫手未開放時使用「休息中」，開放時使用「開通小幫手」 -->
+              <!-- <a v-show="user_data.user_id != 0" class="hub_navbar__profile__dropdown__goto mobile_only" @click="openHelper()" >開通小幫手</a> -->
+              <a v-show="user_data.user_id != 0" class="hub_navbar__profile__dropdown__goto disabled mobile_only" >小幫手休息中</a>
             </div>
           </div>
-          <div v-show="user_data.user_id != 0" class="hub_navbar__profile__dropdown__goto" @click="open_helper()" >開通小幫手</div>
-          <a href="/user/fblogin" v-show="user_data.user_id == 0"><div class="hub_navbar__profile__dropdown__goto">立即登入 / 註冊</div></a>
+          <!-- 以下按鈕，小幫手未開放時使用「休息中」，開放時使用「開通小幫手」 -->
+          <!-- <a v-show="user_data.user_id != 0" class="hub_navbar__profile__dropdown__goto desktop_only" @click="openHelper()" >開通小幫手</a> -->
+          <a v-show="user_data.user_id != 0" class="hub_navbar__profile__dropdown__goto disabled desktop_only" >小幫手休息中</a>
+          <a v-show="user_data.user_id == 0" class="hub_navbar__profile__dropdown__goto desktop_only" href="/user/fblogin" >立即登入 / 註冊</a>
           <div class="hub_navbar__profile__dropdown__links">
             <!-- <a>關於 NCKU HUB</a> -->
             <a v-show="user_data.user_id == 0" class="mobile_only" href="/user/fblogin">登入網站</a>

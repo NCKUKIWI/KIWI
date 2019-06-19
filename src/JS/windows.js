@@ -3,7 +3,8 @@
 var vue_windows = new Vue({
 	el: '#all_windows',
     data: {
-		page_status: pageStatus,
+        userData: userData,
+        page_status: pageStatus,
 	},
     methods: {
         closeWindow: function( window ) {
@@ -24,11 +25,19 @@ var vue_windows = new Vue({
             toTab( pageStatus.next_tab );
             pageStatus.next_tab = '';
         },
+        helperFreeSure: function(){
+            setWindow( 'helper_free_get_make_sure', 'close' );
+            setWindow( 'helper_free_get_success', 'open' );
+            vue_helper_content.helper_qualified = true;
+        },
+        copyCodeDone: function(){
+            setNotification ( '成功複製驗證碼！', 'blue' );
+        },
 				sendReport: function() {
-					$("#report_title").html("檢舉完成");
-					document.getElementById("report_option").style.display = "none";
-					document.getElementById("submit_report").style.display = "none";
-					document.getElementById("report_option").innerHTML = "<p>我們已經收到您的檢舉，很抱歉讓您有不愉快的體驗。若有任何疑問，歡迎私訊我們反應。</p>";
+						$("#report_title").html("檢舉完成");
+						document.getElementById("report_option").style.display = "none";
+						document.getElementById("submit_report").style.display = "none";
+						document.getElementById("report_option").innerHTML = "<p>我們已經收到您的檢舉，很抱歉讓您有不愉快的體驗。若有任何疑問，歡迎私訊我們反應。</p>";
 				}
     }
 })

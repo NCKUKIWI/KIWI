@@ -58,14 +58,42 @@
         </div>
     </div>
 
-    <!-- 小幫手 -->
+    <!-- 開通小幫手確認（免費） -->
+    <div class="window helper_free_get_make_sure" v-if="page_status.windows.helper_free_get_make_sure" >
+        <div class="window__background">
+            <div class="window__self">
+                <div class="window__self__title text_bold text_26">是否確定兌換？</div>
+                <div class="window__self__detail">您填寫的心得須符合事實，不可為無意義內容或含有辱罵、中傷文字。若心得遭檢舉下架，NCKU HUB 將終止您的小幫手使用權益。</div>
+                <div class="window__self__button_area ">
+                    <a @click="closeWindow('helper_free_get_make_sure')" class="window__self__button_area__button text_dark">返回頁面</a>
+                    <a @click="helperFreeSure" class="window__self__button_area__button text_red">確定兌換</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <!-- 開通小幫手成功（免費） -->
+    <div class="window helper_free_get_success" v-if="page_status.windows.helper_free_get_success" >
+        <div class="window__background">
+            <div class="window__self">
+                <div class="window__self__title text_bold text_26">兌換成功！</div>
+                <div class="window__self__detail">您已成功兌換小幫手「一學期使用資格」，目前剩餘心得積點為：{{userData.now_comment.length  - 3}} 點。使用資格期限為 107-1 學期選課期間。</div>
+                <div class="window__self__random_text" @click="copyCodeDone">
+                    <p v-bind:data-clipboard-text="userData.messenger_code">複製開通代碼：{{userData.messenger_code}}</p>
+                </div>
+                <div class="window__self__button_area ">
+                    <a @click="closeWindow('helper_free_get_success')" class="window__self__button_area__button text_dark">返回頁面</a>
+                    <a href="https://m.me/nckuhub/" target="_blank" class="window__self__button_area__button text_deep_blue">前往開通</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- 檢舉確認 -->
     <div class="window report" v-if="page_status.windows.report" >
         <div class="window__background">
             <div class="window__self">
-                <div class="window__self__title text_bold text_26"　id="report_title">檢舉心得</div>
+                <div class="window__self__title text_bold text_26" id="report_title">檢舉心得</div>
                 <div class="window__self__detail">
                   <select class="" name="" id="report_option">
                     <option value="">請選擇檢舉原因</option>
@@ -77,6 +105,7 @@
                 <div class="window__self__button_area ">
                     <a @click="sendReport()" class="window__self__button_area__button" id="submit_report">提交檢舉</a>
                     <a @click="closeWindow('report')" class="window__self__button_area__button text_dark">返回頁面</a>
+                    <a @click="sendReport()" class="window__self__button_area__button text_red">提交檢舉</a>
                 </div>
             </div>
         </div>

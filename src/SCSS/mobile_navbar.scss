@@ -156,7 +156,26 @@
         }
     }
     .hub_navbar__profile__dropdown__goto {
-        display: none;
+        color: white;
+        background: rgba(255,255,255,0.2);
+        @include box_shadow_1();
+        margin-top: 6px;
+        margin-left: 0;
+        margin-bottom: 0;
+        width: 90px;
+        border-radius: 20px;
+        &.disabled {
+            color: white;
+            background: rgba(255,255,255,0.2);
+            @include box_shadow_1();
+            opacity: 0.5;
+            &:hover {
+                background: rgba(255,255,255,0.2);
+            }
+            &:active {
+                filter: brightness(100%);
+            }
+        }
     }
     .dark_screen {
         position: fixed;
@@ -173,5 +192,8 @@
     }
     .list_course_item_mid {
         padding-right: 20px;
+    }
+    .window__self.big {
+        max-width: 350px;
     }
 }

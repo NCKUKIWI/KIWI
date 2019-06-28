@@ -121,11 +121,13 @@
       comment_data: [],
       userData: userData,
       open_reportList: false,
+      nowIndex: null,
       thumbs: {
         up: 0,
         down: 0,
         clicked: false,
       },
+
     },
     methods: {
       hideContent: function() {
@@ -189,12 +191,15 @@
       openAndmore: function(){
         setWindow( 'andmore', 'open');
       },
-      report_list: function(){
+      report_list: function(index){
+        vue_courseContent.nowIndex = index;
         this.open_reportList = true;
       },
-      thumbs_up: function(){
+      thumbs_up: function(index){
         if(!vue_courseContent.thumbs.clicked){
-          vue_courseContent.thumbs.up++;
+          console.log(index);
+          vue_courseContent.comment_data[index].thumbsup = 1;
+          console.log(vue_courseContent.comment_data[index]);
           vue_courseContent.thumbs.clicked = true;
         }
       },

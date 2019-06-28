@@ -3,16 +3,17 @@
     <div class="window__self__title text_34 text_bold">選課小幫手</div>
     <div class="window__self__detail underline">NCKU HUB 的選課小幫手，是全台灣第一個課程餘額追蹤機器人，幫助學生節省在電腦前盯哨的時間，精準選到想上的課程！</div>
     <div class="window__self__detail text_16">
-      <p>用 3 筆課程心得讓成大更好，兌換一學期使用資格！</p>
-      <p v-if="!helper_qualified" class="color_grey9b">您可使用的的心得積點：{{userData.now_comment.length}} 點，尚須 {{3 - userData.now_comment.length > 0 ? 3 - userData.now_comment.length : 0}} 筆心得。</p>
-      <p v-if="helper_qualified" class="color_grey9b">您已成功兌換本學期的使用資格，請以代碼開通。</p>
+      <p>投遞心得讓成大更好，兌換一學期使用資格！</p>
+      <p v-if="!userData.helper_qualified" class="color_grey9b">您可使用的的心得積點：{{userData.now_point }} 點，尚須 {{5 - userData.now_point > 0 ? 5 - userData.now_point : 0}} 筆心得。</p>
+      <p v-if="userData.helper_qualified" class="color_grey9b">您已成功兌換本學期的使用資格<br>目前還有 {{userData.now_point}} 點，請以下列代碼開通。</p>
     </div>
-    <div v-if="helper_qualified" class="window__self__random_text" @click="copyCodeDone">
+    <div v-if="userData.helper_qualified" class="window__self__random_text" @click="copyCodeDone">
       <p v-bind:data-clipboard-text="userData.messenger_code">複製開通代碼：{{userData.messenger_code}}</p>
     </div>
-    <a v-if="!helper_qualified && userData.now_comment.length < 3" class="helper_btn disabled text_16">課程心得兌換</a>
-    <a v-if="!helper_qualified && userData.now_comment.length >= 3" class="helper_btn text_16" @click="exchange_success()">課程心得兌換</a>
-    <a v-if="helper_qualified" class="helper_btn text_16" href="https://www.facebook.com/nckuhub/" target="_blank">前往開通資格</a>
+    <a v-if="userData.helper_qualified" class="helper_btn text_16" href="https://www.facebook.com/nckuhub/" target="_blank">前往開通資格</a>
+    <a v-else-if="userData.now_point < 5" class="helper_btn disabled text_16">課程心得兌換</a>
+    <a v-else-if="userData.now_point >= 5" class="helper_btn text_16" @click="exchange_success()">課程心得兌換</a>
+    
   </div>
 <!--   
       <div class="window__self" id="">

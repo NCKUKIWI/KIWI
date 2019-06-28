@@ -10,7 +10,6 @@ var vue_helper_content = new Vue ({
   },
   methods: {
     exchange_success: function() {
-      console.log( 'davin ');
 			setWindow( 'helper_free_get_make_sure', 'open' );
     },
     close_helper: function() {

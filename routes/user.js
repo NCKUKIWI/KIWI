@@ -187,27 +187,61 @@ router.get('/info', function (req, res) {
     
 });
 
-router.get('/getHelperService/', function (req, res) {
-    uid = req.user.id
+router.get('/findHelperService/', function (req, res) {
+    var uid = req.user.id
     var data = {
-        'messenger_code': 0,
-        'comment': []
+        'messenger_code': "",
+        'point': 0
     }
-    db.Query('SELECT * FROM post WHERE user_id =' + uid, function(query){
-        data.comment = query;
-        if(data.comment.length  >= 3){
-            db.Query('select * from messenger_code where user_id =' + uid, function(messenger_code){
-                if(messenger_code.length == 0){
-                    res.send(data);    
-                }
-                else data.messenger_code = messenger_code[0].code
-                res.send(data);
-            })
+    db.Query('select * from messenger_code where user_id =' + uid, function(messenger_code){
+        messenger_code = messenger_code[0]
+        if( messenger_code.is_used == 1){
+            data.messenger_code = messenger_code.code;
         }
-        else{
+        db.Query('select * from user where id =' + uid, function(userInfo){
+            userInfo = userInfo[0];
+            data.point = userInfo.point;
             res.send(data);
+        })
+        
+    })
+});
+
+router.get('/getHelperService/', function (req, res) {
+    var uid = req.user.id
+    var data = {
+        'messenger_code': "",
+        'point': 0
+    }
+    db.Query('select * from user where id =' + uid, function(userInfo){
+        userInfo = userInfo[0];
+        data.point = userInfo.point;
+        if(data.point >= 5){
+            data.point = data.point - 5;
+            db.Query("update user Set point = point - 5 where id = " + uid, function(result){
+                db.Query('select * from messenger_code where user_id =' + uid, function(messenger_code){
+                    messenger_code = messenger_code[0];
+                    data.messenger_code = messenger_code.code;
+                    res.send(data);
+                });
+            });
         }
     })
+    // db.Query('SELECT * FROM post WHERE user_id =' + uid, function(query){
+    //     data.comment = query;
+    //     if(data.comment.length  >= 3){
+    //         db.Query('select * from messenger_code where user_id =' + uid, function(messenger_code){
+    //             if(messenger_code.length == 0){
+    //                 res.send(data);    
+    //             }
+    //             else data.messenger_code = messenger_code[0].code
+    //             res.send(data);
+    //         })
+    //     }
+    //     else{
+    //         res.send(data);
+    //     }
+    // })
 });
 
 module.exports = router;

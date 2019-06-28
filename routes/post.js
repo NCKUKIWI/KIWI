@@ -272,11 +272,16 @@ router.post('/create', function (req, res) {
                                     for(var d in DbSearch){
                                         redis.set(courseCacheKey(DbSearch[d].id), JSON.stringify(data));
                                     }
-                                    res.send("success");
+                                    db.Query("update user Set point = point + " + req.body.point + " where id = " + userid, function(results) {
+                                        res.send("success");
+                                    })
+                                    
                                 })
                             });
                         }else{ // 沒找到這門課, 不做任何事
-                            res.send("success");
+                            db.Query("update user Set point = point + " + req.body.point + " where id = " + userid, function(results) {
+                                res.send("success");
+                            })
                         }
                     });
                 });

@@ -5,6 +5,7 @@ var vue_windows = new Vue({
     data: {
         userData: userData,
         page_status: pageStatus,
+        public_variable: public_variable
 	},
     methods: {
         closeWindow: function( window ) {
@@ -27,8 +28,13 @@ var vue_windows = new Vue({
         },
         helperFreeSure: function(){
             setWindow( 'helper_free_get_make_sure', 'close' );
-            setWindow( 'helper_free_get_success', 'open' );
-            getHelperService();
+            axios.get('/user/getHelperService').
+            then(function(response){
+                if(response.data == 'success'){
+                    setWindow( 'helper_free_get_success', 'open' );
+                    findHelperService();
+                }
+            })
         },
         copyCodeDone: function(){
             setNotification ( '成功複製驗證碼！', 'blue' );

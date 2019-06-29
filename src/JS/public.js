@@ -39,6 +39,12 @@
         helper_qualified: false,
     }
 
+    // 公用參數
+    var public_variable = {
+        now_semester: '108-1',
+        point_threshold: 5
+    }
+
     // 頁面顯示狀態
 
     var pageStatus = {
@@ -283,21 +289,13 @@
     function findHelperService(){
         axios.get('/user/findHelperService').
         then(function(response){
-            if(userData.helper_qualified != true){
-                userData.messenger_code = response.data.messenger_code;
-                if(userData.messenger_code != "") userData.helper_qualified = true;
-            }
-            
-            userData.now_point = response.data.point;
-        })
-    }
-
-    // 取得小幫手
-    function getHelperService(){
-        axios.get('/user/getHelperService').
-        then(function(response){
             userData.messenger_code = response.data.messenger_code;
             if(userData.messenger_code != "") userData.helper_qualified = true;
             userData.now_point = response.data.point;
         })
     }
+
+    // // 取得小幫手
+    // function getHelperService(){
+
+    // }

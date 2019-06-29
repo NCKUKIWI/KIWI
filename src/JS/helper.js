@@ -3,10 +3,11 @@ var vue_helper_content = new Vue ({
   data: {
     page_status: pageStatus,
     helper_qualified: false,
-    userData: userData
+    userData: userData,
+    public_variable: public_variable
   },
-  created() {
-    new Clipboard( "#helper_background .text_14" );
+  mounted() {
+    new Clipboard( ".window__self__random_text p" );
   },
   methods: {
     exchange_success: function() {

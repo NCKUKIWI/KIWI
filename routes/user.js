@@ -209,39 +209,16 @@ router.get('/findHelperService/', function (req, res) {
 
 router.get('/getHelperService/', function (req, res) {
     var uid = req.user.id
-    var data = {
-        'messenger_code': "",
-        'point': 0
-    }
     db.Query('select * from user where id =' + uid, function(userInfo){
         userInfo = userInfo[0];
-        data.point = userInfo.point;
-        if(data.point >= 5){
-            data.point = data.point - 5;
+        if(userInfo.point >= 5){
             db.Query("update user Set point = point - 5 where id = " + uid, function(result){
-                db.Query('select * from messenger_code where user_id =' + uid, function(messenger_code){
-                    messenger_code = messenger_code[0];
-                    data.messenger_code = messenger_code.code;
-                    res.send(data);
+                db.Query('update messenger_code Set is_used = 1 where id = ' + uid, function(messenger_code){
+                    res.send("success")
                 });
             });
         }
     })
-    // db.Query('SELECT * FROM post WHERE user_id =' + uid, function(query){
-    //     data.comment = query;
-    //     if(data.comment.length  >= 3){
-    //         db.Query('select * from messenger_code where user_id =' + uid, function(messenger_code){
-    //             if(messenger_code.length == 0){
-    //                 res.send(data);    
-    //             }
-    //             else data.messenger_code = messenger_code[0].code
-    //             res.send(data);
-    //         })
-    //     }
-    //     else{
-    //         res.send(data);
-    //     }
-    // })
 });
 
 module.exports = router;

@@ -53,8 +53,8 @@
             </div>
           </div>
           <!-- 以下按鈕，小幫手未開放時使用「休息中」，開放時使用「開通小幫手」 -->
-          <!-- <a v-show="user_data.user_id != 0" class="hub_navbar__profile__dropdown__goto desktop_only" @click="openHelper()" >開通小幫手</a> -->
-          <a v-show="user_data.user_id != 0" class="hub_navbar__profile__dropdown__goto disabled desktop_only" >小幫手休息中</a>
+          <a v-show="user_data.user_id != 0" class="hub_navbar__profile__dropdown__goto desktop_only" @click="openHelper()" >開通小幫手</a>
+          <!-- <a v-show="user_data.user_id != 0" class="hub_navbar__profile__dropdown__goto disabled desktop_only" >小幫手休息中</a> -->
           <a v-show="user_data.user_id == 0" class="hub_navbar__profile__dropdown__goto desktop_only" href="/user/fblogin" >立即登入 / 註冊</a>
           <div class="hub_navbar__profile__dropdown__links">
             <!-- <a>關於 NCKU HUB</a> -->

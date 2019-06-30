@@ -196,14 +196,36 @@
         this.open_reportList = true;
       },
       thumbs_up: function(index){
-        if(!vue_courseContent.thumbs.clicked){
-          console.log(index);
-          vue_courseContent.comment_data[index].thumbsup = 1;
-          console.log(vue_courseContent.comment_data[index]);
-          vue_courseContent.thumbs.clicked = true;
-        }
+        console.log("thumbs up");
+        console.log(this.comment_data[index].id);
+        var postID = this.comment_data[index].id;
+        $.ajax({
+          type: "POST",
+          url: "/post/setPostLike",
+          data: {
+            "userId": 1234,
+            "postId": postID,
+            "thumbs": 1,
+            "suck": 0,
+          },
+          success: function(response) {
+            console.log("upppp");
+          }
+        });
+        // if(this.thumbs.up==0){
+        //   this.thumbs.up = 1;
+        // }
+
+
+        // if(!vue_courseContent.thumbs.clicked){
+        //   console.log(index);
+        //   vue_courseContent.comment_data[index].thumbsup = 1;
+        //   console.log(vue_courseContent.comment_data[index]);
+        //   vue_courseContent.thumbs.clicked = true;
+        // }
       },
-      thumbs_down: function(){
+      thumbs_down: function(index){
+        console.log(index);
         if(!vue_courseContent.thumbs.clicked){
           vue_courseContent.thumbs.down++;
           vue_courseContent.thumbs.clicked = true;

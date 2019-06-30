@@ -85,18 +85,18 @@
             </div>
             <div id="commentBody">
               <div class="courseFeedback__single" v-for="(comment, index) in comment_data">
-                <!-- <div class="courseFeedback__icons">
-                  <div class="icon-span"><span>107-1 學期</span></div>
+                <div class="courseFeedback__icons">
+                  <div class="rec_semester"><span>{{comment.semester}} 學期</span></div>
                   <div class="courseFeedback__icons__icongroup">
                     <span @click="thumbs_up(index)"><img src="./dist/images/course/thumbs_up.png"/></span><span>{{thumbs.up}}</span>
-                    <span @click.stop="thumbs_down()"><img src="./dist/images/course/thumbs_down.png"/></span><span>{{thumbs.down}}</span>
-                    <a @click.stop="report_list(index)"><span>...</span></a>
+                    <span @click="thumbs_down(index)"><img src="./dist/images/course/thumbs_down.png"/></span><span>{{thumbs.down}}</span>
+                    <a @click.stop="report_list(index)"><span><img src="./dist/images/course/more.png" style="width:12px;height:3px"/></span></a>
                     <div v-show="open_reportList && (index == nowIndex)" class="droplist_report">
                       <div @click="openReportWindow()">檢舉</div>
                       <div @click="open_reportList = false">返回</div>
                     </div>
                   </div>
-                </div> -->
+                </div>
                 <div class="courseFeedback__msg">
                   <p v-html="comment.comment">{{comment.comment}}</p>
                 </div>

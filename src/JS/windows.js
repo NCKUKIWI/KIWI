@@ -37,7 +37,7 @@ var vue_windows = new Vue({
             })
         },
         copyCodeDone: function(){
-            setNotification ( '成功複製驗證碼！', 'blue' );
+            setNotification ( '成功複製開通代碼！', 'blue' );
         },
 				sendReport: function() {
 						$("#report_title").html("檢舉完成");

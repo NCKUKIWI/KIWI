@@ -8,3 +8,4 @@ config.*
 /src/views/course/course_content.html
 token.*
 gulpfile.js
+ngrok

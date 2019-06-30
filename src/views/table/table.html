@@ -14,7 +14,7 @@
 		</div>
 		<div class="quick_search_area" :class="{ filter_mode: filter_status }"  @click="clearFilter">
 			<div v-if="filter_status" class="quick_search_clear_filter"></div>
-			<input class="quick_search_input" type="text" v-model="keyword" :disabled="filter_status || page_status.table_locked" :class="{ locked: page_status.table_locked }" placeholder="輸入「課程名」或「教師名」" ><br>
+			<input class="quick_search_input" type="text" v-model.trim="keyword" :disabled="filter_status || page_status.table_locked" :class="{ locked: page_status.table_locked }" placeholder="輸入「課程名」或「教師名」" ><br>
 		</div>
 		<div v-if="keyword.replace(' ','') != '' && !filter_status && !page_status.table_locked" class="quick_search_dropdown">
 			<span> {{ result }} </span>

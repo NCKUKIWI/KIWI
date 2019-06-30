@@ -26,6 +26,7 @@
             display: inline-block;
             margin-left: 0;
             width: 100vw;
+            background-color: rgba(255,255,255,0.25);
             .hub_navbar__search {
                 margin-left: 0;
                 padding: 17px 0;
@@ -33,13 +34,17 @@
                 width: calc(100vw - 48px);
                 background-size: 40px;
                 background-position: 10px center;
+                background-color: transparent;
+                &:focus {
+                    box-shadow: none;
+                }
                 &__cancel {
                     position: absolute;
                     display: inline-block;
                     height: 100%;
                     width: 48px;
                     background-image: url("../images/table/icon_cancel.svg");
-                    background-color: rgba(255,255,255,0.25);
+                    // background-color: rgba(255,255,255,0.25);
                     background-size: 30px;
                     background-repeat: no-repeat;
                     background-position: center left;

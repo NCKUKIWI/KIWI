@@ -144,6 +144,7 @@
                         background-color: $white;
                         overflow-x: hidden;
                         overflow-y: scroll;
+                        -webkit-overflow-scrolling: touch;
                         @include box_shadow_1();
                         transition: height 5s $material_trans;
                         & p {
@@ -285,7 +286,6 @@
                 display: flex;
                 align-items: center;
                 height: 100%;
-                width: 100%;
                 cursor: default;
                 .add_review_status {
                     color: $dark;
@@ -294,16 +294,15 @@
             &__buttons {
                 display: flex;
                 align-items: center;
-                height: 100%;
                 width: auto;
-                float: right;
+                margin-left: auto;
                 .add_review_button {
                     display: flex;
                     justify-content: center;
                     border-radius: 50px;
-                    padding: 5px 0;
+                    padding: 5px 15px;
                     background-color: $white;
-                    margin-left: 10px;
+                    margin-left: 8px;
                     @include box_shadow_1();
                     cursor: default;
                     &.enabled {
@@ -316,28 +315,22 @@
                         }
                     }
                     &.give_up {
-                        width: 55px;
                         color: $gray;
                         &.enabled {
                             color: $dark;
                         }
                     }
                     &.send_review {
-                        width: 160px;
-                        background-image: url("../images/add_review/icon_send_disabled.svg");
-                        background-size: 12px;
-                        background-repeat: no-repeat;
-                        background-position: 14px center;
-                        padding-left: 18px;
+                        img {
+                            margin-right: 5px;
+                        }
                         color: $gray;
                         opacity: 0.7;
                         &.enabled {
-                            background-image: url("../images/add_review/icon_send.svg");
-                            background-size: 12px;
-                            background-repeat: no-repeat;
-                            background-position: 14px center; 
-                            color: $red;       
                             opacity: 1;
+                            p, span {
+                                color: $red;       
+                            }
                         }
                     }
                 }

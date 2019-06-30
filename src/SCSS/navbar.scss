@@ -85,6 +85,7 @@
             border: $light_2 1px solid;
             box-sizing: border-box;
             overflow: scroll;
+            -webkit-overflow-scrolling: touch;
             background: white;
             @include box_shadow_1();
             &__no_result {

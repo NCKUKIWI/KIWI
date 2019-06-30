@@ -29,6 +29,7 @@
     width: 100%;
     height: 70px;
     transition: .2s $material_trans;
+    background: white;
     &_left {
         @include inline_flex_center(row);
         margin-left: 2%;
@@ -319,7 +320,7 @@
         width: 100%;
         background: $white;
         overflow-x: hidden;
-        overflow-y: scroll;
+        overflow-y: scroll; 
         border: $light_2 1px solid;
         @include box_shadow_1();
         @include box_shadow_1_hover();

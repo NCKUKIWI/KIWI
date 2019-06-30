@@ -17,7 +17,7 @@ var vue_helper_content = new Vue ({
       setWindow('helper','close');
     },
     copyCodeDone: function(){
-      setNotification ( '成功複製驗證碼！', 'blue' );
+      setNotification ( '成功複製開通代碼！', 'blue' );
     }
   },
 });

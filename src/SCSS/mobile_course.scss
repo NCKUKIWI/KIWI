@@ -73,9 +73,10 @@
         background: $bg_color;        
     }
     .courseList__sideList__itemBox {
+        height: 100%;
         .list_course_item.blank_for_mobile {
             display: block;
-            height: 20px;
+            height: 80px;
             background: $bg_color;
         }
     }

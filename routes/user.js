@@ -213,7 +213,7 @@ router.get('/getHelperService/', function (req, res) {
         userInfo = userInfo[0];
         if(userInfo.point >= 5){
             db.Query("update user Set point = point - 5 where id = " + uid, function(result){
-                db.Query('update messenger_code Set is_used = 1 where id = ' + uid, function(messenger_code){
+                db.Query('update messenger_code Set is_used = 1 where user_id = ' + uid, function(messenger_code){
                     res.send("success")
                 });
             });

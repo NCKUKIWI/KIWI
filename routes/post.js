@@ -325,6 +325,8 @@ router.get('/:id', function (req, res) {
 
 
 
+//localhost:3000/post/report/123
+
 /*report post */
 router.post('/report/:id', function (req, res) {
     /* 要檢舉的文章id*/
@@ -352,8 +354,8 @@ router.post('/report/:id', function (req, res) {
                     res.send('Already report');
                 } else {
                     // bot.sendReport(); // For broadcast the /report URL.
-                    // var reason = req.body['reason'];
-                    // report_post['reason'] = reason
+                    let reason = req.body['reason'];
+                    report_post['reason'] = reason
                     report_post['reporter_id'] = reporter_id
                     db.Insert('report_post', report_post, function (err, results) {
                         if (err) throw err;

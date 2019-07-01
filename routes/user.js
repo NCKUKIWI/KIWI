@@ -251,7 +251,7 @@ router.post('/signup', function (req, res) {
 })
 
 
-function sendMailVerification(){
+function sendVerificationMail(){
     var mail=req.body['email'];
     var id=req.user.id;
     var sql='SELECT check_key FROM user where id='+id;

@@ -261,9 +261,9 @@
         var key_prefix = vue_courseFilter.dept_dropdown[index].prefix;
         this.keyPrefix = key_prefix;
         this.filter_by_dpmt = [];
-        console.log(key.value);
-        key.value = key_prefix + " " + vue_courseFilter.dept_dropdown[index].name;
-        console.log(key.value);
+        // console.log(key.value);
+        // key.value = key_prefix + " " + vue_courseFilter.dept_dropdown[index].name;
+        // console.log(key.value);
         if(this.keyword) {
           vue_course_item.course_data = [];
           if(vue_courseFilter.comment_only==true){

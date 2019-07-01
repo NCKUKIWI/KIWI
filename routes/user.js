@@ -250,6 +250,28 @@ router.post('/signup', function (req, res) {
     res.send("success");
 })
 
+
+function sendVerificationMail(){
+    var mail=req.body['email'];
+    var id=req.user.id;
+    var sql='SELECT check_key FROM user where id='+id;
+    var check_key;
+    var data={
+        'role':0
+    };
+
+    db.Update('user',data,{"id":id},function(err,results){
+        if(err){console.log(err);}
+    } );
+    db.Query(sql,function(data){
+        check_key=data;
+    });
+
+    var url = "nckuhub.com/user/signup_url/"
+    gmailSend.sendMail(mail, '驗證網址 '+url+check_key);
+}
+
+
 router.get('/signup_url/:check_key', function (req, res) {
     
     var user_check_key = req.params.check_key;

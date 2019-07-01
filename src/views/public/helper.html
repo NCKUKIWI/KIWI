@@ -5,7 +5,7 @@
     <div class="window__self__detail text_16">
       <p>投遞心得讓成大更好，兌換一學期使用資格！</p>
       <p v-if="!userData.helper_qualified" class="color_grey9b">您可使用的的心得積點：{{userData.now_point }} 點，尚須 {{public_variable.point_threshold - userData.now_point > 0 ? public_variable.point_threshold - userData.now_point : 0}} 筆心得。</p>
-      <p v-if="userData.helper_qualified" class="color_grey9b">您已成功兌換 {{public_variable.semester}} 學期的使用資格<br>目前還有 {{userData.now_point}} 點，請以下列代碼開通。</p>
+      <p v-if="userData.helper_qualified" class="color_grey9b">您已成功兌換 {{public_variable.now_semester}} 學期的使用資格<br>目前還有 {{userData.now_point}} 點，請以下列代碼開通。</p>
     </div>
     <div v-if="userData.helper_qualified" class="window__self__random_text" @click="copyCodeDone">
       <p v-bind:data-clipboard-text="userData.messenger_code">複製開通代碼：{{userData.messenger_code}}</p>

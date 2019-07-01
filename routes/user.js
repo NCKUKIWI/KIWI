@@ -218,10 +218,10 @@ router.post('/signup', function (req, res) {
     //var user_email = req.body['user_email'];
     var check_key = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     var data = {
-        'id':config.userId,
-        'account': "hanson0224",//user_account,
-        'password': "Hanson0224",//user_password,
-        'email': "tp6jo4vm4@gmail.com",//user_email
+        'id':req.body.id,
+        'department': req.body['department'],//user_department,
+        'grade': req.body['grade'],//user_grade,
+        'email': req.body['email'],//user_email
         'check_key': check_key
     };
 

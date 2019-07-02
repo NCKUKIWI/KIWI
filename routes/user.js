@@ -252,26 +252,6 @@ router.post('/signup', function (req, res) {
 })
 
 
-function sendVerificationMail(){
-    var mail=req.body['email'];
-    var id=req.user.id;
-    var sql='SELECT check_key FROM user where id='+id;
-    var check_key;
-    var data={
-        'role':0
-    };
-
-    db.Update('user',data,{"id":id},function(err,results){
-        if(err){console.log(err);}
-    } );
-    db.Query(sql,function(data){
-        check_key=data;
-    });
-
-    var url = "nckuhub.com/user/signup_url/"
-    gmailSend.sendMail(mail, '驗證網址 '+url+check_key);
-}
-
 
 router.get('/signup_url/:check_key', function (req, res) {
     
@@ -294,4 +274,23 @@ router.get('/signup_url/:check_key', function (req, res) {
     //}
 })
 
+router.post("/updateEmail", function(req, res){
+    var id = req.body.id;
+    var email = req.body['email'];
+    var check_key = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    var data = {
+        'email': email,
+        'check_key': check_key
+    };
+    db.Update('user', data, {"id": id}, function(results){
+        res.send("success");
+    })
+    sendVerificationMail(id, email, check_key);
+})
+
+function sendVerificationMail(id, email, check_key){
+    db.Update('user', {'role': 0}, {"id":id}, function(result){});
+    let url = "https://nckuhub.com/api/user/signup_url/"+ check_key;
+    gmailSend.sendMail(email, '驗證網址: '+ url);
+}
 module.exports = router;

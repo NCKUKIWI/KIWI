@@ -8,6 +8,7 @@ var graph = require("fbgraph");
 var config = require('../config');
 var cache = require('../helper/cache');
 var redis = require('../helper/cache').redis;
+var gmailSend = require('./gmailSend/gmailSend')
 
 
 router.get("/fblogin", middleware.checkLogin(1), function (req, res) {

@@ -10,7 +10,6 @@ var cache = require('../helper/cache');
 var redis = require('../helper/cache').redis;
 var gmailSend = require('./gmailSend/gmailSend')
 
-
 router.get("/fblogin", middleware.checkLogin(1), function (req, res) {
     res.redirect(`https://www.facebook.com/v3.1/dialog/oauth?client_id=${config.fb.appid}&scope=email,public_profile&response_type=code&redirect_uri=${config.website}/user/fbcheck`);
 });
@@ -208,7 +207,7 @@ router.get('/findHelperService/', function (req, res) {
     })
 });
 
-router.get('/getHelperService/', function (req, res) {
+router.get('/Service/', function (req, res) {
     var uid = req.user.id
     db.Query('select * from user where id =' + uid, function(userInfo){
         userInfo = userInfo[0];
@@ -230,7 +229,6 @@ router.post('/signup', function (req, res) {
     //var user_email = req.body['user_email'];
     var check_key = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     var data = {
-        'id':req.body.id,
         'department': req.body['department'],//user_department,
         'grade': req.body['grade'],//user_grade,
         'email': req.body['email'],//user_email
@@ -252,46 +250,42 @@ router.post('/signup', function (req, res) {
 })
 
 
-function sendVerificationMail(){
-    var mail=req.body['email'];
-    var id=req.user.id;
-    var sql='SELECT check_key FROM user where id='+id;
-    var check_key;
-    var data={
-        'role':0
-    };
-
-    db.Update('user',data,{"id":id},function(err,results){
-        if(err){console.log(err);}
-    } );
-    db.Query(sql,function(data){
-        check_key=data;
-    });
-
-    var url = "nckuhub.com/user/signup_url/"
-    gmailSend.sendMail(mail, '驗證網址 '+url+check_key);
-}
-
 
 router.get('/signup_url/:check_key', function (req, res) {
     
     var user_check_key = req.params.check_key;
-    //var userID = config.userId;
     var datas = {
         role: 3
     };
     var conditions ={
-        check_key : user_check_key
-    };
-    //console.log('\n' + 'GET /signup_url/' + check_key);
-    //if (check_key.match(/\D/g)) { // if ID isn't the digital.
-    //    res.redirect('/');
-    //}else{
-        db.Update('user',datas,conditions,function(err,results){
-            if(err) console.log(err);
-            res.send('success');
-        })
-    //}
+        'check_key' : user_check_key
+    }
+    db.Update('user',datas,conditions,function(results){
+        
+        if (results.affectedRows == 0)
+            res.status(404).send("Sorry, wrong url")
+        else
+            res.send("OK")
+    })
 })
 
+router.post("/updateEmail", function(req, res){
+    var id = req.body.id;
+    var email = req.body['email'];
+    var check_key = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    var data = {
+        'email': email,
+        'check_key': check_key
+    };
+    db.Update('user', data, {"id": id}, function(results){
+        res.send("success");
+    })
+    sendVerificationMail(id, email, check_key);
+})
+
+function sendVerificationMail(id, email, check_key){
+    db.Update('user', {'role': 0}, {"id":id}, function(result){});
+    let url = "https://nckuhub.com/api/user/signup_url/"+ check_key;
+    gmailSend.sendMail(email, '驗證網址: '+ url);
+}
 module.exports = router;

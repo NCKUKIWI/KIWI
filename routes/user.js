@@ -249,6 +249,11 @@ router.post('/signup', function (req, res) {
     res.send("success");
 })
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> fa8f41557f50e65f0d900e4a276f164e4313fc3f
 router.get('/signup_url/:check_key', function (req, res) {
     
     var user_check_key = req.params.check_key;
@@ -267,4 +272,23 @@ router.get('/signup_url/:check_key', function (req, res) {
     })
 })
 
+router.post("/updateEmail", function(req, res){
+    var id = req.body.id;
+    var email = req.body['email'];
+    var check_key = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    var data = {
+        'email': email,
+        'check_key': check_key
+    };
+    db.Update('user', data, {"id": id}, function(results){
+        res.send("success");
+    })
+    sendVerificationMail(id, email, check_key);
+})
+
+function sendVerificationMail(id, email, check_key){
+    db.Update('user', {'role': 0}, {"id":id}, function(result){});
+    let url = "https://nckuhub.com/api/user/signup_url/"+ check_key;
+    gmailSend.sendMail(email, '驗證網址: '+ url);
+}
 module.exports = router;

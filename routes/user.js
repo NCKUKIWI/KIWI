@@ -207,7 +207,7 @@ router.get('/findHelperService/', function (req, res) {
     })
 });
 
-router.get('/getHelperService/', function (req, res) {
+router.get('/Service/', function (req, res) {
     var uid = req.user.id
     db.Query('select * from user where id =' + uid, function(userInfo){
         userInfo = userInfo[0];
@@ -249,11 +249,8 @@ router.post('/signup', function (req, res) {
     res.send("success");
 })
 
-<<<<<<< HEAD
-=======
 
 
->>>>>>> fa8f41557f50e65f0d900e4a276f164e4313fc3f
 router.get('/signup_url/:check_key', function (req, res) {
     
     var user_check_key = req.params.check_key;

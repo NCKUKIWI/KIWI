@@ -146,6 +146,13 @@ router.get("/getUserLike/:uid",function(req, res){
     })
 })
 
+router.get("/getPostLike/:pid",function(req, res){
+    var pid=req.params.pid;
+    db.FindbyColumn("post_like",["userId","postId","thumb","suck"],{"postId":pid},function(postLikeResults){
+        res.json(postLikeResults);
+    })
+})
+
 router.post("/setPostLike", function(req, res){
     let postLikeData = {}
     postLikeData["userId"]= req.body["userId"]

@@ -139,9 +139,10 @@ function checkLikeExist(postLikeData) {
         )
     });
 }
-router.get("/getPostLike", function(req, res){
-    db.Query("SELECT * FROM post_like", function(results){
-        res.send(results)
+router.get("/getUserLike/:uid",function(req, res){
+    var uid=req.params.uid;
+    db.FindbyColumn("post_like",["userId","postId","thumb","suck"],{"userId":uid},function(userLikeResults){
+        res.json(userLikeResults);
     })
 })
 

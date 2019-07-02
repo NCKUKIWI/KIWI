@@ -237,15 +237,15 @@ gulp.task('clearCache', function() {
 gulp.task('compile', ['sass','scss','js','combine_html','assets']);
 
 gulp.task('watch', ['compile'], function() {
-	browserSync.init({
-        port: 8000,
-        proxy: 'http://localhost:3000/',
-        reloadDelay: 1000,
-		// server: {
-		// 	baseDir: './'
-		// },
-        // startPath: '/'
-    });
+	// browserSync.init({
+ //        port: 8000,
+ //        proxy: 'http://localhost:3000/',
+ //        reloadDelay: 1000,
+	// 	// server: {
+	// 	// 	baseDir: './'
+	// 	// },
+ //        // startPath: '/'
+ //    });
     gulp.watch('src/SASS/*.sass', ['sass']);
     gulp.watch('src/SCSS/*.scss', ['scss']);
     gulp.watch('src/JS/*.js', ['js']);

@@ -264,6 +264,18 @@
             }
         }
     }
+    &_delete{
+        display: none;
+        position: absolute;
+        left: 85%;
+        bottom: 23%;
+        border-radius: 30px;
+        width: 20px;
+        height: 20px;
+        background-color: #fff;
+        background-image: url("../images/table/icon_delete.svg");
+        // background-image: url("../images/table/icon_cancel.svg");
+    }
     &_clear_filter {
         position: absolute;
         z-index: 1;

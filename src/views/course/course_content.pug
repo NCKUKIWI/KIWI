@@ -4,11 +4,12 @@ div.course__whole
       div.block_title
         p.text_18 開課單位
       div.quick_search_area(style="z-index:300")
-        input#dpmtFilter.quick_search_input(type="text" v-model.trim="keyword" @input="handle_input($event)" placeholder="選擇「開課單位」" autocomplete="off") 
+        input#dpmtFilter.quick_search_input(type="text" v-model.trim="keyword" placeholder="選擇「開課單位」" autocomplete="off")
+        button.quick_search_delete(@click="deleteSearch()")
         div.quick_search_dropdown--course(v-if="keyword.replace(' ','') != ''")
           p.quick_search_dropdown--course__no_result.text_dark(v-if="!search_result.length") 查無此關鍵字結果。
           div(v-for="(result, index) in search_result").search_result--course
-            div(@click="result_click(index)")
+            div(@click="result_click(result.name,index)")
               p {{result.prefix}} {{result.name}}
     div#courseArrange.courseList__sidenav__courseType
       div.block_title

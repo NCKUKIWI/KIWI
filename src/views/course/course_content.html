@@ -55,6 +55,7 @@
     <div class="card courseList__sideList__itemBox" id="courseList">
       <div id="course_item" v-on:scroll="handleScroll">
         <div class="list_course_item blank_for_mobile mobile_only"></div>
+        <p class="list_course_item__no_result" v-if="!course_data.length">查無課程資訊。</p>
         <div class="list_course_item" @click="openCoursePage(course.id)" v-for="course in course_data">
           <div class="list_course_item_left">
             <p class="list_course_item_category text_white text_20" :class="course.系號">{{course_circle(course.系號,course.系所名稱)}}</p>

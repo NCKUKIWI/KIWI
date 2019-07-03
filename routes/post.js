@@ -141,14 +141,14 @@ function checkLikeExist(postLikeData) {
 }
 router.get("/getUserLike/:uid",function(req, res){
     var uid=req.params.uid;
-    db.FindbyColumn("post_like",["userId","postId","thumb","suck"],{"userId":uid},function(userLikeResults){
+    db.FindbyColumnClear("post_like",["userId","postId","thumb","suck"],{"userId":uid},function(userLikeResults){
         res.json(userLikeResults);
     })
 })
 
 router.get("/getPostLike/:pid",function(req, res){
     var pid=req.params.pid;
-    db.FindbyColumn("post_like",["userId","postId","thumb","suck"],{"postId":pid},function(postLikeResults){
+    db.FindbyColumnClear("post_like",["userId","postId","thumb","suck"],{"postId":pid},function(postLikeResults){
         res.json(postLikeResults);
     })
 })

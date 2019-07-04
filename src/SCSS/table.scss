@@ -306,7 +306,7 @@
         background: $white;
         overflow: scroll;
         // border: $light_2 1px solid;
-        @include box_shadow_1();
+        @include box_shadow_4();
         &__no_result {
             display: flex;
             height: 40px;

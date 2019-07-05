@@ -136,7 +136,7 @@
         $( ".tab_div" ).hide();
         $( ".tab_div[name='" + tab + "']" ).show();
         pageStatus.now_tab = tab ;
-        // 收起下拉選單
+        // 收起下拉選單xＥＥ　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　ㄖ　ㄗ
         pageStatus.nav_profile_dropdown = false;
     }
 

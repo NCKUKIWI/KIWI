@@ -51,7 +51,7 @@ $material_trans: cubic-bezier(0.0, 0.0, 0.2, 1);
 }
 
 @mixin box_shadow_4() {
-    box-shadow: 0 5px 14px 5px rgba(0,0,0,0.15);
+    box-shadow: 0 5px 14px 5px rgba(0,0,0,0.10);
 }
 
 @mixin box_shadow_1_hover {

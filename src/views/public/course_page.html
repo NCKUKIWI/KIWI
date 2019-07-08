@@ -92,7 +92,7 @@
                     <span @click="thumbs_down(index)"><img src="./dist/images/course/thumbs_down.png"/></span><span>{{thumbs.down}}</span>
                     <a @click.stop="report_list(index)"><span><img src="./dist/images/course/more.png" style="width:12px;height:3px"/></span></a>
                     <div v-show="open_reportList && (index == nowIndex)" class="droplist_report">
-                      <div @click="openReportWindow()">檢舉</div>
+                      <div @click="openReportWindow()" style="color:#F35A5A">檢舉</div>
                       <div @click="open_reportList = false">返回</div>
                     </div>
                   </div>

@@ -196,20 +196,35 @@
         this.open_reportList = true;
       },
       thumbs_up: function(index){
-        console.log("thumbs up");
         console.log(this.comment_data[index].id);
         var postID = this.comment_data[index].id;
+        console.log(this.userData.user_id);
         $.ajax({
           type: "POST",
           url: "/post/setPostLike",
           data: {
-            "userId": 1234,
+            "userId": 1,
             "postId": postID,
-            "thumbs": 1,
+            "thumb": 1,
             "suck": 0,
           },
           success: function(response) {
             console.log("upppp");
+            this.thumbs.up = 1;
+            // $.ajax({
+            //   type: "GET",
+            //   url: "/post/setPostLike",
+            //   data: {
+            //     "userId": 1,
+            //     "postId": postID,
+            //     "thumb": 1,
+            //     "suck": 0,
+            //   },
+            //   success: function(response) {
+            //     console.log("upppp");
+            //
+            //   }
+            // });
           }
         });
         // if(this.thumbs.up==0){

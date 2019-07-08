@@ -63,5 +63,16 @@
             }
         }
     }
-    
+
+}
+
+.report_window {
+  width: 400px;
+  select {
+    width: 100%;
+    padding: 5px 3px;
+    border: 1px solid grey;
+    border-radius: 0px;
+  }
+
 }

@@ -62,6 +62,7 @@ var vue_nav_bar = new Vue({
 			vue_nav_bar.user_name = userData.user_name;
 		},
 		openHelper: function() {
+			findHelperService();
 			setWindow( 'helper','open' );		
 		},
 		mobileNavStatus: function( status ) {

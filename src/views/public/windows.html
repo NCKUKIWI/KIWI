@@ -77,7 +77,7 @@
         <div class="window__background">
             <div class="window__self">
                 <div class="window__self__title text_bold text_26">兌換成功！</div>
-                <div class="window__self__detail">您已成功兌換小幫手「一學期使用資格」，目前剩餘心得積點為：{{userData.now_comment.length  - 3}} 點。使用資格期限為 107-1 學期選課期間。</div>
+                <div class="window__self__detail">您已成功兌換小幫手「一學期使用資格」，目前剩餘心得積點為：{{userData.now_point}} 點。使用資格期限為 {{public_variable.now_semester}} 學期選課期間。</div>
                 <div class="window__self__random_text" @click="copyCodeDone">
                     <p v-bind:data-clipboard-text="userData.messenger_code">複製開通代碼：{{userData.messenger_code}}</p>
                 </div>

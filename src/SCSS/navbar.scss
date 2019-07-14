@@ -85,8 +85,9 @@
             border: $light_2 1px solid;
             box-sizing: border-box;
             overflow: scroll;
+            -webkit-overflow-scrolling: touch;
             background: white;
-            @include box_shadow_1();
+            @include box_shadow_4();
             &__no_result {
                 display: flex;
                 height: 40px;
@@ -182,7 +183,7 @@
             background: $white;
             border: $light_2 1px solid;
             border-bottom: $blue 4px solid;
-            @include box_shadow_2();
+            @include box_shadow_4();
             overflow: hidden;
             &__info {
                 position: relative;

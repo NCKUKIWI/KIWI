@@ -29,6 +29,7 @@
     width: 100%;
     height: 70px;
     transition: .2s $material_trans;
+    background: white;
     &_left {
         @include inline_flex_center(row);
         margin-left: 2%;
@@ -263,6 +264,18 @@
             }
         }
     }
+    &_delete{
+        display: none;
+        position: absolute;
+        left: 85%;
+        bottom: 23%;
+        border-radius: 30px;
+        width: 20px;
+        height: 20px;
+        background-color: #fff;
+        background-image: url("../images/table/icon_delete.svg");
+        // background-image: url("../images/table/icon_cancel.svg");
+    }
     &_clear_filter {
         position: absolute;
         z-index: 1;
@@ -293,7 +306,7 @@
         background: $white;
         overflow: scroll;
         // border: $light_2 1px solid;
-        @include box_shadow_1();
+        @include box_shadow_4();
         &__no_result {
             display: flex;
             height: 40px;
@@ -319,7 +332,7 @@
         width: 100%;
         background: $white;
         overflow-x: hidden;
-        overflow-y: scroll;
+        overflow-y: scroll; 
         border: $light_2 1px solid;
         @include box_shadow_1();
         @include box_shadow_1_hover();

@@ -19,9 +19,11 @@ var vue_add_review = new Vue({
 		course_semester_suggestion: [],
 		isChoosingSemester: false,
 		course_teacher_suggestion: [],
-		isChoosingTeacher: false,
 		course_dept_suggestion: [],
-		window_status: '心得最低需求 50 字，請填寫完畢後按下送出。'
+		course_id_suggestion: [],
+		isChoosingTeacher: false,
+		window_status: '心得最低需求 50 字，請填寫完畢後按下送出。',
+		course_point: 0
 	},
 	watch: {
 		course_title: function () {
@@ -80,7 +82,9 @@ var vue_add_review = new Vue({
 			this.isChoosingSemester = false;
 			this.course_teacher_suggestion.length = 0;
 			this.course_dept_suggestion.length = 0;
+			this.course_id_suggestion.length = 0;
 			this.isChoosingTeacher = false;
+			this.course_point = 0;
 			console.log( "清乾淨啦～" );
 		},
 		chooseSemester: function () {
@@ -129,6 +133,7 @@ var vue_add_review = new Vue({
 				this.isChoosingTeacher = true ;
 				this.isChoosingSemester = false ;
 				this.course_teacher_suggestion.length = 0;
+				this.course_id_suggestion.length = 0;
 				for ( var i = 0 ; i < course_prev_db.length ; i ++ ) {
 					// 預先排除特殊符號影響正規表達式の判斷
 					var text_to_check = course_prev_db[i].課程名稱 ;
@@ -149,15 +154,17 @@ var vue_add_review = new Vue({
 							if ( ! ifRepeated ) {
 								this.course_teacher_suggestion.push( course_prev_db[i].老師 );
 								this.course_dept_suggestion.push( course_prev_db[i].系號 );
+								this.course_id_suggestion.push( course_prev_db[i].id);
 							}
 						}
 						else {
 							this.course_teacher_suggestion.push( course_prev_db[i].老師 );
 							this.course_dept_suggestion.push( course_prev_db[i].系號 );
+							this.course_id_suggestion.push( course_prev_db[i].id);
 						}
 					}
 				}
-				this.course_teacher_suggestion.sort();
+				// this.course_teacher_suggestion.sort(); // 先不要排序，避免對應的id亂掉
 			}
 		},
 		fillTitle: function ( val ) {
@@ -177,6 +184,14 @@ var vue_add_review = new Vue({
 			this.isChoosingTeacher = false ;
 			this.course_teacher = val;
 			this.course_dept = this.course_dept_suggestion[index];
+		    axios.get ( '/course/getPoint/' + this.course_id_suggestion[index] )
+		        .then ( function ( response ) {
+		            vue_add_review.course_point = response.data.point;
+		            console.log('now point: ' + vue_add_review.course_point);
+		        })
+		        .catch ( function ( error ) {
+		            console.log (  'get course point error:' + error ) ;
+		    });
 		},
 		giveRate: function ( item, value ) {
 			if(this.course_rate[item] == "") this.course_rate[item] = 5;
@@ -215,7 +230,8 @@ var vue_add_review = new Vue({
 					'sweet': this.course_rate.sweet,
 					'cold': this.course_rate.cold,
 					'got': this.course_rate.gain,
-					'catalog': this.course_dept
+					'catalog': this.course_dept,
+					'point': this.course_point
 				})
 				.then ( function ( response ) {
 					if(response.data == 'success'){

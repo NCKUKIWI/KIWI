@@ -139,9 +139,17 @@ function checkLikeExist(postLikeData) {
         )
     });
 }
-router.get("/getPostLike", function(req, res){
-    db.Query("SELECT * FROM post_like", function(results){
-        res.send(results)
+router.get("/getUserLike/:uid",function(req, res){
+    var uid=req.params.uid;
+    db.FindbyColumnClear("post_like",["userId","postId","thumb","suck"],{"userId":uid},function(userLikeResults){
+        res.json(userLikeResults);
+    })
+})
+
+router.get("/getPostLike/:pid",function(req, res){
+    var pid=req.params.pid;
+    db.FindbyColumnClear("post_like",["userId","postId","thumb","suck"],{"postId":pid},function(postLikeResults){
+        res.json(postLikeResults);
     })
 })
 
@@ -185,7 +193,6 @@ router.post('/create', function (req, res) {
         var errors = req.validationErrors();
         if (errors) {
             console.log("Error " + errors);
-            res.send(errors);
         } else {
             for (var aContent in req.body) {
                 sanitizeHtml(req.body[aContent], {
@@ -207,79 +214,93 @@ router.post('/create', function (req, res) {
                 // course_style: req.body.course_style.replace(/\'|\#|\/\*/g, ""),
                 user_id: userid
             }
-            db.Insert('post', post, function (err, results) {
-                if (err) throw err;
-                console.log(results);
-                var rate = {
-                    sweet: parseInt(req.body.sweet), // 課程甜度
-                    cold: parseInt(req.body.cold), // 課程涼度
-                    // recommand: parseInt(req.body.recommand.replace(/\'|\#|\/\*/g, "")),
-                    // give: parseInt(req.body.give.replace(/\'|\#|\/\*/g, "")),
-                    got: parseInt(req.body.got), // 課程收穫
-                    course_name: req.body.course_name.replace(/\'|\#|\/\*/g, ""),
-                    teacher: req.body.teacher.replace(/\'|\#|\/\*/g, ""),
-                    user_id: userid,
-                    post_id: results.insertId
-                }
-                db.Insert('course_rate', rate, function (err, results) {
-                    if (err) throw err;
-                    column = ['id'];
-                    db.Query(`SELECT id FROM course_new WHERE 課程名稱="${req.body.course_name}" AND 老師="${req.body.teacher}"`, function (DbSearch) {
-                        if(DbSearch.length!=0){  // 有在course_new找到這門課, 則清掉該課程對應到的key就好
-                            db.query_post2(DbSearch[0].id, function (courseInfo, comment) {
-                                courseInfo = courseInfo[0];
-                                courseInfo.comment = 0;
-                                courseInfo.course_style = 0;
-                                courseInfo.report_hw = 0;
-                                courseInfo.score_style = 0;
-            
-                                for (var i in comment) {
-                                    var buf = comment[i];
-                                    for (var j in comment[i]) {
-                                        // console.log(buf[j])
-                                        if (buf[j] == "無" || buf[j] == "" || !buf[j]) {
-                                            delete buf[j];
-                                            continue;
-                                        }
-                                        courseInfo[j]++;
-                                    }
-                                }
-                                db.FindbyColumn('course_rate', ["*"], { course_name: req.body.course_name, teacher: req.body.teacher }, function (rates) {
-                                    var sweet = 0;
-                                    var cold = 0;
-                                    var got = 0;
-                                    var rate_count = 0;
-                                    if (rates.length > 0) {
-                                        for (var i in rates) {
-                                            sweet += rates[i].sweet;
-                                            cold += rates[i].cold;
-                                            got += rates[i].got;
-                                        }
-                                        sweet /= rates.length;
-                                        cold /= rates.length;
-                                        got /= rates.length;
-                                        rate_count = rates.length;
-                                    }
-                                    var data = {
-                                        'got': got,
-                                        'cold': cold,
-                                        'sweet': sweet,
-                                        'rate_count': rate_count,
-                                        'courseInfo': courseInfo,
-                                        'comment': comment,
-                                        'rates': rates
-                                    };
-                                    for(var d in DbSearch){
-                                        redis.set(courseCacheKey(DbSearch[d].id), JSON.stringify(data));
-                                    }
-                                    res.send("success");
-                                })
-                            });
-                        }else{ // 沒找到這門課, 不做任何事
-                            res.send("success");
+            db.Query("SELECT id FROM post WHERE course_name='"+req.body.course_name+"' AND teacher='"+req.body.teacher+"' AND user_id='"+req.user.id+"'",function(results){
+                if(results.length!=0){
+                    console.log("repeat!");
+                    res.json([{
+                        msg: "此心得已繳交過!"
+                    }]);
+                } else {
+                    db.Insert('post', post, function (err, results) {
+                        if (err) throw err;
+                        console.log(results);
+                        var rate = {
+                            sweet: parseInt(req.body.sweet), // 課程甜度
+                            cold: parseInt(req.body.cold), // 課程涼度
+                            // recommand: parseInt(req.body.recommand.replace(/\'|\#|\/\*/g, "")),
+                            // give: parseInt(req.body.give.replace(/\'|\#|\/\*/g, "")),
+                            got: parseInt(req.body.got), // 課程收穫
+                            course_name: req.body.course_name.replace(/\'|\#|\/\*/g, ""),
+                            teacher: req.body.teacher.replace(/\'|\#|\/\*/g, ""),
+                            user_id: userid,
+                            post_id: results.insertId
                         }
+                        db.Insert('course_rate', rate, function (err, results) {
+                            if (err) throw err;
+                            column = ['id'];
+                            db.Query(`SELECT id FROM course_new WHERE 課程名稱="${req.body.course_name}" AND 老師="${req.body.teacher}"`, function (DbSearch) {
+                                if(DbSearch.length!=0){  // 有在course_new找到這門課, 則清掉該課程對應到的key就好
+                                    db.query_post2(DbSearch[0].id, function (courseInfo, comment) {
+                                        courseInfo = courseInfo[0];
+                                        courseInfo.comment = 0;
+                                        courseInfo.course_style = 0;
+                                        courseInfo.report_hw = 0;
+                                        courseInfo.score_style = 0;
+                    
+                                        for (var i in comment) {
+                                            var buf = comment[i];
+                                            for (var j in comment[i]) {
+                                                // console.log(buf[j])
+                                                if (buf[j] == "無" || buf[j] == "" || !buf[j]) {
+                                                    delete buf[j];
+                                                    continue;
+                                                }
+                                                courseInfo[j]++;
+                                            }
+                                        }
+                                        db.FindbyColumn('course_rate', ["*"], { course_name: req.body.course_name, teacher: req.body.teacher }, function (rates) {
+                                            var sweet = 0;
+                                            var cold = 0;
+                                            var got = 0;
+                                            var rate_count = 0;
+                                            if (rates.length > 0) {
+                                                for (var i in rates) {
+                                                    sweet += rates[i].sweet;
+                                                    cold += rates[i].cold;
+                                                    got += rates[i].got;
+                                                }
+                                                sweet /= rates.length;
+                                                cold /= rates.length;
+                                                got /= rates.length;
+                                                rate_count = rates.length;
+                                            }
+                                            var data = {
+                                                'got': got,
+                                                'cold': cold,
+                                                'sweet': sweet,
+                                                'rate_count': rate_count,
+                                                'courseInfo': courseInfo,
+                                                'comment': comment,
+                                                'rates': rates
+                                            };
+                                            for(var d in DbSearch){
+                                                redis.set(courseCacheKey(DbSearch[d].id), JSON.stringify(data));
+                                            }
+                                            db.Query("update user Set point = point + " + req.body.point + " where id = " + userid, function(results) {
+                                                res.send("success");
+                                            })
+                                            
+                                        })
+                                    });
+                                }else{ // 沒找到這門課, 不做任何事
+                                    db.Query("update user Set point = point + " + req.body.point + " where id = " + userid, function(results) {
+                                        res.send("success");
+                                    })
+                                }
+                            });
+                        });
                     });
-                });
+                }    
             });
         }
     }
@@ -320,6 +341,8 @@ router.get('/:id', function (req, res) {
 
 
 
+//localhost:3000/post/report/123
+
 /*report post */
 router.post('/report/:id', function (req, res) {
     /* 要檢舉的文章id*/
@@ -347,8 +370,8 @@ router.post('/report/:id', function (req, res) {
                     res.send('Already report');
                 } else {
                     // bot.sendReport(); // For broadcast the /report URL.
-                    // var reason = req.body['reason'];
-                    // report_post['reason'] = reason
+                    let reason = req.body['reason'];
+                    report_post['reason'] = reason
                     report_post['reporter_id'] = reporter_id
                     db.Insert('report_post', report_post, function (err, results) {
                         if (err) throw err;

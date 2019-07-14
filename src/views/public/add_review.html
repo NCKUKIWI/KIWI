@@ -68,7 +68,11 @@
             </div>
             <div class="add_review__window__bottom_bar__buttons">
                 <div class="add_review_button give_up text_16 enabled" @click="giveUpReview">放棄</div>
-                <div :class="{ enabled: course_review.replace(/\s/g, '').length >= 50 }" class="add_review_button send_review text_16" @click="sendReview">送出心得</div>
+                <!-- <div v-if="course_point == 0" :class="{ enabled: course_review.replace(/\s/g, '').length >= 50 }" class="add_review_button send_review text_16" @click="sendReview">送出心得</div> -->
+                <div :class="{ enabled: course_review.replace(/\s/g, '').length >= 50 }" class="add_review_button send_review text_16" @click="sendReview">
+                    <img :src="course_review.replace(/\s/g, '').length >= 50?'./dist/images/add_review/icon_send.svg':'./dist/images/add_review/icon_send_disabled.svg'"/>
+                    <p>送出心得<span v-if="course_point > 0">，獲得積分 {{course_point}} 點</span></p>
+                </div>
             </div>
         </div>
     </div>

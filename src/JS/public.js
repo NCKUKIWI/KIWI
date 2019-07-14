@@ -25,7 +25,7 @@
     // 使用者資料
 
     var userData = {
-    	user_id: 0,
+        user_id: 0,
         user_name: '訪客貓咪',
         user_photo: 'dist/images/course/sad_hugecat.png',
         user_department: '無',
@@ -35,6 +35,14 @@
         now_wishlist: [],
         now_table: [],
         now_comment: [],
+        now_point: 0,
+        helper_qualified: false,
+    }
+
+    // 公用參數
+    var public_variable = {
+        now_semester: '108-1',
+        point_threshold: 5
     }
 
     // 頁面顯示狀態
@@ -77,13 +85,13 @@
             // 將 course_db 放入
             var tmp = [];
             for (var i = 0; i < 200; i++) {
-	            tmp.push(vue_course_item.course_data_db()[i]);
-	        }
+                tmp.push(vue_course_item.course_data_db()[i]);
+            }
             vue_course_item.course_data = tmp.sort(function(a,b){return a-b});
-	        for (var i in vue_course_item.course_data_db()) {
-	            if (vue_course_item.course_data_db()[i].comment_num > 0) {
-	                vue_course_item.course_with_comment.push(vue_course_item.course_data_db()[i]);
-	            }
+            for (var i in vue_course_item.course_data_db()) {
+                if (vue_course_item.course_data_db()[i].comment_num > 0) {
+                    vue_course_item.course_with_comment.push(vue_course_item.course_data_db()[i]);
+                }
             }
         })
         .catch ( function ( error ) {
@@ -129,7 +137,7 @@
         $( ".tab_div[name='" + tab + "']" ).show();
         pageStatus.now_tab = tab ;
         // 收起下拉選單
-		pageStatus.nav_profile_dropdown = false;
+        pageStatus.nav_profile_dropdown = false;
     }
 
 
@@ -188,7 +196,6 @@
             toTab( pageStatus.initial_tab );
             setWindow ( 'not_login', 'close' );
             getWishlistTable();
-            getUserComment();
         }).catch(function(err){
             vue_loading.turnoff();
             pageStatus.loggedIn = false;
@@ -278,12 +285,17 @@
         });
     }
 
-    // 回傳使用者的心得數
-
-    function getUserComment(){
-        axios.get('/user/getHelperService').
+    // 回傳使用者的小幫手狀態
+    function findHelperService(){
+        axios.get('/user/findHelperService').
         then(function(response){
-            userData.now_comment = response.data.comment;
             userData.messenger_code = response.data.messenger_code;
+            if(userData.messenger_code != "") userData.helper_qualified = true;
+            userData.now_point = response.data.point;
         })
     }
+
+    // // 取得小幫手
+    // function getHelperService(){
+
+    // }

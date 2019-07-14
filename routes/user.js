@@ -8,7 +8,7 @@ var graph = require("fbgraph");
 var config = require('../config');
 var cache = require('../helper/cache');
 var redis = require('../helper/cache').redis;
-
+var gmailSend = require('./gmailSend/gmailSend')
 
 router.get("/fblogin", middleware.checkLogin(1), function (req, res) {
     res.redirect(`https://www.facebook.com/v3.1/dialog/oauth?client_id=${config.fb.appid}&scope=email,public_profile&response_type=code&redirect_uri=${config.website}/user/fbcheck`);
@@ -187,27 +187,105 @@ router.get('/info', function (req, res) {
     
 });
 
-router.get('/getHelperService/', function (req, res) {
-    uid = req.user.id
+router.get('/findHelperService/', function (req, res) {
+    var uid = req.user.id
     var data = {
-        'messenger_code': 0,
-        'comment': []
+        'messenger_code': "",
+        'point': 0
     }
-    db.Query('SELECT * FROM post WHERE user_id =' + uid, function(query){
-        data.comment = query;
-        if(data.comment.length  >= 3){
-            db.Query('select * from messenger_code where user_id =' + uid, function(messenger_code){
-                if(messenger_code.length == 0){
-                    res.send(data);    
-                }
-                else data.messenger_code = messenger_code[0].code
-                res.send(data);
-            })
+    db.Query('select * from messenger_code where user_id =' + uid, function(messenger_code){
+        messenger_code = messenger_code[0]
+        if( messenger_code.is_used == 1){
+            data.messenger_code = messenger_code.code;
         }
-        else{
+        db.Query('select * from user where id =' + uid, function(userInfo){
+            userInfo = userInfo[0];
+            data.point = userInfo.point;
             res.send(data);
+        })
+        
+    })
+});
+
+router.get('/Service/', function (req, res) {
+    var uid = req.user.id
+    db.Query('select * from user where id =' + uid, function(userInfo){
+        userInfo = userInfo[0];
+        if(userInfo.point >= 5){
+            db.Query("update user Set point = point - 5 where id = " + uid, function(result){
+                db.Query('update messenger_code Set is_used = 1 where user_id = ' + uid, function(messenger_code){
+                    res.send("success")
+                });
+            });
         }
     })
 });
 
+
+router.post('/signup', function (req, res) {
+
+    //var user_account = req.body['account'];
+    //var user_password = req.body['password'];
+    //var user_email = req.body['user_email'];
+    var check_key = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    var data = {
+        'department': req.body['department'],//user_department,
+        'grade': req.body['grade'],//user_grade,
+        'email': req.body['email'],//user_email
+        'check_key': check_key
+    };
+
+    var url = "nckuhub.com/user/signup_url/"
+
+    console.log(data);
+    //db.Query('user')
+    db.Insert('user', data, function(err, result){
+        
+        if(err) console.log(err);
+        else{
+            gmailSend.sendMail('nckuhub@gmail.com', 'sginup go go go! '+url+data['check_key']);
+        }
+    })
+    res.send("success");
+})
+
+
+
+router.get('/signup_url/:check_key', function (req, res) {
+    
+    var user_check_key = req.params.check_key;
+    var datas = {
+        role: 3
+    };
+    var conditions ={
+        'check_key' : user_check_key
+    }
+    db.Update('user',datas,conditions,function(results){
+        
+        if (results.affectedRows == 0)
+            res.status(404).send("Sorry, wrong url")
+        else
+            res.send("OK")
+    })
+})
+
+router.post("/updateEmail", function(req, res){
+    var id = req.body.id;
+    var email = req.body['email'];
+    var check_key = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    var data = {
+        'email': email,
+        'check_key': check_key
+    };
+    db.Update('user', data, {"id": id}, function(results){
+        res.send("success");
+    })
+    sendVerificationMail(id, email, check_key);
+})
+
+function sendVerificationMail(id, email, check_key){
+    db.Update('user', {'role': 0}, {"id":id}, function(result){});
+    let url = "https://nckuhub.com/api/user/signup_url/"+ check_key;
+    gmailSend.sendMail(email, '驗證網址: '+ url);
+}
 module.exports = router;

@@ -64,15 +64,19 @@
         }
     }
     .courseList__sideList {
+        top: 0;
+        height: 100vh;
         width: 100vw;
-        margin-top: 64px;
-        height: calc( 100vh - 64px);
         padding: 0;
+    }
+    #course_item {
+        background: $bg_color;        
     }
     .courseList__sideList__itemBox {
         height: 100%;
         .list_course_item.blank_for_mobile {
-            height: 20px;
+            display: block;
+            height: 80px;
             background: $bg_color;
         }
     }
@@ -90,10 +94,13 @@
 
     #courseContent {
         z-index: 5;
-        height: calc(100vh - 64px);
-        margin-top: 64px;
+        top: 0;
+        height: 100%;
+        // height: calc(100vh - 64px);
+        // margin-top: 64px;
         overflow-x: hidden;
         overflow-y: scroll;
+        -webkit-overflow-scrolling: touch;
     }
 
     .courseContentBody {
@@ -105,12 +112,12 @@
 
     .courseContentBody__left {
         height: auto;
-        padding: 40px 30px 0 30px;
+        padding: 100px 30px 0 30px;
     }
 
     .icon-span {
         position: absolute;
-        top: 36px;
+        top: 96px;
         right: 30px;
     }
 

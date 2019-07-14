@@ -293,6 +293,22 @@ router.post('/deleteCourse/', function (req, res) {
     })
 })
 
+router.get('/getPoint/:courseID', function(req, res){
+    var id = req.params.courseID;
+    db.query_post2_courseAll(id, function(courseInfo, comment){
+        let now_comment_num = comment.length;
+        courseInfo = courseInfo[0];
+        if(now_comment_num < 3) {
+            res.send({'point': 3});
+        }
+        else if (courseInfo['系號'] != 'A9' && courseInfo['系號'] != 'A1' && courseInfo['系號'] != 'A2' && courseInfo['系號'] != 'A7'){
+            res.send({'point': 2});
+        }
+        else{
+            res.send({'point': 1});
+        }
+    })
+})
 
 
 // function check_Login(req, res, all_courses, custom_courses) {

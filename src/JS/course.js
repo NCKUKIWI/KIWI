@@ -293,14 +293,18 @@
           console.log(vue_course_item.course_data);
         }
       },
-      result_click: function(index) {
+      deleteSearch:function(){
+        this.keyword='';
+      },
+      result_click: function(resultName,index) {
         // var key = document.getElementById("dpmtFilter");
+        this.keyword = resultName;
         var key_prefix = vue_courseFilter.dept_dropdown[index].prefix;
         this.keyPrefix = key_prefix;
         this.filter_by_dpmt = [];
-        console.log(key.value);
-        key.value = key_prefix + " " + vue_courseFilter.dept_dropdown[index].name;
-        console.log(key.value);
+        // console.log(key.value);
+        // key.value = key_prefix + " " + vue_courseFilter.dept_dropdown[index].name;
+        // console.log(key.value);
         if(this.keyword) {
           vue_course_item.course_data = [];
           if(vue_courseFilter.comment_only==true){
@@ -318,7 +322,8 @@
             }
           }
         }
-        $(".search_result--course").css("display","none");
+        // $(".search_result--course").css("display","none");
+        $(".quick_search_dropdown--course").css("display","none");
       },
       refresh: function () {
         this.wishlist_cont.length = 0;
@@ -333,19 +338,19 @@
       opentabletab: function() {
         toTab('table');
       },
-      handle_input: function($event) {
-        if(!$event.data){
-          this.filter_with_dpmt = false;
-          vue_course_item.course_data = [];
-          if(this.comment_only==true){
-            vue_course_item.course_data = vue_course_item.course_with_comment;
-          } else {
-            for(var i=0;i<100;i++){
-              vue_course_item.course_data.push(vue_course_item.course_data_db()[i]);
-            }
-          }
-        }
-      },
+      // handle_input: function($event) {
+      //   if(!$event.data){
+      //     this.filter_with_dpmt = false;
+      //     vue_course_item.course_data = [];
+      //     if(this.comment_only==true){
+      //       vue_course_item.course_data = vue_course_item.course_with_comment;
+      //     } else {
+      //       for(var i=0;i<100;i++){
+      //         vue_course_item.course_data.push(vue_course_item.course_data_db()[i]);
+      //       }
+      //     }
+      //   }
+      // },
       mobileNavStatus: function( status ) {
         if ( status == 'drop' ) {
           if ( this.mobile_status == 'drop' ) {
@@ -410,6 +415,24 @@
         // }
         return this.dept_dropdown;
 
+      }
+    },
+    watch: {
+      keyword: function(){
+        if(this.keyword == ''){
+          $(".quick_search_delete").css("display","none");
+          this.filter_with_dpmt = false;
+          vue_course_item.course_data = [];
+          if(this.comment_only==true){
+            vue_course_item.course_data = vue_course_item.course_with_comment;
+          } else {
+            for(var i=0;i<100;i++){
+              vue_course_item.course_data.push(vue_course_item.course_data_db()[i]);
+            }
+          }
+        } else {
+          $(".quick_search_delete").css("display","inline-block");
+        }
       }
     }
   });

@@ -28,7 +28,7 @@ var vue_windows = new Vue({
         },
         helperFreeSure: function(){
             setWindow( 'helper_free_get_make_sure', 'close' );
-            axios.get('/user/getHelperService').
+            axios.get('/user/Service').
             then(function(response){
                 if(response.data == 'success'){
                     setWindow( 'helper_free_get_success', 'open' );

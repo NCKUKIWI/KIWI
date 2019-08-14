@@ -53,6 +53,7 @@
             // vue_courseContent.score_data.cold = parseFloat(vue_courseContent.score_data.cold).toFixed(1);
             vue_courseContent.comment_data = response.comment;
             vue_courseContent.course_data = response.courseInfo;
+            vue_courseContent.course_data.id = id;
             if(vue_courseContent.comment_data.length==0){
               $(".courseFeedback__msg--default").css("display","block");
             } else {

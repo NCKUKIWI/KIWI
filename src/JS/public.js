@@ -70,6 +70,19 @@
         loggedIn: false,
     }
 
+    // 課程內頁資訊
+    var courseContent_data = {
+        id: 0,
+        score: {
+            gain: 0,
+            sweet: 0,
+            cold: 0,
+            rate_count: 0,
+        },
+        comment: [],
+        info: [],
+    }
+
     // 轉換目前頁面
     toTab( pageStatus.initial_tab );
 
@@ -295,7 +308,24 @@
         })
     }
 
-    // // 取得小幫手
-    // function getHelperService(){
-
-    // }
+    // 開啟課程內頁
+    function openPage(id) {
+        vue_nav_bar.mobile_status = 'course_page';
+        let course_url = "/course/" + id;
+        // setWindow('course_page','open');
+        axios.get(course_url).then( (res) => {
+            console.log(res);
+            courseContent_data.id = res.data.courseInfo.id;
+            courseContent_data.score.gain = Math.floor(res.data.got);
+            courseContent_data.score.cold = Math.floor(res.data.cold);
+            courseContent_data.score.sweet = Math.floor(res.data.sweet);
+            courseContent_data.score.rate_count = res.data.rate_count;
+            courseContent_data.comment = res.data.comment;
+            courseContent_data.info = res.data.courseInfo;
+            vue_courseContent.course_data = courseContent_data.info;
+            vue_courseContent.score_data = courseContent_data.score;
+            vue_courseContent.comment_data = courseContent_data.comment;
+        }).catch( (err) => {
+            console.log(err);
+        })
+    }

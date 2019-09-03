@@ -9,3 +9,4 @@ config.*
 token.*
 gulpfile.js
 ngrok
+*.sh

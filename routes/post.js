@@ -466,6 +466,22 @@ router.delete('/:id', function (req, res) {
     });
 });
 
+router.post('/githubWebhook', function(req, res, next) {
+    let body = JSON.parse(req.body["payload"])
+    if(body["ref"] == "refs/heads/new_web")
+        deploy(res)
+});
+
+function deploy(res){
+    childProcess.exec('cd /root/KIWI_2.0 && ./deploy.sh', function(err, stdout, stderr){
+        if (err) {
+            console.error(err);
+            return res.send(500);
+        }
+        res.send(200);
+    });
+}
+
 
 
 module.exports = router;

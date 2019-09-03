@@ -8,7 +8,7 @@ var bot = require('./bot');
 var cache = require('../helper/cache');
 var courseCacheKey = cache.courseCacheKey;
 var middleware = require('../middleware');
-
+var childProcess = require('child_process')
 /* index  */
 router.get('/', function (req, res) {
     // Log

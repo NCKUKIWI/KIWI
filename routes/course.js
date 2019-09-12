@@ -177,6 +177,7 @@ router.get('/:id', function (req, res) {
                 for (var i in data.comment){
                     data['comment'][i].comment = data['comment'][i].comment.replace(/\n/g, "<br>");    
                 }
+                data['courseInfo']['id'] = id
                 res.json(data);
             } else {
                 /* 尋找課程的資訊 */

@@ -491,7 +491,7 @@ function sendCourseInfo(sender, course_id) {
 			title = "點我查看上課地點";
 		} else {
 			text += "\n\n上課地點在「" + course[0].教室.replace(/\s/g, "") + "」唷！";
-			url = "http://www.stat.ncku.edu.tw/workshop/information/map_NCKUPlan.asp";
+			url = "http://news.secr.ncku.edu.tw/var/file/37/1037/img/56/168451242.jpg";
 			title = "系館地圖";
 		}
 		sendLink(sender, {

@@ -1,0 +1,81 @@
+.userInfo{
+  margin-top: calc( 9vh - 30px);
+  display: block;
+  width: 100%;
+  &__box{
+    box-shadow: 0 0 14px 0 rgba(0,0,0,.06);
+    &__userPanel{
+      display: flex;
+      height: 140px;
+      width: 100%;
+      padding: 20px 0 10px 0;
+      background: #fff;
+      border: #eee 1px solid;
+      &__photo{
+        margin-left: 20px;
+        border-radius: 100%;
+        width: 65px;
+        height: 65px;
+      }
+      &__profile{
+        padding-left: 15px;
+        & .profile_name{
+          line-height: 28px;
+          color: #4a4a4a;
+        }
+        & .profile_dept,.profile_grade{
+          line-height: 16px;
+        }
+        & .profile_helper{
+          height: 20px;
+          border: #eee 1.5px solid;
+          border-radius: 20px;
+          margin-top: 10px;
+          display: flex;
+          align-items: center;
+          cursor: pointer;
+          & img{
+            margin:0 5px 0 10px;
+            width: 14px;
+            height: 14px;
+          }
+        }
+      }
+    }
+    &:hover{
+      box-shadow: 0 0 28px 0 rgba(0,0,0,0.10);
+    }
+  }
+}
+
+.functionsList{
+  margin-top: 10px;
+  &__box{
+    box-shadow: 0 0 14px 0 rgba(0,0,0,.06);
+    &:hover{
+      box-shadow: 0 0 28px 0 rgba(0,0,0,0.10);
+    }
+  }
+}
+
+
+.single_panel_item{
+  height: 48px;
+  cursor: pointer;
+  background-color: #fff;
+  border: #eee 1px solid;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  transition: .2s cubic-bezier(0,0,.2,1),padding .3s cubic-bezier(0,0,.2,1);
+  padding: 14px 50px 14px 19px;
+  & img{
+    // width:18px;
+  }
+  & p{
+    padding-left: 14px;
+  }
+  &:hover{
+    background-color: #fafafa;
+  }
+}

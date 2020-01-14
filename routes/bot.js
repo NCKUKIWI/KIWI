@@ -337,7 +337,7 @@ router.post('/webhook', function (req, res) {
 
 					if (1) {//關閉bot的if
 						sendTextMessage(sender, Temp_fixing_messenge);
-					} 
+					}
 					// else {//暫時關閉bot待維修
 					// 	if (text.indexOf("小幫手") !== -1) {
 					// 		sendHello(sender);
@@ -389,8 +389,8 @@ router.post('/webhook', function (req, res) {
 				//檢查使用者是否按下訊息中的按鈕
 				if (event.postback) {
 					if (1) {//暫時關閉bot的if
-						//sendTextMessage(sender, Temp_fixing_messenge);
-					} 
+						sendTextMessage(sender, event.postback.payload);
+					}
 					else {
 						// var courseIdFollow = postback.courseIdFollow.matcher(event.postback.payload); //抓payload中的 course_id 用來追蹤課程
 						// var courseIdForceFollow = postback.courseIdForceFollow.matcher(event.postback.payload); //抓payload中的 course_id 用來強制追蹤課程

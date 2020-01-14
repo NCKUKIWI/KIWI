@@ -72,7 +72,7 @@ router.post('/openbot', function (req, res) {
 	var db = new dbsystem();
 	db.update().table("setting").set({
 		status: 1
-	}).where("id=", 1).run(function (result) {});
+	}).where("id=", 1).run(function (result) { });
 	checkCourseStatus = 1;
 	res.send('ok');
 });
@@ -82,7 +82,7 @@ router.post('/closebot', function (req, res) {
 	var db = new dbsystem();
 	db.update().table("setting").set({
 		status: 0
-	}).where("id=", 1).run(function (result) {});
+	}).where("id=", 1).run(function (result) { });
 	checkCourseStatus = 0;
 	res.send('ok');
 });
@@ -160,7 +160,7 @@ const creativeMsgCb = target_label_id => resBody => {
 		}
 	});
 };
-router.post('/broadtest',function(req, res){
+router.post('/broadtest', function (req, res) {
 	var broadcastType = 'broad';
 	var target_label_id = broadcast_label[(broadcastType === "broad" ? "tester" : "all_user")];
 	console.log(target_label_id)
@@ -329,100 +329,112 @@ router.post('/webhook', function (req, res) {
 			});
 		} else if (anEntry.hasOwnProperty('messaging')) { // Messenger
 			anEntry.messaging.forEach(event => {
+				var Temp_fixing_messenge = "同學你好，NCKU HUB 小幫手服務目前正在進行維修，歡迎密切關注粉專或設定搶先看，我們會在重新上線時發文公告 🙌🏻\n\n再次感謝對我們的支持 🙏🏻 如果有任何問題也可以直接回覆在此，我們會儘速為你解答 🚶🚶🚶";
 				var sender = event.sender.id; //使用者messenger id
 				if (event.message && event.message.text && typeof event.message.is_echo === "undefined") {
 					var text = event.message.text; //用戶傳送的訊息
 					console.log(`[粉專私訊] 私訊者：『${sender}』訊息：「${text.replace(/\n/, "\\n")}」`);
-					if (text.indexOf("小幫手") !== -1) {
-						sendHello(sender);
-						if (text.indexOf("小幫手我是管理員") !== -1)
-							subscribeBroadcast(sender, true);
-					} else {
-						var serial = text.replace(/[\s|\-]/g, "").match(/^[a-zA-Z][0-9]{4}/i);
-						if (serial) {
-							if (courseSerialList.indexOf(serial[0].toUpperCase()) !== -1) {
-								askPlaceOrFollow(sender, serial[0]);
-							}
-						} else {
-							if (courseNameList.indexOf(text) != -1) {
-								searchCourseByName(sender, text);
-							} else {
-								var teacher = text.match(/[\%|\uff05][\u4e00-\u9fa5]{1,}/i); //檢查 %老師名稱
-								var dpt = text.match(/[\$|\uff04][\u4e00-\u9fa5]{1,}/i); //檢查 $系所名稱
-								if (dpt) dpt = dpt[0].replace(/[\$|\uff04|\s]/g, ""); //過濾掉不該有的內容
-								if (teacher) teacher = teacher[0].replace(/[\%|\uff05|\s]/g, "");
-								if (text.indexOf('%') == 0) {
-									searchCourseByTeacher(sender, teacher);
-								} else {
-									var courseNamePlace = text.match(/^[\uff20|@][\u4e00-\u9fa5]{1,}/i); //檢查 @課程名稱
-									if (courseNamePlace) {
-										courseNamePlace = courseNamePlace[0].replace(/[\uff20|@|\s]/g, "");
-										sendCoursePlaceByName(sender, courseNamePlace, dpt, teacher); //透過課程名稱搜尋並傳送課程地點
-									}
-									var courseSerialPlace = text.match(/^[\uff20|@][a-zA-Z0-9]{5}/i); //檢查 @選課序號
-									if (courseSerialPlace) {
-										courseSerialPlace = courseSerialPlace[0].replace(/[\uff20|@|\s]/g, "");
-										sendCoursePlaceById(sender, courseSerialPlace); //透過課程序號搜尋並傳送課程地點
-									}
-									var courseNameFollow = text.match(/^[#|\uff03][\u4e00-\u9fa5]{1,}/i); //檢查 #課程名稱
-									if (courseNameFollow) {
-										courseNameFollow = courseNameFollow[0].replace(/[#|\uff03|\s]/g, "");
-										sendFollowCourseByName(sender, courseNameFollow, dpt, teacher); //透過課程名稱搜尋並傳送追蹤課程按鈕
-									}
-									var courseSerialFollow = text.match(/^[#|\uff03][a-zA-Z0-9]{5}/i); //檢查 #選課序號
-									if (courseSerialFollow) {
-										courseSerialFollow = courseSerialFollow[0].replace(/[#|\uff03|\s]/g, "");
-										sendFollowCourseById(sender, courseSerialFollow); //透過選課序號搜尋並傳送追蹤課程按鈕
-									}
-								}
-							}
-						}
-					}
+
+					if (1) {//關閉bot的if
+						sendTextMessage(sender, Temp_fixing_messenge);
+					} 
+					// else {//暫時關閉bot待維修
+					// 	if (text.indexOf("小幫手") !== -1) {
+					// 		sendHello(sender);
+					// 		if (text.indexOf("小幫手我是管理員") !== -1)
+					// 			subscribeBroadcast(sender, true);
+					// 	} else {
+					// 		var serial = text.replace(/[\s|\-]/g, "").match(/^[a-zA-Z][0-9]{4}/i);
+					// 		if (serial) {
+					// 			if (courseSerialList.indexOf(serial[0].toUpperCase()) !== -1) {
+					// 				askPlaceOrFollow(sender, serial[0]);
+					// 			}
+					// 		} else {
+					// 			if (courseNameList.indexOf(text) != -1) {
+					// 				searchCourseByName(sender, text);
+					// 			} else {
+					// 				var teacher = text.match(/[\%|\uff05][\u4e00-\u9fa5]{1,}/i); //檢查 %老師名稱
+					// 				var dpt = text.match(/[\$|\uff04][\u4e00-\u9fa5]{1,}/i); //檢查 $系所名稱
+					// 				if (dpt) dpt = dpt[0].replace(/[\$|\uff04|\s]/g, ""); //過濾掉不該有的內容
+					// 				if (teacher) teacher = teacher[0].replace(/[\%|\uff05|\s]/g, "");
+					// 				if (text.indexOf('%') == 0) {
+					// 					searchCourseByTeacher(sender, teacher);
+					// 				} else {
+					// 					var courseNamePlace = text.match(/^[\uff20|@][\u4e00-\u9fa5]{1,}/i); //檢查 @課程名稱
+					// 					if (courseNamePlace) {
+					// 						courseNamePlace = courseNamePlace[0].replace(/[\uff20|@|\s]/g, "");
+					// 						sendCoursePlaceByName(sender, courseNamePlace, dpt, teacher); //透過課程名稱搜尋並傳送課程地點
+					// 					}
+					// 					var courseSerialPlace = text.match(/^[\uff20|@][a-zA-Z0-9]{5}/i); //檢查 @選課序號
+					// 					if (courseSerialPlace) {
+					// 						courseSerialPlace = courseSerialPlace[0].replace(/[\uff20|@|\s]/g, "");
+					// 						sendCoursePlaceById(sender, courseSerialPlace); //透過課程序號搜尋並傳送課程地點
+					// 					}
+					// 					var courseNameFollow = text.match(/^[#|\uff03][\u4e00-\u9fa5]{1,}/i); //檢查 #課程名稱
+					// 					if (courseNameFollow) {
+					// 						courseNameFollow = courseNameFollow[0].replace(/[#|\uff03|\s]/g, "");
+					// 						sendFollowCourseByName(sender, courseNameFollow, dpt, teacher); //透過課程名稱搜尋並傳送追蹤課程按鈕
+					// 					}
+					// 					var courseSerialFollow = text.match(/^[#|\uff03][a-zA-Z0-9]{5}/i); //檢查 #選課序號
+					// 					if (courseSerialFollow) {
+					// 						courseSerialFollow = courseSerialFollow[0].replace(/[#|\uff03|\s]/g, "");
+					// 						sendFollowCourseById(sender, courseSerialFollow); //透過選課序號搜尋並傳送追蹤課程按鈕
+					// 					}
+					// 				}
+					// 			}
+					// 		}
+					// 	}
+					// }
 				}
 				//檢查使用者是否按下訊息中的按鈕
 				if (event.postback) {
-					var courseIdFollow = postback.courseIdFollow.matcher(event.postback.payload); //抓payload中的 course_id 用來追蹤課程
-					var courseIdForceFollow = postback.courseIdForceFollow.matcher(event.postback.payload); //抓payload中的 course_id 用來強制追蹤課程
-					var courseIdCancel = postback.courseIdCancel.matcher(event.postback.payload); //抓payload中的 course_id 用來取消追蹤課程
-					var courseIdInfo = postback.courseIdInfo.matcher(event.postback.payload); //抓payload中的 course_id 用來傳送單一課程詳細資訊
-					var courseIdAsk = postback.courseIdAsk.matcher(event.postback.payload);
-					let RegPass = /reportPass_/;
-					let RegFail = /reportFail_/;
-					console.log('pload'+event.postback.payload);
-					if (courseIdFollow) {
-						courseIdFollow = postback.courseIdFollow.replacer(courseIdFollow[0]);
-						addFollowCourse(sender, courseIdFollow);
-					} else if (courseIdForceFollow) {
-						courseIdForceFollow = postback.courseIdForceFollow.replacer(courseIdForceFollow[0]);
-						addFollowCourse(sender, courseIdForceFollow, true);
-					} else if (courseIdCancel) {
-						courseIdCancel = postback.courseIdCancel.replacer(courseIdCancel[0]);
-						cancelFollowCourse(sender, courseIdCancel);
-					} else if (courseIdInfo) {
-						courseIdInfo = postback.courseIdInfo.replacer(courseIdInfo[0]);
-						sendCourseInfo(sender, courseIdInfo);
-					} else if (courseIdAsk) {
-						courseIdAsk = postback.courseIdAsk.replacer(courseIdAsk[0]);
-						askPlaceOrFollow(sender, courseIdAsk);
-					} else if (event.postback.payload == "cancelfollow") {
-						sendFollowCourseList(sender);
-					} else if (event.postback.payload == "callagain") {
-						sendHello(sender);
-					} else if (event.postback.payload == "cancelall") {
-						cancelAllFollowCourse(sender);
-					} else if (event.postback.payload == "cancelmsg") {
-						unsubscribeBroadcast(sender);
-					} else if (event.postback.payload == "dontFollow") {
-						sendGoodbye(sender);
-					} else if (RegPass.test(event.postback.payload)) {
-						sendReportReview(true, event)
-					} else if (RegFail.test(event.postback.payload)) {
-						sendReportReview(false, event)
-					}
+					if (1) {//暫時關閉bot的if
+						//sendTextMessage(sender, Temp_fixing_messenge);
+					} 
 					else {
-						if (/開始使用/.test(event.postback.payload))
-							subscribeBroadcast(sender, false);
-						sendTextMessage(sender, event.postback.payload);
+						// var courseIdFollow = postback.courseIdFollow.matcher(event.postback.payload); //抓payload中的 course_id 用來追蹤課程
+						// var courseIdForceFollow = postback.courseIdForceFollow.matcher(event.postback.payload); //抓payload中的 course_id 用來強制追蹤課程
+						// var courseIdCancel = postback.courseIdCancel.matcher(event.postback.payload); //抓payload中的 course_id 用來取消追蹤課程
+						// var courseIdInfo = postback.courseIdInfo.matcher(event.postback.payload); //抓payload中的 course_id 用來傳送單一課程詳細資訊
+						// var courseIdAsk = postback.courseIdAsk.matcher(event.postback.payload);
+						// let RegPass = /reportPass_/;
+						// let RegFail = /reportFail_/;
+						// console.log('pload' + event.postback.payload);
+						// if (courseIdFollow) {
+						// 	courseIdFollow = postback.courseIdFollow.replacer(courseIdFollow[0]);
+						// 	addFollowCourse(sender, courseIdFollow);
+						// } else if (courseIdForceFollow) {
+						// 	courseIdForceFollow = postback.courseIdForceFollow.replacer(courseIdForceFollow[0]);
+						// 	addFollowCourse(sender, courseIdForceFollow, true);
+						// } else if (courseIdCancel) {
+						// 	courseIdCancel = postback.courseIdCancel.replacer(courseIdCancel[0]);
+						// 	cancelFollowCourse(sender, courseIdCancel);
+						// } else if (courseIdInfo) {
+						// 	courseIdInfo = postback.courseIdInfo.replacer(courseIdInfo[0]);
+						// 	sendCourseInfo(sender, courseIdInfo);
+						// } else if (courseIdAsk) {
+						// 	courseIdAsk = postback.courseIdAsk.replacer(courseIdAsk[0]);
+						// 	askPlaceOrFollow(sender, courseIdAsk);
+						// } else if (event.postback.payload == "cancelfollow") {
+						// 	sendFollowCourseList(sender);
+						// } else if (event.postback.payload == "callagain") {
+						// 	sendHello(sender);
+						// } else if (event.postback.payload == "cancelall") {
+						// 	cancelAllFollowCourse(sender);
+						// } else if (event.postback.payload == "cancelmsg") {
+						// 	unsubscribeBroadcast(sender);
+						// } else if (event.postback.payload == "dontFollow") {
+						// 	sendGoodbye(sender);
+						// } else if (RegPass.test(event.postback.payload)) {
+						// 	sendReportReview(true, event)
+						// } else if (RegFail.test(event.postback.payload)) {
+						// 	sendReportReview(false, event)
+						// }
+						// else {
+						// 	if (/開始使用/.test(event.postback.payload))
+						// 		subscribeBroadcast(sender, false);
+						// 	sendTextMessage(sender, event.postback.payload);
+						// }
 					}
 				}
 			});
@@ -431,7 +443,7 @@ router.post('/webhook', function (req, res) {
 	res.sendStatus(200);
 });
 
-router.post('/gmailTest', function(req, res){
+router.post('/gmailTest', function (req, res) {
 	gmailSend.sendMail('nckuhub@gmail.com', 'TO 檢舉人： 你的檢舉通過囉')
 	res.send('gmailSend')
 
@@ -571,7 +583,7 @@ function addFollowCourse(sender, course_id, force = false) {
 							teacher: course[0].老師
 						};
 						db.insert().into("follow").set(data).run(function (result) {
-							db.insert().into("follow_copy").set(data).run(function (result) {}); // for record
+							db.insert().into("follow_copy").set(data).run(function (result) { }); // for record
 						});
 					} else {
 						text = "你選擇的課程是：\n\n" + course[0].系所名稱.replace(/[A-Z0-9]/g, "") + "／" + course[0].課程名稱.replace(/[（|）|\s]/g, "") + "／" + course[0].老師.replace(/\s/g, "") + "／" + course[0].時間 + "\n\n" + noExtra + "已經為你設定過追蹤囉！";
@@ -593,10 +605,10 @@ function sendFollowCourseList(sender) {
 		if (follow.length > 0) {
 			sendGenericTemplate(sender, "以下是你目前追蹤的課程，請問要取消追蹤哪一個呢？",
 				buttonsGenerator(follow, {
-						"type": "postback",
-						"title": "全部取消追蹤",
-						"payload": "cancelall",
-					},
+					"type": "postback",
+					"title": "全部取消追蹤",
+					"payload": "cancelall",
+				},
 					"postback",
 					aFollow => `${aFollow.content.replace(/\uff0f/g, " ")} ${aFollow.serial}`,
 					postback.courseIdCancel.generator(aFollow => aFollow.id)));
@@ -615,7 +627,7 @@ function cancelFollowCourse(sender, follow_id) {
 		var text;
 		if (follow.length > 0) {
 			text = "你選擇的課程是：\n\n" + follow[0].content + "／" + follow[0].teacher + "／" + follow[0].time + "\n\n已經為你取消追蹤囉 🙂🙂";
-			db.delete().from("follow").where("id=", follow_id).run(function (result) {});
+			db.delete().from("follow").where("id=", follow_id).run(function (result) { });
 		} else {
 			text = "已經為你取消追蹤囉 🙂🙂";
 		}
@@ -642,7 +654,7 @@ function checkCoureseRemain() {
 			} else if (follow[i].餘額 == 0 && follow[i].hadNotify != 0) {
 				db.update().table("follow").set({
 					hadNotify: 0
-				}).where("id=", follow[i].id).run(function (result) {});
+				}).where("id=", follow[i].id).run(function (result) { });
 			}
 		}
 	}, true);
@@ -768,47 +780,47 @@ function sendGoodbye(sender) {
 	}, 2000);
 }
 
-function sendReportReview(pass, event){
+function sendReportReview(pass, event) {
 	postid = event.postback.payload.split('_')[1];
-		DB.FindbyColumn('report_post',['onRead'],{'post_id':postid} ,function(result){
-			let broadcastType = 'test';
-			// var target_label_id = broadcast_label[(broadcastType === "broad" ? "broad" : "all_user")]; // 正式版
-			var target_label_id = broadcast_label[(broadcastType === "test" ? "tester" : "all_user")];
-			if(result[0]['onRead'] == 0){ // the report isn't read
-				DB.Update('report_post', {'onRead':1, 'reviewer':event.sender.id}, {'post_id':postid} ,function(){})
-				// Q: If I remove the cb function , it would cause error 'callback isn't a function', WHY?
-				if(pass){
-					gmailSend.sendMail('nckuhub@gmail.com', 'TO 檢舉人： 你的檢舉通過囉')
-					gmailSend.sendMail('nckuhub@gmail.com', 'TO 被檢舉人： 有人檢舉你的心得，且通過我們審核了，你的心得將會GG喔')	 
-					// sendTextMessage(config.bot.test, 'ok！這則心得被通過檢舉, 心得已下架！正在發信通知被檢舉人');
-					sendPostRequest({
-						url: msg_creative_url,
-						json: broadcastTextMsg('以上這則心得被通過檢舉, 心得已下架！正在發信通知被檢舉人')
-					}, creativeMsgCb(target_label_id));
-					DB.Query(`SELECT * FROM post WHERE id=${postid}`, function(result){
-						uid = result[0].user_id;
-						data = JSON.stringify(result[0])
-						if(uid!=0){
-							redis.set(cache.userCourseKey(uid, postid), data,function(){
-								DB.DeleteByColumn('post', {'id':postid}, function(){} )
-							})
-						}
-					})
-					// DB.Query('INSERT INTO BadPost SELECT * FROM post WHERE id='+postid)
-					
-				}else{
-					gmailSend.sendMail('nckuhub@gmail.com', 'TO 檢舉人： 你的檢舉並沒有通過')	 
-					// sendTextMessage(config.bot.test, 'ok！這則心得並沒有通過檢舉門檻 撤銷檢舉！已發信通知檢舉人');
-					sendPostRequest({
-						url: msg_creative_url,
-						json: broadcastTextMsg('以上這則心得並沒有通過檢舉門檻 撤銷檢舉！已發信通知檢舉人')
-					}, creativeMsgCb(target_label_id));
-				}
-			}else{
-				console.log('it has been read.')
-				sendTextMessage(event.sender.id, '已經有其他測試人員審查過囉～別再按了');
+	DB.FindbyColumn('report_post', ['onRead'], { 'post_id': postid }, function (result) {
+		let broadcastType = 'test';
+		// var target_label_id = broadcast_label[(broadcastType === "broad" ? "broad" : "all_user")]; // 正式版
+		var target_label_id = broadcast_label[(broadcastType === "test" ? "tester" : "all_user")];
+		if (result[0]['onRead'] == 0) { // the report isn't read
+			DB.Update('report_post', { 'onRead': 1, 'reviewer': event.sender.id }, { 'post_id': postid }, function () { })
+			// Q: If I remove the cb function , it would cause error 'callback isn't a function', WHY?
+			if (pass) {
+				gmailSend.sendMail('nckuhub@gmail.com', 'TO 檢舉人： 你的檢舉通過囉')
+				gmailSend.sendMail('nckuhub@gmail.com', 'TO 被檢舉人： 有人檢舉你的心得，且通過我們審核了，你的心得將會GG喔')
+				// sendTextMessage(config.bot.test, 'ok！這則心得被通過檢舉, 心得已下架！正在發信通知被檢舉人');
+				sendPostRequest({
+					url: msg_creative_url,
+					json: broadcastTextMsg('以上這則心得被通過檢舉, 心得已下架！正在發信通知被檢舉人')
+				}, creativeMsgCb(target_label_id));
+				DB.Query(`SELECT * FROM post WHERE id=${postid}`, function (result) {
+					uid = result[0].user_id;
+					data = JSON.stringify(result[0])
+					if (uid != 0) {
+						redis.set(cache.userCourseKey(uid, postid), data, function () {
+							DB.DeleteByColumn('post', { 'id': postid }, function () { })
+						})
+					}
+				})
+				// DB.Query('INSERT INTO BadPost SELECT * FROM post WHERE id='+postid)
+
+			} else {
+				gmailSend.sendMail('nckuhub@gmail.com', 'TO 檢舉人： 你的檢舉並沒有通過')
+				// sendTextMessage(config.bot.test, 'ok！這則心得並沒有通過檢舉門檻 撤銷檢舉！已發信通知檢舉人');
+				sendPostRequest({
+					url: msg_creative_url,
+					json: broadcastTextMsg('以上這則心得並沒有通過檢舉門檻 撤銷檢舉！已發信通知檢舉人')
+				}, creativeMsgCb(target_label_id));
 			}
-		})
+		} else {
+			console.log('it has been read.')
+			sendTextMessage(event.sender.id, '已經有其他測試人員審查過囉～別再按了');
+		}
+	})
 }
 
 function sendDisableMsg(sender, dept_no) {
@@ -959,7 +971,7 @@ function sendRequest(option, cb) {
 	});
 }
 
-function sendReport(){
+function sendReport() {
 	var broadcastType = 'test';
 	var target_label_id = broadcast_label[(broadcastType === "test" ? "tester" : "all_user")]; // 正式版
 	sendPostRequest({
@@ -971,5 +983,5 @@ function sendReport(){
 
 // broadcast labelid: https://developers.facebook.com/docs/messenger-platform/send-messages/broadcast-messages/target-broadcasts/?locale=zh_TW
 // user 要記得去訂閱這個粉專 -> 輸入'小幫手我是管理員'
-module.exports = {router, sendReport};
+module.exports = { router, sendReport };
 

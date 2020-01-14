@@ -34,7 +34,7 @@
 </div>
 
 <script>
-  toastr.info('手機版目前只能使用舊官網，若要得到更好的體驗，請至電腦上使用', {'tapToDismiss': true})
+  toastr.info('若要得到更好的體驗，請移步至新版官網！', {'tapToDismiss': true});
   var rawCourses = <%- JSON.stringify(courses) %>; //所有課程的資料 (移出document.ready為了使其他script可以全域使用此資料)
   var nowCourse = <%- JSON.stringify(custom_courses) %>; // 用來裝目前query的系所課程（未用時間表篩選過的）
   var nowCourse_hasComment = []; // 裝nowCourse的有comment的課程

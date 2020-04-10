@@ -58,6 +58,20 @@
         </div>
     </div>
 
+    <!-- 放棄資料變更提醒 -->
+    <div class="window change_profile_give_up" v-if="page_status.windows.change_profile_give_up" >
+      <div class="window__background">
+          <div class="window__self">
+              <div class="window__self__title text_bold text_26">離開頁面？</div>
+              <div class="window__self__detail">變更尚未儲存。您要放棄目前內容並且離開嗎？</div>
+              <div class="window__self__button_area ">
+                  <a @click="closeWindow('change_profile_give_up')" class="window__self__button_area__button text_dark">返回填寫</a>
+                  <a @click=""  class="window__self__button_area__button text_red">放棄內容</a>
+              </div>
+          </div>
+      </div>
+    </div>
+
     <!-- 開通小幫手確認（免費） -->
     <div class="window helper_free_get_make_sure" v-if="page_status.windows.helper_free_get_make_sure" >
         <div class="window__background">

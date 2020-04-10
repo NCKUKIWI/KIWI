@@ -20,6 +20,9 @@ var vue_my_profile__right = new Vue({
   methods: {
     addReview: function(){
       setWindow( 'add_review', 'open' );
-    }
+    },
+    openReportWindow: function(){
+      setWindow( 'edit_table_give_up', 'open');
+    },
   },
 })

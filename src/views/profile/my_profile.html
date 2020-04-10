@@ -1,46 +1,102 @@
-<div class="my_profile__whole">
-  <div class="left_area">
+<div class="my_profile">
+  <div class="my_profile__left" id="my_profile__left">
     <div class="userInfo">
       <div class="block_title">
         <p class="text_18">個人資料</p>
       </div>
       <div class="userInfo__box">
         <div class="userInfo__box__userPanel">
-          <img class="userInfo__box__userPanel__photo" src="./dist/images/course/sad_hugecat.png">
+          <img class="userInfo__box__userPanel__photo" :src="user_data.user_photo">
           <div class="userInfo__box__userPanel__profile">
-            <div class="profile_name text_24">林彥廷</div>
-            <div class="profile_dept text_14 text_dark">工業與資訊管理學系</div>
-            <div class="profile_grade text_14 text_dark">三年級</div>
-            <div class="profile_helper text_12 text_dark">
-              <img src="./dist/images/my_profile/star.svg">
-              未開通小幫手
+            <div class="profile_name text_24">{{user_data.user_name}}</div>
+            <div class="profile_dept text_14 text_dark">{{user_data.user_department}}</div>
+            <div class="profile_grade text_14 text_dark">{{user_data.user_grade}}</div>
+            <div class="profile_helper" :class="{'profile_helper': !user_data.helper_qualified, 'profile_helper--qualified': user_data.helper_qualified}">
+              <img src="./dist/images/my_profile/star.svg" v-if="!user_data.helper_qualified">
+              <p class="text_12 text_dark" v-if="!user_data.helper_qualified">未開通小幫手</p>
+              <img src="./dist/images/my_profile/star_white.svg" v-if="user_data.helper_qualified">
+              <p class="text_12 text_white" v-if="user_data.helper_qualified">已開通小幫手</p>
             </div>
           </div>
         </div>
-        <div class="userInfo__box__userPoint single_panel_item">
+        <div class="userInfo__box__userPoint single_panel_item--last">
           <img src="./dist/images/my_profile/account_box.svg">
-          <p>目前心得積點：5 點</p>
+          <p>目前心得積點：{{user_data.now_point}} 點</p>
         </div>
       </div>
     </div>
     <div class="functionsList">
       <div class="functionsList__box">
-        <div class="single_panel_item">
-          <img src="./dist/images/my_profile/account_box.svg">
-          <p>開通選課小幫手</p>
+        <div class="single_panel_item" :class="{disable: user_data.helper_qualified}">
+          <img src="./dist/images/my_profile/account_box.svg" v-if="!user_data.helper_qualified">
+          <p v-if="!user_data.helper_qualified">開通選課小幫手</p>
+          <img src="./dist/images/my_profile/account_box_gray.svg" v-if="user_data.helper_qualified">
+          <p class="text_dark" v-if="user_data.helper_qualified">已開通小幫手</p>
         </div>
         <div class="single_panel_item">
           <img src="./dist/images/my_profile/account_box.svg">
           <p>修改個人資料</p>
         </div> 
-        <div class="single_panel_item">
-          <img src="./dist/images/my_profile/account_box.svg">
-          <p>登出NCKU HUB</p>
-        </div>
+        <a href='/user/logout'>
+          <div class="single_panel_item--last">
+            <img src="./dist/images/my_profile/account_box.svg">
+            <p>登出NCKU HUB</p>
+          </div>
+        </a>
       </div>
     </div>
   </div>
-  <div class="right_area">
-
+  <div class="my_profile__right" id="my_profile__right">
+    <div class="userComment">
+      <div class="released_comment" v-if="user_data.now_comment.length == 0">
+        <div class="block_title">
+          <p class="text_18">已發布心得</p>
+        </div>
+        <div class="released_comment__box">
+          <div class="list_course_item">
+            <div class="list_course_item_left">
+              <p class="list_course_item_category text_white text_16">108-2</p>
+            </div>
+            <div class="list_course_item_mid">
+              <p class="list_course_item_title text_16">A9-046 音樂舞蹈戲劇</p>
+              <p class="list_course_item_description text_14 text_dark">通識中心  — 林怡薇 — [2]3~4</p>
+            </div>
+            <div class="list_course_item_right">
+              <div class="list_course_item_right--courseList">
+                <img src="./dist/images/course/comment_num.svg" v-if="true"/><!--完成-->
+                <img src="./dist/images/course/comment_num.svg" v-if="false"/><!--編輯-->
+                <img src="./dist/images/course/comment_num.svg" v-if="false"/><!--被檢舉-->
+                <p class="text_14 text_dark" style="margin-right:15px" v-if="true">20200410</p>
+                <p class="text_14 text_dark reported" style="margin-right:15px" v-if="false">Reported</p>
+              </div>
+              <div class="operations">
+                <div class="operations--circle">
+                  <div class="circle--img"><img src="./dist/images/course/heart.svg"/></div>
+                </div>
+                <div class="operations--circle">
+                  <div class="circle--img"><img src="./dist/images/course/heart.svg"/></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="unreleased_comment" v-if="user_data.now_comment.length == 0">
+        <div class="block_title">
+          <p class="text_18">已發布心得</p>
+        </div>
+        <div class="unreleased_comment__box">
+          
+        </div>
+      </div>
+      <div class="no_comment__box" v-if="false">
+        <h2>尚未提供心得</h2>
+        <p>您尚未在NCKU HUB提供課程心得，<br>未來您提供的心得將在此處展示。</p>
+        <p>撰寫心得不用五分鐘，<br>邀請您一同改善成大學習環境。</p>
+        <div class="write_comment_btn" @click="addReview">➜　立即提供課程心得</div>
+      </div>
+    </div>
+    
+    
   </div>
 </div>

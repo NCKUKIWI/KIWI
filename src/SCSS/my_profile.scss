@@ -1,16 +1,22 @@
+%__box{
+  height: 100%;
+  border: #eee 1px solid;
+  background-color: #fff;
+  box-shadow: 0 0 14px 0 rgba(0,0,0,.06);
+  &:hover{
+    box-shadow: 0 0 28px 0 rgba(0,0,0,0.10);
+  }
+}
+
 .userInfo{
-  margin-top: calc( 9vh - 30px);
-  display: block;
-  width: 100%;
   &__box{
-    box-shadow: 0 0 14px 0 rgba(0,0,0,.06);
+    @extend %__box;
     &__userPanel{
       display: flex;
-      height: 140px;
       width: 100%;
       padding: 20px 0 10px 0;
       background: #fff;
-      border: #eee 1px solid;
+      border-bottom: #eee 1px solid;
       &__photo{
         margin-left: 20px;
         border-radius: 100%;
@@ -19,31 +25,35 @@
       }
       &__profile{
         padding-left: 15px;
-        & .profile_name{
+        padding-right: 20px;
+        .profile_name{
           line-height: 28px;
           color: #4a4a4a;
         }
-        & .profile_dept,.profile_grade{
+        .profile_dept,.profile_grade{
           line-height: 16px;
         }
-        & .profile_helper{
+        .profile_helper{
           height: 20px;
+          width: 105px;
           border: #eee 1.5px solid;
           border-radius: 20px;
           margin-top: 10px;
           display: flex;
           align-items: center;
           cursor: pointer;
-          & img{
+          img{
             margin:0 5px 0 10px;
             width: 14px;
             height: 14px;
           }
+          &--qualified{
+            border: #1A6CBD 1.5px solid;
+            background-color: #1A6CBD;
+            cursor: default;
+          }
         }
       }
-    }
-    &:hover{
-      box-shadow: 0 0 28px 0 rgba(0,0,0,0.10);
     }
   }
 }
@@ -51,31 +61,131 @@
 .functionsList{
   margin-top: 10px;
   &__box{
-    box-shadow: 0 0 14px 0 rgba(0,0,0,.06);
-    &:hover{
-      box-shadow: 0 0 28px 0 rgba(0,0,0,0.10);
-    }
+    @extend %__box;
   }
 }
-
 
 .single_panel_item{
   height: 48px;
   cursor: pointer;
   background-color: #fff;
-  border: #eee 1px solid;
+  border-bottom: #eee 1px solid;
   box-sizing: border-box;
   display: flex;
   align-items: center;
   transition: .2s cubic-bezier(0,0,.2,1),padding .3s cubic-bezier(0,0,.2,1);
-  padding: 14px 50px 14px 19px;
-  & img{
-    // width:18px;
+  padding: 14px 19px;
+  &--last{
+    @extend .single_panel_item;
+    border-bottom:none;
   }
-  & p{
+  p{
     padding-left: 14px;
   }
   &:hover{
     background-color: #fafafa;
   }
+  &.disable{
+    cursor: default;
+  }
+}
+
+.userComment{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  .released_comment{
+    margin-bottom: 2vh;
+    height: 42vh;
+    display: flex;
+    flex-direction: column;
+    &__box{
+      @extend %__box;
+    }
+  }
+  .unreleased_comment{
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    &__box{
+      @extend %__box;
+    }
+  }
+  .no_comment{
+    &__box{
+      @extend %__box;
+      height: auto;
+      padding: 60px 40px 40px;
+      h2{
+        font-size: 32px;
+        line-height: 32px;
+      }
+      p{
+        margin-top:20px;
+      }
+      .write_comment_btn{
+        width: 215px;
+        margin-top: 40px;
+        display: flex;
+        align-items: center;
+        font-weight: 700;
+        color: #1A6CBD;
+        border: #1A6CBD 1px solid;
+        padding: 10px 50px 10px 19px;
+        cursor: pointer;
+        &:hover{
+          background-color: #1A6CBD;
+          color:#fff;
+        }
+      }
+    }
+  }
+}
+
+.my_profile__left{
+  width: 30vw;
+  height: calc( 100vh - 60px);
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  padding-top: calc( 9vh - 30px);
+  padding-bottom: calc( 9vh - 30px);padding-right: 10px;
+  padding-left: 5vw;
+}
+
+.my_profile__right{
+  width: 70vw;
+  height: calc( 100vh - 60px);
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  padding-top: calc( 9vh - 30px);
+  padding-bottom: calc( 9vh - 30px);
+  padding-right: 5vw;
+  padding-left: 30px;
+}
+
+.operations{
+  border-left: 1px solid #eeeeee;
+  display: flex;
+  justify-content: space-between;
+  &--circle{
+    display: inline-flex;
+    padding: 0 20px;
+    margin-right: -20px;
+    &:hover{
+      .circle--img{
+        filter: brightness(90%);
+      }
+    }
+    &:active{
+      .circle--img{
+        filter: brightness(85%);
+      }
+    }
+  }
+}
+
+.reported{
+  color: #F35A5A;
 }

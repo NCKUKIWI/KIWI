@@ -142,6 +142,96 @@
   }
 }
 
+.my_profile__window {
+  width: 100vw;
+  height: 100vh;
+  z-index: 200;
+  position: fixed;
+  background: rgba(0,0,0,.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.profile_container {
+  height: 400px;
+  display: flex;
+  &__left {
+    background-color: #fafafa;
+    width: 220px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    &__avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      margin-bottom: 40px;
+      border: #ddd 4px solid;
+    }
+    &__uplolad {
+      width: 80px;
+      height: 30px;
+      border: #eee 1px solid;
+      width: 90px;
+      height: 34px;
+      border-radius: 50px;
+      text-align: center;
+      line-height: 32px;
+      cursor: pointer;
+      box-shadow: 0 0 14px 0 rgba(0,0,0,.06);
+      &:hover {
+        box-shadow: 0 0 28px 0 rgba(0,0,0,.1);
+      }
+    }
+  }
+  &__right {
+    background-color: #fff;
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 50px;
+    &__topic {
+      align-self: flex-start;
+      margin-bottom: 30px;
+      font-weight: 700;
+    }
+    &__form {
+      margin-bottom: 20px;
+      width: 100%;
+      & input {
+        width: 100%;
+        border-bottom: #c8c8c8 2px solid;
+        outline: none;
+        margin-bottom: 15px;
+        transition: all 0.3s;
+        &:focus, &:hover {
+          border-bottom: #1A6CBD 2px solid;
+        }
+      }
+    }
+    &__send {
+      width: 80px;
+      height: 30px;
+      border: #eee 1px solid;
+      align-self: flex-end;
+      width: 90px;
+      height: 34px;
+      font-weight: 700;
+      border-radius: 50px;
+      text-align: center;
+      line-height: 32px;
+      cursor: pointer;
+      box-shadow: 0 0 14px 0 rgba(0,0,0,.06);
+      &:hover {
+        box-shadow: 0 0 28px 0 rgba(0,0,0,.1);
+      }
+    }
+  }
+}
+
 .my_profile__left{
   width: 30vw;
   height: calc( 100vh - 60px);

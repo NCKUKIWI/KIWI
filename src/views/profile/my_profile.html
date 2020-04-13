@@ -1,7 +1,48 @@
-<div class="my_profile">
-  <div class="my_profile__window">
-    <div class="window--edit_profile">
-
+<div class="my_profile" id="my_profile">
+  <div class="my_profile__window" @click.self="closeEditWindow" v-if="edit_profile">
+    <div class="profile_container">
+      <div class="profile_container__left">
+        <img class="profile_container__left__avatar" :src="user_data.user_photo">
+        <div class="profile_container__left__uplolad text_14">上傳照片</div>
+      </div>
+      <div class="profile_container__right">
+        <div class="profile_container__right__topic text_20">個人資料</div>
+        <table class="profile_container__right__form">
+          <tr>
+            <td>
+              <label for="user_name">姓名</label>
+            </td>
+            <td>
+              <input type="text" id="user_name" v-model="new_name">
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label for="user_dept">就讀系所</label>
+            </td>
+            <td>
+              <input type="text" id="user_dept" v-model="new_dept">
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label for="user_grade">目前年級</label>
+            </td>
+            <td>
+              <input type="text" id="user_grade" v-model="new_grade">
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label for="user_email">電子信箱</label>
+            </td>
+            <td>
+              <input type="text" id="user_email" v-model="new_email">
+            </td>
+          </tr>
+        </table>
+        <div class="profile_container__right__send text_deep_blue text_14" @click="changeUserProfile">儲存變更</div>
+      </div>
     </div>
   </div>
   <div class="my_profile__left" id="my_profile__left">
@@ -38,7 +79,7 @@
           <img src="./dist/images/my_profile/account_box_gray.svg" v-if="user_data.helper_qualified">
           <p class="text_dark" v-if="user_data.helper_qualified">已開通小幫手</p>
         </div>
-        <div class="single_panel_item">
+        <div class="single_panel_item" @click="openEditWindow">
           <img src="./dist/images/my_profile/account_box.svg">
           <p>修改個人資料</p>
         </div> 
@@ -75,7 +116,7 @@
                 <p class="text_14 text_dark reported" style="margin-right:15px" v-if="false">Reported</p>
               </div>
               <div class="operations">
-                <div class="operations--circle" @click="openReportWindow">
+                <div class="operations--circle">
                   <div class="circle--img"><img src="./dist/images/course/heart.svg"/></div>
                 </div>
                 <div class="operations--circle">

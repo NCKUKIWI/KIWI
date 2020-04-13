@@ -26,6 +26,14 @@ var vue_windows = new Vue({
             toTab( pageStatus.next_tab );
             pageStatus.next_tab = '';
         },
+        giveUpChangeProfile: function() {
+            vue_my_profile.giveUpChangeProfile();
+            setWindow( 'change_profile_give_up', 'close' );
+        },
+        confirmChangeEmail: function() {
+            vue_my_profile.sendChangeRequest();
+            setWindow( 'change_email_confirm', 'close' );
+        },
         helperFreeSure: function(){
             setWindow( 'helper_free_get_make_sure', 'close' );
             axios.get('/user/Service').

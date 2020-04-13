@@ -63,7 +63,8 @@
             andmore: false,
             helper_free_get_make_sure: false,
             helper_free_get_success: false,
-            edit_table_give_up: false,
+            change_profile_give_up: false,
+            change_email_confirm: false, 
             // 新的視窗加在這裡
         },
         table_locked: true,                     // 課表鎖定狀態

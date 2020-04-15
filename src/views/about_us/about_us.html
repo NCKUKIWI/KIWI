@@ -1,0 +1,75 @@
+<div class="about_us" id="about_us">
+  <div class="about_us__left">
+    <img src="./dist/images/register/LOGO.png" class="about_us__left__logo">
+    <div class="about_us__left__intro">
+      <h2>資訊技術改善校園</h2>
+      <p class="text_20">NCKU HUB是由成大生自主發起，<br>以解決校園問題為目標的資訊平台</p>
+    </div>
+    <div class="about_us__left__buttons">
+      <div class="btn_about_us" v-bind:class="[selected==='portfolio'?activeClass:normalClass]" @click="changeView('portfolio')">作品一覽</div>
+      <div class="btn_about_us" v-bind:class="[selected==='members'?activeClass:normalClass]"
+      @click="changeView('members')">團隊成員</div>
+      <div class="btn_about_us" v-bind:class="[selected==='support'?activeClass:normalClass]"
+      @click="changeView('support')">支持我們</div>
+    </div>
+  </div>
+  <div class="about_us__right">
+    <div class="about_us__right__container">
+      <div class="right_header">{{rightHeader}}</div>
+      <div class="right_content">
+        <div class="right_content__portfolio" v-show="selected==='portfolio'">
+          <p>目前已上架之計畫成品，成效分析以及運作現況。</p>
+          <div class="product_list">
+            <div class="product_item">
+              <img src="./dist/images/about_us/text-box.svg" alt="" class="product_item__icon">
+              <div>
+                <p class="product_item__title text_24">課程心得查詢</p>
+                <p class="product_item__product_item__detail">
+                  幫助 <span class="text_deep_blue">4782</span> 人選擇要上的課
+                </p>
+              </div>
+            </div>
+            <div class="product_item">
+              <img src="./dist/images/about_us/eye.svg" alt="" class="product_item__icon">
+              <div>
+                <p class="product_item__title text_24">課程餘額小幫手</p>
+                <p class="product_item__detail">
+                  幫助 <span class="text_deep_blue">460</span> 人選到要上的課
+                </p>
+              </div>
+            </div>
+            <div class="product_item">
+              <img src="./dist/images/about_us/navigation.svg" alt="" class="product_item__icon">
+              <div>
+                <p class="product_item__title text_24">尋找教室小幫手</p>
+                <p class="product_item__product_item__detail">
+                  幫助 <span class="text_deep_blue">286</span> 人快速找到教室
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="right_content__members" v-show="selected==='members'">
+          
+        </div>
+        <div class="right_content__support_us" v-show="selected==='support'">
+          <p>NCKU HUB一直致力於打造更好用的服務，同時也面臨著現實面的問題。</p>
+          <p>諸如伺服器租借、網域購買等皆須一定成本。若沒有資金支持，這些我們努力打造，你們愛用的服務，都無法繼續存活下去。</p>
+          <p>贊助我們一杯咖啡的錢，催生更好的服務！</p>
+          <p>
+            【 成為支持者的好處 】<br>
+            [ V ] 無限量使用餘額通知小幫手<br>
+            [ V ] 優先取得所有新服務試用<br>
+            [ V ] 出現在 NCKU HUB 的感謝名單中<br>
+          </p>
+          <a> → 被感動了，我要贊助一杯咖啡！</a>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="right_drawer" v-if="showDrawer" @click.self="showDrawer=!showDrawer">
+      <div class="right_drawer__container">
+
+      </div>
+    </div> -->
+  </div>
+</div>

@@ -51,6 +51,7 @@
     <link rel="stylesheet" href="dist/CSS/register.css">
     <link rel="stylesheet" href="dist/CSS/public_sas.css">
     <link rel="stylesheet" href="dist/CSS/notification.css">
+    <link rel="stylesheet" href="dist/CSS/about_us.css">
     <link rel="stylesheet" href="dist/CSS/mobile_course.css">
     <link rel="stylesheet" href="dist/CSS/mobile_navbar.css">
     <link rel="stylesheet" href="dist/CSS/mobile_add_review.css">
@@ -59,7 +60,7 @@
     <body>
 
         <!-- 視窗 -->
-    	<div class="window_div">  @@include('public/loading.html')  </div>
+    	<!-- <div class="window_div">  @@include('public/loading.html')  </div> -->
         <div class="window_div"> @@include('public/notification.html') </div>
         <div class="window_div">  @@include('public/helper.html')  </div>
         <div class="window_div"> @@include('public/add_review.html') </div>
@@ -71,10 +72,11 @@
         <div class="basic_div"> @@include('public/button.html')  </div>
 
         <!-- 分頁 -->
-    	<div class="tab_div" name="course" style="display:none">  @@include('course/course_content.html')  </div>
+    	<!-- <div class="tab_div" name="course" style="display:none">  @@include('course/course_content.html')  </div> -->
         <div class="tab_div" name="table" style="display:none">  @@include('table/table.html')  </div>
         <div class="tab_div" name="register" style="display:none">  @@include('public/register.html')  </div>
-    	<!-- <div class="tab_div" name="profile">  @@include('profile/profile.html')  </div> -->
+      <!-- <div class="tab_div" name="profile">  @@include('profile/profile.html')  </div> -->
+      <div class="tab_div" name="about_us">  @@include('about_us/about_us.html')  </div>
 
     </body>
 </head>
@@ -95,5 +97,6 @@
 <script src="dist/JS/add_review.js"></script>
 <script src="dist/JS/windows.js"></script>
 <script src="dist/JS/notification.js"></script>
+<script src="dist/JS/about_us.js"></script>
 <!-- <script src="dist/JS/profile/profile.js "></script> -->
 </html>

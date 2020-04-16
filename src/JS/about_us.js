@@ -1,7 +1,7 @@
 var about_us_vue = new Vue({
   el: '#about_us',
   data: {
-    selected: 'support',
+    selected: 'portfolio',
     showDrawer: true,
     isActive: true,
     activeClass: 'text_deep_blue',
@@ -9,8 +9,14 @@ var about_us_vue = new Vue({
   },
   methods: {
     changeView: function(to) {
-      this.selected = to;
+      if(this.selected !== to){
+        this.selected = to;
+        this.showDrawer = false;
+      }
     },
+    toggleDrawer: function() {
+      this.showDrawer = !this.showDrawer;
+    }
   },
   computed: {
     rightHeader: function() {

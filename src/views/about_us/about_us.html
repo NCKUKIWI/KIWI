@@ -21,7 +21,7 @@
           <p>目前已上架之計畫成品，成效分析以及運作現況。</p>
           <div class="product_list">
             <div class="product_item">
-              <img src="./dist/images/about_us/text-box.svg" alt="" class="product_item__icon">
+              <img src="./dist/images/about_us/text-box.svg" alt="text-box" class="product_item__icon" @click="toggleDrawer">
               <div>
                 <p class="product_item__title text_24">課程心得查詢</p>
                 <p class="product_item__product_item__detail">
@@ -30,7 +30,7 @@
               </div>
             </div>
             <div class="product_item">
-              <img src="./dist/images/about_us/eye.svg" alt="" class="product_item__icon">
+              <img src="./dist/images/about_us/eye.svg" alt="eye" class="product_item__icon" @click="toggleDrawer">
               <div>
                 <p class="product_item__title text_24">課程餘額小幫手</p>
                 <p class="product_item__detail">
@@ -39,7 +39,7 @@
               </div>
             </div>
             <div class="product_item">
-              <img src="./dist/images/about_us/navigation.svg" alt="" class="product_item__icon">
+              <img src="./dist/images/about_us/navigation.svg" alt="navigation" class="product_item__icon" @click="toggleDrawer">
               <div>
                 <p class="product_item__title text_24">尋找教室小幫手</p>
                 <p class="product_item__product_item__detail">
@@ -66,10 +66,24 @@
         </div>
       </div>
     </div>
-    <!-- <div class="right_drawer" v-if="showDrawer" @click.self="showDrawer=!showDrawer">
-      <div class="right_drawer__container">
-
-      </div>
-    </div> -->
+    <div class="right_drawer" v-show="showDrawer" @click.self="showDrawer=!showDrawer">
+      <transition name="slide-fade">
+        <div class="right_drawer__container" v-show="showDrawer">
+          <div class="right_drawer__left">
+            <h2 class="text_deep_blue">課程心得查詢</h2>
+            <p class="text_dark text_18">使用人數：5273人。</p>
+            <p class="text_dark text_18">瀏覽次數：232582次。</p>
+            <a href="https://nckuhub.com/" target="_blank">進入官網</a>
+          </div>
+          <div class="right_drawer__right">
+            <p class="text_24">
+              如果每個人都能<br>找到最適合自己的課程，<br>
+              學習的品質就能被提升。<br><br>
+              而這一步，<br>從解決資訊落差開始。
+            </p>
+          </div>
+        </div>
+      </transition>
+    </div>
   </div>
 </div>

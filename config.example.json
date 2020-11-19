@@ -1,0 +1,26 @@
+{
+    "secret": {
+        "session": "nckuhub"
+    },
+    "db": {
+        "host": "127.0.0.1",
+        "user": "root",
+        "pw": "pw",
+        "database": "nckuhub",
+        "port": "3306"
+    },
+    "redis": {
+        "host": "127.0.0.1",
+        "port": "6300",
+        "pw": "redispw"
+    },
+    "fb": {
+        "appid": "",
+        "token": "",
+        "secret": ""
+    },
+    "bot": {
+        "disable": true
+    },
+    "website": "https://nckuhub.com"
+}

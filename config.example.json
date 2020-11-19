@@ -1,0 +1,26 @@
+{
+    "secret": {
+        "session": "nckuhub"
+    },
+    "db":{
+        "host":"",
+        "user":"",
+        "pw":"",
+        "port":"",
+        "database":""
+    },
+    "redis":{
+        "host":"",
+        "port":"",
+        "pw":""
+    },
+    "fb":{
+        "appid":"",
+        "token":"",
+        "secret":""
+    },
+    "bot":{
+        "disable": true
+    },
+    "website":"https://nckuhub.com"
+}

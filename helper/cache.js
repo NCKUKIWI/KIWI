@@ -3,7 +3,7 @@ var config = require("../config");
 
 client = redis.createClient({
     'host': config.redis.host,
-    'port': 6379,
+    'port': config.redis.port,
     'password': config.redis.pw,
     'db': 1
 });

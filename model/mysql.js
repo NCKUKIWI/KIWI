@@ -8,7 +8,8 @@ function handleDisconnect() {
         host: config.db.host,
         user: config.db.user,
         password: config.db.pw,
-        database: config.db.database
+        database: config.db.database,
+        port: config.db.port
     });
 
     connection.connect(function (err) {

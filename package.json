@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "gulp & nodemon app.js",
-    "dev": "NODE_ENV=production node ./node_modules/nodemon/bin/nodemon -e '.js .ejs .css .html' app.js -V"
+    "dev": "NODE_ENV=production node ./node_modules/nodemon/bin/nodemon -e '.js .ejs .css .html' app.js -V",
+    "preinstall": "npx npm-force-resolutions"
   },
   "author": "KIWI",
   "license": "ISC",
@@ -32,6 +33,9 @@
     "redis": "^2.8.0",
     "request": "^2.88.0",
     "sanitize-html": "^1.18.4"
+  },
+  "resolutions": {
+    "graceful-fs": "^4.2.4"
   },
   "devDependencies": {
     "browser-sync": "^2.26.13",

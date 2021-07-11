@@ -92,20 +92,12 @@
 
     axios.get ( '/course/' )
         .then ( function ( response ) {
-            course_db = response.data.courses;
+            course_db = response.data.courses.sort((a, b) => b.comment_num - a.comment_num);
             console.log ( '課程資料庫: 抓取資料成功！' ) ;
             getUserInfo ();
             // 將 course_db 放入
-            var tmp = [];
-            for (var i = 0; i < 200; i++) {
-                tmp.push(vue_course_item.course_data_db()[i]);
-            }
-            vue_course_item.course_data = tmp.sort(function(a,b){return a-b});
-            for (var i in vue_course_item.course_data_db()) {
-                if (vue_course_item.course_data_db()[i].comment_num > 0) {
-                    vue_course_item.course_with_comment.push(vue_course_item.course_data_db()[i]);
-                }
-            }
+            vue_course_item.course_data = course_db.slice(0, 200);
+            vue_course_item.course_with_comment = course_db.filter(course => course.comment_num > 0)
         })
         .catch ( function ( error ) {
             console.log (  '課程資料庫:' + error ) ;

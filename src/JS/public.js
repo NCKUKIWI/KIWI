@@ -312,12 +312,23 @@
             courseContent_data.score.cold = Math.floor(res.data.cold);
             courseContent_data.score.sweet = Math.floor(res.data.sweet);
             courseContent_data.score.rate_count = res.data.rate_count;
-            courseContent_data.comment = res.data.comment;
+            courseContent_data.comment = newLineProcess(res.data.comment);
             courseContent_data.info = res.data.courseInfo;
             vue_courseContent.course_data = courseContent_data.info;
             vue_courseContent.score_data = courseContent_data.score;
             vue_courseContent.comment_data = courseContent_data.comment;
         }).catch( (err) => {
             console.log(err);
+        })
+    }
+
+    function newLineProcess(comment_array) {
+        let regex = /<br\s*[\/]?>/gi;
+        return comment_array.map(x => {
+            return {
+                id: x.id,
+                comment: x.comment.replace(regex, "\n"),
+                semester: x.semester
+            }
         })
     }

@@ -174,9 +174,9 @@ router.get('/:id', function (req, res) {
                 }
                 data['courserate_id'] = 0;
                 data['user'] = req.user;
-                for (var i in data.comment){
-                    data['comment'][i].comment = data['comment'][i].comment.replace(/\n/g, "\\n");    
-                }
+                // for (var i in data.comment){
+                //     data['comment'][i].comment = data['comment'][i].comment.replace(/\n/g, "\\n");    
+                // }
                 data['courseInfo']['id'] = id
                 res.json(data);
             } else {
@@ -225,9 +225,9 @@ router.get('/:id', function (req, res) {
                             'comment': comment,
                             'rates': rates
                         }
-                        for (var i in data.comment){
-                            data['comment'][i].comment = data['comment'][i].comment.replace(/\n/g, "\\n");    
-                        }
+                        // for (var i in data.comment){
+                        //     data['comment'][i].comment = data['comment'][i].comment.replace(/\n/g, "\\n");    
+                        // }
                         redis.set(courseCacheKey(id), JSON.stringify(data));
                         if (req.user) {
                             if (rates.length > 0) {

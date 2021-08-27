@@ -101,9 +101,14 @@ app.use("/admin", function (req, res, next) {
         return unauthorized(res);
     }
 }, require("./routes/admin"));
+
 app.get("/", function(req, res) {
 	res.send(render('index.html'))
 })
+
+app.get("/privacy", function(req, res) {
+	res.send(render('privacy.html'))
+});
 
 function render(filename, params) {
   var data = fs.readFileSync(filename, 'utf8');
@@ -112,7 +117,6 @@ function render(filename, params) {
   }
   return data;
 }
-// app.use("/*", require("./routes/course"));
 
 setInterval(() => require("./script"), 1000 * 60 * 10); // 更新心得數
 

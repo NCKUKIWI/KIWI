@@ -107,7 +107,7 @@ app.get("/", function(req, res) {
 })
 
 app.get("/privacy", function(req, res) {
-	res.send(render('privacy.html'))
+    res.sendFile(path.join(__dirname + '/privacy.html'));
 });
 
 function render(filename, params) {

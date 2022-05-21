@@ -53,14 +53,16 @@ app.use(function (req, res, next) {
                 if( userCheckKeyLen < 15) {
                     res.status(401).send({message: 'Unauthorized user'});
                 }
-                db.FindbyColumn("user",  ['id', 'name', 'department', 'email', 'grade', 'fb_id'], {
-                    'check_key': req.cookies.id
-                }, function (user) {
-                    user = user[0];
-                    redis.set(userCacheKey(req.cookies.id), JSON.stringify(user));
-                    req.user = user;
-                    next();
-                });
+                else {
+                    db.FindbyColumn("user",  ['id', 'name', 'department', 'email', 'grade', 'fb_id'], {
+                        'check_key': req.cookies.id
+                    }, function (user) {
+                        user = user[0];
+                        redis.set(userCacheKey(req.cookies.id), JSON.stringify(user));
+                        req.user = user;
+                        next();
+                    });
+                }
             }
         });
     } else {

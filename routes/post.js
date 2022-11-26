@@ -291,7 +291,11 @@ router.delete('/:id', function (req, res) {
     var id = req.params.id;
     console.log('\n' + 'DELETE post/' + id);
     db.DeleteById('post', id, function (err) {
-        res.send('Success');
+        db.DeleteByColumn('course_rate', {post_id: id}, function(err){
+            redis.flushdb( function (err, result) {
+                res.send("success");
+            });
+        });
     });
 });
 

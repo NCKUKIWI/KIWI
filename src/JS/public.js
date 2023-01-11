@@ -21,7 +21,6 @@
         });
 
 
-
     // 使用者資料
 
     var userData = {
@@ -41,7 +40,7 @@
 
     // 公用參數
     var public_variable = {
-        now_semester: '109-2',
+        now_semester: '111-2',
         point_threshold: 5
     }
 

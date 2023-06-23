@@ -7,7 +7,9 @@ var vue_nav_bar = new Vue({
 		result_cont: [],
 		user_data: userData,
 		page_status: pageStatus,
-		mobile_status: 'default'
+		mobile_status: 'default',
+		focus_search: false,
+		hover_search: false,
 	},
 	computed: {
 		result: function () {
@@ -56,7 +58,6 @@ var vue_nav_bar = new Vue({
 		},
 		openCourse: function(id) {
 			vue_course_item.openCoursePage(id);
-			vue_nav_bar.search_keyword = "";
 		},
 		logIn: function(){
 			vue_nav_bar.user_name = userData.user_name;
@@ -91,6 +92,18 @@ var vue_nav_bar = new Vue({
 		hideCoursePage: function() {
 			vue_courseContent.hideContent();
 			this.mobile_status = 'default';
+		},
+		focusOn: function (){
+			this.focus_search = true;
+		},
+		focusOff: function (){
+			this.focus_search = false;
+		},
+		hoverOn: function (){
+			this.hover_search = true;
+		},
+		hoverOff: function (){
+			this.hover_search = false;
 		}
 	}
 })

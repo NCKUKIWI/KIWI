@@ -12,9 +12,9 @@
       </div>
       <div class="hub_navbar__left_area" :class="{ mobile_on: mobile_status == 'search' }">
           <a class="hub_navbar__logo" href="/"></a>
-          <input class="hub_navbar__search" type="text" v-model.trim="search_keyword" placeholder="搜尋「課程名」或「教師名」" autocomplete="off" />
+          <input class="hub_navbar__search" type="text" v-model.trim="search_keyword" placeholder="搜尋「課程名」或「教師名」" autocomplete="off" @blur="focusOff" @focus="focusOn" />
           <div class="hub_navbar__search__cancel"  @click="mobileNavStatus('cancel_search')"></div>
-          <div v-if="search_keyword.replace(' ','') != ''" class="hub_navbar__search__dropdown">
+          <div v-if="search_keyword.replace(' ','') != '' && (focus_search || hover_search)" class="hub_navbar__search__dropdown" @mouseleave="hoverOff" @mouseenter="hoverOn">
               <p v-if="!result_cont.length" class="hub_navbar__search__dropdown__no_result text_dark">查無此關鍵字結果。</p>
               <div v-for="item in result_cont" class="list_course_item" @click="openCourse(item.id)">
                 <div class="list_course_item_left">

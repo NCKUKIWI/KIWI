@@ -271,9 +271,6 @@
                         filter: brightness(100%);
                     }
                 }
-                &:link, &:visited {
-                    color: $black;
-                }
             }
             &__links {
                 position: relative;

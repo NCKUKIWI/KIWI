@@ -40,7 +40,7 @@
 
     // 公用參數
     var public_variable = {
-        now_semester: '112-1',
+        now_semester: '112-2',
         point_threshold: 5
     }
 

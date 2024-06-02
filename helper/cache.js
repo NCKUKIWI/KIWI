@@ -5,7 +5,7 @@ client = redis.createClient({
     'host': config.redis.host,
     'port': config.redis.port,
     'password': config.redis.pw,
-    'db': 1
+    'db': config.redis.db
 });
 
 client.on("error", function (err) {
@@ -13,18 +13,18 @@ client.on("error", function (err) {
 });
 
 function courseCacheKey(id) {
-    return "course_" + id;
+    return "course:" + id;
 }
 
 function userCacheKey(id) {
-    return "user_" + id;
+    return "user:login:" + id;
 }
 function userCourseKey(uid, cid) {
-    return "user_" + uid + "_"+cid;
+    return "user:course:" + uid + "_"+cid;
 }
 
 function userCourseKey(uid, cid) {
-    return "user_" + uid + "_"+cid;
+    return "user:course:" + uid + "_"+cid;
 }
 
 function draftKey(course, teacher, uid) {

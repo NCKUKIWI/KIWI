@@ -30,7 +30,7 @@ function userCourseKey(uid, cid) {
 function draftKey(course, teacher, uid) {
     course = trimSpace(course)
     teacher = trimSpace(teacher)
-    let str = course+"_"+teacher+"_"+uid;
+    let str = course+":"+teacher+":"+uid;
     return str;
 }
 

@@ -6,22 +6,77 @@
     <title>Login Error</title>
     <!-- Include Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #e6f7ff; /* 浅蓝色背景 */
+            color: #333;
+            font-family: 'Arial', sans-serif;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            animation: cardFadeIn 1s ease-out;
+        }
+        @keyframes cardFadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+            border-radius: 30px;
+            padding: 10px 20px;
+            font-size: 1.1em;
+            transition: background-color 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+        .header-logo {
+            width: 100px;
+        }
+        .header-title {
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
     <div class="container mt-5">
-        <div class="row">
-            <div class="col-md-8 offset-md-2">
-                <div class="card">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <!-- Add a logo -->
+                <div class="text-center mb-4">
+                    <img src="/dist/images/favicon/apple-touch-icon.png" alt="NCKU HUB Logo" class="header-logo img-fluid">
+                </div>
+                <!-- Add a header -->
+                <h1 class="text-center mb-4 header-title">NCKU HUB Login</h1>
+                <div class="card p-4">
                     <div class="card-body">
-                        <h5 class="card-title">Login Error</h5>
-                        <p class="card-text">Please use your NCKU gmail to login. (ex: XXXXXXXXX@gs.ncku.edu.tw)</p>
-                        <a href="/" class="btn btn-primary">Back</a>
+                        <!-- Center the title -->
+                        <h5 class="card-title text-center text-danger">Login Not Allowed</h5>
+                        <p class="card-text text-center text-dark">
+                            Please use your NCKU Gmail to login. <br>
+                            (e.g., XXXXXXXXX@gs.ncku.edu.tw)
+                        </p>
+                        <!-- Add some additional text -->
+                        <p class="card-text text-center text-dark">
+                            If you have any questions, please contact our 
+                            <a href="https://www.facebook.com/nckuhub" target="_blank" style="color: #007bff;">Facebook page</a>.
+                        </p>
+                        <div class="text-center">
+                            <a href="/" class="btn btn-primary">Go Back</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <!-- Include Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 </body>
 </html>

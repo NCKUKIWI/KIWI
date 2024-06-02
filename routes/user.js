@@ -9,9 +9,35 @@ var config = require('../config');
 var cache = require('../helper/cache');
 var redis = require('../helper/cache').redis;
 var gmailSend = require('./gmailSend/gmailSend')
+var {google} = require('googleapis');
+
+const oauth2Client = new google.auth.OAuth2(
+    config.google.client_id,
+    config.google.secret,
+    `${config.website}/user/google_check`
+);
+  
+// generate a url that asks permissions for Blogger and Google Calendar scopes
+const scopes = [
+    'https://www.googleapis.com/auth/userinfo.profile',
+    'https://www.googleapis.com/auth/userinfo.email'
+];
+
+const google_auth_url = oauth2Client.generateAuthUrl({
+    // 'online' (default) or 'offline' (gets refresh_token)
+    // access_type: 'offline',
+
+    // If you only need one scope you can pass it as a string
+    scope: scopes
+});
+  
 
 router.get("/fblogin", middleware.checkLogin(1), function (req, res) {
     res.redirect(`https://www.facebook.com/v3.1/dialog/oauth?client_id=${config.fb.appid}&scope=email,public_profile&response_type=code&redirect_uri=${config.website}/user/fbcheck`);
+});
+
+router.get("/google_login", middleware.checkLogin(1), function (req, res) {
+    res.redirect(google_auth_url);
 });
 
 router.get("/fbcheck", middleware.checkLogin(1), function (req, res) {
@@ -72,6 +98,62 @@ router.get("/fbcheck", middleware.checkLogin(1), function (req, res) {
                         })
                     }
                 });
+            });
+        });
+    } else {
+        res.redirect('/');
+    }
+});
+
+router.get("/google_check", middleware.checkLogin(1), function (req, res) {
+    if (req.query.code) {
+        // Use the code to get the access token
+        oauth2Client.getToken(req.query.code, function (err, tokens) {
+            if (err) {
+                console.error(err);
+                return;
+            }
+
+            oauth2Client.setCredentials(tokens);
+
+            // Use the access token to get the user's profile
+            const oauth2 = google.oauth2({
+                auth: oauth2Client,
+                version: 'v2'
+            });
+
+            oauth2.userinfo.get(function (err, response) {
+                if (err) {
+                    console.error(err);
+                    return;
+                }
+
+                const email = response.data.email;
+                const name = response.data.name;
+                const picture = response.data.picture;
+                const verified_email = response.data.verified_email;
+                // Verify the email format
+                const emailRegex = /^[a-zA-Z]\d{8}@ncku\.edu\.tw$/;
+                if (!emailRegex.test(email)) {
+                    // if email in white list
+                    redis.get("login:email_white_list", function (err, result) {
+                        console.log("get white list" + result);
+                        if (result) {
+                            console.log(result);
+                            const whiteList = JSON.parse(result);
+                            if (whiteList.data.includes(email)) {
+                                // if email in white list, login or create user
+                                user_login_by_google_id(response.data.id, name, email, picture, res);
+                            }
+                        }
+                        console.error('Invalid email format');
+                        return;
+                    });
+                    console.error('Invalid email format');
+                    return;
+                }
+                // if email is verified, login or create user
+                user_login_by_google_id(response.data.id, name, email, picture, res);
             });
         });
     } else {
@@ -288,4 +370,68 @@ function sendVerificationMail(id, email, check_key){
     let url = "https://nckuhub.com/api/user/signup_url/"+ check_key;
     gmailSend.sendMail(email, '驗證網址: '+ url);
 }
+
+
+function user_login_by_google_id(google_id, name, email, picture_url, res){
+    db.FindbyColumn('user', ['id', 'check_key', 'google_id'], {
+        'google_id': google_id
+    }, function (user) {
+        if (user.length > 0) {
+            res.cookie("isLogin", 1, {
+                maxAge: 1000 * 60 * 60 * 12 * 2 * 30
+            });
+            res.cookie("id", user[0].check_key, {
+                maxAge: 1000 * 60 * 60 * 12 * 2 * 30
+            });
+            console.log("======user======");
+            console.log(user);
+            // res.send(user);
+            res.redirect('/');
+        } else {
+            var check_key = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+            var code = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+            code = 'nckuhub' + code.substring(1, 14);
+            while (code.length != 20){
+                code = 'nckuhub' + Math.random().toString(36).substring(2, 15);
+            }
+
+            student_id = null;
+            department_id = 'new';
+            if (email.split('@')[1] == 'ncku.edu.tw'){
+                student_id = email.split('@')[0];
+                department_id = student_id[0] + student_id[1];
+            }
+
+            db.Insert('user', {
+                'name': name,
+                'google_id': google_id,
+                'role': 0,
+                'department': department_id,
+                'grade': 'new',
+                'check_key': check_key,
+                'email': email,
+                'photo': picture_url,
+                "student_id": student_id
+            }, function (err, result) {
+                if (err) console.log(err);
+                db.Insert('messenger_code', {
+                    'code': code,
+                    'user_id': result.insertId
+                }, function(err, result){
+                    if (err) console.log(err);
+                    res.cookie("isLogin", 1, {
+                        maxAge: 1000 * 60 * 60 * 12 * 2 * 30
+                    });
+                    res.cookie("id", check_key, {
+                        maxAge: 1000 * 60 * 60 * 12 * 2 * 30
+                    });
+                    console.log("======create user======");
+                    console.log(result);
+                    res.redirect('/');
+                })
+            })
+        }
+    });
+}
+
 module.exports = router;

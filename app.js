@@ -49,7 +49,7 @@ app.use(function (req, res, next) {
                 req.user = JSON.parse(result);
                 next();
             } else {
-                db.FindbyColumn("user",  ['id', 'name', 'department', 'email', 'grade', 'fb_id'], {
+                db.FindbyColumn("user",  ['id', 'name', 'department', 'email', 'grade', 'google_id', 'photo'], {
                     'check_key': req.cookies.id
                 }, function (user) {
                     user = user[0];

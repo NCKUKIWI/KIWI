@@ -147,14 +147,17 @@ router.get("/google_check", middleware.checkLogin(1), function (req, res) {
                                 // if email in white list, login or create user
                                 user_login_by_google_id(response.data.id, name, email, picture, res);
                             }
+                            else {
+                                console.error('Invalid email format');
+                                res.send(render('./src/views/report/login_error.html'))
+                            }
                         }
-                        console.error('Invalid email format');
-                        res.send(render('./src/views/report/login_error.html'))
-                        // res.send("Please use your NCKU email to login. (ex: XXXXXXXXX@gs.ncku.edu.tw)");
                     });
                 }
-                // if email is verified, login or create user
-                user_login_by_google_id(response.data.id, name, email, picture, res);
+                else {
+                    // if email is verified, login or create user
+                    user_login_by_google_id(response.data.id, name, email, picture, res);
+                }
             });
         });
     } else {

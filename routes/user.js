@@ -10,6 +10,7 @@ var cache = require('../helper/cache');
 var redis = require('../helper/cache').redis;
 var gmailSend = require('./gmailSend/gmailSend')
 var {google} = require('googleapis');
+var fs = require("fs");
 
 const oauth2Client = new google.auth.OAuth2(
     config.google.client_id,
@@ -28,7 +29,8 @@ const google_auth_url = oauth2Client.generateAuthUrl({
     // access_type: 'offline',
 
     // If you only need one scope you can pass it as a string
-    scope: scopes
+    scope: scopes,
+    prompt: 'select_account'
 });
   
 
@@ -133,7 +135,7 @@ router.get("/google_check", middleware.checkLogin(1), function (req, res) {
                 const picture = response.data.picture;
                 const verified_email = response.data.verified_email;
                 // Verify the email format
-                const emailRegex = /^[a-zA-Z]\d{8}@ncku\.edu\.tw$/;
+                const emailRegex = /^[a-zA-Z]\d{8}@gs\.ncku\.edu\.tw$/;
                 if (!emailRegex.test(email)) {
                     // if email in white list
                     redis.get("login:email_white_list", function (err, result) {
@@ -147,10 +149,9 @@ router.get("/google_check", middleware.checkLogin(1), function (req, res) {
                             }
                         }
                         console.error('Invalid email format');
-                        return;
+                        res.send(render('./src/views/report/login_error.html'))
+                        // res.send("Please use your NCKU email to login. (ex: XXXXXXXXX@gs.ncku.edu.tw)");
                     });
-                    console.error('Invalid email format');
-                    return;
                 }
                 // if email is verified, login or create user
                 user_login_by_google_id(response.data.id, name, email, picture, res);
@@ -433,5 +434,13 @@ function user_login_by_google_id(google_id, name, email, picture_url, res){
         }
     });
 }
+
+function render(filename, params) {
+    var data = fs.readFileSync(filename, 'utf8');
+    for (var key in params) {
+      data = data.replace('{' + key + '}', params[key]);
+    }
+    return data;
+  }
 
 module.exports = router;

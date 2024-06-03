@@ -402,10 +402,10 @@ function user_login_by_google_id(google_id, name, email, picture_url, res){
             student_id = null;
             department_id = 'new';
             if (email.split('@')[1] == 'gs.ncku.edu.tw'){
-                student_id = email.split('@')[0];
-                department_id = student_id[0].toUpperCase() + student_id[1];
+                student_id = email.split('@')[0].toUpperCase();
+                department_id = student_id[0] + student_id[1];
                 // trim the student_id from the name
-                name = name.replace(student_id.toUpperCase(), "");
+                name = name.replace(student_id, "");
             }
 
             db.Insert('user', {

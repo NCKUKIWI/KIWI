@@ -135,8 +135,10 @@ router.get("/google_check", middleware.checkLogin(1), function (req, res) {
                 const picture = response.data.picture;
                 const verified_email = response.data.verified_email;
                 // Verify the email format
-                const emailRegex = /^[a-zA-Z]\d{8}@gs\.ncku\.edu\.tw$/;
-                if (!emailRegex.test(email)) {
+                const emailPattern1 = /^[a-zA-Z]{2}\d{7}@gs\.ncku\.edu\.tw$/;  // 2字母 + 7數字
+                const emailPattern2 = /^[a-zA-Z]\d{8}@gs\.ncku\.edu\.tw$/;     // 1字母 + 8數字
+
+                if (!emailPattern1.test(email) && !emailPattern2.test(email)) {
                     // if email in white list
                     redis.get("login:email_white_list", function (err, result) {
                         console.log("get white list" + result);

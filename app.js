@@ -32,6 +32,9 @@ app.use(bodyParser.urlencoded({
 app.use("/dist", express.static("dist", {
     maxAge: 24 * 60 * 60
 }));
+app.get("/ads.txt", function (req, res) {
+    res.sendFile(path.join(__dirname, "ads.txt"));
+});
 app.use(cookieParser("secretString"));
 app.use(session({
     cookie: {
